@@ -1,0 +1,97 @@
+* {
+    padding: 0;
+    margin: 0;
+}
+
+html, body, #public, #premade, #gameChat {
+    height: 100%;
+}
+
+html {
+    background: #000;
+}
+
+body {
+    margin: 0 auto;
+    background: #222;
+    width: 550px;
+    color: #fff;
+}
+
+#login>form {
+    padding: 100px 100px 0;
+}
+#login>form span {
+    float: left;
+    width: 120px;
+}
+#login>form div {
+    padding: 0 0 5px;
+}
+#login>form div.submit {
+    padding-left: 120px;
+}
+
+#field {
+    border: solid 1px gray;
+}
+
+.user-list {
+    float: left;
+    width: 100px;
+    height: 100%;
+    border-right: solid 1px #ccc;
+}
+.user:hover {
+    background: #444;
+    cursor: pointer;
+}
+
+.premades, .game-controls {
+    float: left;
+    width: 100px;
+    height: 100%;
+    margin-left: 348px;
+    border-left: solid 1px #ccc;
+}
+.premades input, .game-controls input {
+    width: 90px;
+}
+.premade:hover {
+    background: #444;
+    cursor: pointer;
+}
+
+.chat {
+    float: left;
+    width: 347px;
+    margin-left: -448px;
+    height: 100%;
+    background: #333;
+}
+.chat .chat-log {
+    height: 100%;
+    margin-bottom: -30px;
+    overflow: auto;
+}
+.chat .chat-log .messages {
+    padding-bottom: 30px;
+}
+.chat .message-form {
+    height: 30px;
+    line-height: 30px;
+}
+.chat .message-form input[type="text"] {
+    width: 250px;
+}
+.chat .message-form input[type="submit"] {
+    width: 70px;
+}
+#bot-stack {
+    float: right;
+    width: 80px;
+}
+
+.current {
+    font-weight: bold;
+}

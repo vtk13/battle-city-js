@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>Battle city</title>
+    <link rel="stylesheet" type="text/css" href="/css/screen.css">
+    <script type="text/javascript" src="/lib/jquery.js"></script>
+    <script type="text/javascript" src ="/socket.io/socket.io.js"></script>
+    <script type="text/javascript" src="/lib/node/events.js"></script>
+    <script type="text/javascript" src="/src/core/event.js"></script>
+    <script type="text/javascript" src="/src/core/list.js"></script>
+    <script type="text/javascript" src="/src/client/list.js"></script>
+    <script type="text/javascript" src="/src/battle-city/field.js"></script>
+    <script type="text/javascript" src="/src/battle-city/keyboard.js"></script>
+    <script type="text/javascript" src="/src/battle-city/objects/bullet.js"></script>
+    <script type="text/javascript" src="/src/battle-city/objects/tank.js"></script>
+    <script type="text/javascript" src="/src/battle-city/objects/tankbot.js"></script>
+    <script type="text/javascript" src="/src/battle-city/objects/wall.js"></script>
+    <script type="text/javascript" src="/src/battle-city/objects/delimiter.js"></script>
+    <script type="text/javascript" src="/src/battle-city/objects/base.js"></script>
+    <script type="text/javascript" src="/src/battle-city/objects/bonus.js"></script>
+    <script type="text/javascript" src="/src/battle-city/objects/trees.js"></script>
+    <script type="text/javascript" src="/src/client.js"></script><!-- should be last -->
+</head>
+<body>
+<div id="login">
+    <form class="login-form">
+        <div><span>Ник:</span><input type="text" name="nick" value="vtk"></div>
+        <div class="submit"><input type="submit" value="Вход"></div>
+    </form>
+</div>
+
+<div id="public" style="display: none;">
+    <div class="user-list"><h3>Игроки</h3></div>
+    <div class="premades">
+        <form id="create-form">
+        <div>
+            <input type="text" name="name">
+            <input type="submit" value="Создать">
+        </div>
+        </form>
+        <h3>Игры</h3>
+    </div>
+    <div class="chat">
+        <div class="chat-log">
+            <div class="messages"></div>
+        </div>
+        <form class="message-form">
+            <input type="text" name="message">
+            <input type="submit" value="Отправить">
+        </form>
+    </div>
+</div>
+
+<div id="premade" style="display: none;">
+    <div class="user-list"><h3>Игроки</h3></div>
+    <div class="game-controls">
+        <input class="start-game" type="button" value="Старт!">
+        <input class="exit-game" type="button" value="Выйти">
+        <div class="level">Уровень: <span class="value"></span></div>
+        <div>Жизни 1: <span class="player1-lives"></span></div>
+        <div>Жизни 2: <span class="player2-lives"></span></div>
+    </div>
+    <div class="chat">
+        <div class="chat-log">
+            <div class="messages"></div>
+        </div>
+        <form class="message-form">
+            <input type="text" name="message">
+            <input type="submit" value="Отправить">
+        </form>
+    </div>
+</div>
+
+<div id="game" style="display: none;">
+    <div id="bot-stack"></div>
+    <canvas id="field" width="416" height="416"></canvas>
+    <div id="game-stat">
+        <div class="player1-lives"></div>
+        <div class="player2-lives"></div>
+    </div>
+</div>
+</body>
+</html>
