@@ -39,7 +39,7 @@ TankController.prototype.controlEvent = function(e)
             this.tank.stopMove();
         }
     }
-    if (e.keyCode == 70 /*f*/) {
+    if (e.keyCode == 70 /*f*/ || e.keyCode == 32) {
         this.tank.fire();
     }
 };
