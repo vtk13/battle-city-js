@@ -52,6 +52,38 @@ Field.prototype.intersect = function(object)
     return res;
 };
 
+Field.prototype.terrain = function(map)
+{
+    for (var i = 0 ; i < 10; i++) {
+        this.game.botStack.add(new TankBot(0, 0, true));
+    }
+
+    this.addObject(new Delimiter(           - 20, this.height /  2,             20, this.height / 2));
+    this.addObject(new Delimiter(this.width + 20, this.height /  2,             20, this.height / 2));
+    this.addObject(new Delimiter(this.width /  2,             - 20, this.width / 2,              20));
+    this.addObject(new Delimiter(this.width /  2, this.height + 20, this.width / 2,              20));
+    this.addObject(new      Base(this.width /  2, this.height - 16));
+
+    for (var y = 0 ; y < 26 ; y++) {
+        for (var x = 0 ; x < 26 ; x++) {
+            switch (map[y][x]) {
+            case 1:
+                this.addObject(new Wall(x*16+ 4, y*16+ 4));
+                this.addObject(new Wall(x*16+12, y*16+ 4));
+                this.addObject(new Wall(x*16+ 4, y*16+12));
+                this.addObject(new Wall(x*16+12, y*16+12));
+                break;
+            case 2:
+                this.addObject(new SteelWall(x*16+8, y*16+8));
+                break;
+            case 3:
+                this.addObject(new Trees(x*16+8, y*16+8));
+                break;
+            }
+        }
+    }
+};
+
 Field.prototype.updateWith = function(data)
 {
     for (var i in data) {

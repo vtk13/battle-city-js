@@ -8,8 +8,8 @@ Trees = function Trees(x, y)
     this.x = x;
     this.y = y;
     this.z = 2;
-    this.hw = 16; // half width
-    this.hh = 16; // half height
+    this.hw = 8; // half width
+    this.hh = 8; // half height
     this.img = new Image();
     this.img.src = 'img/trees.png';
 };
