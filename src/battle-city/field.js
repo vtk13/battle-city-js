@@ -3,7 +3,7 @@ Field = function Field(width, height)
     this.width      = width;
     this.height     = height;
     this.objects    = new Array(); // todo TList?
-    this.setMaxListeners(100);
+    this.setMaxListeners(100); // @todo
 };
 
 Eventable(Field.prototype);

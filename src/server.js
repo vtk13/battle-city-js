@@ -89,7 +89,7 @@ var server = require('http').createServer(function(request, response) {
 server.listen(8124);
 
 var io = require('socket.io');
-io.listen(server).sockets.on('connection', function(socket) {
+io.listen(server, {'log level': 2}).sockets.on('connection', function(socket) {
     var user = null;
     socket.on('message', function(event) {
         switch (event.type) {
