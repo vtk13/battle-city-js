@@ -54,6 +54,7 @@ Field.prototype.intersect = function(object)
 
 Field.prototype.terrain = function(map)
 {
+    // todo move from this function
     for (var i = 0 ; i < 10; i++) {
         this.game.botStack.add(new TankBot(0, 0, true));
     }

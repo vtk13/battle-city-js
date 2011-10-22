@@ -1,9 +1,6 @@
 
-// todo who listen message form this class
-
 Premade = function Premade(name)
 {
-    Loggable(this); // todo is this needed?
     this.name = name;
     this.level = 1;
     this.userCount = 0;
