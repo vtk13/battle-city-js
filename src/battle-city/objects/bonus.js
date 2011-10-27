@@ -14,6 +14,8 @@ Bonus = function Bonus(x, y)
     this.img.src = 'img/star.png';
 };
 
+Bonus.prototype = new AbstractGameObject();
+
 Eventable(Bonus.prototype);
 
 Bonus.prototype.serialize = function()

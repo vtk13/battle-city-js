@@ -14,6 +14,8 @@ Wall = function Wall(x, y)
     this.img.src = 'img/brick-wall.png';
 };
 
+Wall.prototype = new AbstractGameObject();
+
 Eventable(Wall.prototype);
 
 Wall.prototype.serialize = function()
@@ -62,8 +64,8 @@ Wall.prototype.hit = function(bullet)
                 break;
         }
     }
-    this.field.removeObject(this);
-    // after removeObject to avoid recusion
+    this.field.remove(this);
+    // after remove to avoid recusion
     var intersect = this.field.intersect({x: x, y: y, hw: 1, hh: 1});
     for (var i in intersect) {
         if (typeof intersect[i]['hit'] == 'function') {
@@ -83,7 +85,6 @@ SteelWall = function SteelWall(x, y)
 };
 
 SteelWall.prototype = new Wall();
-SteelWall.prototype.constructor = SteelWall;
 
 SteelWall.prototype.serialize = function()
 {
@@ -99,7 +100,7 @@ SteelWall.prototype.serialize = function()
 SteelWall.prototype.hit = function(bullet)
 {
     if (bullet.power == 2) {
-        this.field.removeObject(this);
+        this.field.remove(this);
     }
     return true;
 };

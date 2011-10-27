@@ -24,9 +24,11 @@ require('./core/user');
 require('./server/user');
 require('./core/message');
 require('./server/messagelist');
+require('./utils/map_arrayed');
 require('./battle-city/field');
 require('./battle-city/bot-emitter');
 require('./battle-city/keyboard');
+require('./battle-city/objects/abstract');
 require('./battle-city/objects/bullet');
 require('./battle-city/objects/tank');
 require('./battle-city/objects/tankbot');
@@ -90,6 +92,7 @@ server.listen(8124);
 
 var io = require('socket.io');
 io.listen(server, {'log level': 2}).sockets.on('connection', function(socket) {
+//io.listen(server, {'log level': 3}).sockets.on('connection', function(socket) {
     var user = null;
     socket.on('message', function(event) {
         switch (event.type) {

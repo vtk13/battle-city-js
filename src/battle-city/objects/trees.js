@@ -14,6 +14,8 @@ Trees = function Trees(x, y)
     this.img.src = 'img/trees.png';
 };
 
+Trees.prototype = new AbstractGameObject();
+
 Eventable(Trees.prototype);
 
 Trees.prototype.serialize = function()

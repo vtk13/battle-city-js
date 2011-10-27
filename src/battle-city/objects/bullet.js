@@ -18,31 +18,28 @@ Bullet = function Bullet(speedX, speedY)
     this.img.src = 'img/bullet.png';
 };
 
+Bullet.prototype = new AbstractGameObject();
+
 Eventable(Bullet.prototype);
 
 Bullet.prototype.step = function()
 {
-    var x = this.x;
-    var y = this.y;
-    var removeBullet = false;
-    this.x += this.speedX;
-    this.y += this.speedY;
-    var intersect = this.field.intersect(this);
-    if (intersect.length > 0) {
-        for (var i in intersect) {
-            if (typeof intersect[i]['hit'] == 'function') {
-                // todo neiberhood wall can be already removed
-                if (intersect[i].hit(this)) {
-                    removeBullet = true;
-                }
-            }
-        }
-    }
-    if (removeBullet) {
-        this.field.removeObject(this);
-    } else {
+    if (this.field.move(this, this.x + this.speedX, this.y + this.speedY)) {
         this.emit('change', {type: 'change', object: this});
     }
+};
+
+Bullet.prototype.onIntersect = function(items)
+{
+    var res = true;
+    for (var i in items) {
+        // todo neiberhood wall can be already removed
+        if (items[i].hit && items[i].hit(this)) {
+            this.field.remove(this);
+            res = false;
+        }
+    }
+    return res;
 };
 
 Bullet.prototype.serialize = function()

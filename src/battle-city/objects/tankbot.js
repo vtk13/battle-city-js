@@ -10,7 +10,6 @@ TankBot = function TankBot(x, y, bonus)
 
 TankBot.prototype = new Tank();
 TankBot.prototype._super = Tank.prototype;
-TankBot.prototype.constructor = TankBot;
 // todo tank types
 TankBot.prototype.reward = 20;
 
@@ -50,7 +49,7 @@ TankBot.prototype.hit = function(bullet)
     // copy paste condition from parent::hit()
     // this.clan != bullet.clan means tank is hitted
     if (this.clan != bullet.clan && this.bonus) {
-        this.field.addObject(new Bonus(
+        this.field.add(new Bonus(
             Math.round((Math.random() * this.field.width  / 16 - 1)) * 16,
             Math.round((Math.random() * this.field.height / 16 - 1)) * 16
         ));

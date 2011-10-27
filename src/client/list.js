@@ -9,7 +9,7 @@ function TItemList(container, filter, itemClass)
 };
 
 /**
- * Test item to accept in 'addObject' and 'change' methods.
+ * Test item to accept in 'add' and 'change' methods.
  *
  * @param item
  * @return bool
@@ -22,7 +22,7 @@ TItemList.prototype.filter = function(item)
 TItemList.prototype.import = function(items)
 {
     this.clear();
-    items.forEach(this.addObject, this);
+    items.forEach(this.add, this);
 };
 
 TItemList.prototype.itemDomElement = function(item)
@@ -39,7 +39,7 @@ TItemList.prototype.clear = function()
 TItemList.prototype.updateWith = function(items)
 {
     items.forEach(function(item) {
-        if (['addObject', 'change', 'removeObject'].indexOf(item.type) >= 0) {
+        if (['add', 'change', 'remove'].indexOf(item.type) >= 0) {
             this[item.type](item.data);
         } else {
             throw {message: 'Undefined type ' + item.type};
@@ -47,7 +47,7 @@ TItemList.prototype.updateWith = function(items)
     }, this);
 };
 
-TItemList.prototype.addObject = function(item)
+TItemList.prototype.add = function(item)
 {
     if (this.filter(item)) {
         this.items[item.id] = item;
@@ -60,9 +60,9 @@ TItemList.prototype.addObject = function(item)
     }
 };
 
-TItemList.prototype.change = TItemList.prototype.addObject;
+TItemList.prototype.change = TItemList.prototype.add;
 
-TItemList.prototype.removeObject = function(item)
+TItemList.prototype.remove = function(item)
 {
     $('.' + this.itemClass + item.id, this.container).remove();
     delete this.items[item.id];
@@ -77,7 +77,6 @@ function TUserList(container, filter, itemClass)
 };
 
 TUserList.prototype = new TItemList();
-TUserList.prototype.constructor = TUserList;
 
 TUserList.prototype.itemDomElement = function(item)
 {
@@ -101,7 +100,6 @@ function TTankStack(container, filter, itemClass)
 };
 
 TTankStack.prototype = new TItemList();
-TTankStack.prototype.constructor = TTankStack;
 TTankStack.prototype._super = TItemList.prototype;
 
 TTankStack.prototype.itemDomElement = function(item)
@@ -111,9 +109,9 @@ TTankStack.prototype.itemDomElement = function(item)
         item.img.src + '"></div>');
 };
 
-TTankStack.prototype.addObject = function(item)
+TTankStack.prototype.add = function(item)
 {
     var bot = new TankBot();
     bot.unserialize(item);
-    this._super.addObject.call(this, bot);
+    this._super.add.call(this, bot);
 };

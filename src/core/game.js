@@ -9,7 +9,7 @@ Game = function Game(level)
 
     this.users = new Array();
     var bots = this.bots = new Array();
-    this.field.on('removeObject', function(event) {
+    this.field.on('remove', function(event) {
         for (var i in bots) {
             if (bots[i] == event.object) {
                 bots.splice(i, 1);
@@ -49,13 +49,13 @@ Game.prototype.join = function(user)
     user.tank.user = user;
     user.tank.initialPosition.x = user.tank.x = 32*4 + user.tank.hw + userId * 4*32;
     user.tank.initialPosition.y = user.tank.y = 32*12 + user.tank.hh;
-    this.field.addObject(user.tank);
+    this.field.add(user.tank);
 };
 
 Game.prototype.unjoin = function(user)
 {
     if (user.game == this) {
-        this.field.removeObject(user.tank);
+        this.field.remove(user.tank);
         user.tank = null;
         for (var i in this.users) {
             if (this.users[i] == user) {
@@ -71,12 +71,11 @@ Game.prototype.unjoin = function(user)
 
 Game.prototype.step = function()
 {
-    for (var i in this.field.objects) {
-        var current = this.field.objects[i];
-        if (typeof current['step'] == 'function') {
-            current.step();
+    this.field.objects.forEach(function(item){
+        if (item.step) {
+            item.step();
         }
-    }
+    });
 
     if (this.bots.length == 0 && this.botStack.count() == 0) {
         this.gameOver(1);
@@ -93,7 +92,7 @@ Game.prototype.step = function()
             bot.y = botY;
 
             this.bots.push(bot);
-            this.field.addObject(bot); // removeObject handler defined in constructor
+            this.field.add(bot); // remove handler defined in constructor
 
             this.botsEmitters.current = (this.botsEmitters.current + 1) % 3;
         }

@@ -6,19 +6,16 @@ Field.prototype.draw = function()
     this.context.fillStyle = 'rgba(0, 0, 0, 1)';
     this.context.fillRect(0, 0, this.width, this.height);
     for (var z = 0 ; z <= 2 ; z++) {
-        for (var i = 0 ; i < this.objects.length ; i++) {
-            var current = this.objects[i];
-            switch (true) {
-                case z == current.z:
-                    try {
-                        this.context.drawImage(current.img, current.x - current.hw,
-                                current.y - current.hh);
-                    } catch (e) {
-                        console.log(current.img, current.x, current.y);
-                    }
-                    break;
+        this.objects.forEach(function(current){
+            if (z == current.z) {
+                try {
+                    this.context.drawImage(current.img, current.x - current.hw,
+                            current.y - current.hh);
+                } catch (e) {
+                    console.log(current.img, current.x, current.y);
+                }
             }
-        }
+        }, this);
     }
 };
 
@@ -159,7 +156,7 @@ $(function() {
                     }
                     if (data['messages']) {
                         data.messages.forEach(function(event) {
-                            if (event.type == 'addObject') {
+                            if (event.type == 'add') {
                                 var date = new Date(event.data.time);
                                 var time = date.getHours() + ':' + (date.getMinutes() < 10 ? 0 : '') + date.getMinutes();
                                 $('#public .messages').append('<div><span>' +
@@ -173,7 +170,7 @@ $(function() {
                     if (data['premades']) {
                         data['premades'].forEach(function(event) {
                             switch (event.type) {
-                            case 'addObject':
+                            case 'add':
                             case 'change':
                                 if (event.data.id == premade.id) {
                                     premade = event.data;
@@ -187,7 +184,7 @@ $(function() {
                                         event.data.name + '</div>'));
                                 }
                                 break;
-                            case 'removeObject':
+                            case 'remove':
                                 $('#public .premades .premade' + event.data.id).remove();
                                 break;
                             }
@@ -205,7 +202,7 @@ $(function() {
                     }
                     if (data['premade.messages']) {
                         data['premade.messages'].forEach(function(event) {
-                            if (event.type == 'addObject') {
+                            if (event.type == 'add') {
                                 var date = new Date(event.data.time);
                                 var time = date.getHours() + ':' + (date.getMinutes() < 10 ? 0 : '') + date.getMinutes();
                                 $('#premade .messages').append('<div><span>' +

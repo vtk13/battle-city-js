@@ -10,6 +10,8 @@ Base = function Base(x, y)
     this.img.src = 'img/base.png';
 };
 
+Base.prototype = new AbstractGameObject();
+
 Eventable(Base.prototype);
 
 Base.prototype.serialize = function()

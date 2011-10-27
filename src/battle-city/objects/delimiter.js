@@ -10,6 +10,8 @@ Delimiter = function Delimiter(x, y, hw, hh)
     this.img.src = 'img/black.png';
 };
 
+Delimiter.prototype = new AbstractGameObject();
+
 Eventable(Delimiter.prototype);
 
 Delimiter.prototype.serialize = function()

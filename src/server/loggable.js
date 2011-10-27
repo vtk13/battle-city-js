@@ -1,7 +1,7 @@
 /**
  * This class is for log object changes to lightly sync they with client.
  * This class can log objects with serialize() method and property id.
- * You can't run Loggable() against prototype due to addObject and removeObject
+ * You can't run Loggable() against prototype due to add and remove
  * will operate with prototype as this.
  */
 
@@ -9,20 +9,20 @@ Loggable = function Loggable(object)
 {
     if (object) {
         object.sync = Loggable.prototype.sync;
-        object.on('addObject', callback(Loggable.prototype.log, object));
-        object.on('removeObject', callback(Loggable.prototype.log, object));
+        object.on('add', callback(Loggable.prototype.log, object));
+        object.on('remove', callback(Loggable.prototype.log, object));
     }
 };
 
 /**
- * This method should be attached to addObject events of object container.
+ * This method should be attached to add events of object container.
  * @param event {
  *      object: {
  *          id: int,
  *          serialize: function
  *      },
- *      type: string, // addObject|change|removeObject
- *      lastSync: int // if you want to delete 'removeObject' events before lastSync
+ *      type: string, // add|change|remove
+ *      lastSync: int // if you want to delete 'remove' events before lastSync
  *  }
  */
 Loggable.prototype.log = function(event)
@@ -31,7 +31,7 @@ Loggable.prototype.log = function(event)
     var current = this.logData, prev = null;
     while (current != null) {
         if (current.data.id == data.id ||
-                (event.lastSync && current.type == 'removeObject' && current.time < event.lastSync)) {
+                (event.lastSync && current.type == 'remove' && current.time < event.lastSync)) {
             // remove current
             if (prev == null) {
                 current = this.logData = current.next;
@@ -52,7 +52,7 @@ Loggable.prototype.log = function(event)
     };
     current.next = this.logData;
     this.logData = current;
-    if (event.type == 'addObject') {
+    if (event.type == 'add') {
         event.object.on('change', callback(Loggable.prototype.log, this));
     }
 };

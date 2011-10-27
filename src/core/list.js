@@ -8,7 +8,6 @@ TList = function TList()
         Loggable(this);
     }
     this.items = [];
-
 };
 
 Eventable(TList.prototype);
@@ -21,13 +20,13 @@ TList.prototype.add = function(item)
         item.id = this.items.push(item) - 1;
     }
     // is this event for myself?
-    this.emit('addObject', {type: 'addObject', object: item});
+    this.emit('add', {type: 'add', object: item});
 };
 
 TList.prototype.remove = function(item)
 {
     // is this event for myself?
-    this.emit('removeObject', {type: 'removeObject', object: item});
+    this.emit('remove', {type: 'remove', object: item});
     delete this.items[item.id];
 };
 
@@ -40,7 +39,7 @@ TList.prototype.pop = function()
         return null;
     }
     var item = this.items[i];
-    this.emit('removeObject', {type: 'removeObject', object: item});
+    this.emit('remove', {type: 'remove', object: item});
     delete this.items[i];
     return item;
 };

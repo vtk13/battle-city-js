@@ -2,11 +2,18 @@
 var n = 0;
 var id = 0;
 
-// this is also object manager, so all coordinate operations should be done here
-
+/**
+ * this is also object manager, so all coordinate operations should be done here
+ * Ideally object should not know about x and y
+ *
+ * public interface:
+ * add(item)
+ * remove(item)
+ * move(item, newX, newY)
+ * intersects(item)
+ */
 function Area(x, y, hw, hh, leaf)
 {
-    this.id = id++;
     this.x = x;
     this.y = y;
     this.hw = hw;
@@ -69,6 +76,9 @@ Area.prototype.add = function(item)
             }
         }
         if (this.leafs) {
+            if (this.id === undefined) {
+                this.id = id++;
+            }
             this.childs[item.id] = item;
             this.count++;
         } else {

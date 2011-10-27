@@ -1,0 +1,5 @@
+
+AbstractGameObject = function AbstractGameObject()
+{
+
+};

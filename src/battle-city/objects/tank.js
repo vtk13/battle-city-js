@@ -28,6 +28,8 @@ Tank = function Tank(x, y)
     this.clan = 0; // users
 };
 
+Tank.prototype = new AbstractGameObject();
+
 Eventable(Tank.prototype);
 
 Tank.prototype.fire = function()
@@ -44,8 +46,8 @@ Tank.prototype.fire = function()
         bullet.power = this.bulletPower;
 
         bullets.push(bullet);
-        this.field.addObject(bullet);
-        this.field.on('removeObject', function(event) {
+        this.field.add(bullet);
+        this.field.on('remove', function(event) {
             for (var i in bullets) {
                 if (bullets[i] == event.object) {
                     bullets.splice(i, 1);
@@ -66,10 +68,10 @@ Tank.prototype.step = function()
       var intersect = this.field.intersect(this);
       if (intersect.length > 0) {
           for (var i in intersect) {
-              switch (intersect[i].constructor) {
-              case Trees:
+              switch (true) {
+              case intersect[i] instanceof Trees:
                   break;
-              case Bonus:
+              case intersect[i] instanceof Bonus:
                   this.onBonus(intersect[i]);
                   break;
               default:
@@ -90,7 +92,7 @@ Tank.prototype.onBonus = function(bonus)
     } else if (this.bulletPower == 1) {
         this.bulletPower = 2;
     }
-    this.field.removeObject(bonus);
+    this.field.remove(bonus);
 };
 
 Tank.prototype.serialize = function()
@@ -177,7 +179,7 @@ Tank.prototype.hit = function(bullet)
         if (this.user) {
             this.user.hit();
         } else {
-            this.field.removeObject(this);
+            this.field.remove(this);
         }
     }
     return true;
