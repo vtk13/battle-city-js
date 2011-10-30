@@ -10,8 +10,7 @@ Trees = function Trees(x, y)
     this.z = 2;
     this.hw = 8; // half width
     this.hh = 8; // half height
-    this.img = new Image();
-    this.img.src = 'img/trees.png';
+    this.setImage('img/trees.png');
 };
 
 Trees.prototype = new AbstractGameObject();

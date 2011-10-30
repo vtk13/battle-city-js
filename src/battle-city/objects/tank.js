@@ -18,8 +18,7 @@ Tank = function Tank(x, y)
     this.speed = 2;
     this.speedX = 0;
     this.speedY = -this.speed;
-    this.img = new Image();
-    this.img.src = 'img/tank-up.png';
+    this.setImage('img/tank-up.png');
     this.maxBullets = 1;
     this.bulletPower = 1;
     this.bullets = new Array();
@@ -118,53 +117,57 @@ Tank.prototype.unserialize = function(data)
     this.speedY = data.speedY;
 
     if (this.speedX == 0 && this.speedY  > 0) {
-        this.img.src = 'img/tank-down.png';
+        this.setImage('img/tank-down.png');
     }
     if (this.speedX == 0 && this.speedY  < 0) {
-        this.img.src = 'img/tank-up.png';
+        this.setImage('img/tank-up.png');
     }
     if (this.speedX  > 0 && this.speedY == 0) {
-        this.img.src = 'img/tank-right.png';
+        this.setImage('img/tank-right.png');
     }
     if (this.speedX  < 0 && this.speedY == 0) {
-        this.img.src = 'img/tank-left.png';
+        this.setImage('img/tank-left.png');
     }
 };
 
 Tank.prototype.startMove = function(direction)
 {
-    this.moveOn = true;
-    // emulate move back tank for 1 pixel
-    // doto this may be a bug, if tank just change direction to opposite
-    var vx = this.speedX > 0 ? 1 : -1;
-    var vy = this.speedY > 0 ? 1 : -1;
-    switch (direction) {
-        case 'up':
-            this.speedX = 0;
-            this.speedY = -this.speed;
-            this.x += (this.x % 16 > 8 + vx) ? 16 - this.x % 16 : - this.x % 16;
-            break;
-        case 'right':
-            this.speedX = this.speed;
-            this.speedY = 0;
-            this.y += (this.y % 16 > 8 + vy) ? 16 - this.y % 16 : - this.y % 16;
-            break;
-        case 'down':
-            this.speedX = 0;
-            this.speedY = this.speed;
-            this.x += (this.x % 16 > 8 + vx) ? 16 - this.x % 16 : - this.x % 16;
-            break;
-        case 'left':
-            this.speedX = -this.speed;
-            this.speedY = 0;
-            this.y += (this.y % 16 > 8 + vy) ? 16 - this.y % 16 : - this.y % 16;
-            break;
+    if (this.direction != direction) {
+        this.direction = direction;
+        this.moveOn = true;
+        // emulate move back tank for 1 pixel
+        // doto this may be a bug, if tank just change direction to opposite
+        var vx = this.speedX > 0 ? 1 : -1;
+        var vy = this.speedY > 0 ? 1 : -1;
+        switch (direction) {
+            case 'up':
+                this.speedX = 0;
+                this.speedY = -this.speed;
+                this.x += (this.x % 16 > 8 + vx) ? 16 - this.x % 16 : - this.x % 16;
+                break;
+            case 'right':
+                this.speedX = this.speed;
+                this.speedY = 0;
+                this.y += (this.y % 16 > 8 + vy) ? 16 - this.y % 16 : - this.y % 16;
+                break;
+            case 'down':
+                this.speedX = 0;
+                this.speedY = this.speed;
+                this.x += (this.x % 16 > 8 + vx) ? 16 - this.x % 16 : - this.x % 16;
+                break;
+            case 'left':
+                this.speedX = -this.speed;
+                this.speedY = 0;
+                this.y += (this.y % 16 > 8 + vy) ? 16 - this.y % 16 : - this.y % 16;
+                break;
+        }
+        this.emit('change', {type: 'change', object: this});
     }
-    this.emit('change', {type: 'change', object: this});
 };
 
 Tank.prototype.stopMove = function()
 {
+    this.direction = null;
     this.moveOn = false;
 };
 

@@ -14,8 +14,7 @@ Bullet = function Bullet(speedX, speedY)
     this.speedX = speedX;
     this.speedY = speedY;
     this.power = 1;
-    this.img = new Image();
-    this.img.src = 'img/bullet.png';
+    this.setImage('img/bullet.png');
 };
 
 Bullet.prototype = new AbstractGameObject();

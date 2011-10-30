@@ -10,8 +10,7 @@ Bonus = function Bonus(x, y)
     this.z = 2;
     this.hw = 16; // half width
     this.hh = 16; // half height
-    this.img = new Image();
-    this.img.src = 'img/star.png';
+    this.setImage('img/star.png');
 };
 
 Bonus.prototype = new AbstractGameObject();

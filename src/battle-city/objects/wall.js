@@ -10,8 +10,7 @@ Wall = function Wall(x, y)
     this.z = 1;
     this.hw = 4; // half width
     this.hh = 4; // half height
-    this.img = new Image();
-    this.img.src = 'img/brick-wall.png';
+    this.setImage('img/brick-wall.png');
 };
 
 Wall.prototype = new AbstractGameObject();
@@ -81,7 +80,7 @@ SteelWall = function SteelWall(x, y)
     this.y = y;
     this.hw = 8; // half width
     this.hh = 8; // half height
-    this.img.src = 'img/steel-wall.png';
+    this.setImage('img/steel-wall.png');
 };
 
 SteelWall.prototype = new Wall();

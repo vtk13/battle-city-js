@@ -6,8 +6,7 @@ Base = function Base(x, y)
     this.z = 1;
     this.hw = 16; // half width
     this.hh = 16; // half height
-    this.img = new Image();
-    this.img.src = 'img/base.png';
+    this.setImage('img/base.png');
 };
 
 Base.prototype = new AbstractGameObject();

@@ -6,8 +6,7 @@ Delimiter = function Delimiter(x, y, hw, hh)
     this.z = 1;
     this.hw = hw; // half width
     this.hh = hh; // half height
-    this.img = new Image();
-    this.img.src = 'img/black.png';
+    this.setImage('img/black.png');
 };
 
 Delimiter.prototype = new AbstractGameObject();

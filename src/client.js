@@ -7,13 +7,9 @@ Field.prototype.draw = function()
     this.context.fillRect(0, 0, this.width, this.height);
     for (var z = 0 ; z <= 2 ; z++) {
         this.objects.forEach(function(current){
-            if (z == current.z) {
-                try {
-                    this.context.drawImage(current.img, current.x - current.hw,
-                            current.y - current.hh);
-                } catch (e) {
-                    console.log(current.img, current.x, current.y);
-                }
+            if (current.z == z) {
+                this.context.drawImage(current.img, current.x - current.hw,
+                        current.y - current.hh);
             }
         }, this);
     }
@@ -33,13 +29,13 @@ $(function() {
     field = new Field(canvas.width, canvas.height);
     field.context = canvas.getContext('2d');;
 
-    var images = [], sprites = ['img/tank-down.png', 'img/tank-up.png',
+    window.images = {}, sprites = ['img/tank-down.png', 'img/tank-up.png',
         'img/tank-right.png', 'img/tank-left.png', 'img/bullet.png',
         'img/brick-wall.png', 'img/black.png', 'img/base.png',
         'img/steel-wall.png', 'img/star.png', 'img/trees.png'];
     for (var i in sprites) {
-        images[i] = new Image();
-        images[i].src = sprites[i];
+        images[sprites[i]] = new Image();
+        images[sprites[i]].src = sprites[i];
     }
 
     $('.login-form').submit(function(){
@@ -150,7 +146,6 @@ $(function() {
                     registry.tankStack.clear();
                     break;
                 case 'sync':
-    //                console.log(data);
                     if (data['users']) {
                         registry.users.updateWith(data['users']);
                     }
