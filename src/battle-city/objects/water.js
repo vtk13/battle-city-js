@@ -3,24 +3,24 @@
  * coordinates
  */
 
-Water = function Water(x, y)
+Trees = function Trees(x, y)
 {
     this.x = x;
     this.y = y;
-    this.z = 1;
+    this.z = 2;
     this.hw = 8; // half width
     this.hh = 8; // half height
-    this.setImage('img/water1.png');
+    this.setImage('img/trees.png');
 };
 
-Water.prototype = new AbstractGameObject();
+Trees.prototype = new AbstractGameObject();
 
-Eventable(Water.prototype);
+Eventable(Trees.prototype);
 
-Water.prototype.serialize = function()
+Trees.prototype.serialize = function()
 {
     return {
-        type: 'Water',
+        type: 'Trees',
         id: this.id,
         x: this.x,
         y: this.y,
@@ -28,7 +28,7 @@ Water.prototype.serialize = function()
     };
 };
 
-Water.prototype.unserialize = function(data)
+Trees.prototype.unserialize = function(data)
 {
     this.id = data.id;
     this.x = data.x;
@@ -36,7 +36,7 @@ Water.prototype.unserialize = function(data)
     this.z = data.z;
 };
 
-Water.prototype.hit = function(bullet)
+Trees.prototype.hit = function(bullet)
 {
     return false;
 };

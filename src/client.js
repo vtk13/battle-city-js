@@ -32,7 +32,8 @@ $(function() {
     window.images = {}, sprites = ['img/tank-down.png', 'img/tank-up.png',
         'img/tank-right.png', 'img/tank-left.png', 'img/bullet.png',
         'img/brick-wall.png', 'img/black.png', 'img/base.png',
-        'img/steel-wall.png', 'img/star.png', 'img/trees.png'];
+        'img/steel-wall.png', 'img/star.png', 'img/trees.png',
+        'img/water1.png'];
     for (var i in sprites) {
         images[sprites[i]] = new Image();
         images[sprites[i]].src = sprites[i];

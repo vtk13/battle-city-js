@@ -34,6 +34,7 @@ require('./battle-city/objects/delimiter');
 require('./battle-city/objects/base');
 require('./battle-city/objects/bonus');
 require('./battle-city/objects/trees');
+require('./battle-city/objects/water');
 
 registry = {
     users: new TList(),

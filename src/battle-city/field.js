@@ -74,6 +74,9 @@ Field.prototype.terrain = function(map)
             case 3:
                 this.add(new Trees(x*16+8, y*16+8));
                 break;
+            case 4:
+                this.add(new Water(x*16+8, y*16+8));
+                break;
             }
         }
     }
