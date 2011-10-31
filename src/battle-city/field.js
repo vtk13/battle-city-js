@@ -82,6 +82,17 @@ Field.prototype.terrain = function(map)
     }
 };
 
+Field.prototype.canPutTank = function(x, y)
+{
+    var res = true;
+    this.intersect({x: x, y: y, hw: 16, hh: 16}).forEach(function(item){
+        if (!(item instanceof Bonus)) {
+            res = false;
+        }
+    });
+    return res;
+};
+
 // client method
 Field.prototype.updateWith = function(data)
 {

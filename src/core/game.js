@@ -84,7 +84,7 @@ Game.prototype.step = function()
     if (this.bots.length < 6 && this.botStack.count() > 0 && Math.random() < 0.01) {
         var botX = this.botsEmitters[this.botsEmitters.current].x;
         var botY = this.botsEmitters[this.botsEmitters.current].y;
-        if (this.field.intersect({x: botX, y: botY, hw: 16, hh: 16}).length == 0) {
+        if (this.field.canPutTank(botX, botY)) {
             var bot = this.botStack.pop();
             delete bot['id'];
             bot.removeAllListeners('change');

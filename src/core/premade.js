@@ -66,7 +66,7 @@ Premade.prototype.gameOver = function()
         var game = this.game;
         if (this.game.status == 1) {
             this.level++;
-            if (this.level > 2) {
+            if (this.level > 14) {
                 this.level = 1;
             }
             this.emit('change', {type: 'change', object: this});
