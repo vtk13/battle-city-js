@@ -22,10 +22,7 @@ MapArrayed.prototype.get = function(id)
 
 MapArrayed.prototype.remove = function(item)
 {
-    if (typeof item == 'number') {
-        delete this.items[item];
-        return true;
-    } else if (this.items[item.id]) {
+    if (this.items[item.id]) {
         delete this.items[item.id];
         return true;
     } else {

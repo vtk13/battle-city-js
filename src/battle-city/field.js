@@ -3,6 +3,7 @@ Field = function Field(width, height)
     this.width      = width;
     this.height     = height;
     this.objects    = null;
+    this.step       = 1;
     this.clear();
     this.setMaxListeners(100); // @todo
 };
@@ -33,6 +34,11 @@ Field.prototype.remove = function(object)
 {
     if (this.objects.remove(object)) {
         this.emit('remove', {type: 'remove', object: object});
+    }
+    if (isClient() && object instanceof Bullet) {
+        var anim = new BulletHitAnimation(this.step, object.finalX, object.finalY);
+        anim.id = object.id;
+        this.add(anim);
     }
 };
 
@@ -93,15 +99,18 @@ Field.prototype.canPutTank = function(x, y)
     return res;
 };
 
-// client method
+// client methods
 Field.prototype.updateWith = function(data)
 {
     for (var i in data) {
         var event = data[i];
         switch (event.type) {
-            case 'remove':
-                this.objects.remove(event.data);
-                break;
+        case 'remove':
+            if (obj = this.objects.get(event.data.id)) {
+                obj.unserialize(event.data); // for bullets finalX and finalY
+                this.remove(obj);
+            }
+            break;
             case 'add':
             case 'change':
                 var obj = this.objects.get(event.data.id);
@@ -110,9 +119,32 @@ Field.prototype.updateWith = function(data)
                 } else {
                     obj = new (window[event.data.type])();
                     obj.unserialize(event.data);
-                    this.objects.add(obj);
+                    this.add(obj);
                 }
                 break;
         }
     }
+};
+
+Field.prototype.animateStep = function()
+{
+//    this.animateQueue || (this.animateQueue = []);
+    this.objects.forEach(function(item) {
+        if (item instanceof Water) {
+            if (this.step % 10 == 0) {
+                if (this.step % 20 >= 10) {
+                    item.setImage('img/water2.png');
+                } else {
+                    item.setImage('img/water1.png');
+                }
+            }
+        }
+        if (item instanceof OnFieldAnimation) {
+            item.animateStep(this.step);
+        }
+    }, this);
+    this.step++;
+
+    field.draw();
+//    console.log('animate step');
 };

@@ -5,6 +5,11 @@ callback = function(method, context)
     };
 };
 
+isClient = function isClient()
+{
+    return false;
+};
+
 var sys     = require("sys"),
     http    = require("http"),
     url     = require("url"),
@@ -21,6 +26,7 @@ require('./core/user');
 require('./server/user');
 require('./core/message');
 require('./server/messagelist');
+require('./utils/func');
 require('./utils/map_arrayed');
 require('./battle-city/field');
 require('./battle-city/bot-emitter');
@@ -89,8 +95,7 @@ var server = require('http').createServer(function(request, response) {
 server.listen(8124);
 
 var io = require('socket.io');
-//io.listen(server, {'log level': 2}).sockets.on('connection', function(socket) {
-io.listen(server, {'log level': 3}).sockets.on('connection', function(socket) {
+io.listen(server, {'log level': 2}).sockets.on('connection', function(socket) {
     var user = null;
     socket.on('message', function(event) {
         switch (event.type) {

@@ -64,7 +64,7 @@ Loggable.prototype.sync = function(lastSync)
     while (current != null) {
         // as logData is time desc sorted, so walk throw logData while
         // time great than or equal to lastSync and break if:
-        if (current.time < lastSync) {
+        if (current.time <= lastSync) { // "<=" to avoid duplicate events
             break;
         }
         res.push({

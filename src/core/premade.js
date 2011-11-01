@@ -2,7 +2,7 @@
 Premade = function Premade(name)
 {
     this.name = name;
-    this.level = 1;
+    this.level = 14;
     this.userCount = 0;
     this.users = new TList();
     this.messages = new TList();

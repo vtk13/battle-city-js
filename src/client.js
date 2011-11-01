@@ -15,6 +15,11 @@ Field.prototype.draw = function()
     }
 };
 
+function isClient()
+{
+    return true;
+};
+
 $(function() {
     registry = {
         users: new TUserList($('#public .user-list'), undefined, 'user'),
@@ -27,13 +32,13 @@ $(function() {
 
     var canvas = document.getElementById('field');
     field = new Field(canvas.width, canvas.height);
-    field.context = canvas.getContext('2d');;
+    field.context = canvas.getContext('2d');
 
     window.images = {}, sprites = ['img/tank-down.png', 'img/tank-up.png',
         'img/tank-right.png', 'img/tank-left.png', 'img/bullet.png',
         'img/brick-wall.png', 'img/black.png', 'img/base.png',
         'img/steel-wall.png', 'img/star.png', 'img/trees.png',
-        'img/water1.png'];
+        'img/water1.png', 'img/water2.png', 'img/hit1.png', 'img/hit2.png'];
     for (var i in sprites) {
         images[sprites[i]] = new Image();
         images[sprites[i]].src = sprites[i];
@@ -139,11 +144,13 @@ $(function() {
                 case 'started':
                     $('#premade').hide();
                     $('#game').show();
+                    field.animateIntervalId = setInterval(function(){field.animateStep();}, 50);
                     break;
                 case 'gameover':
                     $('#game').hide();
                     $('#premade').show();
                     field.clear();
+                    clearInterval(field.animateIntervalId);
                     registry.tankStack.clear();
                     break;
                 case 'sync':
@@ -211,7 +218,6 @@ $(function() {
                     }
                     if (data['field.objects']) {
                         field.updateWith(data['field.objects']);
-                        field.draw();
                     }
                     if (data['game.botStack']) {
                         registry.tankStack.updateWith(data['game.botStack']);
