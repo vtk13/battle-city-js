@@ -139,9 +139,7 @@ Field.prototype.animateStep = function()
                 }
             }
         }
-        if (item instanceof OnFieldAnimation) {
-            item.animateStep(this.step);
-        }
+        item.animateStep && item.animateStep(this.step);
     }, this);
     this.step++;
 

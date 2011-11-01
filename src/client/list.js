@@ -106,7 +106,7 @@ TTankStack.prototype.itemDomElement = function(item)
 {
     return $('<div class="' + this.itemClass + ' ' +
         this.itemClass + item.id + '"><img src="' +
-        item.img.src + '"></div>');
+        item.img[0] + '"></div>');
 };
 
 TTankStack.prototype.add = function(item)

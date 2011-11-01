@@ -32,6 +32,7 @@ require('./battle-city/field');
 require('./battle-city/bot-emitter');
 require('./battle-city/keyboard');
 require('./battle-city/objects/abstract');
+require('./battle-city/objects/animation');
 require('./battle-city/objects/bullet');
 require('./battle-city/objects/tank');
 require('./battle-city/objects/tankbot');

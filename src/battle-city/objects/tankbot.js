@@ -6,6 +6,7 @@ TankBot = function TankBot(x, y, bonus)
     this.moveOn = true;
     this.bonus = bonus;
     this.clan = 1; // bots
+    this.armoredTimer = 0;
 };
 
 TankBot.prototype = new Tank();

@@ -8,8 +8,10 @@ Field.prototype.draw = function()
     for (var z = 0 ; z <= 2 ; z++) {
         this.objects.forEach(function(current){
             if (current.z == z) {
-                this.context.drawImage(current.img, current.x - current.hw,
-                        current.y - current.hh);
+                for (var i in current.img) {
+                    this.context.drawImage(images[current.img[i]], current.x - current.hw,
+                            current.y - current.hh);
+                }
             }
         }, this);
     }
@@ -38,7 +40,8 @@ $(function() {
         'img/tank-right.png', 'img/tank-left.png', 'img/bullet.png',
         'img/brick-wall.png', 'img/black.png', 'img/base.png',
         'img/steel-wall.png', 'img/star.png', 'img/trees.png',
-        'img/water1.png', 'img/water2.png', 'img/hit1.png', 'img/hit2.png'];
+        'img/water1.png', 'img/water2.png', 'img/hit1.png', 'img/hit2.png',
+        'img/armored1.png', 'img/armored2.png'];
     for (var i in sprites) {
         images[sprites[i]] = new Image();
         images[sprites[i]].src = sprites[i];

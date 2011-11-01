@@ -25,6 +25,7 @@ Tank = function Tank(x, y)
     // can move to current direction?
     this.stuck = false;
     this.clan = 0; // users
+    this.armoredTimer = 20 * 1000/30; // 30 step
 };
 
 Tank.prototype = new AbstractGameObject();
@@ -58,30 +59,31 @@ Tank.prototype.fire = function()
 
 Tank.prototype.step = function()
 {
-  if (this.moveOn) {
-      var x = this.x;
-      var y = this.y;
-      this.stuck = false;
-      this.x += this.speedX;
-      this.y += this.speedY;
-      var intersect = this.field.intersect(this);
-      if (intersect.length > 0) {
-          for (var i in intersect) {
-              switch (true) {
-              case intersect[i] instanceof Trees:
-                  break;
-              case intersect[i] instanceof Bonus:
-                  this.onBonus(intersect[i]);
-                  break;
-              default:
-                  this.x = x;
-                  this.y = y;
-                  this.stuck = true;
-              }
-          }
-      }
-      this.emit('change', {type: 'change', object: this});
-  }
+    this.armoredTimer > 0 && this.armoredTimer--;
+    if (this.moveOn) {
+        var x = this.x;
+        var y = this.y;
+        this.stuck = false;
+        this.x += this.speedX;
+        this.y += this.speedY;
+        var intersect = this.field.intersect(this);
+        if (intersect.length > 0) {
+            for (var i in intersect) {
+                switch (true) {
+                case intersect[i] instanceof Trees:
+                    break;
+                case intersect[i] instanceof Bonus:
+                    this.onBonus(intersect[i]);
+                      break;
+                default:
+                    this.x = x;
+                      this.y = y;
+                      this.stuck = true;
+                }
+            }
+        }
+        this.emit('change', {type: 'change', object: this});
+    }
 };
 
 Tank.prototype.onBonus = function(bonus)
@@ -103,7 +105,8 @@ Tank.prototype.serialize = function()
         y: this.y,
         z: this.z,
         speedX: this.speedX,
-        speedY: this.speedY
+        speedY: this.speedY,
+        armoredTimer: this.armoredTimer
     };
 };
 
@@ -115,6 +118,7 @@ Tank.prototype.unserialize = function(data)
     this.z = data.z;
     this.speedX = data.speedX;
     this.speedY = data.speedY;
+    this.armoredTimer = data.armoredTimer;
 
     if (this.speedX == 0 && this.speedY  > 0) {
         this.setImage('img/tank-down.png');
@@ -127,6 +131,15 @@ Tank.prototype.unserialize = function(data)
     }
     if (this.speedX  < 0 && this.speedY == 0) {
         this.setImage('img/tank-left.png');
+    }
+};
+
+Tank.prototype.animateStep = function(step)
+{
+    if (this.armoredTimer > 0) {
+        this.img[2] = step % 2 ? 'img/armored1.png' : 'img/armored2.png';
+    } else {
+        delete this.img[2];
     }
 };
 
@@ -173,6 +186,9 @@ Tank.prototype.stopMove = function()
 
 Tank.prototype.hit = function(bullet)
 {
+    if (this.armoredTimer > 0) {
+        return true;
+    }
     // do not hit your confederates (or yourself)
     if (this.clan != bullet.clan) {
         if (bullet.tank.user) {
@@ -184,6 +200,7 @@ Tank.prototype.hit = function(bullet)
         } else {
             this.field.remove(this);
         }
+        return true;
     }
     return true;
 };
