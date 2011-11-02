@@ -42,6 +42,7 @@ require('./battle-city/objects/base');
 require('./battle-city/objects/bonus');
 require('./battle-city/objects/trees');
 require('./battle-city/objects/water');
+require('./battle-city/objects/ice');
 
 registry = {
     users: new TList(),

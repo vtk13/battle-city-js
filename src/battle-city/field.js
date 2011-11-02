@@ -83,6 +83,9 @@ Field.prototype.terrain = function(map)
             case 4:
                 this.add(new Water(x*16+8, y*16+8));
                 break;
+            case 5:
+                this.add(new Ice(x*16+8, y*16+8));
+                break;
             }
         }
     }

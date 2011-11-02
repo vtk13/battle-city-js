@@ -36,12 +36,27 @@ $(function() {
     field = new Field(canvas.width, canvas.height);
     field.context = canvas.getContext('2d');
 
-    window.images = {}, sprites = ['img/tank-down.png', 'img/tank-up.png',
-        'img/tank-right.png', 'img/tank-left.png', 'img/bullet.png',
-        'img/brick-wall.png', 'img/black.png', 'img/base.png',
-        'img/steel-wall.png', 'img/star.png', 'img/trees.png',
-        'img/water1.png', 'img/water2.png', 'img/hit1.png', 'img/hit2.png',
-        'img/armored1.png', 'img/armored2.png'];
+    window.images = {};
+    var sprites = [
+        'img/tank-down.png'
+      , 'img/tank-up.png'
+      , 'img/tank-right.png'
+      , 'img/tank-left.png'
+      , 'img/bullet.png'
+      , 'img/brick-wall.png'
+      , 'img/black.png'
+      , 'img/base.png'
+      , 'img/steel-wall.png'
+      , 'img/star.png'
+      , 'img/trees.png'
+      , 'img/water1.png'
+      , 'img/water2.png'
+      , 'img/hit1.png'
+      , 'img/hit2.png'
+      , 'img/armored1.png'
+      , 'img/armored2.png'
+      , 'img/ice.png'
+    ];
     for (var i in sprites) {
         images[sprites[i]] = new Image();
         images[sprites[i]].src = sprites[i];

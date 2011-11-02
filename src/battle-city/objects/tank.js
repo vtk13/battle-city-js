@@ -15,7 +15,7 @@ Tank = function Tank(x, y)
     this.hw = 16; // half width
     this.hh = 16; // half height
     this.moveOn = 0;
-    this.speed = 2;
+    this.speed = 2; // default speed
     this.speedX = 0;
     this.speedY = -this.speed;
     this.setImage('img/tank-up.png');
@@ -25,7 +25,9 @@ Tank = function Tank(x, y)
     // can move to current direction?
     this.stuck = false;
     this.clan = 0; // users
-    this.armoredTimer = 20 * 1000/30; // 30 step
+    this.armoredTimer = 20 * 1000/30; // 30ms step
+    this.onIce = false;
+    this.glidingTimer = 0;
 };
 
 Tank.prototype = new AbstractGameObject();
@@ -60,7 +62,8 @@ Tank.prototype.fire = function()
 Tank.prototype.step = function()
 {
     this.armoredTimer > 0 && this.armoredTimer--;
-    if (this.moveOn) {
+    var onIce = false;
+    if (this.moveOn || this.glidingTimer > 0) {
         var x = this.x;
         var y = this.y;
         this.stuck = false;
@@ -70,17 +73,26 @@ Tank.prototype.step = function()
         if (intersect.length > 0) {
             for (var i in intersect) {
                 switch (true) {
-                case intersect[i] instanceof Trees:
-                    break;
                 case intersect[i] instanceof Bonus:
                     this.onBonus(intersect[i]);
-                      break;
+                    break;
+                case intersect[i] instanceof Ice:
+                    onIce = true;
+                    // no break! before default!
                 default:
-                    this.x = x;
-                      this.y = y;
-                      this.stuck = true;
+                    if (intersect[i].z == this.z) {
+                        this.x = x;
+                        this.y = y;
+                        this.stuck = true;
+                        this.glidingTimer = 0;
+                    }
                 }
             }
+        }
+        this.onIce = onIce;
+        if (this.glidingTimer > 0) {
+             onIce && this.glidingTimer--;
+            !onIce && (this.glidingTimer = 0);
         }
         this.emit('change', {type: 'change', object: this});
     }
@@ -182,6 +194,9 @@ Tank.prototype.stopMove = function()
 {
     this.direction = null;
     this.moveOn = false;
+    if (this.onIce) {
+        this.glidingTimer = 1000/30; // 30ms step
+    }
 };
 
 Tank.prototype.hit = function(bullet)
