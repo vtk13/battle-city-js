@@ -67,6 +67,7 @@ FastBulletTankBot.prototype = new TankBot();
 FastBulletTankBot.prototype.constructor = FastBulletTankBot;
 FastBulletTankBot.prototype.reward = 200;
 FastBulletTankBot.prototype.imgBase = 'img/fast-bullet-bot';
+FastBulletTankBot.prototype.bulletSpeed = 8; // default speed
 
 FastTankBot = function FastTankBot(x, y, bonus)
 {
@@ -77,10 +78,12 @@ FastTankBot.prototype = new TankBot();
 FastTankBot.prototype.constructor = FastTankBot;
 FastTankBot.prototype.reward = 300;
 FastTankBot.prototype.imgBase = 'img/fast-bot';
+FastTankBot.prototype.speed = 3; // default speed
 
 HeavyTankBot = function HeavyTankBot(x, y, bonus)
 {
     TankBot.apply(this, arguments); // call parent constructor
+    this.lives = 3;
 };
 
 HeavyTankBot.prototype = new TankBot();

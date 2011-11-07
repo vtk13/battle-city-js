@@ -15,7 +15,6 @@ Tank = function Tank(x, y)
     this.hw = 16; // half width
     this.hh = 16; // half height
     this.moveOn = 0;
-    this.speed = 2; // default speed
     this.speedX = 0;
     this.speedY = -this.speed;
     this.setDirectionImage();
@@ -28,11 +27,14 @@ Tank = function Tank(x, y)
     this.armoredTimer = 10 * 1000/30; // 30ms step
     this.onIce = false;
     this.glidingTimer = 0;
+    this.lives = 1;
 };
 
 Tank.prototype = new AbstractGameObject();
 Tank.prototype.constructor = Tank;
 Tank.prototype.imgBase = 'img/tank1';
+Tank.prototype.speed = 2; // default speed
+Tank.prototype.bulletSpeed = 5; // default speed
 
 Eventable(Tank.prototype);
 
@@ -43,10 +45,10 @@ Tank.prototype.fire = function()
         var bullet = new Bullet();
         bullet.tank = this;
         bullet.clan = this.clan;
-        bullet.speedX = this.speedX * 4;
-        bullet.speedY = this.speedY * 4;
-        bullet.x = this.x + (this.speedX != 0 ? (this.hw+1-Math.abs(bullet.speedX)) * this.speedX / Math.abs(this.speedX) : 0);
-        bullet.y = this.y + (this.speedY != 0 ? (this.hh+1-Math.abs(bullet.speedY)) * this.speedY / Math.abs(this.speedY) : 0);
+        bullet.speedX = vector(this.speedX) * this.bulletSpeed;
+        bullet.speedY = vector(this.speedY) * this.bulletSpeed;
+        bullet.x = this.x + (this.hw+1-Math.abs(bullet.speedX)) * vector(this.speedX);
+        bullet.y = this.y + (this.hh+1-Math.abs(bullet.speedY)) * vector(this.speedY);
         bullet.power = this.bulletPower;
 
         bullets.push(bullet);
@@ -213,6 +215,9 @@ Tank.prototype.hit = function(bullet)
     }
     // do not hit your confederates (or yourself)
     if (this.clan != bullet.clan) {
+        if (--this.lives > 0) {
+            return true;
+        }
         if (bullet.tank.user) {
             bullet.tank.user.addReward(this.reward);
         }
