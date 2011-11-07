@@ -10,6 +10,7 @@ Base = function Base(x, y)
 };
 
 Base.prototype = new AbstractGameObject();
+Base.prototype.constructor = Base;
 
 Eventable(Base.prototype);
 

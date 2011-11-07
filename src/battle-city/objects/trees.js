@@ -14,6 +14,7 @@ Trees = function Trees(x, y)
 };
 
 Trees.prototype = new AbstractGameObject();
+Trees.prototype.constructor = Trees;
 
 Eventable(Trees.prototype);
 

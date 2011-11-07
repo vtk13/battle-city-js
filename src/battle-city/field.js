@@ -55,8 +55,11 @@ Field.prototype.intersect = function(object)
 Field.prototype.terrain = function(map)
 {
     // todo move from this function
-    for (var i = 0 ; i < 10; i++) {
+    for (var i = 0 ; i < 3; i++) {
         this.game.botStack.add(new TankBot(0, 0, true));
+        this.game.botStack.add(new FastBulletTankBot(0, 0, true));
+        this.game.botStack.add(new FastTankBot(0, 0, true));
+        this.game.botStack.add(new HeavyTankBot(0, 0, true));
     }
 
     this.add(new Delimiter(           - 20, this.height /  2,             20, this.height / 2));

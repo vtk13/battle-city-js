@@ -18,19 +18,21 @@ Tank = function Tank(x, y)
     this.speed = 2; // default speed
     this.speedX = 0;
     this.speedY = -this.speed;
-    this.setImage('img/tank-up.png');
+    this.setDirectionImage();
     this.maxBullets = 1;
     this.bulletPower = 1;
     this.bullets = new Array();
     // can move to current direction?
     this.stuck = false;
     this.clan = 0; // users
-    this.armoredTimer = 20 * 1000/30; // 30ms step
+    this.armoredTimer = 10 * 1000/30; // 30ms step
     this.onIce = false;
     this.glidingTimer = 0;
 };
 
 Tank.prototype = new AbstractGameObject();
+Tank.prototype.constructor = Tank;
+Tank.prototype.imgBase = 'img/tank1';
 
 Eventable(Tank.prototype);
 
@@ -111,7 +113,7 @@ Tank.prototype.onBonus = function(bonus)
 Tank.prototype.serialize = function()
 {
     return {
-        type: 'Tank',
+        type: this.constructor.name,
         id: this.id,
         x: this.x,
         y: this.y,
@@ -120,6 +122,22 @@ Tank.prototype.serialize = function()
         speedY: this.speedY,
         armoredTimer: this.armoredTimer
     };
+};
+
+// function for override for different sprites
+Tank.prototype.setDirectionImage = function()
+{
+    if        (this.speedX == 0 && this.speedY  > 0) {
+        this.setImage(this.imgBase + '-down.png');
+    } else if (this.speedX == 0 && this.speedY  < 0) {
+        this.setImage(this.imgBase + '-up.png');
+    } else if (this.speedX  > 0 && this.speedY == 0) {
+        this.setImage(this.imgBase + '-right.png');
+    } else if (this.speedX  < 0 && this.speedY == 0) {
+        this.setImage(this.imgBase + '-left.png');
+    } else {
+        this.setImage(this.imgBase + '-up.png');
+    }
 };
 
 Tank.prototype.unserialize = function(data)
@@ -132,18 +150,7 @@ Tank.prototype.unserialize = function(data)
     this.speedY = data.speedY;
     this.armoredTimer = data.armoredTimer;
 
-    if (this.speedX == 0 && this.speedY  > 0) {
-        this.setImage('img/tank-down.png');
-    }
-    if (this.speedX == 0 && this.speedY  < 0) {
-        this.setImage('img/tank-up.png');
-    }
-    if (this.speedX  > 0 && this.speedY == 0) {
-        this.setImage('img/tank-right.png');
-    }
-    if (this.speedX  < 0 && this.speedY == 0) {
-        this.setImage('img/tank-left.png');
-    }
+    this.setDirectionImage();
 };
 
 Tank.prototype.animateStep = function(step)

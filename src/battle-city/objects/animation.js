@@ -5,6 +5,7 @@ OnFieldAnimation = function OnFieldAnimation(step)
 };
 
 OnFieldAnimation.prototype = new AbstractGameObject();
+OnFieldAnimation.prototype.constructor = OnFieldAnimation;
 
 BulletHitAnimation = function BulletHitAnimation(step, x, y)
 {
@@ -16,6 +17,7 @@ BulletHitAnimation = function BulletHitAnimation(step, x, y)
 };
 
 BulletHitAnimation.prototype = new OnFieldAnimation();
+BulletHitAnimation.prototype.constructor = BulletHitAnimation;
 
 BulletHitAnimation.prototype.animateStep = function(step)
 {

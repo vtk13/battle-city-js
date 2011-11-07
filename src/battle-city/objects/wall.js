@@ -14,6 +14,7 @@ Wall = function Wall(x, y)
 };
 
 Wall.prototype = new AbstractGameObject();
+Wall.prototype.constructor = Wall;
 
 Eventable(Wall.prototype);
 
@@ -84,6 +85,7 @@ SteelWall = function SteelWall(x, y)
 };
 
 SteelWall.prototype = new Wall();
+SteelWall.prototype.constructor = SteelWall;
 
 SteelWall.prototype.serialize = function()
 {

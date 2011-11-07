@@ -4,6 +4,7 @@ TMessageList = function TMessageList()
 };
 
 TMessageList.prototype = new TList();
+TMessageList.prototype.constructor = TMessageList;
 
 TMessageList.prototype.say = function(message)
 {

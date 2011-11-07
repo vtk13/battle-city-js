@@ -14,6 +14,7 @@ Ice = function Ice(x, y)
 };
 
 Ice.prototype = new AbstractGameObject();
+Ice.prototype.constructor = Ice;
 
 Eventable(Ice.prototype);
 

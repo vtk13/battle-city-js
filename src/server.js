@@ -51,7 +51,11 @@ registry = {
 };
 
 process.on('uncaughtException', function(ex) {
-    console.log(ex.stack);
+    if (ex.stack) {
+        console.log(ex.stack);
+    } else {
+        console.trace();
+    }
 });
 
 /**

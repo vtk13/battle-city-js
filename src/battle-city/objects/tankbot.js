@@ -10,9 +10,9 @@ TankBot = function TankBot(x, y, bonus)
 };
 
 TankBot.prototype = new Tank();
-TankBot.prototype._super = Tank.prototype;
-// todo tank types
-TankBot.prototype.reward = 20;
+TankBot.prototype.constructor = TankBot;
+TankBot.prototype.reward = 100;
+TankBot.prototype.imgBase = 'img/normal-bot';
 
 TankBot.prototype.step = function()
 {
@@ -36,7 +36,7 @@ TankBot.prototype.step = function()
             }
         }
     }
-    this._super.step.call(this);
+    Tank.prototype.step.call(this);
 };
 
 TankBot.prototype.onBonus = function(bonus)
@@ -46,7 +46,7 @@ TankBot.prototype.onBonus = function(bonus)
 
 TankBot.prototype.hit = function(bullet)
 {
-    var res = this._super.hit.apply(this, arguments);
+    var res = Tank.prototype.hit.apply(this, arguments);
     // copy paste condition from parent::hit()
     // this.clan != bullet.clan means tank is hitted
     if (this.clan != bullet.clan && this.bonus) {
@@ -57,3 +57,34 @@ TankBot.prototype.hit = function(bullet)
     }
     return res;
 };
+
+FastBulletTankBot = function FastBulletTankBot(x, y, bonus)
+{
+    TankBot.apply(this, arguments); // call parent constructor
+};
+
+FastBulletTankBot.prototype = new TankBot();
+FastBulletTankBot.prototype.constructor = FastBulletTankBot;
+FastBulletTankBot.prototype.reward = 200;
+FastBulletTankBot.prototype.imgBase = 'img/fast-bullet-bot';
+
+FastTankBot = function FastTankBot(x, y, bonus)
+{
+    TankBot.apply(this, arguments); // call parent constructor
+};
+
+FastTankBot.prototype = new TankBot();
+FastTankBot.prototype.constructor = FastTankBot;
+FastTankBot.prototype.reward = 300;
+FastTankBot.prototype.imgBase = 'img/fast-bot';
+
+HeavyTankBot = function HeavyTankBot(x, y, bonus)
+{
+    TankBot.apply(this, arguments); // call parent constructor
+};
+
+HeavyTankBot.prototype = new TankBot();
+HeavyTankBot.prototype.constructor = HeavyTankBot;
+HeavyTankBot.prototype.reward = 400;
+HeavyTankBot.prototype.imgBase = 'img/heavy-bot';
+

@@ -4,6 +4,7 @@ TPremadeList = function TPremadeList()
 };
 
 TPremadeList.prototype = new TList();
+TPremadeList.prototype.constructor = TPremadeList;
 
 TPremadeList.prototype.join = function(event, user)
 {

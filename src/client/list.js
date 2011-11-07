@@ -77,6 +77,7 @@ function TUserList(container, filter, itemClass)
 };
 
 TUserList.prototype = new TItemList();
+TUserList.prototype.constructor = TUserList;
 
 TUserList.prototype.itemDomElement = function(item)
 {
@@ -100,7 +101,7 @@ function TTankStack(container, filter, itemClass)
 };
 
 TTankStack.prototype = new TItemList();
-TTankStack.prototype._super = TItemList.prototype;
+TTankStack.prototype.constructor = TTankStack;
 
 TTankStack.prototype.itemDomElement = function(item)
 {
@@ -113,5 +114,5 @@ TTankStack.prototype.add = function(item)
 {
     var bot = new TankBot();
     bot.unserialize(item);
-    this._super.add.call(this, bot);
+    TItemList.prototype.add.call(this, bot);
 };

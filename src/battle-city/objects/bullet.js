@@ -20,6 +20,7 @@ Bullet = function Bullet(speedX, speedY)
 };
 
 Bullet.prototype = new AbstractGameObject();
+Bullet.prototype.constructor = Bullet;
 
 Eventable(Bullet.prototype);
 

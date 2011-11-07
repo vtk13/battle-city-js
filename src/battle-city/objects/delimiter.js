@@ -10,6 +10,7 @@ Delimiter = function Delimiter(x, y, hw, hh)
 };
 
 Delimiter.prototype = new AbstractGameObject();
+Delimiter.prototype.constructor = Delimiter;
 
 Eventable(Delimiter.prototype);
 

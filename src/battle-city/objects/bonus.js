@@ -14,6 +14,7 @@ Bonus = function Bonus(x, y)
 };
 
 Bonus.prototype = new AbstractGameObject();
+Bonus.prototype.constructor = Bonus;
 
 Eventable(Bonus.prototype);
 

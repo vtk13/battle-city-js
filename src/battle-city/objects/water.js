@@ -14,6 +14,7 @@ Water = function Water(x, y)
 };
 
 Water.prototype = new AbstractGameObject();
+Water.prototype.constructor = Water;
 
 Eventable(Water.prototype);
 
