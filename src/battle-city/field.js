@@ -56,10 +56,10 @@ Field.prototype.terrain = function(map)
 {
     // todo move from this function
     for (var i = 0 ; i < 3; i++) {
-        this.game.botStack.add(new TankBot(0, 0, true));
+        this.game.botStack.add(new HeavyTankBot(0, 0, true));
         this.game.botStack.add(new FastBulletTankBot(0, 0, true));
         this.game.botStack.add(new FastTankBot(0, 0, true));
-        this.game.botStack.add(new HeavyTankBot(0, 0, true));
+        this.game.botStack.add(new TankBot(0, 0, true));
     }
 
     this.add(new Delimiter(           - 20, this.height /  2,             20, this.height / 2));
@@ -92,6 +92,8 @@ Field.prototype.terrain = function(map)
             }
         }
     }
+
+    this.add(new BonusShovel(10*16, 20*16));
 };
 
 Field.prototype.canPutTank = function(x, y)
@@ -136,7 +138,7 @@ Field.prototype.animateStep = function()
 {
 //    this.animateQueue || (this.animateQueue = []);
     this.objects.forEach(function(item) {
-        if (item instanceof Water) {
+        if (item instanceof Water) { // todo move to Water
             if (this.step % 10 == 0) {
                 if (this.step % 20 >= 10) {
                     item.setImage('img/water2.png');

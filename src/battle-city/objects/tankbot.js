@@ -44,13 +44,16 @@ TankBot.prototype.onBonus = function(bonus)
 
 };
 
+/**
+ * Bullet may be undefined (see BonusGrenade)
+ */
 TankBot.prototype.hit = function(bullet)
 {
     var res = Tank.prototype.hit.apply(this, arguments);
     // copy paste condition from parent::hit()
     // this.clan != bullet.clan means tank is hitted
-    if (this.clan != bullet.clan && this.bonus) {
-        this.field.add(new Bonus(
+    if (bullet && this.clan != bullet.clan && this.bonus) {
+        this.field.add(new ([BonusStar, BonusGrenade, BonusShovel][Math.floor(Math.random()*2.9999)])(
             Math.round((Math.random() * this.field.width  / 16 - 1)) * 16,
             Math.round((Math.random() * this.field.height / 16 - 1)) * 16
         ));

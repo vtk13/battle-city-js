@@ -23,11 +23,15 @@ Tank = function Tank(x, y)
     this.bullets = new Array();
     // can move to current direction?
     this.stuck = false;
+    this.lives = 1;
+    this.bonus = false;
     this.clan = 0; // users
+
     this.armoredTimer = 10 * 1000/30; // 30ms step
+    this.trackStep = 1; // 1 or 2
+
     this.onIce = false;
     this.glidingTimer = 0;
-    this.lives = 1;
 };
 
 Tank.prototype = new AbstractGameObject();
@@ -104,11 +108,7 @@ Tank.prototype.step = function()
 
 Tank.prototype.onBonus = function(bonus)
 {
-    if (this.maxBullets == 1) {
-        this.maxBullets = 2;
-    } else if (this.bulletPower == 1) {
-        this.bulletPower = 2;
-    }
+    bonus.applyTo(this);
     this.field.remove(bonus);
 };
 
@@ -122,6 +122,7 @@ Tank.prototype.serialize = function()
         z: this.z,
         speedX: this.speedX,
         speedY: this.speedY,
+        bonus: this.bonus,
         armoredTimer: this.armoredTimer
     };
 };
@@ -129,17 +130,18 @@ Tank.prototype.serialize = function()
 // function for override for different sprites
 Tank.prototype.setDirectionImage = function()
 {
-    if        (this.speedX == 0 && this.speedY  > 0) {
-        this.setImage(this.imgBase + '-down.png');
-    } else if (this.speedX == 0 && this.speedY  < 0) {
-        this.setImage(this.imgBase + '-up.png');
-    } else if (this.speedX  > 0 && this.speedY == 0) {
-        this.setImage(this.imgBase + '-right.png');
-    } else if (this.speedX  < 0 && this.speedY == 0) {
-        this.setImage(this.imgBase + '-left.png');
-    } else {
-        this.setImage(this.imgBase + '-up.png');
+    var dir = 'up';
+    if (this.speedY  > 0) {
+        dir = 'down';
+    } else if (this.speedY  < 0) {
+        dir = 'up';
+    } else if (this.speedX  > 0) {
+        dir = 'right';
+    } else if (this.speedX  < 0) {
+        dir = 'left';
     }
+    this.setImage(this.imgBase + '-' + dir + '-s' + this.trackStep +
+            (this.blink ? '-blink' : '') + '.png');
 };
 
 Tank.prototype.unserialize = function(data)
@@ -151,6 +153,7 @@ Tank.prototype.unserialize = function(data)
     this.speedX = data.speedX;
     this.speedY = data.speedY;
     this.armoredTimer = data.armoredTimer;
+    this.bonus = data.bonus;
 
     this.setDirectionImage();
 };
@@ -161,6 +164,12 @@ Tank.prototype.animateStep = function(step)
         this.img[2] = step % 2 ? 'img/armored1.png' : 'img/armored2.png';
     } else {
         delete this.img[2];
+    }
+    if (this.moveOn) {
+        this.trackStep = step % 2 + 1;
+    }
+    if (this.bonus) {
+        this.blink = (step % 10) > 5;
     }
 };
 
@@ -208,26 +217,29 @@ Tank.prototype.stopMove = function()
     }
 };
 
+/**
+ * Bullet may be undefined (see BonusGrenade)
+ */
 Tank.prototype.hit = function(bullet)
 {
     if (this.armoredTimer > 0) {
         return true;
     }
-    // do not hit your confederates (or yourself)
-    if (this.clan != bullet.clan) {
-        if (--this.lives > 0) {
-            return true;
-        }
-        if (bullet.tank.user) {
-            bullet.tank.user.addReward(this.reward);
-        }
+    if (bullet === undefined) {
+        this.field.remove(this);
+    } else if (this.clan != bullet.clan) {
+        // do not hit your confederates (or yourself)
+        if (--this.lives <= 0) {
+            if (bullet.tank.user) {
+                bullet.tank.user.addReward(this.reward);
+            }
 
-        if (this.user) {
-            this.user.hit();
-        } else {
-            this.field.remove(this);
+            if (this.user) {
+                this.user.hit();
+            } else {
+                this.field.remove(this);
+            }
         }
-        return true;
     }
     return true;
 };

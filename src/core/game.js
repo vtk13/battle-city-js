@@ -72,9 +72,7 @@ Game.prototype.unjoin = function(user)
 Game.prototype.step = function()
 {
     this.field.objects.forEach(function(item){
-        if (item.step) {
-            item.step();
-        }
+        item.step && item.step();
     });
 
     if (this.bots.length == 0 && this.botStack.count() == 0) {
