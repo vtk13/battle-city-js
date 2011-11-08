@@ -107,3 +107,46 @@ BonusShovel.prototype.applyTo = function(tank)
     var base = tank.field.intersect({x: 12*16+8, y: 24*16+8, hw: 2, hh: 2});
     base[0].armoredTimer = 10 * 1000/30; // 30ms step
 };
+
+BonusHelmet = function BonusHelmet(x, y)
+{
+    Bonus.apply(this, arguments);
+    this.setImage('img/helmet.png');
+};
+
+BonusHelmet.prototype = new Bonus();
+BonusHelmet.prototype.constructor = BonusHelmet;
+
+BonusHelmet.prototype.applyTo = function(tank)
+{
+    tank.armoredTimer = 10 * 1000/30; // 30ms step
+};
+
+BonusLive = function BonusLive(x, y)
+{
+    Bonus.apply(this, arguments);
+    this.setImage('img/live.png');
+};
+
+BonusLive.prototype = new Bonus();
+BonusLive.prototype.constructor = BonusLive;
+
+BonusLive.prototype.applyTo = function(tank)
+{
+    tank.user.lives++;
+    tank.user.emit('change', {type: 'change', object: tank.user});
+};
+
+BonusTimer = function BonusTimer(x, y)
+{
+    Bonus.apply(this, arguments);
+    this.setImage('img/timer.png');
+};
+
+BonusTimer.prototype = new Bonus();
+BonusTimer.prototype.constructor = BonusTimer;
+
+BonusTimer.prototype.applyTo = function(tank)
+{
+    tank.field.timer = 10 * 1000/30; // 30ms step
+};

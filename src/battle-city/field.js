@@ -4,6 +4,7 @@ Field = function Field(width, height)
     this.height     = height;
     this.objects    = null;
     this.step       = 1;
+    this.timer      = 0;
     this.clear();
     this.setMaxListeners(100); // @todo
 };
@@ -98,7 +99,7 @@ Field.prototype.terrain = function(map)
         }
     }
 
-    this.add(new BonusShovel(10*16, 20*16));
+//    this.add(new BonusTimer(10*16, 20*16));
 };
 
 Field.prototype.canPutTank = function(x, y)

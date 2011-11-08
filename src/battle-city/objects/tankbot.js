@@ -53,7 +53,8 @@ TankBot.prototype.hit = function(bullet)
     // copy paste condition from parent::hit()
     // this.clan != bullet.clan means tank is hitted
     if (bullet && this.clan != bullet.clan && this.bonus) {
-        this.field.add(new ([BonusStar, BonusGrenade, BonusShovel][Math.floor(Math.random()*2.9999)])(
+        var bonuses = [BonusStar, BonusGrenade, BonusShovel, BonusHelmet, BonusLive, BonusTimer];
+        this.field.add(new (bonuses[Math.floor(Math.random()*(bonuses.length-0.0001))])(
             Math.round((Math.random() * this.field.width  / 16 - 1)) * 16,
             Math.round((Math.random() * this.field.height / 16 - 1)) * 16
         ));
