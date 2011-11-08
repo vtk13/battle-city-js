@@ -40,6 +40,11 @@ Field.prototype.remove = function(object)
         anim.id = object.id;
         this.add(anim);
     }
+    if (isClient() && object instanceof Tank) {
+        var anim = new TankHitAnimation(this.step, object.x, object.y);
+        anim.id = object.id;
+        this.add(anim);
+    }
 };
 
 Field.prototype.move = function(item, newX, newY)

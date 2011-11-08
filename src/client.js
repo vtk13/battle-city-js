@@ -9,7 +9,8 @@ Field.prototype.draw = function()
         this.objects.forEach(function(current){
             if (current.z == z) {
                 for (var i in current.img) {
-                    this.context.drawImage(images[current.img[i]], current.x - current.hw,
+                    this.context.drawImage(images[current.img[i]],
+                            current.x - current.hw,
                             current.y - current.hh);
                 }
             }
@@ -123,6 +124,7 @@ $(function() {
       , 'img/water2.png'
       , 'img/hit1.png'
       , 'img/hit2.png'
+      , 'img/hit3.png'
       , 'img/armored1.png'
       , 'img/armored2.png'
       , 'img/ice.png'
