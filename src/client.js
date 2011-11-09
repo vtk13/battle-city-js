@@ -261,10 +261,11 @@ $(function() {
                             if (event.type == 'add') {
                                 var date = new Date(event.data.time);
                                 var time = date.getHours() + ':' + (date.getMinutes() < 10 ? 0 : '') + date.getMinutes();
-                                $('#public .messages').append('<div><span>' +
-                                        time + '</span> ' +
-                                        '<span>&lt;' + event.data.nick + '&gt;</span> ' +
-                                        event.data.text + '</div>');
+                                var message = $('<div><span>' +
+                                        time + '</span> </div>');
+                                message.append($('<span/>').text('<' + event.data.nick + '> '));
+                                message.append($('<span/>').text(event.data.text));
+                                $('#public .messages').append(message);
                                 $('#public .messages').get(0).scrollTop = $('#public .messages').get(0).scrollHeight;
                             }
                         });
@@ -282,8 +283,7 @@ $(function() {
                                     $('#public .premades .premade' + event.data.id).html(event.data.name);
                                 } else {
                                     $('#public .premades').append($('<div class="premade premade' +
-                                        event.data.id + '">' +
-                                        event.data.name + '</div>'));
+                                        event.data.id + '"></div>').text(event.data.name));
                                 }
                                 break;
                             case 'remove':
@@ -307,10 +307,11 @@ $(function() {
                             if (event.type == 'add') {
                                 var date = new Date(event.data.time);
                                 var time = date.getHours() + ':' + (date.getMinutes() < 10 ? 0 : '') + date.getMinutes();
-                                $('#premade .messages').append('<div><span>' +
-                                        time + '</span> ' +
-                                        '<span>&lt;' + event.data.nick + '&gt;</span> ' +
-                                        event.data.text + '</div>');
+                                var message = $('<div><span>' +
+                                        time + '</span> </div>');
+                                message.append($('<span/>').text('<' + event.data.nick + '> '));
+                                message.append($('<span/>').text(event.data.text));
+                                $('#premade .messages').append(message);
                                 $('#premade .messages').get(0).scrollTop = $('#premade .messages').get(0).scrollHeight;
                             }
                         });

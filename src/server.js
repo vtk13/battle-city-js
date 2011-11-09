@@ -102,7 +102,7 @@ var server = require('http').createServer(function(request, response) {
 server.listen(8124);
 
 var io = require('socket.io');
-io.listen(server, {'log level': 2}).sockets.on('connection', function(socket) {
+io.listen(server, {'log level': 1}).sockets.on('connection', function(socket) {
     var user = null;
     socket.on('message', function(event) {
         switch (event.type) {
@@ -118,6 +118,7 @@ io.listen(server, {'log level': 2}).sockets.on('connection', function(socket) {
                         type: 'connected',
                         userId: user.id
                     });
+                    console.log('User ' + event.nick + ' connected');
                 }
                 break;
             case 'join':
@@ -126,6 +127,7 @@ io.listen(server, {'log level': 2}).sockets.on('connection', function(socket) {
                         type: 'joined',
                         premade: user.premade.serialize()
                     });
+                    console.log('User ' + user.nick + ' join premade ' + user.premade.name);
                 } else {
                     socket.json.send({
                         type: 'user-message',
@@ -135,6 +137,7 @@ io.listen(server, {'log level': 2}).sockets.on('connection', function(socket) {
                 break;
             case 'unjoin':
                 if (user.premade) {
+                    console.log('User ' + user.nick + ' unjoin premade ' + user.premade.name);
                     user.premade.unjoin(user);
                     socket.json.send({
                         type: 'unjoined'
@@ -144,6 +147,7 @@ io.listen(server, {'log level': 2}).sockets.on('connection', function(socket) {
             case 'start':
                 if (user.premade) {
                     user.premade.startGame();
+                    console.log('User ' + user.nick + ' starts game ' + user.premade.name);
                 }
                 break;
             case 'control':
@@ -151,6 +155,7 @@ io.listen(server, {'log level': 2}).sockets.on('connection', function(socket) {
                 break;
             case 'say':
                 user.say(event.text);
+                console.log('User ' + user.nick + ' say ' + event.text);
                 break;
         }
     });

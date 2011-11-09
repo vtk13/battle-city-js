@@ -83,8 +83,7 @@ TUserList.prototype.itemDomElement = function(item)
 {
     return $('<div class="' + this.itemClass + ' ' +
         (this.currentId == item.id ? 'current ' : '') +
-        this.itemClass + item.id + '">' +
-        item.nick + '</div>');
+        this.itemClass + item.id + '"></div>').text(item.nick);
 };
 
 TUserList.prototype.setCurrent = function(id)
