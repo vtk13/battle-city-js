@@ -152,6 +152,9 @@ $(function() {
         });
         socket.on('message', function(data) {
             switch (data.type) {
+                case 'user-message':
+                    alert(data.message);
+                    break;
                 case 'connected':
                     $('#login').hide();
                     $('#public').show();

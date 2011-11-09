@@ -126,6 +126,11 @@ io.listen(server, {'log level': 2}).sockets.on('connection', function(socket) {
                         type: 'joined',
                         premade: user.premade.serialize()
                     });
+                } else {
+                    socket.json.send({
+                        type: 'user-message',
+                        message: 'Can\'t create/join game' // todo more verbose
+                    });
                 }
                 break;
             case 'unjoin':

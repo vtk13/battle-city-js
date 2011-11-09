@@ -23,7 +23,7 @@ Premade.prototype.say = function(message)
 
 Premade.prototype.join = function(user)
 {
-    if (!this.locked) {
+    if (!this.locked && (this.users.count() < 2)) {
         // todo extract to user method setPremade()
         if (user.premade) {
             user.premade.unjoin();

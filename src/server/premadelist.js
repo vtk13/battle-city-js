@@ -17,8 +17,12 @@ TPremadeList.prototype.join = function(event, user)
             }
         }
         if (!premade) {
-            premade = new Premade(event.name);
-            this.add(premade);
+            if (this.count() >= 3) { // todo P4 3GHz can run only 3 games
+                return false;
+            } else {
+                premade = new Premade(event.name);
+                this.add(premade);
+            }
         }
         return premade.join(user);
     } else {
