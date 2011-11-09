@@ -7,12 +7,12 @@ Field = function Field(width, height)
     this.timer      = 0;
     this.clear();
     this.setMaxListeners(100); // @todo
+    if (typeof Loggable == 'function') {
+        Loggable(this);
+    }
 };
 
 Eventable(Field.prototype);
-if (typeof Loggable == 'function') {
-    Loggable(Field.prototype);
-}
 
 Field.autoIncrement = 1; // todo eliminate?
 

@@ -20,7 +20,7 @@ TPremadeList.prototype.join = function(event, user)
             premade = new Premade(event.name);
             this.add(premade);
         }
-        premade.join(user);
+        return premade.join(user);
     } else {
         throw {message: "User already in premade - " + user.premade.id};
     }

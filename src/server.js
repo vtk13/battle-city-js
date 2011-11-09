@@ -54,6 +54,7 @@ process.on('uncaughtException', function(ex) {
     if (ex.stack) {
         console.log(ex.stack);
     } else {
+        console.log(ex);
         console.trace();
     }
 });
@@ -120,11 +121,12 @@ io.listen(server, {'log level': 2}).sockets.on('connection', function(socket) {
                 }
                 break;
             case 'join':
-                registry.premades.join(event, user);
-                socket.json.send({
-                    type: 'joined',
-                    premade: user.premade.serialize()
-                });
+                if (registry.premades.join(event, user)) {
+                    socket.json.send({
+                        type: 'joined',
+                        premade: user.premade.serialize()
+                    });
+                }
                 break;
             case 'unjoin':
                 if (user.premade) {
@@ -133,10 +135,12 @@ io.listen(server, {'log level': 2}).sockets.on('connection', function(socket) {
                         type: 'unjoined'
                     });
                 }
+                break;
             case 'start':
                 if (user.premade) {
                     user.premade.startGame();
                 }
+                break;
             case 'control':
                 user.control(event);
                 break;

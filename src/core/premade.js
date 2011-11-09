@@ -4,6 +4,7 @@ Premade = function Premade(name)
     this.name = name;
     this.level = 1;
     this.userCount = 0;
+    this.locked = false; // lock for new users
     this.users = new TList();
     this.messages = new TList();
 };
@@ -22,19 +23,24 @@ Premade.prototype.say = function(message)
 
 Premade.prototype.join = function(user)
 {
-    // todo extract to user method setPremade()
-    if (user.premade) {
-        user.premade.unjoin();
-    }
-    user.premade = this;
+    if (!this.locked) {
+        // todo extract to user method setPremade()
+        if (user.premade) {
+            user.premade.unjoin();
+        }
+        user.premade = this;
 
-    this.users.add(user);
-    this.userCount++;
-    this.emit('change', {type: 'change', object: this});
-    // todo extract to user methods setLives(), setPoints() ?
-    user.lives = 4;
-    user.points = 0;
-    user.emit('change', {type: 'change', object: user});
+        this.users.add(user);
+        this.userCount++;
+        this.emit('change', {type: 'change', object: this});
+        // todo extract to user methods setLives(), setPoints() ?
+        user.lives = 4;
+        user.points = 0;
+        user.emit('change', {type: 'change', object: user});
+        return true;
+    } else {
+        return false;
+    }
 };
 
 Premade.prototype.unjoin = function(user)
@@ -44,6 +50,7 @@ Premade.prototype.unjoin = function(user)
     }
     this.users.remove(user);
     this.userCount--;
+    delete user.premade;
     this.emit('change', {type: 'change', object: this});
     if (this.userCount == 0) {
         registry.premades.remove(this);
@@ -52,12 +59,13 @@ Premade.prototype.unjoin = function(user)
 
 Premade.prototype.startGame = function()
 {
-    var game = this.game = new Game('../battle-city/maps/level' + this.level);
+    this.locked = true;
+    this.game = new Game('../battle-city/maps/level' + this.level);
     this.game.premade = this;
     this.users.forEach(function(user){
-        game.join(user);
+        this.game.join(user);
         user.socket.json.send({type: 'started'});
-    });
+    }, this);
 };
 
 Premade.prototype.gameOver = function()

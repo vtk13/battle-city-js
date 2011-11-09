@@ -53,7 +53,7 @@ TList.prototype.count = function()
     return n;
 };
 
-TList.prototype.forEach = function(handler)
+TList.prototype.forEach = function(handler, thisObj)
 {
-    this.items.forEach(handler);
+    this.items.forEach(handler, thisObj);
 };
