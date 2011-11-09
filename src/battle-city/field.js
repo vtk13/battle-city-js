@@ -53,6 +53,11 @@ Field.prototype.move = function(item, newX, newY)
     return this.objects.move(item, newX, newY);
 };
 
+/**
+ *
+ * @param object AbstractGameObject
+ * @return
+ */
 Field.prototype.intersect = function(object)
 {
     return this.objects.intersects(object);
@@ -105,7 +110,7 @@ Field.prototype.terrain = function(map)
 Field.prototype.canPutTank = function(x, y)
 {
     var res = true;
-    this.intersect({x: x, y: y, hw: 16, hh: 16}).forEach(function(item){
+    this.intersect(new BoundObject(null, x, y, 16, 16, 0, 0)).forEach(function(item){
         if (!(item instanceof Bonus)) {
             res = false;
         }

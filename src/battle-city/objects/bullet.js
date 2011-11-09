@@ -9,14 +9,14 @@ Bullet = function Bullet(speedX, speedY)
     this.y = 0;
     this.z = 1;
     // bullet is rectangle step of bullet
-    this.hw = 1; // speedX > 0 ? speedX / 2 : 1; // half width
-    this.hh = 1; // speedY > 0 ? speedY / 2 : 1; // half height
+    this.hw = 4; // speedX > 0 ? speedX / 2 : 1; // half width
+    this.hh = 4; // speedY > 0 ? speedY / 2 : 1; // half height
     this.speedX = speedX;
     this.speedY = speedY;
     this.finalX = 0; // for proper hit animation (todo ugly)
     this.finalY = 0; // for proper hit animation (todo ugly)
     this.power = 1;
-    this.setImage('img/bullet.png');
+    this.setDirectionImage();
 };
 
 Bullet.prototype = new AbstractGameObject();
@@ -24,11 +24,32 @@ Bullet.prototype.constructor = Bullet;
 
 Eventable(Bullet.prototype);
 
+Bullet.prototype.setDirectionImage = function()
+{
+ var dir = 'up';
+ if (this.speedY  > 0) {
+     dir = 'down';
+ } else if (this.speedY  < 0) {
+     dir = 'up';
+ } else if (this.speedX  > 0) {
+     dir = 'right';
+ } else if (this.speedX  < 0) {
+     dir = 'left';
+ }
+ this.setImage('img/bullet-' + dir + '.png');
+};
+
 Bullet.prototype.step = function()
 {
     if (this.field.move(this, this.x + this.speedX, this.y + this.speedY)) {
         this.emit('change', {type: 'change', object: this});
     }
+};
+
+Bullet.prototype.hit = function()
+{
+    this.field.remove(this);
+    return true;
 };
 
 Bullet.prototype.onIntersect = function(items)
@@ -73,4 +94,5 @@ Bullet.prototype.unserialize = function(data)
     this.speedY = data.speedY;
     this.finalX = data.finalX;
     this.finalY = data.finalY;
+    this.setDirectionImage();
 };

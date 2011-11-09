@@ -51,8 +51,8 @@ Tank.prototype.fire = function()
         bullet.clan = this.clan;
         bullet.speedX = vector(this.speedX) * this.bulletSpeed;
         bullet.speedY = vector(this.speedY) * this.bulletSpeed;
-        bullet.x = this.x + (this.hw+1-Math.abs(bullet.speedX)) * vector(this.speedX);
-        bullet.y = this.y + (this.hh+1-Math.abs(bullet.speedY)) * vector(this.speedY);
+        bullet.x = this.x + (this.hw+bullet.boundX()-Math.abs(bullet.speedX)) * vector(this.speedX);
+        bullet.y = this.y + (this.hh+bullet.boundY()-Math.abs(bullet.speedY)) * vector(this.speedY);
         bullet.power = this.bulletPower;
 
         bullets.push(bullet);

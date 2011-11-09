@@ -55,7 +55,7 @@ Base.prototype.step = function()
         if (--this.armoredTimer <= 0) {
             for (var i in this.baseEdge) {
                 var cell = this.baseEdge[i];
-                var walls = this.field.intersect({x: cell.x*16+8, y: cell.y*16+8, hw: 8, hh: 8});
+                var walls = this.field.intersect(new BoundObject(null, cell.x*16+8, cell.y*16+8, 8, 8));
                 var convert = true;
                 for (var j in walls) {
                     if (!(walls[j] instanceof Wall)) {

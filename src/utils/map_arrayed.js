@@ -32,7 +32,7 @@ MapArrayed.prototype.remove = function(item)
 
 MapArrayed.prototype.move = function(item, newX, newY)
 {
-    var items = this.intersects({id: item.id, x: newX, y: newY, hw: item.hw, hh: item.hh});
+    var items = this.intersects(new BoundObject(item.id, newX, newY, item.hw, item.hh, item.speedX, item.speedY));
     if (items.length == 0 || (item.onIntersect && item.onIntersect(items))) {
         item.x = newX;
         item.y = newY;
@@ -45,13 +45,13 @@ MapArrayed.prototype.move = function(item, newX, newY)
 MapArrayed.prototype.intersects = function(item)
 {
     var res = [];
-    for (var i in this.items) {
-        if (this.items[i].id == item.id) continue;
-        if (Math.abs(this.items[i].x - item.x) < this.items[i].hw + item.hw &&
-            Math.abs(this.items[i].y - item.y) < this.items[i].hh + item.hh) {
-            res.push(this.items[i]);
+    this.forEach(function(each){
+        if (each.id == item.id) return;
+        if (Math.abs(each.x - item.x) < (each.boundX() + item.boundX()) &&
+            Math.abs(each.y - item.y) < (each.boundY() + item.boundY())) {
+            res.push(each);
         }
-    }
+    });
     return res;
 };
 
