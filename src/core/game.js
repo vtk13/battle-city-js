@@ -24,7 +24,8 @@ Game = function Game(level)
     this.botsEmitters.current = 0;
 
     this.botStack = new TList();
-    this.field.terrain(require(level).map);
+    var level = require(level);
+    this.field.terrain(level.map, level.enemies.reverse());
 
     this.stepIntervalId = setInterval(callback(this.step, this), 30);
 };

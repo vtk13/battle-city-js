@@ -106,8 +106,7 @@ TTankStack.prototype.constructor = TTankStack;
 TTankStack.prototype.itemDomElement = function(item)
 {
     return $('<div class="' + this.itemClass + ' ' +
-        this.itemClass + item.id + '"><img src="' +
-        item.img[0] + '"></div>');
+        this.itemClass + item.id + '"><img src="img/bot.png"></div>');
 };
 
 TTankStack.prototype.add = function(item)

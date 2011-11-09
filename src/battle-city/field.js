@@ -41,7 +41,7 @@ Field.prototype.remove = function(object)
         anim.id = object.id;
         this.add(anim);
     }
-    if (isClient() && object instanceof Tank) {
+    if (isClient() && object instanceof Tank) { // todo hit myself without splash ((
         var anim = new TankHitAnimation(this.step, object.x, object.y);
         anim.id = object.id;
         this.add(anim);
@@ -63,14 +63,25 @@ Field.prototype.intersect = function(object)
     return this.objects.intersects(object);
 };
 
-Field.prototype.terrain = function(map)
+Field.prototype.terrain = function(map, enemies)
 {
     // todo move from this function
-    for (var i = 0 ; i < 3; i++) {
-        this.game.botStack.add(new HeavyTankBot(0, 0, true));
-        this.game.botStack.add(new FastBulletTankBot(0, 0, true));
-        this.game.botStack.add(new FastTankBot(0, 0, true));
-        this.game.botStack.add(new TankBot(0, 0, true));
+    for (var i in enemies) {
+        var bonus = ['3','10','17'].indexOf(i) >= 0;
+        switch (enemies[i]) {
+            case 1:
+                this.game.botStack.add(new TankBot(0, 0, bonus));
+                break;
+            case 2:
+                this.game.botStack.add(new FastTankBot(0, 0, bonus));
+                break;
+            case 3:
+                this.game.botStack.add(new FastBulletTankBot(0, 0, bonus));
+                break;
+            case 4:
+                this.game.botStack.add(new HeavyTankBot(0, 0, bonus));
+                break;
+        }
     }
 
     this.add(new Delimiter(           - 20, this.height /  2,             20, this.height / 2));
