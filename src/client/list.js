@@ -19,7 +19,7 @@ TItemList.prototype.filter = function(item)
     return true;
 };
 
-TItemList.prototype.import = function(items)
+TItemList.prototype.importItems = function(items)
 {
     this.clear();
     items.forEach(this.add, this);

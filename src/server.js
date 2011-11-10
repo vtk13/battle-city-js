@@ -107,7 +107,7 @@ io.listen(server, {'log level': 1}).sockets.on('connection', function(socket) {
     socket.on('message', function(event) {
         switch (event.type) {
             case 'connect':
-                if (user == null) {
+                if (user == null && event.nick) {
                     user = new User();
                     user.lastSync = 0;
                     user.socket = socket;
@@ -166,5 +166,8 @@ io.listen(server, {'log level': 1}).sockets.on('connection', function(socket) {
             }
             registry.users.remove(user);
         }
+    });
+    socket.json.send({
+        'type': 'init'
     });
 });

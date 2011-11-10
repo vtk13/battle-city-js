@@ -140,193 +140,202 @@ $(function() {
         images[sprites[i]].src = sprites[i];
     }
 
-    $('.login-form').submit(function(){
-        var socket = io.connect(location.href);
+    var socket = io.connect(location.href);
 
-        socket.on('connect', function() {
-            console.log(socket.socket.transport.name);
-            socket.json.send({
-                type: 'connect',
-                nick: $('#login input[name=nick]').val()
-            });
-        });
-        socket.on('message', function(data) {
-            switch (data.type) {
-                case 'user-message':
-                    alert(data.message);
-                    break;
-                case 'connected':
-                    $('#login').hide();
-                    $('#public').show();
-                    registry.users.setCurrent(registry.currentId = data.userId);
-                    $('form.message-form').submit(function(){
-                        var text = $(':text', this).val();
-                        if (text) {
-                            socket.json.send({
-                                type: 'say',
-                                text: text
-                            });
-                        }
-                        $(':text', this).val('').focus();
-                        return false;
-                    });
-                    $('#create-form').submit(function(){
-                        var name = $('input[name=name]', this).val();
-                        if (name) {
-                            socket.json.send({
-                                type: 'join',
-                                name: name
-                            });
-                        }
-                        return false;
-                    });
-                    $('.premade').live('click', function(){
+    socket.on('message', function(data) {
+        switch (data.type) {
+            case 'init':
+                if (socket.socket.transport.name == 'websocket') {
+                    $('#message-connecting').hide();
+                    $('#login-form').show();
+                } else {
+                    $('#message-connecting').text('Извините, но подключение произошло не через websocket. ' +
+                        'Или ваш браузер не поддерживает websockets, или вы находитесь за прокси, ' +
+                        'которая рубит websocket траффик (в будущем, когда будет поддержка websockets через ssl, ' +
+                        'шанс подключиться через такие прокси будет значительно выше).');
+                }
+                break;
+            case 'user-message':
+                alert(data.message);
+                break;
+            case 'connected':
+                $('#login').hide();
+                $('#public').show();
+                registry.users.setCurrent(registry.currentId = data.userId);
+                $('form.message-form').submit(function(){
+                    var text = $(':text', this).val();
+                    if (text) {
+                        socket.json.send({
+                            type: 'say',
+                            text: text
+                        });
+                    }
+                    $(':text', this).val('').focus();
+                    return false;
+                });
+                $('#create-form').submit(function(){
+                    var name = $('input[name=name]', this).val();
+                    if (name) {
                         socket.json.send({
                             type: 'join',
-                            name: $(this).text()
+                            name: name
                         });
-                        return false;
+                    }
+                    return false;
+                });
+                $('.premade').live('click', function(){
+                    socket.json.send({
+                        type: 'join',
+                        name: $(this).text()
                     });
-                    $('#public .user').live('click', function(){
-                        var nick = $(this).text();
-                        var input = $('#public .message-form :text');
-                        input.val(nick + ': ' + input.val());
-                        input.focus();
+                    return false;
+                });
+                $('#public .user').live('click', function(){
+                    var nick = $(this).text();
+                    var input = $('#public .message-form :text');
+                    input.val(nick + ': ' + input.val());
+                    input.focus();
+                });
+                $('#premade .user').live('click', function(){
+                    var nick = $(this).text();
+                    var input = $('#premade .message-form :text');
+                    input.val(nick + ': ' + input.val());
+                    input.focus();
+                });
+                $('input.exit-game').click(function(){
+                    socket.json.send({
+                        type: 'unjoin'
                     });
-                    $('#premade .user').live('click', function(){
-                        var nick = $(this).text();
-                        var input = $('#premade .message-form :text');
-                        input.val(nick + ': ' + input.val());
-                        input.focus();
+                });
+                $('input.start-game').click(function(){
+                    socket.json.send({
+                        type: 'start'
                     });
-                    $('input.exit-game').click(function(){
-                        socket.json.send({
-                            type: 'unjoin'
-                        });
-                    });
-                    $('input.start-game').click(function(){
-                        socket.json.send({
-                            type: 'start'
-                        });
-                    });
-                    new TankController({
-                        startMove: function(direction)
-                        {
-                            socket.json.send({type: 'control', move: direction});
-                        },
-                        stopMove: function()
-                        {
-                            socket.json.send({type: 'control', stop: 1});
-                        },
-                        fire: function()
-                        {
-                            socket.json.send({type: 'control', fire: 1});
+                });
+                new TankController({
+                    startMove: function(direction)
+                    {
+                        socket.json.send({type: 'control', move: direction});
+                    },
+                    stopMove: function()
+                    {
+                        socket.json.send({type: 'control', stop: 1});
+                    },
+                    fire: function()
+                    {
+                        socket.json.send({type: 'control', fire: 1});
+                    }
+                });
+                break;
+            case 'joined':
+                $('#public').hide();
+                $('#premade').show();
+                premade = data.premade;
+                registry.premadeUsers.importItems(registry.users.items);
+                registry.premadeUsers.setCurrent(registry.currentId);
+                $('.level .value').text(premade.level);
+                break;
+            case 'unjoined':
+                $('#premade').hide();
+                $('#public').show();
+                premade = {};
+                registry.premadeUsers.clear();
+                // todo sync bugs when join unjoin different premades?
+                $('#premade .messages').empty();
+                break;
+            case 'started':
+                $('#premade').hide();
+                $('#game').show();
+                field.animateIntervalId = setInterval(function(){field.animateStep();}, 50);
+                break;
+            case 'gameover':
+                $('#game').hide();
+                $('#premade').show();
+                field.clear();
+                clearInterval(field.animateIntervalId);
+                registry.tankStack.clear();
+                break;
+            case 'sync':
+                if (data['users']) {
+                    registry.users.updateWith(data['users']);
+                }
+                if (data['messages']) {
+                    data.messages.forEach(function(event) {
+                        if (event.type == 'add') {
+                            var date = new Date(event.data.time);
+                            var time = date.getHours() + ':' + (date.getMinutes() < 10 ? 0 : '') + date.getMinutes();
+                            var message = $('<div><span>' +
+                                    time + '</span> </div>');
+                            message.append($('<span/>').text('<' + event.data.nick + '> '));
+                            message.append($('<span/>').text(event.data.text));
+                            $('#public .messages').append(message);
+                            $('#public .messages').get(0).scrollTop = $('#public .messages').get(0).scrollHeight;
                         }
                     });
-                    break;
-                case 'joined':
-                    $('#public').hide();
-                    $('#premade').show();
-                    premade = data.premade;
-                    registry.premadeUsers.import(registry.users.items);
-                    registry.premadeUsers.setCurrent(registry.currentId);
-                    $('.level .value').text(premade.level);
-                    break;
-                case 'unjoined':
-                    $('#premade').hide();
-                    $('#public').show();
-                    premade = {};
-                    registry.premadeUsers.clear();
-                    // todo sync bugs when join unjoin different premades?
-                    $('#premade .messages').empty();
-                    break;
-                case 'started':
-                    $('#premade').hide();
-                    $('#game').show();
-                    field.animateIntervalId = setInterval(function(){field.animateStep();}, 50);
-                    break;
-                case 'gameover':
-                    $('#game').hide();
-                    $('#premade').show();
-                    field.clear();
-                    clearInterval(field.animateIntervalId);
-                    registry.tankStack.clear();
-                    break;
-                case 'sync':
-                    if (data['users']) {
-                        registry.users.updateWith(data['users']);
-                    }
-                    if (data['messages']) {
-                        data.messages.forEach(function(event) {
-                            if (event.type == 'add') {
-                                var date = new Date(event.data.time);
-                                var time = date.getHours() + ':' + (date.getMinutes() < 10 ? 0 : '') + date.getMinutes();
-                                var message = $('<div><span>' +
-                                        time + '</span> </div>');
-                                message.append($('<span/>').text('<' + event.data.nick + '> '));
-                                message.append($('<span/>').text(event.data.text));
-                                $('#public .messages').append(message);
-                                $('#public .messages').get(0).scrollTop = $('#public .messages').get(0).scrollHeight;
+                }
+                if (data['premades']) {
+                    data['premades'].forEach(function(event) {
+                        switch (event.type) {
+                        case 'add':
+                        case 'change':
+                            if (event.data.id == premade.id) {
+                                premade = event.data;
+                                $('.level .value').text(premade.level);
                             }
-                        });
-                    }
-                    if (data['premades']) {
-                        data['premades'].forEach(function(event) {
-                            switch (event.type) {
-                            case 'add':
-                            case 'change':
-                                if (event.data.id == premade.id) {
-                                    premade = event.data;
-                                    $('.level .value').text(premade.level);
-                                }
-                                if ($('#public .premades .premade' + event.data.id).size() > 0) {
-                                    $('#public .premades .premade' + event.data.id).html(event.data.name);
-                                } else {
-                                    $('#public .premades').append($('<div class="premade premade' +
-                                        event.data.id + '"></div>').text(event.data.name));
-                                }
-                                break;
-                            case 'remove':
-                                $('#public .premades .premade' + event.data.id).remove();
-                                break;
+                            if ($('#public .premades .premade' + event.data.id).size() > 0) {
+                                $('#public .premades .premade' + event.data.id).html(event.data.name);
+                            } else {
+                                $('#public .premades').append($('<div class="premade premade' +
+                                    event.data.id + '"></div>').text(event.data.name));
                             }
-                        });
-                    }
-                    if (data['premade.users']) {
-                        registry.premadeUsers.updateWith(data['premade.users']);
-                        var players = registry.premadeUsers.items;
-                        var current = 1;
-                        for (var i in players) {
-                            $('.player' + current + '-lives')
-                                .text(players[i].lives + ':' + players[i].points);
-                            current++;
+                            break;
+                        case 'remove':
+                            $('#public .premades .premade' + event.data.id).remove();
+                            break;
                         }
+                    });
+                }
+                if (data['premade.users']) {
+                    registry.premadeUsers.updateWith(data['premade.users']);
+                    var players = registry.premadeUsers.items;
+                    var current = 1;
+                    for (var i in players) {
+                        $('.player' + current + '-lives')
+                            .text(players[i].lives + ':' + players[i].points);
+                        current++;
                     }
-                    if (data['premade.messages']) {
-                        data['premade.messages'].forEach(function(event) {
-                            if (event.type == 'add') {
-                                var date = new Date(event.data.time);
-                                var time = date.getHours() + ':' + (date.getMinutes() < 10 ? 0 : '') + date.getMinutes();
-                                var message = $('<div><span>' +
-                                        time + '</span> </div>');
-                                message.append($('<span/>').text('<' + event.data.nick + '> '));
-                                message.append($('<span/>').text(event.data.text));
-                                $('#premade .messages').append(message);
-                                $('#premade .messages').get(0).scrollTop = $('#premade .messages').get(0).scrollHeight;
-                            }
-                        });
-                    }
-                    if (data['field.objects']) {
-                        field.updateWith(data['field.objects']);
-                    }
-                    if (data['game.botStack']) {
-                        registry.tankStack.updateWith(data['game.botStack']);
-                    }
-                    break;
-            }
-        });
-        socket.on('disconnect', function() {
-            console.log('disconnect');
+                }
+                if (data['premade.messages']) {
+                    data['premade.messages'].forEach(function(event) {
+                        if (event.type == 'add') {
+                            var date = new Date(event.data.time);
+                            var time = date.getHours() + ':' + (date.getMinutes() < 10 ? 0 : '') + date.getMinutes();
+                            var message = $('<div><span>' +
+                                    time + '</span> </div>');
+                            message.append($('<span/>').text('<' + event.data.nick + '> '));
+                            message.append($('<span/>').text(event.data.text));
+                            $('#premade .messages').append(message);
+                            $('#premade .messages').get(0).scrollTop = $('#premade .messages').get(0).scrollHeight;
+                        }
+                    });
+                }
+                if (data['field.objects']) {
+                    field.updateWith(data['field.objects']);
+                }
+                if (data['game.botStack']) {
+                    registry.tankStack.updateWith(data['game.botStack']);
+                }
+                break;
+        }
+    });
+    socket.on('disconnect', function() {
+        console.log('disconnect');
+    });
+
+    $('#login-form').submit(function(){
+        socket.json.send({
+            type: 'connect',
+            nick: $('#login input[name=nick]').val()
         });
         return false;
     });
