@@ -2,7 +2,7 @@
 TankBot = function TankBot(x, y, bonus)
 {
     Tank.apply(this, arguments); // call parent constructor
-    this.speedY = this.speed;
+    this.setSpeedY(this.speed);
     this.moveOn = true;
     this.bonus = bonus;
     this.clan = 1; // bots

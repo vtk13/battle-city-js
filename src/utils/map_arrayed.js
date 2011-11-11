@@ -45,13 +45,14 @@ MapArrayed.prototype.move = function(item, newX, newY)
 MapArrayed.prototype.intersects = function(item)
 {
     var res = [];
-    this.forEach(function(each){
-        if (each.id == item.id) return;
-        if (Math.abs(each.x - item.x) < (each.boundX() + item.boundX()) &&
-            Math.abs(each.y - item.y) < (each.boundY() + item.boundY())) {
+    for (var i in this.items) {
+        var each = this.items[i];
+        if (each.id == item.id) continue;
+        if (Math.abs(each.x - item.x) < (each.boundX + item.boundX) &&
+            Math.abs(each.y - item.y) < (each.boundY + item.boundY)) {
             res.push(each);
         }
-    });
+    }
     return res;
 };
 

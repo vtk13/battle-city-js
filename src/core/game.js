@@ -77,7 +77,7 @@ Game.prototype.step = function()
             item.step && item.step();
         }
     }, this);
-    this.field.timer && this.field.timer--;
+    this.field.timer > 0 && this.field.timer--;
 
     if (this.bots.length == 0 && this.botStack.count() == 0) {
         this.gameOver(1);

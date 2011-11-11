@@ -5,14 +5,13 @@
 
 Bullet = function Bullet(speedX, speedY)
 {
+    AbstractGameObject.call(this, 4, 4);
     this.x = 0;
     this.y = 0;
     this.z = 1;
     // bullet is rectangle step of bullet
-    this.hw = 4; // speedX > 0 ? speedX / 2 : 1; // half width
-    this.hh = 4; // speedY > 0 ? speedY / 2 : 1; // half height
-    this.speedX = speedX;
-    this.speedY = speedY;
+    this.setSpeedX(speedX);
+    this.setSpeedY(speedY);
     this.finalX = 0; // for proper hit animation (todo ugly)
     this.finalY = 0; // for proper hit animation (todo ugly)
     this.power = 1;
@@ -56,6 +55,7 @@ Bullet.prototype.onIntersect = function(items)
 {
     var canMoveThrowItems = true;
     for (var i in items) {
+        if (items[i] == this.tank) continue;
         // todo neiberhood wall can be already removed
         if (items[i].hit && items[i].hit(this)) {
             if (this.speedX) this.finalX = items[i].x - items[i].hw * vector(this.speedX); else this.finalX = this.x;
@@ -90,8 +90,8 @@ Bullet.prototype.unserialize = function(data)
     this.x = data.x;
     this.y = data.y;
     this.z = data.z;
-    this.speedX = data.speedX;
-    this.speedY = data.speedY;
+    this.setSpeedX(data.speedX);
+    this.setSpeedY(data.speedY);
     this.finalX = data.finalX;
     this.finalY = data.finalY;
     this.setDirectionImage();

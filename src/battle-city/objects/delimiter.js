@@ -1,6 +1,7 @@
 
 Delimiter = function Delimiter(x, y, hw, hh)
 {
+    AbstractGameObject.call(this, hw, hh);
     this.x = x;
     this.y = y;
     this.z = 1;

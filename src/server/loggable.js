@@ -22,7 +22,6 @@ Loggable = function Loggable(object)
  *          serialize: function
  *      },
  *      type: string, // add|change|remove
- *      lastSync: int // if you want to delete 'remove' events before lastSync
  *  }
  */
 Loggable.prototype.log = function(event)
@@ -30,14 +29,14 @@ Loggable.prototype.log = function(event)
     var data = event.object.serialize();
     var current = this.logData, prev = null;
     while (current != null) {
-        if (current.data.id == data.id ||
-                (event.lastSync && current.type == 'remove' && current.time < event.lastSync)) {
+        if (current.data.id == data.id) {
             // remove current
             if (prev == null) {
                 current = this.logData = current.next;
             } else {
                 current = prev.next = current.next;
             }
+            break;
         } else {
             // to next element
             prev = current;

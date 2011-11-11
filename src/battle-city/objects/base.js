@@ -1,11 +1,10 @@
 
 Base = function Base(x, y)
 {
+    AbstractGameObject.call(this, 16, 16);
     this.x = x;
     this.y = y;
     this.z = 1;
-    this.hw = 16; // half width
-    this.hh = 16; // half height
     this.setImage('img/base.png');
 };
 

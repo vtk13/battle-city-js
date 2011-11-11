@@ -5,11 +5,10 @@
 
 Ice = function Ice(x, y)
 {
+    AbstractGameObject.call(this, 8, 8);
     this.x = x;
     this.y = y;
     this.z = 0;
-    this.hw = 8; // half width
-    this.hh = 8; // half height
     this.setImage('img/ice.png');
 };
 

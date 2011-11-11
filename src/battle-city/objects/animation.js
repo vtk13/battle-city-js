@@ -1,6 +1,7 @@
 
-OnFieldAnimation = function OnFieldAnimation(step)
+OnFieldAnimation = function OnFieldAnimation(step, hw, hh)
 {
+    AbstractGameObject.call(this, hw, hh);
     this.firstStep = step;
 };
 
@@ -9,10 +10,9 @@ OnFieldAnimation.prototype.constructor = OnFieldAnimation;
 
 BulletHitAnimation = function BulletHitAnimation(step, x, y)
 {
-    OnFieldAnimation.call(this, step);
+    OnFieldAnimation.call(this, step, 16, 16);
     this.x = x;
     this.y = y;
-    this.hw = this.hh = 16;
     this.setImage('img/hit1.png');
 };
 
@@ -31,10 +31,9 @@ BulletHitAnimation.prototype.animateStep = function(step)
 
 TankHitAnimation = function TankHitAnimation(step, x, y)
 {
-    OnFieldAnimation.call(this, step);
+    OnFieldAnimation.call(this, step, 16, 16);
     this.x = x;
     this.y = y;
-    this.hw = this.hh = 16;
     this.setImage('img/hit1.png');
 };
 

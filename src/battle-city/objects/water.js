@@ -5,11 +5,10 @@
 
 Water = function Water(x, y)
 {
+    AbstractGameObject.call(this, 8, 8);
     this.x = x;
     this.y = y;
     this.z = 1;
-    this.hw = 8; // half width
-    this.hh = 8; // half height
     this.setImage('img/water1.png');
 };
 

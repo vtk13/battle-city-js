@@ -3,13 +3,12 @@
  * coordinates
  */
 
-Wall = function Wall(x, y)
+Wall = function Wall(x, y, hw, hh)
 {
+    AbstractGameObject.call(this, hw ? hw : 4, hh ? hh : 4);
     this.x = x;
     this.y = y;
     this.z = 1;
-    this.hw = 4; // half width
-    this.hh = 4; // half height
     this.setImage('img/brick-wall.png');
 };
 
@@ -77,10 +76,7 @@ Wall.prototype.hit = function(bullet)
 
 SteelWall = function SteelWall(x, y)
 {
-    this.x = x;
-    this.y = y;
-    this.hw = 8; // half width
-    this.hh = 8; // half height
+    Wall.call(this, x, y, 8, 8);
     this.setImage('img/steel-wall.png');
 };
 

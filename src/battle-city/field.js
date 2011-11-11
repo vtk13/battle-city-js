@@ -67,7 +67,8 @@ Field.prototype.terrain = function(map, enemies)
 {
     // todo move from this function
     for (var i in enemies) {
-        var bonus = ['3','10','17'].indexOf(i) >= 0;
+        var bonus = ['4','11','18'].indexOf(i) >= 0;
+//        var bonus = true;
         switch (enemies[i]) {
             case 1:
                 this.game.botStack.add(new TankBot(0, 0, bonus));

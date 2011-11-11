@@ -5,11 +5,10 @@
 
 Trees = function Trees(x, y)
 {
+    AbstractGameObject.call(this, 8, 8);
     this.x = x;
     this.y = y;
     this.z = 2;
-    this.hw = 8; // half width
-    this.hh = 8; // half height
     this.setImage('img/trees.png');
 };
 

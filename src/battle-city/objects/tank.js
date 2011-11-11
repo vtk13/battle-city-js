@@ -5,6 +5,7 @@
 
 Tank = function Tank(x, y)
 {
+    AbstractGameObject.call(this, 16, 16);
     this.initialPosition = {
         x: x,
         y: y
@@ -12,11 +13,9 @@ Tank = function Tank(x, y)
     this.x = x;
     this.y = y;
     this.z = 1;
-    this.hw = 16; // half width
-    this.hh = 16; // half height
     this.moveOn = 0;
-    this.speedX = 0;
-    this.speedY = -this.speed;
+    this.setSpeedX(0);
+    this.setSpeedY(-this.speed);
     this.setDirectionImage();
     this.maxBullets = 1;
     this.bulletPower = 1;
@@ -49,10 +48,10 @@ Tank.prototype.fire = function()
         var bullet = new Bullet();
         bullet.tank = this;
         bullet.clan = this.clan;
-        bullet.speedX = vector(this.speedX) * this.bulletSpeed;
-        bullet.speedY = vector(this.speedY) * this.bulletSpeed;
-        bullet.x = this.x + (this.hw+bullet.boundX()-Math.abs(bullet.speedX)) * vector(this.speedX);
-        bullet.y = this.y + (this.hh+bullet.boundY()-Math.abs(bullet.speedY)) * vector(this.speedY);
+        bullet.setSpeedX(vector(this.speedX) * this.bulletSpeed);
+        bullet.setSpeedY(vector(this.speedY) * this.bulletSpeed);
+        bullet.x = this.x + (this.hw - 2) * vector(this.speedX);
+        bullet.y = this.y + (this.hh - 2) * vector(this.speedY);
         bullet.power = this.bulletPower;
 
         bullets.push(bullet);
@@ -150,8 +149,8 @@ Tank.prototype.unserialize = function(data)
     this.x = data.x;
     this.y = data.y;
     this.z = data.z;
-    this.speedX = data.speedX;
-    this.speedY = data.speedY;
+    this.setSpeedX(data.speedX);
+    this.setSpeedY(data.speedY);
     this.armoredTimer = data.armoredTimer;
     this.bonus = data.bonus;
 
@@ -184,23 +183,23 @@ Tank.prototype.startMove = function(direction)
         var vy = this.speedY > 0 ? 1 : -1;
         switch (direction) {
             case 'up':
-                this.speedX = 0;
-                this.speedY = -this.speed;
+                this.setSpeedX(0);
+                this.setSpeedY(-this.speed);
                 this.x += (this.x % 16 > 8 + vx) ? 16 - this.x % 16 : - this.x % 16;
                 break;
             case 'right':
-                this.speedX = this.speed;
-                this.speedY = 0;
+                this.setSpeedX(this.speed);
+                this.setSpeedY(0);
                 this.y += (this.y % 16 > 8 + vy) ? 16 - this.y % 16 : - this.y % 16;
                 break;
             case 'down':
-                this.speedX = 0;
-                this.speedY = this.speed;
+                this.setSpeedX(0);
+                this.setSpeedY(this.speed);
                 this.x += (this.x % 16 > 8 + vx) ? 16 - this.x % 16 : - this.x % 16;
                 break;
             case 'left':
-                this.speedX = -this.speed;
-                this.speedY = 0;
+                this.setSpeedX(-this.speed);
+                this.setSpeedY(0);
                 this.y += (this.y % 16 > 8 + vy) ? 16 - this.y % 16 : - this.y % 16;
                 break;
         }

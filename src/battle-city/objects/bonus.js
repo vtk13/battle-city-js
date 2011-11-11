@@ -5,11 +5,10 @@
 
 Bonus = function Bonus(x, y)
 {
+    AbstractGameObject.call(this, 16, 16);
     this.x = x;
     this.y = y;
     this.z = 2;
-    this.hw = 16; // half width
-    this.hh = 16; // half height
 };
 
 Bonus.prototype = new AbstractGameObject();
