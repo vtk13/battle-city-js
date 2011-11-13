@@ -31,8 +31,13 @@ Wall.prototype.serialize = function()
 Wall.prototype.unserialize = function(data)
 {
     this.id = data.id;
-    this.x = data.x;
-    this.y = data.y;
+    if (this.field) {
+        this.field.setXY(this, data.x, data.y);
+    } else {
+        // first unserialize, before adding to field -> may set x and y directly
+        this.x = data.x;
+        this.y = data.y;
+    }
     this.z = data.z;
 };
 

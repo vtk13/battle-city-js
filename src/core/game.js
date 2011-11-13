@@ -48,6 +48,7 @@ Game.prototype.join = function(user)
     var userId = this.users.push(user) - 1;
     user.tank = new Tank();
     user.tank.user = user;
+    // before add to field, may set x y directly
     user.tank.initialPosition.x = user.tank.x = 32*4 + user.tank.hw + userId * 4*32;
     user.tank.initialPosition.y = user.tank.y = 32*12 + user.tank.hh;
     this.field.add(user.tank);
@@ -90,9 +91,9 @@ Game.prototype.step = function()
             var bot = this.botStack.pop();
             delete bot['id'];
             bot.removeAllListeners('change');
+            // before add to field, may set x y directly
             bot.x = botX;
             bot.y = botY;
-
             this.bots.push(bot);
             this.field.add(bot); // remove handler defined in constructor
 

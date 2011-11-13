@@ -27,7 +27,7 @@ require('./server/user');
 require('./core/message');
 require('./server/messagelist');
 require('./utils/func');
-require('./utils/map_arrayed');
+require('./utils/map_tiled'); // require('./utils/map_arrayed');
 require('./battle-city/field');
 require('./battle-city/bot-emitter');
 require('./battle-city/keyboard');

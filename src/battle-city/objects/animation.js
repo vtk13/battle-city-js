@@ -46,7 +46,7 @@ TankHitAnimation.prototype.animateStep = function(step)
         this.field.remove(this);
     } else
     if (step - this.firstStep > 3) {
-        this.hw = this.hh = 32;
+        this.hw = this.hh = 32; // don't care about intersections
         this.setImage('img/hit3.png');
     } else
     if (step - this.firstStep > 1) {

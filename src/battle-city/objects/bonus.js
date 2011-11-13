@@ -30,8 +30,13 @@ Bonus.prototype.serialize = function()
 Bonus.prototype.unserialize = function(data)
 {
     this.id = data.id;
-    this.x = data.x;
-    this.y = data.y;
+    if (this.field) {
+        this.field.setXY(this, data.x, data.y);
+    } else {
+        // first unserialize, before adding to field -> may set x and y directly
+        this.x = data.x;
+        this.y = data.y;
+    }
     this.z = data.z;
 };
 
@@ -104,7 +109,9 @@ BonusShovel.prototype.applyTo = function(tank)
         }
     }
     var base = tank.field.intersect(new BoundObject(null, 12*16+8, 24*16+8, 2, 2));
-    base[0].armoredTimer = 10 * 1000/30; // 30ms step
+    for (var i in base) {
+        base[i].armoredTimer = 10 * 1000/30; // 30ms step
+    }
 };
 
 BonusHelmet = function BonusHelmet(x, y)

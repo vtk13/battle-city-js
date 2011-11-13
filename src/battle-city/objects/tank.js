@@ -41,28 +41,34 @@ Tank.prototype.bulletSpeed = 5; // default speed
 
 Eventable(Tank.prototype);
 
-Tank.prototype.fire = function()
+Tank.prototype.onAddToField = function()
 {
     var bullets = this.bullets;
-    if (bullets.length < this.maxBullets) {
+    // todo why every hit?
+    this.field.on('remove', function(event) {
+        for (var i in bullets) {
+            if (bullets[i] == event.object) {
+                bullets.splice(i, 1);
+            }
+        }
+    });
+};
+
+Tank.prototype.fire = function()
+{
+    if (this.bullets.length < this.maxBullets) {
         var bullet = new Bullet();
         bullet.tank = this;
         bullet.clan = this.clan;
         bullet.setSpeedX(vector(this.speedX) * this.bulletSpeed);
         bullet.setSpeedY(vector(this.speedY) * this.bulletSpeed);
+        // before adding to field (may set x, y directly)
         bullet.x = this.x + (this.hw - 2) * vector(this.speedX);
         bullet.y = this.y + (this.hh - 2) * vector(this.speedY);
         bullet.power = this.bulletPower;
 
-        bullets.push(bullet);
+        this.bullets.push(bullet);
         this.field.add(bullet);
-        this.field.on('remove', function(event) {
-            for (var i in bullets) {
-                if (bullets[i] == event.object) {
-                    bullets.splice(i, 1);
-                }
-            }
-        });
     }
 };
 
@@ -71,11 +77,13 @@ Tank.prototype.step = function()
     this.armoredTimer > 0 && this.armoredTimer--;
     var onIce = false;
     if (this.moveOn || this.glidingTimer > 0) {
+        // todo field.move()?
         var x = this.x;
         var y = this.y;
         this.stuck = false;
-        this.x += this.speedX;
-        this.y += this.speedY;
+        if (this.field) {
+            this.field.setXY(this, this.x + this.speedX, this.y + this.speedY);
+        }
         var intersect = this.field.intersect(this);
         if (intersect.length > 0) {
             for (var i in intersect) {
@@ -88,8 +96,9 @@ Tank.prototype.step = function()
                     // no break! before default!
                 default:
                     if (intersect[i].z == this.z) {
-                        this.x = x;
-                        this.y = y;
+                        if (this.field) {
+                            this.field.setXY(this, x, y);
+                        }
                         this.stuck = true;
                         this.glidingTimer = 0;
                     }
@@ -146,8 +155,13 @@ Tank.prototype.setDirectionImage = function()
 Tank.prototype.unserialize = function(data)
 {
     this.id = data.id;
-    this.x = data.x;
-    this.y = data.y;
+    if (this.field) {
+        this.field.setXY(this, data.x, data.y);
+    } else {
+        // first unserialize, before adding to field -> may set x and y directly
+        this.x = data.x;
+        this.y = data.y;
+    }
     this.z = data.z;
     this.setSpeedX(data.speedX);
     this.setSpeedY(data.speedY);
@@ -181,28 +195,34 @@ Tank.prototype.startMove = function(direction)
         // doto this may be a bug, if tank just change direction to opposite
         var vx = this.speedX > 0 ? 1 : -1;
         var vy = this.speedY > 0 ? 1 : -1;
+        var newX, newY;
         switch (direction) {
             case 'up':
                 this.setSpeedX(0);
                 this.setSpeedY(-this.speed);
-                this.x += (this.x % 16 > 8 + vx) ? 16 - this.x % 16 : - this.x % 16;
+                newX = this.x + ((this.x % 16 > 8 + vx) ? 16 - this.x % 16 : - this.x % 16);
+                newY = this.y;
                 break;
             case 'right':
                 this.setSpeedX(this.speed);
                 this.setSpeedY(0);
-                this.y += (this.y % 16 > 8 + vy) ? 16 - this.y % 16 : - this.y % 16;
+                newX = this.x;
+                newY = this.y + ((this.y % 16 > 8 + vy) ? 16 - this.y % 16 : - this.y % 16);
                 break;
             case 'down':
                 this.setSpeedX(0);
                 this.setSpeedY(this.speed);
-                this.x += (this.x % 16 > 8 + vx) ? 16 - this.x % 16 : - this.x % 16;
+                newX = this.x + ((this.x % 16 > 8 + vx) ? 16 - this.x % 16 : - this.x % 16);
+                newY = this.y;
                 break;
             case 'left':
                 this.setSpeedX(-this.speed);
                 this.setSpeedY(0);
-                this.y += (this.y % 16 > 8 + vy) ? 16 - this.y % 16 : - this.y % 16;
+                newX = this.x;
+                newY = this.y + ((this.y % 16 > 8 + vy) ? 16 - this.y % 16 : - this.y % 16);
                 break;
         }
+        this.field.setXY(this, newX, newY);
         this.emit('change', {type: 'change', object: this});
     }
 };
@@ -225,6 +245,7 @@ Tank.prototype.hit = function(bullet)
         return true;
     }
     if (bullet === undefined) {
+        this.lives = 0;
         this.field.remove(this);
     } else if (this.clan != bullet.clan) {
         // do not hit your confederates (or yourself)
@@ -247,7 +268,8 @@ Tank.prototype.resetPosition = function()
 {
     this.maxBullets = 1;
     this.bulletPower = 1;
-    this.x = this.initialPosition.x;
-    this.y = this.initialPosition.y;
+    if (this.field) {
+        this.field.setXY(this, this.initialPosition.x, this.initialPosition.y);
+    }
     this.emit('change', {type: 'change', object: this});
 };

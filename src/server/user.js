@@ -100,6 +100,7 @@ User.prototype.hit = function()
             this.game.unjoin(this);
         } else {
             this.tank.resetPosition();
+            this.tank.lives = 1;
         }
         this.emit('change', {type: 'change', object: this});
     }

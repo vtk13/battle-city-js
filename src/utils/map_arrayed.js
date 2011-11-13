@@ -1,4 +1,6 @@
 /**
+ * @outdated
+ *
  * public interface:
  * void add(item)
  * bool remove(item)
@@ -30,12 +32,17 @@ MapArrayed.prototype.remove = function(item)
     }
 };
 
+MapArrayed.prototype.setXY = function(item, newX, newY)
+{
+    item.x = newX;
+    item.y = newY;
+};
+
 MapArrayed.prototype.move = function(item, newX, newY)
 {
     var items = this.intersects(new BoundObject(item.id, newX, newY, item.hw, item.hh, item.speedX, item.speedY));
     if (items.length == 0 || (item.onIntersect && item.onIntersect(items))) {
-        item.x = newX;
-        item.y = newY;
+        this.setXY(item, newX, newY);
         return true;
     } else {
         return false;

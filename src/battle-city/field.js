@@ -18,7 +18,7 @@ Field.autoIncrement = 1; // todo eliminate?
 
 Field.prototype.clear = function()
 {
-    this.objects = new MapArrayed(); // todo MapTree
+    this.objects = new MapTiled(this.width, this.height);
 };
 
 Field.prototype.add = function(object)
@@ -29,6 +29,7 @@ Field.prototype.add = function(object)
     object.field = this;
     this.objects.add(object);
     this.emit('add', {type: 'add', object: object});
+    object.onAddToField && object.onAddToField();
 };
 
 Field.prototype.remove = function(object)
@@ -46,6 +47,11 @@ Field.prototype.remove = function(object)
         anim.id = object.id;
         this.add(anim);
     }
+};
+
+Field.prototype.setXY = function(item, newX, newY)
+{
+    return this.objects.setXY(item, newX, newY);
 };
 
 Field.prototype.move = function(item, newX, newY)

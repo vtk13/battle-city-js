@@ -11,7 +11,7 @@
     <script type="text/javascript" src="/src/core/event.js"></script>
     <script type="text/javascript" src="/src/core/list.js"></script>
     <script type="text/javascript" src="/src/client/list.js"></script>
-    <script type="text/javascript" src="/src/utils/map_arrayed.js"></script>
+    <script type="text/javascript" src="/src/utils/map_tiled.js"></script><!-- map_arrayed -->
     <script type="text/javascript" src="/src/battle-city/field.js"></script>
     <script type="text/javascript" src="/src/battle-city/keyboard.js"></script>
     <script type="text/javascript" src="/src/battle-city/objects/abstract.js"></script>
@@ -31,9 +31,22 @@
 <body>
 <div id="login">
     <form id="login-form" style="display: none;">
+        <h4>F.A.Q.</h4>
+        <ul>
+            <li><strong>Почему так тормозит? сначала доделай, потом пости!</strong> Согласен,
+            поторопился выложить. Во время написания, игра не отнимала больше 10% процессорного времени.
+            Поэтому решил, что 5-10 игр одновременно сервер потянет. Но не тут-то было. Сервер течет, и
+            очень быстро начинает тормозить даже одна игра. По этой причине каждые полчаса возможен
+            рестарт сервера в XX:00 и XX:30. Со временем думаю все наладится.</li>
+            <li><strong>Как играть?</strong> После авторизации вы попадаете в общий чат. Чтобы начать играть,
+            создайте в верхнем правом углу игру или присоединитесь к уже идущей. На следующим экране вы можете
+            дождаться подключение второго игрока или сразу начать игру кнопкой "Старт!"</li>
+            <li><strong>Управление</strong> Стрелки - ездить, пробел - стрелять</li>
+            <li><strong>Максимум может быть только 3 игры и только 2 игрока в одной игре, так что не удивляйтесь
+            сообщению "Can't create/join game".</strong></li>
+        </ul>
         <div><span>Ник:</span><input type="text" name="nick"></div>
         <div class="submit"><input type="submit" value="Вход"></div>
-        <div>Стрелки - ездить, пробел - стрелять</div>
     </form>
     <div id="message-connecting">Подключение...</div>
 </div>
@@ -43,11 +56,12 @@
     <div class="premades">
         <form id="create-form">
         <div>
+            Введите имя новый игры:
             <input type="text" name="name">
             <input type="submit" value="Создать">
         </div>
         </form>
-        <h3>Игры</h3>
+        <h3>Идущие игры</h3>
     </div>
     <div class="chat">
         <div class="chat-log">
