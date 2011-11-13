@@ -81,7 +81,7 @@ MapTiled.prototype.setXY = function(item, newX, newY)
 
 MapTiled.prototype.move = function(item, newX, newY)
 {
-    var items = this.intersects(new BoundObject(item.id, newX, newY, item.hw, item.hh, item.speedX, item.speedY));
+    var items = this.intersects(item, newX, newY);
     if (items.length == 0 || (item.onIntersect && item.onIntersect(items))) {
         this.setXY(item, newX, newY);
         return true;
@@ -90,24 +90,37 @@ MapTiled.prototype.move = function(item, newX, newY)
     }
 };
 
-MapTiled.prototype.intersects = function(item)
+/**
+ *
+ * @param item not always needed, but should be object
+ * @param x int|null
+ * @param y int|null
+ * @param hw int|null
+ * @param hh int|null
+ * @return
+ */
+MapTiled.prototype.intersects = function(item, ix, iy, hw, hh)
 {
-    var res = [];
-    var fromX = Math.floor((item.x-item.hw) / this.tileSize);
+    var res = [],
+        ix = ix || item.x,
+        iy = iy || item.y,
+        hw = hw || item.boundX,
+        hh = hh || item.boundY;
+    var fromX = Math.floor((ix-hw) / this.tileSize);
     if (fromX < 0) fromX = 0; else if (fromX > this.maxX) fromX = this.maxX;
-    var toX   = Math.ceil ((item.x+item.hw) / this.tileSize);
+    var toX   = Math.ceil ((ix+hw) / this.tileSize);
     if (toX < 0) toX = 0; else if (toX > this.maxX) toX = this.maxX;
-    var fromY = Math.floor((item.y-item.hh) / this.tileSize);
+    var fromY = Math.floor((iy-hh) / this.tileSize);
     if (fromY < 0) fromY = 0; else if (fromY > this.maxX) fromY = this.maxY;
-    var toY   = Math.ceil ((item.y+item.hh) / this.tileSize);
+    var toY   = Math.ceil ((iy+hh) / this.tileSize);
     if (toY < 0) toY = 0; else if (toY > this.maxX) toY = this.maxY;
     for (var x = fromX ; x <= toX ; x++) {
         for (var y = fromY ; y <= toY ; y++) {
             for (var i in this.items[x][y]) {
                 var each = this.items[x][y][i];
                 if (each.id == item.id || res[each.id]) continue;
-                if (Math.abs(each.x - item.x) < (each.boundX + item.boundX) &&
-                    Math.abs(each.y - item.y) < (each.boundY + item.boundY)) {
+                if (Math.abs(each.x - ix) < (each.boundX + hw) &&
+                    Math.abs(each.y - iy) < (each.boundY + hh)) {
                     res[each.id] = each;
                 }
             }

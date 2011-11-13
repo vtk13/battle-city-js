@@ -70,7 +70,7 @@ Wall.prototype.hit = function(bullet)
     }
     this.field.remove(this);
     // after remove to avoid recusion
-    var intersect = this.field.intersect(new BoundObject(null, x, y, 1, 1));
+    var intersect = this.field.intersect(this, x, y, 1, 1);
     for (var i in intersect) {
         if (typeof intersect[i]['hit'] == 'function') {
             intersect[i].hit(bullet);

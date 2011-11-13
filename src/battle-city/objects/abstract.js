@@ -6,6 +6,8 @@ AbstractGameObject = function AbstractGameObject(hw, hh)
     this.hw = this.boundX = hw;
   //for intersection (when speedY > hh)
     this.hh = this.boundY = hh;
+    this.speedX; // set only through setSpeedX()
+    this.speedY; // set only through setSpeedY()
 };
 
 AbstractGameObject.prototype.setImage = function(img1/*, img2, ...*/)
@@ -24,16 +26,3 @@ AbstractGameObject.prototype.setSpeedY = function(value)
     this.speedY = value;
     this.boundY = this.speedY ? Math.max(this.hh, Math.abs(this.speedY)) : this.hh;
 };
-
-// this is for properly work boundX and boundY
-BoundObject = function BoundObject(id, x, y, hw, hh, speedX, speedY)
-{
-    AbstractGameObject.call(this, hw, hh);
-    this.id = id;
-    this.x = x;
-    this.y = y;
-    this.setSpeedX(speedX);
-    this.setSpeedY(speedY);
-};
-BoundObject.prototype = new AbstractGameObject();
-BoundObject.prototype.constructor = BoundObject;

@@ -94,7 +94,7 @@ BonusShovel.prototype.applyTo = function(tank)
 {
     for (var i in Base.prototype.baseEdge) {
         var cell = Base.prototype.baseEdge[i];
-        var walls = tank.field.intersect(new BoundObject(null, cell.x*16+8, cell.y*16+8, 8, 8));
+        var walls = tank.field.intersect(this, cell.x*16+8, cell.y*16+8, 8, 8);
         var convert = true;
         for (var j in walls) {
             if (!(walls[j] instanceof Wall)) {
@@ -108,7 +108,7 @@ BonusShovel.prototype.applyTo = function(tank)
             tank.field.add(new SteelWall(cell.x*16+8, cell.y*16+8));
         }
     }
-    var base = tank.field.intersect(new BoundObject(null, 12*16+8, 24*16+8, 2, 2));
+    var base = tank.field.intersect(this, 12*16+8, 24*16+8, 2, 2);
     for (var i in base) {
         base[i].armoredTimer = 10 * 1000/30; // 30ms step
     }
