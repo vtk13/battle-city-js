@@ -59,7 +59,7 @@ Tank.prototype.onAddToField = function()
 
 Tank.prototype.fire = function()
 {
-    if (this.bullets.length < this.maxBullets) {
+    if (this.birthTimer <= 0 && this.bullets.length < this.maxBullets) {
         var bullet = new Bullet();
         bullet.tank = this;
         bullet.clan = this.clan;
