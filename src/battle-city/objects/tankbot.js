@@ -14,29 +14,31 @@ TankBot.prototype.constructor = TankBot;
 TankBot.prototype.reward = 100;
 TankBot.prototype.imgBase = 'img/normal-bot';
 
-TankBot.prototype.step = function()
+TankBot.prototype.step = function(paused)
 {
-    if (this.stuck || Math.random() < 0.03) {
-        this.fire();
-    }
-    if (this.stuck || Math.random() < 0.007) {
-        // move percents
-        var mp = {
-            up: this.y / 500,
-            right: (416 - this.x) / 416,
-            down: (500 - this.y) / 500,
-            left: this.x / 416
-        };
-        var percent = Math.random() * (mp.up + mp.right + mp.down + mp.left);
-        for (var i in mp) {
-            percent -= mp[i];
-            if (percent < 0) {
-                this.startMove(i);
-                break;
+    if ((this.birthTimer <= 0) && !paused) {
+        if (this.stuck || Math.random() < 0.03) {
+            this.fire();
+        }
+        if (this.stuck || Math.random() < 0.007) {
+            // move percents
+            var mp = {
+                up: this.y / 500,
+                right: (416 - this.x) / 416,
+                down: (500 - this.y) / 500,
+                left: this.x / 416
+            };
+            var percent = Math.random() * (mp.up + mp.right + mp.down + mp.left);
+            for (var i in mp) {
+                percent -= mp[i];
+                if (percent < 0) {
+                    this.startMove(i);
+                    break;
+                }
             }
         }
     }
-    Tank.prototype.step.call(this);
+    Tank.prototype.step.call(this, paused);
 };
 
 TankBot.prototype.onBonus = function(bonus)

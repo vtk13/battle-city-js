@@ -118,6 +118,8 @@ $(function() {
       , 'img/brick-wall.png'
       , 'img/black.png'
       , 'img/base.png'
+      , 'img/birth1.png'
+      , 'img/birth2.png'
       , 'img/steel-wall.png'
       , 'img/star.png'
       , 'img/grenade.png'

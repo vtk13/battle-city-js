@@ -180,6 +180,6 @@ Field.prototype.animateStep = function()
     }, this);
     this.step++;
 
-    field.draw();
+    this.draw();
 //    console.log('animate step');
 };

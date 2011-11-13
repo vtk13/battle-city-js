@@ -10,6 +10,11 @@ AbstractGameObject = function AbstractGameObject(hw, hh)
     this.speedY; // set only through setSpeedY()
 };
 
+/**
+ * @deprecated set this.img[0] directly
+ * @param img1
+ * @return
+ */
 AbstractGameObject.prototype.setImage = function(img1/*, img2, ...*/)
 {
     this.img = arguments;

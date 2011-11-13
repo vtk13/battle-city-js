@@ -74,9 +74,7 @@ Game.prototype.unjoin = function(user)
 Game.prototype.step = function()
 {
     this.field.objects.forEach(function(item){
-        if (!(item instanceof TankBot) || this.field.timer <= 0) {
-            item.step && item.step();
-        }
+        item.step && item.step(this.field.timer > 0);
     }, this);
     this.field.timer > 0 && this.field.timer--;
 

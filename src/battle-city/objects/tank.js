@@ -16,6 +16,7 @@ Tank = function Tank(x, y)
     this.moveOn = 0;
     this.setSpeedX(0);
     this.setSpeedY(-this.speed);
+    this.img = [];
     this.setDirectionImage();
     this.maxBullets = 1;
     this.bulletPower = 1;
@@ -28,6 +29,8 @@ Tank = function Tank(x, y)
 
     this.armoredTimer = 10 * 1000/30; // 30ms step
     this.trackStep = 1; // 1 or 2
+
+    this.birthTimer = 1 * 1000/30; // 30ms step
 
     this.onIce = false;
     this.glidingTimer = 0;
@@ -72,9 +75,16 @@ Tank.prototype.fire = function()
     }
 };
 
-Tank.prototype.step = function()
+Tank.prototype.step = function(paused)
 {
-    this.armoredTimer > 0 && this.armoredTimer--;
+    if ((this.birthTimer > 0)) {
+        this.birthTimer--;
+        this.emit('change', {type: 'change', object: this});
+        return;
+    }
+    if (this instanceof TankBot && paused) return;
+
+    if (this.armoredTimer > 0) this.armoredTimer--;
     var onIce = false;
     if (this.moveOn || this.glidingTimer > 0) {
         // todo field.move()?
@@ -131,7 +141,8 @@ Tank.prototype.serialize = function()
         speedX: this.speedX,
         speedY: this.speedY,
         bonus: this.bonus,
-        armoredTimer: this.armoredTimer
+        armoredTimer: this.armoredTimer,
+        birthTimer: this.birthTimer
     };
 };
 
@@ -148,7 +159,7 @@ Tank.prototype.setDirectionImage = function()
     } else if (this.speedX  < 0) {
         dir = 'left';
     }
-    this.setImage(this.imgBase + '-' + dir + '-s' + this.trackStep +
+    this.img[0] = (this.imgBase + '-' + dir + '-s' + this.trackStep +
             (this.blink ? '-blink' : '') + '.png');
 };
 
@@ -166,23 +177,27 @@ Tank.prototype.unserialize = function(data)
     this.setSpeedX(data.speedX);
     this.setSpeedY(data.speedY);
     this.armoredTimer = data.armoredTimer;
+    this.birthTimer = data.birthTimer;
     this.bonus = data.bonus;
-
-    this.setDirectionImage();
 };
 
 Tank.prototype.animateStep = function(step)
 {
-    if (this.armoredTimer > 0) {
-        this.img[2] = step % 2 ? 'img/armored1.png' : 'img/armored2.png';
+    if (this.birthTimer > 0) {
+        this.img[0] = 'img/birth' + ((step % 6) > 3 ? 1 : 2) + '.png';
     } else {
-        delete this.img[2];
-    }
-    if (this.moveOn) {
-        this.trackStep = step % 2 + 1;
-    }
-    if (this.bonus) {
-        this.blink = (step % 10) > 5;
+        if (this.moveOn) {
+            this.trackStep = step % 2 + 1;
+        }
+        if (this.bonus) {
+            this.blink = (step % 10) > 5;
+        }
+        this.setDirectionImage();
+        if (this.armoredTimer > 0) {
+            this.img[1] = step % 2 ? 'img/armored1.png' : 'img/armored2.png';
+        } else {
+            delete this.img[1];
+        }
     }
 };
 
@@ -271,5 +286,7 @@ Tank.prototype.resetPosition = function()
     if (this.field) {
         this.field.setXY(this, this.initialPosition.x, this.initialPosition.y);
     }
+    this.armoredTimer = 10 * 1000/30; // 30ms step
+    this.birthTimer = 1 * 1000/30; // 30ms step
     this.emit('change', {type: 'change', object: this});
 };
