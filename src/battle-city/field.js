@@ -74,21 +74,24 @@ Field.prototype.terrain = function(map, enemies)
     // todo move from this function
     for (var i in enemies) {
         var bonus = ['4','11','18'].indexOf(i) >= 0;
+        var bot;
 //        var bonus = true;
         switch (enemies[i]) {
             case 1:
-                this.game.botStack.add(new TankBot(0, 0, bonus));
+                bot = new TankBot(0, 0, bonus);
                 break;
             case 2:
-                this.game.botStack.add(new FastTankBot(0, 0, bonus));
+                bot = new FastTankBot(0, 0, bonus);
                 break;
             case 3:
-                this.game.botStack.add(new FastBulletTankBot(0, 0, bonus));
+                bot = new FastBulletTankBot(0, 0, bonus);
                 break;
             case 4:
-                this.game.botStack.add(new HeavyTankBot(0, 0, bonus));
+                bot = new HeavyTankBot(0, 0, bonus);
                 break;
         }
+        bot.clan = this.game.premade.clans[1];
+        this.game.botStack.add(bot);
     }
 
     this.add(new Delimiter(           - 20, this.height /  2,             20, this.height / 2));
@@ -163,21 +166,24 @@ Field.prototype.updateWith = function(data)
     }
 };
 
+Field.prototype._animateStepItem = function(item)
+{
+    if (item instanceof Water) { // todo move to Water
+        if (this.step % 10 == 0) {
+            if (this.step % 20 >= 10) {
+                item.img[0] = 'img/water2.png';
+            } else {
+                item.img[0] = 'img/water1.png';
+            }
+        }
+    }
+    item.animateStep && item.animateStep(this.step);
+};
+
 Field.prototype.animateStep = function()
 {
 //    this.animateQueue || (this.animateQueue = []);
-    this.objects.forEach(function(item) {
-        if (item instanceof Water) { // todo move to Water
-            if (this.step % 10 == 0) {
-                if (this.step % 20 >= 10) {
-                    item.setImage('img/water2.png');
-                } else {
-                    item.setImage('img/water1.png');
-                }
-            }
-        }
-        item.animateStep && item.animateStep(this.step);
-    }, this);
+    this.objects.forEach(Field.prototype._animateStepItem, this);
     this.step++;
 
     this.draw();

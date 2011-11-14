@@ -48,7 +48,7 @@ Bonus.prototype.hit = function(bullet)
 BonusStar = function BonusStar(x, y)
 {
     Bonus.apply(this, arguments);
-    this.setImage('img/star.png');
+    this.img[0] = 'img/star.png';
 };
 
 BonusStar.prototype = new Bonus();
@@ -66,7 +66,7 @@ BonusStar.prototype.applyTo = function(tank)
 BonusGrenade = function BonusGrenade(x, y)
 {
     Bonus.apply(this, arguments);
-    this.setImage('img/grenade.png');
+    this.img[0] = 'img/grenade.png';
 };
 
 BonusGrenade.prototype = new Bonus();
@@ -84,7 +84,7 @@ BonusGrenade.prototype.applyTo = function(tank)
 BonusShovel = function BonusShovel(x, y)
 {
     Bonus.apply(this, arguments);
-    this.setImage('img/shovel.png');
+    this.img[0] = 'img/shovel.png';
 };
 
 BonusShovel.prototype = new Bonus();
@@ -117,7 +117,7 @@ BonusShovel.prototype.applyTo = function(tank)
 BonusHelmet = function BonusHelmet(x, y)
 {
     Bonus.apply(this, arguments);
-    this.setImage('img/helmet.png');
+    this.img[0] = 'img/helmet.png';
 };
 
 BonusHelmet.prototype = new Bonus();
@@ -131,7 +131,7 @@ BonusHelmet.prototype.applyTo = function(tank)
 BonusLive = function BonusLive(x, y)
 {
     Bonus.apply(this, arguments);
-    this.setImage('img/live.png');
+    this.img[0] = 'img/live.png';
 };
 
 BonusLive.prototype = new Bonus();
@@ -146,7 +146,7 @@ BonusLive.prototype.applyTo = function(tank)
 BonusTimer = function BonusTimer(x, y)
 {
     Bonus.apply(this, arguments);
-    this.setImage('img/timer.png');
+    this.img[0] = 'img/timer.png';
 };
 
 BonusTimer.prototype = new Bonus();

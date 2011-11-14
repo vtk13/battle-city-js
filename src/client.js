@@ -1,20 +1,23 @@
 
-var registry, field, premade = {};
+var registry = {}, field, premade = {};
+
+Field.prototype.drawItem = function(current)
+{
+    if (current.z == this.z) {
+        for (var i in current.img) {
+            this.context.drawImage(window.images[current.img[i]],
+                    current.x - current.hw,
+                    current.y - current.hh);
+        }
+    }
+};
 
 Field.prototype.draw = function()
 {
     this.context.fillStyle = 'rgba(0, 0, 0, 1)';
     this.context.fillRect(0, 0, this.width, this.height);
-    for (var z = 0 ; z <= 2 ; z++) {
-        this.objects.forEach(function(current){
-            if (current.z == z) {
-                for (var i in current.img) {
-                    this.context.drawImage(images[current.img[i]],
-                            current.x - current.hw,
-                            current.y - current.hh);
-                }
-            }
-        }, this);
+    for (this.z = 0 ; this.z <= 2 ; this.z++) { // this.z hack?
+        this.objects.forEach(this.drawItem, this);
     }
 };
 
@@ -23,15 +26,60 @@ function isClient()
     return true;
 };
 
+function appendPublicMessages(event) {
+    if (event.type == 'add') {
+        var date = new Date(event.data.time);
+        var time = date.getHours() + ':' + (date.getMinutes() < 10 ? 0 : '') + date.getMinutes();
+        var message = $('<div><span>' +
+                time + '</span> </div>');
+        message.append($('<span/>').text('<' + event.data.nick + '> '));
+        message.append($('<span/>').text(event.data.text));
+        $('#public .messages').append(message);
+        $('#public .messages').get(0).scrollTop = $('#public .messages').get(0).scrollHeight;
+    }
+};
+
+function appendPremadeMessages(event) {
+    if (event.type == 'add') {
+        var date = new Date(event.data.time);
+        var time = date.getHours() + ':' + (date.getMinutes() < 10 ? 0 : '') + date.getMinutes();
+        var message = $('<div><span>' +
+                time + '</span> </div>');
+        message.append($('<span/>').text('<' + event.data.nick + '> '));
+        message.append($('<span/>').text(event.data.text));
+        $('#premade .messages').append(message);
+        $('#premade .messages').get(0).scrollTop = $('#premade .messages').get(0).scrollHeight;
+    }
+};
+
+function updatePremaded(event) {
+    switch (event.type) {
+    case 'add':
+    case 'change':
+        if (event.data.id == premade.id) {
+            premade = event.data;
+            $('.level .value').text(premade.level);
+        }
+        if ($('#public .premades .premade' + event.data.id).size() > 0) {
+            $('#public .premades .premade' + event.data.id).html(event.data.name);
+        } else {
+            $('#public .premades').append($('<div class="premade premade' +
+                event.data.id + '"></div>').text(event.data.name));
+        }
+        break;
+    case 'remove':
+        $('#public .premades .premade' + event.data.id).remove();
+        break;
+    }
+};
+
 $(function() {
-    registry = {
-        users: new TUserList($('#public .user-list'), undefined, 'user'),
+    window.registry.users = new TUserList($('#public .user-list'), undefined, 'user');
         // todo move to premade object
-        premadeUsers: new TUserList($('#premade .user-list'), function(user) {
+    window.registry.premadeUsers = new TUserList($('#premade .user-list'), function(user) {
             return user.premadeId == premade.id;
-        }, 'user'),
-        tankStack: new TTankStack($('#game #bot-stack'), undefined, 'bot')
-    };
+        }, 'user');
+    window.registry.tankStack = new TTankStack($('#game #bot-stack'), undefined, 'bot');
 
     var canvas = document.getElementById('field');
     field = new Field(canvas.width, canvas.height);
@@ -262,40 +310,10 @@ $(function() {
                     registry.users.updateWith(data['users']);
                 }
                 if (data['messages']) {
-                    data.messages.forEach(function(event) {
-                        if (event.type == 'add') {
-                            var date = new Date(event.data.time);
-                            var time = date.getHours() + ':' + (date.getMinutes() < 10 ? 0 : '') + date.getMinutes();
-                            var message = $('<div><span>' +
-                                    time + '</span> </div>');
-                            message.append($('<span/>').text('<' + event.data.nick + '> '));
-                            message.append($('<span/>').text(event.data.text));
-                            $('#public .messages').append(message);
-                            $('#public .messages').get(0).scrollTop = $('#public .messages').get(0).scrollHeight;
-                        }
-                    });
+                    data.messages.forEach(appendPublicMessages);
                 }
                 if (data['premades']) {
-                    data['premades'].forEach(function(event) {
-                        switch (event.type) {
-                        case 'add':
-                        case 'change':
-                            if (event.data.id == premade.id) {
-                                premade = event.data;
-                                $('.level .value').text(premade.level);
-                            }
-                            if ($('#public .premades .premade' + event.data.id).size() > 0) {
-                                $('#public .premades .premade' + event.data.id).html(event.data.name);
-                            } else {
-                                $('#public .premades').append($('<div class="premade premade' +
-                                    event.data.id + '"></div>').text(event.data.name));
-                            }
-                            break;
-                        case 'remove':
-                            $('#public .premades .premade' + event.data.id).remove();
-                            break;
-                        }
-                    });
+                    data['premades'].forEach(updatePremaded);
                 }
                 if (data['premade.users']) {
                     registry.premadeUsers.updateWith(data['premade.users']);
@@ -308,18 +326,7 @@ $(function() {
                     }
                 }
                 if (data['premade.messages']) {
-                    data['premade.messages'].forEach(function(event) {
-                        if (event.type == 'add') {
-                            var date = new Date(event.data.time);
-                            var time = date.getHours() + ':' + (date.getMinutes() < 10 ? 0 : '') + date.getMinutes();
-                            var message = $('<div><span>' +
-                                    time + '</span> </div>');
-                            message.append($('<span/>').text('<' + event.data.nick + '> '));
-                            message.append($('<span/>').text(event.data.text));
-                            $('#premade .messages').append(message);
-                            $('#premade .messages').get(0).scrollTop = $('#premade .messages').get(0).scrollHeight;
-                        }
-                    });
+                    data['premade.messages'].forEach(appendPremadeMessages);
                 }
                 if (data['field.objects']) {
                     field.updateWith(data['field.objects']);
@@ -331,7 +338,7 @@ $(function() {
         }
     });
     socket.on('disconnect', function() {
-        console.log('disconnect');
+        $('body').html('<h3 style="text-align: center;">Извините, подключени прервано. Перезагрузите страницу, чтобы начать заново.</h3>');
     });
 
     $('#login-form').submit(function(){

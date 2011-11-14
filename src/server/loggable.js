@@ -9,6 +9,7 @@ Loggable = function Loggable(object)
 {
     if (object) {
         object.sync = Loggable.prototype.sync;
+        object.clearRemoved = Loggable.prototype.clearRemoved;
         object.on('add', callback(Loggable.prototype.log, object));
         object.on('remove', callback(Loggable.prototype.log, object));
     }
@@ -53,6 +54,25 @@ Loggable.prototype.log = function(event)
     this.logData = current;
     if (event.type == 'add') {
         event.object.on('change', callback(Loggable.prototype.log, this));
+    }
+};
+
+Loggable.prototype.clearRemoved = function(timestamp)
+{
+    var current = this.logData, prev = null;
+    while (current != null) {
+        if (current.type == 'remove' && current.time < timestamp) {
+            // remove current
+            if (prev == null) {
+                current = this.logData = current.next;
+            } else {
+                current = prev.next = current.next;
+            }
+        } else {
+            // to next element
+            prev = current;
+            current = current.next;
+        }
     }
 };
 

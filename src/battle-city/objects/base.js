@@ -5,7 +5,7 @@ Base = function Base(x, y)
     this.x = x;
     this.y = y;
     this.z = 1;
-    this.setImage('img/base.png');
+    this.img[0] = 'img/base.png';
 };
 
 Base.prototype = new AbstractGameObject();

@@ -16,7 +16,6 @@ Tank = function Tank(x, y)
     this.moveOn = 0;
     this.setSpeedX(0);
     this.setSpeedY(-this.speed);
-    this.img = [];
     this.setDirectionImage();
     this.maxBullets = 1;
     this.bulletPower = 1;
@@ -25,7 +24,7 @@ Tank = function Tank(x, y)
     this.stuck = false;
     this.lives = 1;
     this.bonus = false;
-    this.clan = 0; // users
+    this.clan = null;
 
     this.armoredTimer = 10 * 1000/30; // 30ms step
     this.trackStep = 1; // 1 or 2

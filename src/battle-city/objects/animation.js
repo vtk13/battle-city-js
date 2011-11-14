@@ -13,7 +13,7 @@ BulletHitAnimation = function BulletHitAnimation(step, x, y)
     OnFieldAnimation.call(this, step, 16, 16);
     this.x = x;
     this.y = y;
-    this.setImage('img/hit1.png');
+    this.img[0] = 'img/hit1.png';
 };
 
 BulletHitAnimation.prototype = new OnFieldAnimation();
@@ -25,7 +25,7 @@ BulletHitAnimation.prototype.animateStep = function(step)
         this.field.remove(this);
     } else
     if (step - this.firstStep > 1) {
-        this.setImage('img/hit2.png');
+        this.img[0] = 'img/hit2.png';
     }
 };
 
@@ -34,7 +34,7 @@ TankHitAnimation = function TankHitAnimation(step, x, y)
     OnFieldAnimation.call(this, step, 16, 16);
     this.x = x;
     this.y = y;
-    this.setImage('img/hit1.png');
+    this.img[0] = 'img/hit1.png';
 };
 
 TankHitAnimation.prototype = new OnFieldAnimation();
@@ -47,9 +47,9 @@ TankHitAnimation.prototype.animateStep = function(step)
     } else
     if (step - this.firstStep > 3) {
         this.hw = this.hh = 32; // don't care about intersections
-        this.setImage('img/hit3.png');
+        this.img[0] = 'img/hit3.png';
     } else
     if (step - this.firstStep > 1) {
-        this.setImage('img/hit2.png');
+        this.img[0] = 'img/hit2.png';
     }
 };

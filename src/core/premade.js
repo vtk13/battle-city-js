@@ -1,15 +1,21 @@
 
-Premade = function Premade(name)
+Premade = function Premade(name, type)
 {
     this.name = name;
+    this.type = type || 'classic';
     this.level = 1;
     this.userCount = 0;
     this.locked = false; // lock for new users
-    this.users = new TList();
+    this.users = new TList(); // todo move to clan?
+    this.clans = [new Clan(), new Clan()];
+    this.clans[0].enemiesClan = this.clans[1];
+    this.clans[1].enemiesClan = this.clans[0];
     this.messages = new TList();
 };
 
 Eventable(Premade.prototype);
+
+Premade.types = ['classic', 'team-vs-team'];
 
 Premade.prototype.say = function(message)
 {
@@ -21,15 +27,24 @@ Premade.prototype.say = function(message)
     }
 };
 
-Premade.prototype.join = function(user)
+Premade.prototype.setClan = function(user, clanId)
 {
-    if (!this.locked && (this.users.count() < 2)) {
+    this.clans[clanId].attachUser(user);
+};
+
+Premade.prototype.join = function(user, clanId)
+{
+    clanId = clanId || 0;
+    if (this.type == 'team-vs-team' && this.clans[clanId].isFull()) {
+        clanId = 1;
+    }
+    if (!this.locked && !this.clans[clanId].isFull()) {
         // todo extract to user method setPremade()
         if (user.premade) {
             user.premade.unjoin();
         }
         user.premade = this;
-
+        this.clans[clanId].attachUser(user);
         this.users.add(user);
         this.userCount++;
         this.emit('change', {type: 'change', object: this});
@@ -37,9 +52,8 @@ Premade.prototype.join = function(user)
         user.lives = 4;
         user.points = 0;
         user.emit('change', {type: 'change', object: user});
-        return true;
     } else {
-        return false;
+        throw {message: 'К этой игре уже нельзя присоединиться.'};
     }
 };
 
@@ -48,6 +62,7 @@ Premade.prototype.unjoin = function(user)
     if (this.game) {
         this.game.unjoin(user);
     }
+    user.clan.detachUser(user);
     this.users.remove(user);
     this.userCount--;
     delete user.premade;
@@ -60,8 +75,7 @@ Premade.prototype.unjoin = function(user)
 Premade.prototype.startGame = function()
 {
     this.locked = true;
-    this.game = new Game('../battle-city/maps/level' + this.level);
-    this.game.premade = this;
+    this.game = new Game('../battle-city/maps/level' + this.level, this);
     this.users.forEach(function(user){
         this.game.join(user);
         user.socket.json.send({type: 'started'});
@@ -71,7 +85,6 @@ Premade.prototype.startGame = function()
 Premade.prototype.gameOver = function()
 {
     if (this.game) {
-        var game = this.game;
         if (this.game.status == 1) {
             this.level++;
             if (this.level > 35) {
@@ -80,10 +93,10 @@ Premade.prototype.gameOver = function()
             this.emit('change', {type: 'change', object: this});
         }
         this.users.forEach(function(user){
-            game.unjoin(user);
+            this.game.unjoin(user);
             // todo extract
             user.socket.json.send({type: 'gameover'});
-        });
+        }, this);
         this.game = null;
     }
 };
@@ -94,6 +107,7 @@ Premade.prototype.serialize = function()
         id: this.id,
         name: this.name,
         level: this.level,
+        type: this.type,
         // todo rename?
         users: this.userCount
     };

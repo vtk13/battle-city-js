@@ -9,7 +9,7 @@ Water = function Water(x, y)
     this.x = x;
     this.y = y;
     this.z = 1;
-    this.setImage('img/water1.png');
+    this.img[0] = 'img/water1.png';
 };
 
 Water.prototype = new AbstractGameObject();

@@ -35,7 +35,7 @@ Bullet.prototype.setDirectionImage = function()
  } else if (this.speedX  < 0) {
      dir = 'left';
  }
- this.setImage('img/bullet-' + dir + '.png');
+ this.img[0] = 'img/bullet-' + dir + '.png';
 };
 
 Bullet.prototype.step = function()

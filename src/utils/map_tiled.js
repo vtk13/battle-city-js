@@ -129,9 +129,6 @@ MapTiled.prototype.intersects = function(item, ix, iy, hw, hh)
     return res;
 };
 
-/**
- * @deprecated
- */
 MapTiled.prototype.forEach = function(callback, thisObj)
 {
     this.all.forEach(callback, thisObj);

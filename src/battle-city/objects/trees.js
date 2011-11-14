@@ -9,7 +9,7 @@ Trees = function Trees(x, y)
     this.x = x;
     this.y = y;
     this.z = 2;
-    this.setImage('img/trees.png');
+    this.img[0] = 'img/trees.png';
 };
 
 Trees.prototype = new AbstractGameObject();

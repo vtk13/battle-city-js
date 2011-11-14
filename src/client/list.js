@@ -36,15 +36,18 @@ TItemList.prototype.clear = function()
     this.items.splice(0, this.items.length);
 };
 
+TItemList.prototype._updateItem = function(item)
+{
+    if (['add', 'change', 'remove'].indexOf(item.type) >= 0) {
+        this[item.type](item.data);
+    } else {
+        throw {message: 'Undefined type ' + item.type};
+    }
+};
+
 TItemList.prototype.updateWith = function(items)
 {
-    items.forEach(function(item) {
-        if (['add', 'change', 'remove'].indexOf(item.type) >= 0) {
-            this[item.type](item.data);
-        } else {
-            throw {message: 'Undefined type ' + item.type};
-        }
-    }, this);
+    items.forEach(this._updateItem, this);
 };
 
 TItemList.prototype.add = function(item)

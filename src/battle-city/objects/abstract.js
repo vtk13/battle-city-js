@@ -8,16 +8,7 @@ AbstractGameObject = function AbstractGameObject(hw, hh)
     this.hh = this.boundY = hh;
     this.speedX; // set only through setSpeedX()
     this.speedY; // set only through setSpeedY()
-};
-
-/**
- * @deprecated set this.img[0] directly
- * @param img1
- * @return
- */
-AbstractGameObject.prototype.setImage = function(img1/*, img2, ...*/)
-{
-    this.img = arguments;
+    this.img = [];
 };
 
 AbstractGameObject.prototype.setSpeedX = function(value)

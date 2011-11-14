@@ -5,7 +5,7 @@ TankBot = function TankBot(x, y, bonus)
     this.setSpeedY(this.speed);
     this.moveOn = true;
     this.bonus = bonus;
-    this.clan = 1; // bots
+    this.clan = null;
     this.armoredTimer = 0;
 };
 

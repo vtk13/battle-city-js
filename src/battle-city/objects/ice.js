@@ -9,7 +9,7 @@ Ice = function Ice(x, y)
     this.x = x;
     this.y = y;
     this.z = 0;
-    this.setImage('img/ice.png');
+    this.img[0] = 'img/ice.png';
 };
 
 Ice.prototype = new AbstractGameObject();

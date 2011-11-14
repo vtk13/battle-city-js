@@ -1,6 +1,7 @@
 
-Game = function Game(level)
+Game = function Game(level, premade)
 {
+    this.premade = premade;
     // 1 - win, 0 - fail
     this.status = -1;
 
@@ -30,6 +31,8 @@ Game = function Game(level)
     this.stepIntervalId = setInterval(callback(this.step, this), 30);
 };
 
+Game.tankPositions = [{x:4, y:12}, {x:8, y:12}, {x:4, y:0}, {x:8, y:0}];
+
 Game.prototype.gameOver = function(status)
 {
     if (this.status == -1) {
@@ -49,8 +52,8 @@ Game.prototype.join = function(user)
     user.tank = new Tank();
     user.tank.user = user;
     // before add to field, may set x y directly
-    user.tank.initialPosition.x = user.tank.x = 32*4 + user.tank.hw + userId * 4*32;
-    user.tank.initialPosition.y = user.tank.y = 32*12 + user.tank.hh;
+    user.tank.initialPosition.x = user.tank.x = 32*Game.tankPositions[userId].x + user.tank.hw;
+    user.tank.initialPosition.y = user.tank.y = 32*Game.tankPositions[userId].y + user.tank.hh;
     this.field.add(user.tank);
 };
 
@@ -71,11 +74,14 @@ Game.prototype.unjoin = function(user)
     }
 };
 
+Game.prototype._stepItem = function(item)
+{
+    item.step && item.step(this.field.timer > 0);
+};
+
 Game.prototype.step = function()
 {
-    this.field.objects.forEach(function(item){
-        item.step && item.step(this.field.timer > 0);
-    }, this);
+    this.field.objects.forEach(this._stepItem, this);
     this.field.timer > 0 && this.field.timer--;
 
     if (this.bots.length == 0 && this.botStack.count() == 0) {

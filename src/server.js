@@ -10,16 +10,19 @@ isClient = function isClient()
     return false;
 };
 
-var sys     = require("sys"),
-    http    = require("http"),
-    url     = require("url"),
-    path    = require("path"),
-    fs      = require("fs");
+var sys      = require("sys"),
+    http     = require("http"),
+    url      = require("url"),
+    path     = require("path"),
+    fs       = require("fs");
+
+registry = {};
 
 require('./core/event');
 require('./server/loggable');
 require('./core/list');
 require('./core/game');
+require('./battle-city/clan');
 require('./core/premade');
 require('./server/premadelist');
 require('./core/user');
@@ -44,11 +47,16 @@ require('./battle-city/objects/trees');
 require('./battle-city/objects/water');
 require('./battle-city/objects/ice');
 
-registry = {
-    users: new TList(),
-    premades: new TPremadeList(),
-    messages: new TMessageList()
-};
+registry.users = new TList();
+registry.premades = new TPremadeList();
+registry.messages = new TMessageList();
+
+setInterval(function(){
+    var timestamp = Date.now() - 1 /* minutes */ * 60 * 1000;
+    registry.users.clearRemoved(timestamp);
+    registry.premades.clearRemoved(timestamp);
+    registry.messages.clearRemoved(timestamp);
+}, 1 /* minutes */ * 60 * 1000);
 
 process.on('uncaughtException', function(ex) {
     if (ex.stack) {
@@ -118,26 +126,27 @@ io.listen(server, {'log level': 1}).sockets.on('connection', function(socket) {
                         type: 'connected',
                         userId: user.id
                     });
-                    console.log('User ' + event.nick + ' connected');
+                    console.log(new Date().toLocaleTimeString() + ': User ' + event.nick + ' connected');
                 }
                 break;
             case 'join':
-                if (registry.premades.join(event, user)) {
+                try {
+                    registry.premades.join(event, user);
                     socket.json.send({
                         type: 'joined',
                         premade: user.premade.serialize()
                     });
-                    console.log('User ' + user.nick + ' join premade ' + user.premade.name);
-                } else {
+                    console.log(new Date().toLocaleTimeString() + ': User ' + user.nick + ' join premade ' + user.premade.name);
+                } catch (ex) {
                     socket.json.send({
                         type: 'user-message',
-                        message: 'Can\'t create/join game' // todo more verbose
+                        message: ex.message
                     });
                 }
                 break;
             case 'unjoin':
                 if (user.premade) {
-                    console.log('User ' + user.nick + ' unjoin premade ' + user.premade.name);
+                    console.log(new Date().toLocaleTimeString() + ': User ' + user.nick + ' unjoin premade ' + user.premade.name);
                     user.premade.unjoin(user);
                     socket.json.send({
                         type: 'unjoined'
@@ -147,7 +156,7 @@ io.listen(server, {'log level': 1}).sockets.on('connection', function(socket) {
             case 'start':
                 if (user.premade) {
                     user.premade.startGame();
-                    console.log('User ' + user.nick + ' starts game ' + user.premade.name);
+                    console.log(new Date().toLocaleTimeString() + ': User ' + user.nick + ' starts game ' + user.premade.name);
                 }
                 break;
             case 'control':
@@ -155,18 +164,20 @@ io.listen(server, {'log level': 1}).sockets.on('connection', function(socket) {
                 break;
             case 'say':
                 user.say(event.text);
-                console.log('User ' + user.nick + ' say ' + event.text);
+                console.log(new Date().toLocaleTimeString() + ': User ' + user.nick + ' say ' + event.text);
                 break;
         }
     });
     socket.on('disconnect', function(event) {
         if (user) {
+            console.log(new Date().toLocaleTimeString() + ': User ' + user.nick + ' disconnected');
             if (user.premade) {
                 user.premade.unjoin(user);
             }
             registry.users.remove(user);
         }
     });
+    console.log(new Date().toLocaleTimeString() + ': Connection accepted');
     socket.json.send({
         'type': 'init'
     });
