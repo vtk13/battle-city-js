@@ -17,7 +17,7 @@ Field.prototype.draw = function()
     this.context.fillStyle = 'rgba(0, 0, 0, 1)';
     this.context.fillRect(0, 0, this.width, this.height);
     for (this.z = 0 ; this.z <= 2 ; this.z++) { // this.z hack?
-        this.objects.forEach(this.drawItem, this);
+        this.objects.traversal(this.drawItem, this);
     }
 };
 
@@ -310,10 +310,14 @@ $(function() {
                     registry.users.updateWith(data['users']);
                 }
                 if (data['messages']) {
-                    data.messages.forEach(appendPublicMessages);
+                    for (var i in data.messages) {
+                        appendPublicMessages(data.messages[i]);
+                    }
                 }
                 if (data['premades']) {
-                    data['premades'].forEach(updatePremaded);
+                    for (var i in data.premades) {
+                        updatePremaded(data.premades[i]);
+                    }
                 }
                 if (data['premade.users']) {
                     registry.premadeUsers.updateWith(data['premade.users']);
@@ -326,7 +330,9 @@ $(function() {
                     }
                 }
                 if (data['premade.messages']) {
-                    data['premade.messages'].forEach(appendPremadeMessages);
+                    for (var i in data['premade.messages']) {
+                        appendPremadeMessages(data['premade.messages'][i]);
+                    }
                 }
                 if (data['field.objects']) {
                     field.updateWith(data['field.objects']);

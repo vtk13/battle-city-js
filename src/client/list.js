@@ -22,7 +22,9 @@ TItemList.prototype.filter = function(item)
 TItemList.prototype.importItems = function(items)
 {
     this.clear();
-    items.forEach(this.add, this);
+    for (var i in items) {
+        this.add(items[i]);
+    }
 };
 
 TItemList.prototype.itemDomElement = function(item)
@@ -47,7 +49,9 @@ TItemList.prototype._updateItem = function(item)
 
 TItemList.prototype.updateWith = function(items)
 {
-    items.forEach(this._updateItem, this);
+    for (var i in items) {
+        this._updateItem(items[i]);
+    }
 };
 
 TItemList.prototype.add = function(item)

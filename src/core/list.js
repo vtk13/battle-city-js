@@ -53,7 +53,9 @@ TList.prototype.count = function()
     return n;
 };
 
-TList.prototype.forEach = function(handler, thisObj)
+TList.prototype.traversal = function(callback, thisObj)
 {
-    this.items.forEach(handler, thisObj);
+    for (var i in this.items) {
+        callback.call(thisObj, this.items[i]);
+    }
 };

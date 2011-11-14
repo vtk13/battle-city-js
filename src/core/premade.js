@@ -76,7 +76,7 @@ Premade.prototype.startGame = function()
 {
     this.locked = true;
     this.game = new Game('../battle-city/maps/level' + this.level, this);
-    this.users.forEach(function(user){
+    this.users.traversal(function(user){
         this.game.join(user);
         user.sendToClient({type: 'started'});
     }, this);
@@ -92,7 +92,7 @@ Premade.prototype.gameOver = function()
             }
             this.emit('change', {type: 'change', object: this});
         }
-        this.users.forEach(function(user){
+        this.users.traversal(function(user){
             this.game.unjoin(user);
             // todo extract
             user.sendToClient({type: 'gameover'});

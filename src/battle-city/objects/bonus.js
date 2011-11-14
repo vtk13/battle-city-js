@@ -74,7 +74,7 @@ BonusGrenade.prototype.constructor = BonusGrenade;
 
 BonusGrenade.prototype.applyTo = function(tank)
 {
-    tank.field.objects.forEach(function(item){
+    tank.field.objects.traversal(function(item){
         if (item instanceof TankBot) {
             item.hit();
         }

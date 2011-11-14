@@ -7,7 +7,7 @@
  */
 MapTiled = function MapTiled(width, height)
 {
-    this.all = []; // for fast foreach
+    this.all = []; // for fast traversal
     this.items = [];
     this.maxX = Math.ceil(width/this.tileSize) - 1;
     this.maxY = Math.ceil(height/this.tileSize) - 1;
@@ -129,7 +129,9 @@ MapTiled.prototype.intersects = function(item, ix, iy, hw, hh)
     return res;
 };
 
-MapTiled.prototype.forEach = function(callback, thisObj)
+MapTiled.prototype.traversal = function(callback, thisObj)
 {
-    this.all.forEach(callback, thisObj);
+    for (var i in this.all) {
+        callback.call(thisObj, this.all[i]);
+    }
 };

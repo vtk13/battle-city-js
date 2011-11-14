@@ -81,7 +81,7 @@ Game.prototype._stepItem = function(item)
 
 Game.prototype.step = function()
 {
-    this.field.objects.forEach(this._stepItem, this);
+    this.field.objects.traversal(this._stepItem, this);
     this.field.timer > 0 && this.field.timer--;
 
     if (this.bots.length == 0 && this.botStack.count() == 0) {

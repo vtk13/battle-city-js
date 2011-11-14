@@ -131,11 +131,12 @@ Field.prototype.terrain = function(map, enemies)
 Field.prototype.canPutTank = function(x, y)
 {
     var res = true;
-    this.intersect({}, x, y, 16, 16).forEach(function(item){
-        if (!(item instanceof Bonus)) {
+    var intersects = this.intersect({}, x, y, 16, 16);
+    for (var i in intersects) {
+        if (!(intersects[i] instanceof Bonus)) {
             res = false;
         }
-    });
+    };
     return res;
 };
 
@@ -183,7 +184,7 @@ Field.prototype._animateStepItem = function(item)
 Field.prototype.animateStep = function()
 {
 //    this.animateQueue || (this.animateQueue = []);
-    this.objects.forEach(Field.prototype._animateStepItem, this);
+    this.objects.traversal(Field.prototype._animateStepItem, this);
     this.step++;
 
     this.draw();
