@@ -17,7 +17,7 @@ TPremadeList.prototype.join = function(event, user)
             }
         }
         if (!premade) {
-            if (this.count() >= 3) { // todo P4 3GHz can run only 3 games
+            if (this.count() >= 6) { // games limit
                 throw {message: "Не получается создать игру. Достигнут максимум одновременных игр на сервере."};
             } else {
                 premade = new Premade(event.name);

@@ -52,7 +52,7 @@ function appendPremadeMessages(event) {
     }
 };
 
-function updatePremaded(event) {
+function updatePremades(event) {
     switch (event.type) {
     case 'add':
     case 'change':
@@ -61,7 +61,7 @@ function updatePremaded(event) {
             $('.level .value').text(premade.level);
         }
         if ($('#public .premades .premade' + event.data.id).size() > 0) {
-            $('#public .premades .premade' + event.data.id).html(event.data.name);
+            $('#public .premades .premade' + event.data.id).text(event.data.name);
         } else {
             $('#public .premades').append($('<div class="premade premade' +
                 event.data.id + '"></div>').text(event.data.name));
@@ -316,7 +316,7 @@ $(function() {
                 }
                 if (data['premades']) {
                     for (var i in data.premades) {
-                        updatePremaded(data.premades[i]);
+                        updatePremades(data.premades[i]);
                     }
                 }
                 if (data['premade.users']) {
