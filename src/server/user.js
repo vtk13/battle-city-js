@@ -62,7 +62,7 @@ User.prototype.sendUpdatesToClient = function()
     if (data['users'] || data['messages'] || data['premades'] ||
             data['premade.users'] || data['premade.messages'] ||
             data['field.objects'] || data['game.botStack']) {
-        this.socket.json.send(data);
+        this.sendToClient(data);
     }
 };
 
@@ -110,4 +110,14 @@ User.prototype.addReward = function(reward)
 {
     this.points += reward;
     this.emit('change', {type: 'change', object: this});
+};
+
+User.prototype.sendToClient = function(data)
+{
+    if (this.socket) {
+        this.socket.json.send(data);
+    } else {
+        console.log('Trying to send data to disconnected client.'); // todo bug?
+        console.trace();
+    }
 };

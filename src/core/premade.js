@@ -65,7 +65,7 @@ Premade.prototype.unjoin = function(user)
     user.clan.detachUser(user);
     this.users.remove(user);
     this.userCount--;
-    delete user.premade;
+    user.premade = null;
     this.emit('change', {type: 'change', object: this});
     if (this.userCount == 0) {
         registry.premades.remove(this);
@@ -78,7 +78,7 @@ Premade.prototype.startGame = function()
     this.game = new Game('../battle-city/maps/level' + this.level, this);
     this.users.forEach(function(user){
         this.game.join(user);
-        user.socket.json.send({type: 'started'});
+        user.sendToClient({type: 'started'});
     }, this);
 };
 
@@ -95,7 +95,7 @@ Premade.prototype.gameOver = function()
         this.users.forEach(function(user){
             this.game.unjoin(user);
             // todo extract
-            user.socket.json.send({type: 'gameover'});
+            user.sendToClient({type: 'gameover'});
         }, this);
         this.game = null;
     }

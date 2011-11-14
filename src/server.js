@@ -121,8 +121,8 @@ io.listen(server, {'log level': 1}).sockets.on('connection', function(socket) {
                     user.socket = socket;
                     user.nick = event.nick;
                     registry.users.add(user);
-                    setInterval(callback(user.sendUpdatesToClient, user), 50);
-                    socket.json.send({
+                    user.updateIntervalId = setInterval(callback(user.sendUpdatesToClient, user), 50);
+                    user.sendToClient({
                         type: 'connected',
                         userId: user.id
                     });
@@ -132,13 +132,13 @@ io.listen(server, {'log level': 1}).sockets.on('connection', function(socket) {
             case 'join':
                 try {
                     registry.premades.join(event, user);
-                    socket.json.send({
+                    user.sendToClient({
                         type: 'joined',
                         premade: user.premade.serialize()
                     });
                     console.log(new Date().toLocaleTimeString() + ': User ' + user.nick + ' join premade ' + user.premade.name);
                 } catch (ex) {
-                    socket.json.send({
+                    user.sendToClient({
                         type: 'user-message',
                         message: ex.message
                     });
@@ -148,7 +148,7 @@ io.listen(server, {'log level': 1}).sockets.on('connection', function(socket) {
                 if (user.premade) {
                     console.log(new Date().toLocaleTimeString() + ': User ' + user.nick + ' unjoin premade ' + user.premade.name);
                     user.premade.unjoin(user);
-                    socket.json.send({
+                    user.sendToClient({
                         type: 'unjoined'
                     });
                 }
@@ -171,6 +171,8 @@ io.listen(server, {'log level': 1}).sockets.on('connection', function(socket) {
     socket.on('disconnect', function(event) {
         if (user) {
             console.log(new Date().toLocaleTimeString() + ': User ' + user.nick + ' disconnected');
+            clearInterval(user.updateIntervalId);
+            user.socket = null; // to be on the safe side
             if (user.premade) {
                 user.premade.unjoin(user);
             }
