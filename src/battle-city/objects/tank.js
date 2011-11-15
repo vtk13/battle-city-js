@@ -129,55 +129,53 @@ Tank.prototype.onBonus = function(bonus)
     this.field.remove(bonus);
 };
 
-Tank.prototype.serialize = function()
-{
-    return {
-        type: this.constructor.name,
-        id: this.id,
-        x: this.x,
-        y: this.y,
-        z: this.z,
-        speedX: this.speedX,
-        speedY: this.speedY,
-        bonus: this.bonus,
-        armoredTimer: this.armoredTimer,
-        birthTimer: this.birthTimer
-    };
-};
-
-// function for override for different sprites
+//function for override for different sprites
 Tank.prototype.setDirectionImage = function()
 {
-    var dir = 'up';
-    if (this.speedY  > 0) {
-        dir = 'down';
-    } else if (this.speedY  < 0) {
-        dir = 'up';
-    } else if (this.speedX  > 0) {
-        dir = 'right';
-    } else if (this.speedX  < 0) {
-        dir = 'left';
-    }
-    this.img[0] = (this.imgBase + '-' + dir + '-s' + this.trackStep +
-            (this.blink ? '-blink' : '') + '.png');
+ var dir = 'up';
+ if (this.speedY  > 0) {
+     dir = 'down';
+ } else if (this.speedY  < 0) {
+     dir = 'up';
+ } else if (this.speedX  > 0) {
+     dir = 'right';
+ } else if (this.speedX  < 0) {
+     dir = 'left';
+ }
+ this.img[0] = (this.imgBase + '-' + dir + '-s' + this.trackStep +
+         (this.blink ? '-blink' : '') + '.png');
+};
+
+Tank.prototype.serialize = function()
+{
+    return [
+        battleCityTypesSerialize[this.constructor.name], // 0
+        this.id, // 1
+        this.x, // 2
+        this.y, // 3
+        this.speedX, // 4
+        this.speedY, // 5
+        this.bonus, // 6
+        Math.round(this.armoredTimer), // 7
+        Math.round(this.birthTimer) // 8
+    ];
 };
 
 Tank.prototype.unserialize = function(data)
 {
-    this.id = data.id;
+    this.id = data[1];
     if (this.field) {
-        this.field.setXY(this, data.x, data.y);
+        this.field.setXY(this, data[2], data[3]);
     } else {
         // first unserialize, before adding to field -> may set x and y directly
-        this.x = data.x;
-        this.y = data.y;
+        this.x = data[2];
+        this.y = data[3];
     }
-    this.z = data.z;
-    this.setSpeedX(data.speedX);
-    this.setSpeedY(data.speedY);
-    this.armoredTimer = data.armoredTimer;
-    this.birthTimer = data.birthTimer;
-    this.bonus = data.bonus;
+    this.setSpeedX(data[4]);
+    this.setSpeedY(data[5]);
+    this.bonus = data[6];
+    this.armoredTimer = data[7];
+    this.birthTimer = data[8];
 };
 
 Tank.prototype.animateStep = function(step)

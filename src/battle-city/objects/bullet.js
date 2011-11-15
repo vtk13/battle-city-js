@@ -71,33 +71,31 @@ Bullet.prototype.onIntersect = function(items)
 
 Bullet.prototype.serialize = function()
 {
-    return {
-        type: 'Bullet',
-        id: this.id,
-        x: this.x,
-        y: this.y,
-        z: this.z,
-        speedX: this.speedX,
-        speedY: this.speedY,
-        finalX: this.finalX,
-        finalY: this.finalY
-    };
+    return [
+        battleCityTypesSerialize['Bullet'], // 0
+        this.id, // 1
+        this.x, // 2
+        this.y, // 3
+        this.speedX, // 4
+        this.speedY, // 5
+        this.finalX, // 6 todo remove
+        this.finalY // 7 todo remove
+    ];
 };
 
 Bullet.prototype.unserialize = function(data)
 {
-    this.id = data.id;
+    this.id = data[1];
     if (this.field) {
-        this.field.setXY(this, data.x, data.y);
+        this.field.setXY(this, data[2], data[3]);
     } else {
         // first unserialize, before adding to field -> may set x and y directly
-        this.x = data.x;
-        this.y = data.y;
+        this.x = data[2];
+        this.y = data[3];
     }
-    this.z = data.z;
-    this.setSpeedX(data.speedX);
-    this.setSpeedY(data.speedY);
-    this.finalX = data.finalX;
-    this.finalY = data.finalY;
+    this.setSpeedX(data[4]);
+    this.setSpeedY(data[5]);
+    this.finalX = data[6];
+    this.finalY = data[7];
     this.setDirectionImage();
 };

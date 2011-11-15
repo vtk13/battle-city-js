@@ -18,26 +18,25 @@ Eventable(Bonus.prototype);
 
 Bonus.prototype.serialize = function()
 {
-    return {
-        type: this.constructor.name,
-        id: this.id,
-        x: this.x,
-        y: this.y,
-        z: this.z
-    };
+    return [
+        battleCityTypesSerialize[this.constructor.name],
+        this.id,
+        this.x,
+        this.y
+    ];
+    // z is constant
 };
 
 Bonus.prototype.unserialize = function(data)
 {
-    this.id = data.id;
+    this.id = data[1];
     if (this.field) {
-        this.field.setXY(this, data.x, data.y);
+        this.field.setXY(this, data[2], data[3]);
     } else {
         // first unserialize, before adding to field -> may set x and y directly
-        this.x = data.x;
-        this.y = data.y;
+        this.x = data[2];
+        this.y = data[3];
     }
-    this.z = data.z;
 };
 
 Bonus.prototype.hit = function(bullet)

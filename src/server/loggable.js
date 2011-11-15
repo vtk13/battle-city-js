@@ -30,7 +30,7 @@ Loggable.prototype.log = function(event)
     var data = event.object.serialize();
     var current = this.logData, prev = null;
     while (current != null) {
-        if (current.data.id == data.id) {
+        if (current.data[1] == data[1]) { // id
             // remove current
             if (prev == null) {
                 current = this.logData = current.next;
@@ -60,6 +60,7 @@ Loggable.prototype.log = function(event)
 Loggable.prototype.clearRemoved = function(timestamp)
 {
     var current = this.logData, prev = null;
+    var length = 0;
     while (current != null) {
         if (current.type == 'remove' && current.time < timestamp) {
             // remove current
@@ -73,8 +74,12 @@ Loggable.prototype.clearRemoved = function(timestamp)
             prev = current;
             current = current.next;
         }
+        length++;
     }
+    return length;
 };
+
+Loggable._eventTypeMap = {'add': 'a', 'change': 'c', 'remove': 'r'};
 
 Loggable.prototype.sync = function(lastSync)
 {
@@ -86,10 +91,10 @@ Loggable.prototype.sync = function(lastSync)
         if (current.time <= lastSync) { // "<=" to avoid duplicate events
             break;
         }
-        res.push({
-            type: current.type,
-            data: current.data
-        });
+        res.push([
+            Loggable._eventTypeMap[current.type],
+            current.data
+        ]);
         // to next element
         current = current.next;
     }

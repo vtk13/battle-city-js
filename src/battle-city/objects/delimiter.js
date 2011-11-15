@@ -17,30 +17,28 @@ Eventable(Delimiter.prototype);
 
 Delimiter.prototype.serialize = function()
 {
-    return {
-        type: 'Delimiter',
-        id: this.id,
-        x: this.x,
-        y: this.y,
-        z: this.z,
-        hw: this.hw,
-        hh: this.hh
-    };
+    return [
+        battleCityTypesSerialize['Delimiter'], // 0
+        this.id, // 1
+        this.x,
+        this.y,
+        this.hw,
+        this.hh
+    ];
 };
 
 Delimiter.prototype.unserialize = function(data)
 {
-    this.id = data.id;
+    this.id = data[1];
     if (this.field) {
-        this.field.setXY(this, data.x, data.y);
+        this.field.setXY(this, data[2], data[3]);
     } else {
         // first unserialize, before adding to field -> may set x and y directly
-        this.x = data.x;
-        this.y = data.y;
+        this.x = data[2];
+        this.y = data[3];
     }
-    this.z = data.z;
-    this.hw = data.hw;
-    this.hh = data.hh;
+    this.hw = data[4];
+    this.hh = data[5];
 };
 
 Delimiter.prototype.hit = function()

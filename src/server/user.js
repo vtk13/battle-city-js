@@ -24,7 +24,7 @@ User.prototype.serialize = function()
  *  'premades'
  *  'premade.users'
  *  'premade.messages'
- *  'field.objects'
+ *  'f' // field.objects
  *  'game.botStack'
  * }
  *
@@ -32,7 +32,7 @@ User.prototype.serialize = function()
  */
 User.prototype.sendUpdatesToClient = function()
 {
-    var lastSync = this.lastSync, chunk, data = {type: 'sync'};
+    var lastSync = this.lastSync, chunk, data = {};
     this.lastSync = Date.now();
 
     data['users'] = registry.users.sync(lastSync);
@@ -52,8 +52,8 @@ User.prototype.sendUpdatesToClient = function()
         if (data['premade.messages'].length == 0) delete data['premade.messages'];
 
         if (this.premade.game) {
-            data['field.objects'] = this.premade.game.field.sync(lastSync);
-            if (data['field.objects'].length == 0) delete data['field.objects'];
+            data['f'] = this.premade.game.field.sync(lastSync);
+            if (data['f'].length == 0) delete data['f'];
 
             data['game.botStack'] = this.premade.game.botStack.sync(lastSync);
             if (data['game.botStack'].length == 0) delete data['game.botStack'];
@@ -61,8 +61,8 @@ User.prototype.sendUpdatesToClient = function()
     }
     if (data['users'] || data['messages'] || data['premades'] ||
             data['premade.users'] || data['premade.messages'] ||
-            data['field.objects'] || data['game.botStack']) {
-        this.sendToClient(data);
+            data['f'] || data['game.botStack']) {
+        this.clientMessage('sync', data);
     }
 };
 
@@ -110,6 +110,16 @@ User.prototype.addReward = function(reward)
 {
     this.points += reward;
     this.emit('change', {type: 'change', object: this});
+};
+
+User.prototype.clientMessage = function(type, data)
+{
+    if (this.socket) {
+        this.socket.emit(type, data);
+    } else {
+        console.log('Trying to send data to disconnected client.'); // todo bug?
+        console.trace();
+    }
 };
 
 User.prototype.sendToClient = function(data)

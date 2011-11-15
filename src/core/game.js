@@ -4,6 +4,7 @@ Game = function Game(level, premade)
     this.premade = premade;
     // 1 - win, 0 - fail
     this.status = -1;
+    this._stepCounter = 0;
 
     this.field = new Field(13*32, 13*32);
     this.field.game = this;
@@ -81,6 +82,10 @@ Game.prototype._stepItem = function(item)
 
 Game.prototype.step = function()
 {
+    this._stepCounter++;
+    if ((this._stepCounter % 300) == 0) { // ~10 seconds (30ms step)
+        this.field.clearRemoved(Date.now() - 10 * 1000);
+    }
     this.field.objects.traversal(this._stepItem, this);
     this.field.timer > 0 && this.field.timer--;
 

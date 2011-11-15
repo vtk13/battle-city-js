@@ -141,25 +141,28 @@ Field.prototype.canPutTank = function(x, y)
 };
 
 // client methods
-Field.prototype.updateWith = function(data)
+Field.prototype.updateWith = function(events)
 {
-    for (var i in data) {
-        var event = data[i];
-        switch (event.type) {
-        case 'remove':
-            if (obj = this.objects.get(event.data.id)) {
-                obj.unserialize(event.data); // for bullets finalX and finalY
+    for (var i in events) {
+        var eventType = events[i][0/*type*/];
+        var eventData = events[i][1/*data*/];
+        var type = battleCityTypesUnserialize[eventData[0/*type*/]];
+        var id = parseInt(eventData[1/*id*/]);
+        switch (eventType) {
+        case 'r'/*remove*/:
+            if (obj = this.objects.get(id)) {
+                obj.unserialize(eventData); // for bullets finalX and finalY
                 this.remove(obj);
             }
             break;
-            case 'add':
-            case 'change':
-                var obj = this.objects.get(event.data.id);
+            case 'a'/*add*/:
+            case 'c'/*change*/:
+                var obj = this.objects.get(id);
                 if (obj) {
-                    obj.unserialize(event.data);
+                    obj.unserialize(eventData);
                 } else {
-                    obj = new (window[event.data.type])();
-                    obj.unserialize(event.data);
+                    obj = new (window[type])();
+                    obj.unserialize(eventData);
                     this.add(obj);
                 }
                 break;

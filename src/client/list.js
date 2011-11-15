@@ -38,27 +38,35 @@ TItemList.prototype.clear = function()
     this.items.splice(0, this.items.length);
 };
 
-TItemList.prototype._updateItem = function(item)
+TItemList.prototype._methodMap = {
+    'a': 'add',
+    'c': 'change',
+    'r': 'remove'
+};
+
+TItemList.prototype._updateItem = function(event)
 {
-    if (['add', 'change', 'remove'].indexOf(item.type) >= 0) {
-        this[item.type](item.data);
+    if (['a'/*add*/, 'c'/*change*/, 'r'/*remove*/].indexOf(event[0/*type*/]) >= 0) {
+        var method = this._methodMap[event[0/*type*/]];
+        this[method](event[1/*data*/]);
     } else {
-        throw {message: 'Undefined type ' + item.type};
+        throw {message: 'Undefined message type "' + event[0/*type*/] + '"'};
     }
 };
 
-TItemList.prototype.updateWith = function(items)
+TItemList.prototype.updateWith = function(events)
 {
-    for (var i in items) {
-        this._updateItem(items[i]);
+    for (var i in events) {
+        this._updateItem(events[i]);
     }
 };
 
 TItemList.prototype.add = function(item)
 {
     if (this.filter(item)) {
-        this.items[item.id] = item;
-        var div = $('.' + this.itemClass + item.id, this.container);
+        var id = item.id || item[1];
+        this.items[id] = item;
+        var div = $('.' + this.itemClass + id, this.container);
         if (div.size() > 0) {
             div.replaceWith(this.itemDomElement(item));
         } else {
@@ -112,7 +120,7 @@ TTankStack.prototype.constructor = TTankStack;
 TTankStack.prototype.itemDomElement = function(item)
 {
     return $('<div class="' + this.itemClass + ' ' +
-        this.itemClass + item.id + '"><img src="img/bot.png"></div>');
+        this.itemClass + item[1/*id*/] + '"><img src="img/bot.png"></div>');
 };
 
 TTankStack.prototype.add = function(item)

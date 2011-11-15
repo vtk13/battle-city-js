@@ -4,7 +4,6 @@ Base = function Base(x, y)
     AbstractGameObject.call(this, 16, 16);
     this.x = x;
     this.y = y;
-    this.z = 1;
     this.img[0] = 'img/base.png';
 };
 
@@ -25,26 +24,25 @@ Eventable(Base.prototype);
 
 Base.prototype.serialize = function()
 {
-    return {
-        type: 'Base',
-        id: this.id,
-        x: this.x,
-        y: this.y,
-        z: this.z
-    };
+    return [
+        battleCityTypesSerialize['Base'],
+        this.id,
+        this.x,
+        this.y
+    ];
+    // z is constant
 };
 
 Base.prototype.unserialize = function(data)
 {
-    this.id = data.id;
+    this.id = data[1];
     if (this.field) {
-        this.field.setXY(this, data.x, data.y);
+        this.field.setXY(this, data[2], data[3]);
     } else {
         // first unserialize, before adding to field -> may set x and y directly
-        this.x = data.x;
-        this.y = data.y;
+        this.x = data[2];
+        this.y = data[3];
     }
-    this.z = data.z;
 };
 
 Base.prototype.hit = function()

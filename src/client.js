@@ -1,6 +1,9 @@
 
 var registry = {}, field, premade = {};
 
+var bytes = 0;
+setInterval(function(){console.log(bytes); bytes = 0;}, 1000);
+
 Field.prototype.drawItem = function(current)
 {
     if (current.z == this.z) {
@@ -27,48 +30,48 @@ function isClient()
 };
 
 function appendPublicMessages(event) {
-    if (event.type == 'add') {
-        var date = new Date(event.data.time);
+    if (event[0/*type*/] == 'a'/*add*/) {
+        var date = new Date(event[1/*data*/].time);
         var time = date.getHours() + ':' + (date.getMinutes() < 10 ? 0 : '') + date.getMinutes();
         var message = $('<div><span>' +
                 time + '</span> </div>');
-        message.append($('<span/>').text('<' + event.data.nick + '> '));
-        message.append($('<span/>').text(event.data.text));
+        message.append($('<span/>').text('<' + event[1/*data*/].nick + '> '));
+        message.append($('<span/>').text(event[1/*data*/].text));
         $('#public .messages').append(message);
         $('#public .messages').get(0).scrollTop = $('#public .messages').get(0).scrollHeight;
     }
 };
 
 function appendPremadeMessages(event) {
-    if (event.type == 'add') {
-        var date = new Date(event.data.time);
+    if (event[0/*type*/] == 'a'/*add*/) {
+        var date = new Date(event[1/*data*/].time);
         var time = date.getHours() + ':' + (date.getMinutes() < 10 ? 0 : '') + date.getMinutes();
         var message = $('<div><span>' +
                 time + '</span> </div>');
-        message.append($('<span/>').text('<' + event.data.nick + '> '));
-        message.append($('<span/>').text(event.data.text));
+        message.append($('<span/>').text('<' + event[1/*data*/].nick + '> '));
+        message.append($('<span/>').text(event[1/*data*/].text));
         $('#premade .messages').append(message);
         $('#premade .messages').get(0).scrollTop = $('#premade .messages').get(0).scrollHeight;
     }
 };
 
 function updatePremades(event) {
-    switch (event.type) {
-    case 'add':
-    case 'change':
-        if (event.data.id == premade.id) {
-            premade = event.data;
+    switch (event[0/*type*/]) {
+    case 'a'/*add*/:
+    case 'c'/*change*/:
+        if (event[1/*data*/].id == premade.id) {
+            premade = event[1/*data*/];
             $('.level .value').text(premade.level);
         }
-        if ($('#public .premades .premade' + event.data.id).size() > 0) {
-            $('#public .premades .premade' + event.data.id).text(event.data.name);
+        if ($('#public .premades .premade' + event[1/*data*/].id).size() > 0) {
+            $('#public .premades .premade' + event[1/*data*/].id).text(event[1/*data*/].name);
         } else {
             $('#public .premades').append($('<div class="premade premade' +
-                event.data.id + '"></div>').text(event.data.name));
+                event[1/*data*/].id + '"></div>').text(event[1/*data*/].name));
         }
         break;
-    case 'remove':
-        $('#public .premades .premade' + event.data.id).remove();
+    case 'r'/*remove*/:
+        $('#public .premades .premade' + event[1/*data*/].id).remove();
         break;
     }
 };
@@ -193,6 +196,7 @@ $(function() {
     var socket = io.connect(location.href);
 
     socket.on('message', function(data) {
+        bytes += JSON.stringify(data).length;
         switch (data.type) {
             case 'init':
                 if (socket.socket.transport.name == 'websocket') {
@@ -305,42 +309,44 @@ $(function() {
                 clearInterval(field.animateIntervalId);
                 registry.tankStack.clear();
                 break;
-            case 'sync':
-                if (data['users']) {
-                    registry.users.updateWith(data['users']);
-                }
-                if (data['messages']) {
-                    for (var i in data.messages) {
-                        appendPublicMessages(data.messages[i]);
-                    }
-                }
-                if (data['premades']) {
-                    for (var i in data.premades) {
-                        updatePremades(data.premades[i]);
-                    }
-                }
-                if (data['premade.users']) {
-                    registry.premadeUsers.updateWith(data['premade.users']);
-                    var players = registry.premadeUsers.items;
-                    var current = 1;
-                    for (var i in players) {
-                        $('.player' + current + '-lives')
-                            .text(players[i].lives + ':' + players[i].points);
-                        current++;
-                    }
-                }
-                if (data['premade.messages']) {
-                    for (var i in data['premade.messages']) {
-                        appendPremadeMessages(data['premade.messages'][i]);
-                    }
-                }
-                if (data['field.objects']) {
-                    field.updateWith(data['field.objects']);
-                }
-                if (data['game.botStack']) {
-                    registry.tankStack.updateWith(data['game.botStack']);
-                }
-                break;
+        }
+    });
+    socket.on('sync', function(data) {
+        bytes += JSON.stringify(data).length;
+        if (bytes>8000) console.log(JSON.stringify(data));
+        if (data['users']) {
+            registry.users.updateWith(data['users']);
+        }
+        if (data['messages']) {
+            for (var i in data.messages) {
+                appendPublicMessages(data.messages[i]);
+            }
+        }
+        if (data['premades']) {
+            for (var i in data.premades) {
+                updatePremades(data.premades[i]);
+            }
+        }
+        if (data['premade.users']) {
+            registry.premadeUsers.updateWith(data['premade.users']);
+            var players = registry.premadeUsers.items;
+            var current = 1;
+            for (var i in players) {
+                $('.player' + current + '-lives')
+                    .text(players[i].lives + ':' + players[i].points);
+                current++;
+            }
+        }
+        if (data['premade.messages']) {
+            for (var i in data['premade.messages']) {
+                appendPremadeMessages(data['premade.messages'][i]);
+            }
+        }
+        if (data['f']) {
+            field.updateWith(data['f']);
+        }
+        if (data['game.botStack']) {
+            registry.tankStack.updateWith(data['game.botStack']);
         }
     });
     socket.on('disconnect', function() {
