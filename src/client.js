@@ -1,9 +1,6 @@
 
 var registry = {}, field, premade = {};
 
-var bytes = 0;
-setInterval(function(){console.log(bytes); bytes = 0;}, 1000);
-
 Field.prototype.drawItem = function(current)
 {
     if (current.z == this.z) {
@@ -196,7 +193,6 @@ $(function() {
     var socket = io.connect(location.href);
 
     socket.on('message', function(data) {
-        bytes += JSON.stringify(data).length;
         switch (data.type) {
             case 'init':
                 if (socket.socket.transport.name == 'websocket') {
@@ -312,8 +308,6 @@ $(function() {
         }
     });
     socket.on('sync', function(data) {
-        bytes += JSON.stringify(data).length;
-        if (bytes>8000) console.log(JSON.stringify(data));
         if (data['users']) {
             registry.users.updateWith(data['users']);
         }

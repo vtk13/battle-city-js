@@ -6,6 +6,7 @@ Eventable(User.prototype);
 User.prototype.serialize = function()
 {
     var res = {
+        "1": this.id, // todo hack
         id:   this.id,
         nick: this.nick,
         lives: this.lives,
@@ -37,6 +38,7 @@ User.prototype.sendUpdatesToClient = function()
 
     data['users'] = registry.users.sync(lastSync);
     if (data['users'].length == 0) delete data['users'];
+    else console.log(registry.users.logData);
 
     data['messages'] = registry.messages.sync(lastSync);
     if (data['messages'].length == 0) delete data['messages'];

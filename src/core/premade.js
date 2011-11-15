@@ -2,7 +2,7 @@
 Premade = function Premade(name, type)
 {
     this.name = name;
-    this.type = type || 'classic';
+    this.type = type || 'team-vs-team';
     this.level = 1;
     this.userCount = 0;
     this.locked = false; // lock for new users
@@ -104,6 +104,7 @@ Premade.prototype.gameOver = function()
 Premade.prototype.serialize = function()
 {
     return {
+        "1": this.id, // todo hack
         id: this.id,
         name: this.name,
         level: this.level,
