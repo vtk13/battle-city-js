@@ -4,7 +4,6 @@ Field = function Field(width, height)
     this.height     = height;
     this.objects    = null;
     this.step       = 1;
-    this.timer      = 0;
     this.clear();
     this.setMaxListeners(100); // @todo
     if (typeof Loggable == 'function') {
@@ -36,6 +35,7 @@ Field.prototype.remove = function(object)
 {
     if (this.objects.remove(object)) {
         this.emit('remove', {type: 'remove', object: object});
+        object.removeAllListeners && object.removeAllListeners();
     }
     if (isClient() && object instanceof Bullet) {
         var anim = new BulletHitAnimation(this.step, object.finalX, object.finalY);
@@ -69,36 +69,12 @@ Field.prototype.intersect = function(object, newX, newY, boundX, boundY)
     return this.objects.intersects(object, newX, newY, boundX, boundY);
 };
 
-Field.prototype.terrain = function(map, enemies)
+Field.prototype.terrain = function(map)
 {
-    // todo move from this function
-    for (var i in enemies) {
-        var bonus = ['4','11','18'].indexOf(i) >= 0;
-        var bot;
-//        var bonus = true;
-        switch (enemies[i]) {
-            case 1:
-                bot = new TankBot(0, 0, bonus);
-                break;
-            case 2:
-                bot = new FastTankBot(0, 0, bonus);
-                break;
-            case 3:
-                bot = new FastBulletTankBot(0, 0, bonus);
-                break;
-            case 4:
-                bot = new HeavyTankBot(0, 0, bonus);
-                break;
-        }
-        bot.clan = this.game.premade.clans[1];
-        this.game.botStack.add(bot);
-    }
-
     this.add(new Delimiter(           - 20, this.height /  2,             20, this.height / 2));
     this.add(new Delimiter(this.width + 20, this.height /  2,             20, this.height / 2));
     this.add(new Delimiter(this.width /  2,             - 20, this.width / 2,              20));
     this.add(new Delimiter(this.width /  2, this.height + 20, this.width / 2,              20));
-    this.add(new      Base(this.width /  2, this.height - 16));
 
     for (var y = 0 ; y < 26 ; y++) {
         for (var x = 0 ; x < 26 ; x++) {
@@ -125,7 +101,7 @@ Field.prototype.terrain = function(map, enemies)
         }
     }
 
-//    this.add(new BonusTimer(10*16, 20*16));
+    this.add(new BonusTimer(10*16, 20*16));
 };
 
 Field.prototype.canPutTank = function(x, y)

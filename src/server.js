@@ -22,7 +22,6 @@ require('./core/event');
 require('./server/loggable');
 require('./core/list');
 require('./core/game');
-require('./battle-city/clan');
 require('./core/premade');
 require('./server/premadelist');
 require('./core/user');
@@ -46,6 +45,7 @@ require('./battle-city/objects/bonus');
 require('./battle-city/objects/trees');
 require('./battle-city/objects/water');
 require('./battle-city/objects/ice');
+require('./battle-city/clan');
 
 registry.users = new TList();
 registry.premades = new TPremadeList();
@@ -156,7 +156,7 @@ io.listen(server, {'log level': 1}).sockets.on('connection', function(socket) {
             case 'start':
                 if (user.premade) {
                     user.premade.startGame();
-                    console.log(new Date().toLocaleTimeString() + ': User ' + user.nick + ' starts game ' + user.premade.name);
+                    console.log(new Date().toLocaleTimeString() + ': User ' + user.nick + ' starts game ' + user.premade.name + ', level ' + user.premade.level);
                 }
                 break;
             case 'control':

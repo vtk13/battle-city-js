@@ -7,6 +7,7 @@ TankBot = function TankBot(x, y, bonus)
     this.bonus = bonus;
     this.clan = null;
     this.armoredTimer = 0;
+    this.fireTimer = 0; // do not fire too fast
 };
 
 TankBot.prototype = new Tank();
@@ -17,8 +18,9 @@ TankBot.prototype.imgBase = 'img/normal-bot';
 TankBot.prototype.step = function(paused)
 {
     if ((this.birthTimer <= 0) && !paused) {
-        if (this.stuck || Math.random() < 0.03) {
+        if ((this.stuck || Math.random() < 0.03) && this.fireTimer <= 0) {
             this.fire();
+            this.fireTimer = 1 * 1000/30; // 30ms step
         }
         if (this.stuck || Math.random() < 0.007) {
             // move percents
@@ -44,24 +46,6 @@ TankBot.prototype.step = function(paused)
 TankBot.prototype.onBonus = function(bonus)
 {
 
-};
-
-/**
- * Bullet may be undefined (see BonusGrenade)
- */
-TankBot.prototype.hit = function(bullet)
-{
-    var res = Tank.prototype.hit.apply(this, arguments);
-    // copy paste condition from parent::hit()
-    // this.clan != bullet.clan means tank is hitted
-    if (bullet && this.clan != bullet.clan && this.bonus) {
-        var bonuses = [BonusStar, BonusGrenade, BonusShovel, BonusHelmet, BonusLive, BonusTimer];
-        this.field.add(new (bonuses[Math.floor(Math.random()*(bonuses.length-0.0001))])(
-            Math.round((Math.random() * this.field.width  / 16 - 1)) * 16,
-            Math.round((Math.random() * this.field.height / 16 - 1)) * 16
-        ));
-    }
-    return res;
 };
 
 FastBulletTankBot = function FastBulletTankBot(x, y, bonus)

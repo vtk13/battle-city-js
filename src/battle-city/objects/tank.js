@@ -30,6 +30,7 @@ Tank = function Tank(x, y)
     this.trackStep = 1; // 1 or 2
 
     this.birthTimer = 1 * 1000/30; // 30ms step
+    this.fireTimer = 0;
 
     this.onIce = false;
     this.glidingTimer = 0;
@@ -45,12 +46,11 @@ Eventable(Tank.prototype);
 
 Tank.prototype.onAddToField = function()
 {
-    var bullets = this.bullets;
-    // todo why every hit?
+    var tank = this;
     this.field.on('remove', function(event) {
-        for (var i in bullets) {
-            if (bullets[i] == event.object) {
-                bullets.splice(i, 1);
+        for (var i in tank.bullets) {
+            if (tank.bullets[i] == event.object) {
+                tank.bullets.splice(i, 1);
             }
         }
     });
@@ -58,7 +58,11 @@ Tank.prototype.onAddToField = function()
 
 Tank.prototype.fire = function()
 {
-    if (this.birthTimer <= 0 && this.bullets.length < this.maxBullets) {
+    if (this.birthTimer <= 0 && this.bullets.length < this.maxBullets &&
+            !(this.bullets.length > 0 && this.fireTimer > 0)) {
+        if (this.bullets.length > 0) { // to not second fire too fast
+            this.fireTimer = 0.5 * 1000/30; // 30ms step
+        }
         var bullet = new Bullet();
         bullet.tank = this;
         bullet.clan = this.clan;
@@ -76,14 +80,21 @@ Tank.prototype.fire = function()
 
 Tank.prototype.step = function(paused)
 {
+    if (this.fireTimer > 0) this.fireTimer--;
     if ((this.birthTimer > 0)) {
         this.birthTimer--;
         this.emit('change', {type: 'change', object: this});
         return;
     }
-    if (this instanceof TankBot && paused) return;
 
-    if (this.armoredTimer > 0) this.armoredTimer--;
+    if (this.armoredTimer > 0) {
+        this.armoredTimer--;
+        if (this.armoredTimer <= 0) {
+            this.emit('change', {type: 'change', object: this});
+        }
+    }
+    if (paused) return;
+
     var onIce = false;
     if (this.moveOn || this.glidingTimer > 0) {
         // todo field.move()?
@@ -182,6 +193,7 @@ Tank.prototype.animateStep = function(step)
 {
     if (this.birthTimer > 0) {
         this.img[0] = 'img/birth' + ((step % 6) > 3 ? 1 : 2) + '.png';
+        delete this.img[1];
     } else {
         if (this.moveOn) {
             this.trackStep = step % 2 + 1;
@@ -256,13 +268,15 @@ Tank.prototype.hit = function(bullet)
     if (this.armoredTimer > 0) {
         return true;
     }
-    if (bullet === undefined) {
-        this.lives = 0;
-        this.field.remove(this);
-    } else if (this.clan != bullet.clan) {
-        // do not hit your confederates (or yourself)
-        if (--this.lives <= 0) {
-            if (bullet.tank.user) {
+    // do not hit your confederates (or yourself)
+    if (!bullet || this.clan != bullet.clan) {
+        if (bullet) {
+            this.lives--;
+        } else {
+            this.lives = 0;
+        }
+        if (this.lives <= 0) {
+            if (bullet && bullet.tank.user) {
                 bullet.tank.user.addReward(this.reward);
             }
 
@@ -272,6 +286,15 @@ Tank.prototype.hit = function(bullet)
                 this.field.remove(this);
             }
         }
+        // this.clan.enemiesClan.base means enemies is people, not bots
+        if (bullet && (this.bonus || (this.user && this.clan.enemiesClan.base))) {
+            this.bonus = false;
+            var bonuses = [BonusStar, BonusGrenade, BonusShovel, BonusHelmet, BonusLive, BonusTimer];
+            this.field.add(new (bonuses[Math.floor(Math.random()*(bonuses.length-0.0001))])(
+                Math.round((Math.random() * this.field.width  / 16 - 1)) * 16,
+                Math.round((Math.random() * this.field.height / 16 - 1)) * 16
+            ));
+        }
     }
     return true;
 };
@@ -280,10 +303,14 @@ Tank.prototype.resetPosition = function()
 {
     this.maxBullets = 1;
     this.bulletPower = 1;
+    this.moveOn = 0;
+    this.setSpeedX(0);
+    this.setSpeedY(-this.speed);
+    this.bullets = [];
+    this.armoredTimer = 10 * 1000/30; // 30ms step
+    this.birthTimer = 1 * 1000/30; // 30ms step
     if (this.field) {
         this.field.setXY(this, this.initialPosition.x, this.initialPosition.y);
     }
-    this.armoredTimer = 10 * 1000/30; // 30ms step
-    this.birthTimer = 1 * 1000/30; // 30ms step
     this.emit('change', {type: 'change', object: this});
 };

@@ -34,11 +34,11 @@ User.prototype.serialize = function()
 User.prototype.sendUpdatesToClient = function()
 {
     var lastSync = this.lastSync, chunk, data = {};
-    this.lastSync = Date.now();
+    // events may occur is this milliseconds, so do not record it as synced, and "- 1"
+    this.lastSync = Date.now() - 1;
 
     data['users'] = registry.users.sync(lastSync);
     if (data['users'].length == 0) delete data['users'];
-    else console.log(registry.users.logData);
 
     data['messages'] = registry.messages.sync(lastSync);
     if (data['messages'].length == 0) delete data['messages'];
@@ -53,12 +53,14 @@ User.prototype.sendUpdatesToClient = function()
         data['premade.messages'] = this.premade.messages.sync(lastSync);
         if (data['premade.messages'].length == 0) delete data['premade.messages'];
 
-        if (this.premade.game) {
+        if (this.premade.game && this.premade.game.field) {
             data['f'] = this.premade.game.field.sync(lastSync);
             if (data['f'].length == 0) delete data['f'];
 
-            data['game.botStack'] = this.premade.game.botStack.sync(lastSync);
-            if (data['game.botStack'].length == 0) delete data['game.botStack'];
+            if (this.clan.enemiesClan.botStack) {
+                data['game.botStack'] = this.clan.enemiesClan.botStack.sync(lastSync);
+                if (data['game.botStack'].length == 0) delete data['game.botStack'];
+            }
         }
     }
     if (data['users'] || data['messages'] || data['premades'] ||
@@ -96,13 +98,13 @@ User.prototype.say = function(text)
 
 User.prototype.hit = function()
 {
-    if (this.game) {
+    if (this.premade) {
         this.lives -= 1;
         if (this.lives < 0) {
-            this.game.unjoin(this);
+            this.tank.field.remove(this.tank);
         } else {
-            this.tank.resetPosition();
             this.tank.lives = 1;
+            this.tank.resetPosition();
         }
         this.emit('change', {type: 'change', object: this});
     }

@@ -47,33 +47,59 @@ Base.prototype.unserialize = function(data)
 
 Base.prototype.hit = function()
 {
-    this.field.game.gameOver(0);
+    this.clan.premade.gameOver(this.clan.enemiesClan);
     return true;
+};
+
+Base.prototype.armor = function()
+{
+    this.armoredTimer = 10 * 1000/30; // 30ms step
+    for (var i in this.baseEdge) {
+        var cell = this.baseEdge[i];
+        var walls = this.field.intersect(this, cell.x*16+8, cell.y*16+8, 8, 8);
+        var convert = true;
+        for (var j in walls) {
+            if (!(walls[j] instanceof Wall)) {
+                convert = false;
+            }
+        }
+        if (convert) {
+            for (var j in walls) {
+                this.field.remove(walls[j]);
+            }
+            this.field.add(new SteelWall(cell.x*16+8, cell.y*16+8));
+        }
+    }
+};
+
+Base.prototype.disarm = function()
+{
+    for (var i in this.baseEdge) {
+        var cell = this.baseEdge[i];
+        var walls = this.field.intersect(this, cell.x*16+8, cell.y*16+8, 8, 8);
+        var convert = true;
+        for (var j in walls) {
+            if (!(walls[j] instanceof Wall)) {
+                convert = false;
+            }
+        }
+        if (convert) {
+            for (var j in walls) {
+                this.field.remove(walls[j]);
+            }
+            this.field.add(new Wall(cell.x*16+ 4, cell.y*16+ 4));
+            this.field.add(new Wall(cell.x*16+ 4, cell.y*16+12));
+            this.field.add(new Wall(cell.x*16+12, cell.y*16+ 4));
+            this.field.add(new Wall(cell.x*16+12, cell.y*16+12));
+        }
+    }
 };
 
 Base.prototype.step = function()
 {
     if (this.armoredTimer > 0) {
         if (--this.armoredTimer <= 0) {
-            for (var i in this.baseEdge) {
-                var cell = this.baseEdge[i];
-                var walls = this.field.intersect(this, cell.x*16+8, cell.y*16+8, 8, 8);
-                var convert = true;
-                for (var j in walls) {
-                    if (!(walls[j] instanceof Wall)) {
-                        convert = false;
-                    }
-                }
-                if (convert) {
-                    for (var j in walls) {
-                        this.field.remove(walls[j]);
-                    }
-                    this.field.add(new Wall(cell.x*16+ 4, cell.y*16+ 4));
-                    this.field.add(new Wall(cell.x*16+ 4, cell.y*16+12));
-                    this.field.add(new Wall(cell.x*16+12, cell.y*16+ 4));
-                    this.field.add(new Wall(cell.x*16+12, cell.y*16+12));
-                }
-            }
+            this.disarm();
         }
     }
 };

@@ -340,6 +340,13 @@ $(function() {
             field.updateWith(data['f']);
         }
         if (data['game.botStack']) {
+            // todo quick hack
+            for (var i in data['game.botStack']) {
+                var type = battleCityTypesUnserialize[data['game.botStack'][i][1/*data*/][0/*type*/]];
+                obj = new (window[type])();
+                obj.unserialize(data['game.botStack'][i][1/*data*/]);
+                data['game.botStack'][i][1/*data*/] = obj;
+            }
             registry.tankStack.updateWith(data['game.botStack']);
         }
     });

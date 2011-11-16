@@ -81,14 +81,20 @@ Loggable.prototype.clearRemoved = function(timestamp)
 
 Loggable._eventTypeMap = {'add': 'a', 'change': 'c', 'remove': 'r'};
 
+/**
+ * When you store current timestamp use Date.now() - 1
+ *
+ * @param lastSync
+ * @return
+ */
 Loggable.prototype.sync = function(lastSync)
 {
     var res = [];
     var current = this.logData;
     while (current != null) {
         // as logData is time desc sorted, so walk throw logData while
-        // time great than or equal to lastSync and break if:
-        if (current.time <= lastSync) { // "<=" to avoid duplicate events
+        // time great than lastSync and break if:
+        if (current.time <= lastSync) {
             break;
         }
         res.push([

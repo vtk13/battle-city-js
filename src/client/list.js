@@ -64,7 +64,7 @@ TItemList.prototype.updateWith = function(events)
 TItemList.prototype.add = function(item)
 {
     if (this.filter(item)) {
-        var id = item.id || item[1];
+        var id = item.id;
         this.items[id] = item;
         var div = $('.' + this.itemClass + id, this.container);
         if (div.size() > 0) {
@@ -120,12 +120,5 @@ TTankStack.prototype.constructor = TTankStack;
 TTankStack.prototype.itemDomElement = function(item)
 {
     return $('<div class="' + this.itemClass + ' ' +
-        this.itemClass + item[1/*id*/] + '"><img src="img/bot.png"></div>');
-};
-
-TTankStack.prototype.add = function(item)
-{
-    var bot = new TankBot();
-    bot.unserialize(item);
-    TItemList.prototype.add.call(this, bot);
+        this.itemClass + item.id + '"><img src="img/bot.png"></div>');
 };

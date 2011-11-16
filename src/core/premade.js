@@ -2,12 +2,20 @@
 Premade = function Premade(name, type)
 {
     this.name = name;
-    this.type = type || 'team-vs-team';
+    this.type = type || 'classic';
     this.level = 1;
     this.userCount = 0;
     this.locked = false; // lock for new users
     this.users = new TList(); // todo move to clan?
-    this.clans = [new Clan(), new Clan()];
+    switch (this.type) {
+        case 'classic':
+            this.clans = [new Clan(1), new BotsClan(2)];
+            break;
+        case 'teamvsteam':
+            this.clans = [new Clan(1), new Clan(2)];
+            break;
+    }
+    this.clans[0].premade = this.clans[1].premade = this;
     this.clans[0].enemiesClan = this.clans[1];
     this.clans[1].enemiesClan = this.clans[0];
     this.messages = new TList();
@@ -15,7 +23,7 @@ Premade = function Premade(name, type)
 
 Eventable(Premade.prototype);
 
-Premade.types = ['classic', 'team-vs-team'];
+Premade.types = ['classic', 'teamvsteam'];
 
 Premade.prototype.say = function(message)
 {
@@ -35,7 +43,7 @@ Premade.prototype.setClan = function(user, clanId)
 Premade.prototype.join = function(user, clanId)
 {
     clanId = clanId || 0;
-    if (this.type == 'team-vs-team' && this.clans[clanId].isFull()) {
+    if (this.type == 'teamvsteam' && this.clans[clanId].isFull()) {
         clanId = 1;
     }
     if (!this.locked && !this.clans[clanId].isFull()) {
@@ -59,9 +67,6 @@ Premade.prototype.join = function(user, clanId)
 
 Premade.prototype.unjoin = function(user)
 {
-    if (this.game) {
-        this.game.unjoin(user);
-    }
     user.clan.detachUser(user);
     this.users.remove(user);
     this.userCount--;
@@ -76,16 +81,19 @@ Premade.prototype.startGame = function()
 {
     this.locked = true;
     this.game = new Game('../battle-city/maps/level' + this.level, this);
+    this.clans[0].startGame(this.game);
+    this.clans[1].startGame(this.game);
     this.users.traversal(function(user){
-        this.game.join(user);
         user.sendToClient({type: 'started'});
     }, this);
+    this.game.start();
 };
 
-Premade.prototype.gameOver = function()
+Premade.prototype.gameOver = function(winnerClan)
 {
     if (this.game) {
-        if (this.game.status == 1) {
+        this.game.gameOver();
+        if (this.type == 'classic' && this.clans[0] == winnerClan) {
             this.level++;
             if (this.level > 35) {
                 this.level = 1;
@@ -93,11 +101,9 @@ Premade.prototype.gameOver = function()
             this.emit('change', {type: 'change', object: this});
         }
         this.users.traversal(function(user){
-            this.game.unjoin(user);
-            // todo extract
             user.sendToClient({type: 'gameover'});
         }, this);
-        this.game = null;
+        this.clans[0].game = this.clans[1].game = this.game = null;
     }
 };
 

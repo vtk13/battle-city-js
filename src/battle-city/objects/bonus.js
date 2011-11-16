@@ -73,11 +73,14 @@ BonusGrenade.prototype.constructor = BonusGrenade;
 
 BonusGrenade.prototype.applyTo = function(tank)
 {
-    tank.field.objects.traversal(function(item){
-        if (item instanceof TankBot) {
-            item.hit();
-        }
-    });
+    // hit() cause splice tank.clan.enemiesClan.users, so collect tanks first
+    var tanks = [];
+    for (var i in tank.clan.enemiesClan.users) {
+        tanks.push(tank.clan.enemiesClan.users[i].tank);
+    }
+    for (var i in tanks) {
+        tanks[i].hit();
+    }
 };
 
 BonusShovel = function BonusShovel(x, y)
@@ -91,25 +94,8 @@ BonusShovel.prototype.constructor = BonusShovel;
 
 BonusShovel.prototype.applyTo = function(tank)
 {
-    for (var i in Base.prototype.baseEdge) {
-        var cell = Base.prototype.baseEdge[i];
-        var walls = tank.field.intersect(this, cell.x*16+8, cell.y*16+8, 8, 8);
-        var convert = true;
-        for (var j in walls) {
-            if (!(walls[j] instanceof Wall)) {
-                convert = false;
-            }
-        }
-        if (convert) {
-            for (var j in walls) {
-                tank.field.remove(walls[j]);
-            }
-            tank.field.add(new SteelWall(cell.x*16+8, cell.y*16+8));
-        }
-    }
-    var base = tank.field.intersect(this, 12*16+8, 24*16+8, 2, 2);
-    for (var i in base) {
-        base[i].armoredTimer = 10 * 1000/30; // 30ms step
+    if (tank.clan.base) {
+        tank.clan.base.armor();
     }
 };
 
@@ -153,5 +139,5 @@ BonusTimer.prototype.constructor = BonusTimer;
 
 BonusTimer.prototype.applyTo = function(tank)
 {
-    tank.field.timer = 10 * 1000/30; // 30ms step
+    tank.clan.enemiesClan.timer = 10 * 1000/30; // 30ms step
 };
