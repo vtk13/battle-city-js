@@ -53,22 +53,29 @@ function appendPremadeMessages(event) {
 };
 
 function updatePremades(event) {
+    var data = event[1/*data*/];
     switch (event[0/*type*/]) {
     case 'a'/*add*/:
     case 'c'/*change*/:
-        if (event[1/*data*/].id == premade.id) {
-            premade = event[1/*data*/];
-            $('.level .value').text(premade.level);
+        if (data.id == premade.id) {
+            premade = data;
+            var levelSelect = $('.level select');
+            levelSelect.empty();
+            for (var i = 1; i <= (premade.type == 'classic' ? 35 : 1); i++) {
+                levelSelect.append($('<option value="' + i + '">' + i + '</option>'));
+            }
+            levelSelect.val(premade.level);
         }
-        if ($('#public .premades .premade' + event[1/*data*/].id).size() > 0) {
-            $('#public .premades .premade' + event[1/*data*/].id).text(event[1/*data*/].name);
-        } else {
+        var stat = ' (' + data.users + '/' + (data.type == 'classic' ? 2 : 4) + ')';
+        if ($('#public .premades .premade' + data.id).size() == 0) {
             $('#public .premades').append($('<div class="premade premade' +
-                event[1/*data*/].id + '"></div>').text(event[1/*data*/].name));
+                data.id + '"><span class="name"/><span class="stat"/></div>'));
         }
+        $('#public .premades .premade' + data.id + ' .name').text(data.name);
+        $('#public .premades .premade' + data.id + ' .stat').text(stat);
         break;
     case 'r'/*remove*/:
-        $('#public .premades .premade' + event[1/*data*/].id).remove();
+        $('#public .premades .premade' + data.id).remove();
         break;
     }
 };
@@ -247,7 +254,7 @@ $(function() {
                 $('.premade').live('click', function(){
                     socket.json.send({
                         type: 'join',
-                        name: $(this).text()
+                        name: $('.name', this).text()
                     });
                     return false;
                 });
@@ -270,7 +277,8 @@ $(function() {
                 });
                 $('input.start-game').click(function(){
                     socket.json.send({
-                        type: 'start'
+                        type: 'start',
+                        level: $('#premade select[name=level]').val()
                     });
                 });
                 new TankController({

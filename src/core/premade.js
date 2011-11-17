@@ -3,7 +3,7 @@ Premade = function Premade(name, type)
 {
     this.name = name;
     this.type = type || 'classic';
-    this.level = 1;
+    this.level = 10;
     this.userCount = 0;
     this.locked = false; // lock for new users
     this.users = new TList(); // todo move to clan?
@@ -84,6 +84,10 @@ Premade.prototype.startGame = function()
     this.clans[0].startGame(this.game);
     this.clans[1].startGame(this.game);
     this.users.traversal(function(user){
+        if (user.premade.type == 'teamvsteam') {
+            user.lives = 4;
+            user.emit('change', {type: 'change', object: user});
+        }
         user.sendToClient({type: 'started'});
     }, this);
     this.game.start();
@@ -102,6 +106,8 @@ Premade.prototype.gameOver = function(winnerClan)
         }
         this.users.traversal(function(user){
             user.sendToClient({type: 'gameover'});
+            console.log(new Date().toLocaleTimeString() + ': User ' + user.nick +
+                    ' has left game ' + user.premade.name);
         }, this);
         this.clans[0].game = this.clans[1].game = this.game = null;
     }

@@ -23,7 +23,10 @@ a {
 }
 
 #login>form {
-    padding: 100px 100px 0;
+    padding: 60px 60px 0;
+}
+#login ul.faq {
+    margin-bottom: 20px;
 }
 #login>form span {
     float: left;
@@ -79,6 +82,9 @@ a {
     height: 100%;
     margin-left: 348px;
     border-left: solid 1px #ccc;
+}
+.game-controls select {
+    width: 60px;
 }
 .premades input, .game-controls input {
     width: 90px;

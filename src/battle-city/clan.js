@@ -67,9 +67,9 @@ Clan.prototype.step = function()
         }
     }
     if (activeUsers == 0) {
-        this.premade.gameOver(this.enemiesClan);
+        this.base.hit();
     }
-    this.base && this.base.step();
+    this.base.step();
     this.timer > 0 && this.timer--;
 };
 

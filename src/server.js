@@ -136,7 +136,8 @@ io.listen(server, {'log level': 1}).sockets.on('connection', function(socket) {
                         type: 'joined',
                         premade: user.premade.serialize()
                     });
-                    console.log(new Date().toLocaleTimeString() + ': User ' + user.nick + ' join premade ' + user.premade.name);
+                    console.log(new Date().toLocaleTimeString() + ': User ' + user.nick
+                            + ' join premade ' + user.premade.name + ' (' + event.gameType + ')');
                 } catch (ex) {
                     user.sendToClient({
                         type: 'user-message',
@@ -155,6 +156,8 @@ io.listen(server, {'log level': 1}).sockets.on('connection', function(socket) {
                 break;
             case 'start':
                 if (user.premade) {
+                    user.premade.level = event.level;
+                    user.premade.emit('change', {type: 'change', object: user.premade});
                     user.premade.startGame();
                     console.log(new Date().toLocaleTimeString() + ': User ' + user.nick + ' starts game ' + user.premade.name + ', level ' + user.premade.level);
                 }
