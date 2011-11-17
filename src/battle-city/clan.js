@@ -90,6 +90,11 @@ Clan.prototype.startGame = function(game)
     }
 };
 
+Clan.prototype.pauseTanks = function()
+{
+    this.timer = 3 * 30; // 30 steps per second
+};
+
 BotsClan = function BotsClan(n)
 {
     Clan.apply(this, arguments);
@@ -173,4 +178,9 @@ BotsClan.prototype.startGame = function(game)
         bot.id = Field.autoIncrement++; // todo hack, to bots in stack have id on client (see TItemList.prototype.add)
         this.botStack.add(bot);
     }
+};
+
+BotsClan.prototype.pauseTanks = function()
+{
+    this.timer = 10 * 1000/30; // 30ms step
 };

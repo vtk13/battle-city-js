@@ -338,9 +338,12 @@ $(function() {
             var players = registry.premadeUsers.items;
             var current = 1;
             for (var i in players) {
-                $('.player' + current + '-lives')
+                $('.player' + current + '-stats')
                     .text(players[i].lives + ':' + players[i].points);
                 current++;
+            }
+            for (var i = current ; current <= 4 ; current++) {
+                $('.player' + current + '-stats').text('');
             }
         }
         if (data['premade.messages']) {

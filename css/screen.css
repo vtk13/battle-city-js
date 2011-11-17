@@ -3,7 +3,7 @@
     margin: 0;
 }
 
-html, body, #public, #premade, #gameChat, #create {
+html, body, #public, #premade, #gameChat, #game, #create {
     height: 100%;
 }
 
@@ -36,8 +36,30 @@ a {
     padding-left: 120px;
 }
 
+#game {
+    position: relative;
+}
 #field {
     border: solid 1px gray;
+    margin-top: 50px;
+}
+#game .player1-stats {
+    float: left;
+    padding-left: 10px;
+    width: 340px;
+}
+#game .player2-stats {
+    float: left;
+}
+#game .player3-stats {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+}
+#game .player4-stats {
+    position: absolute;
+    top: 10px;
+    left: 350px;
 }
 
 .user-list {

@@ -139,5 +139,5 @@ BonusTimer.prototype.constructor = BonusTimer;
 
 BonusTimer.prototype.applyTo = function(tank)
 {
-    tank.clan.enemiesClan.timer = 10 * 1000/30; // 30ms step
+    tank.clan.enemiesClan.pauseTanks();
 };
