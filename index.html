@@ -54,14 +54,8 @@
 <div id="public" style="display: none;">
     <div class="user-list"><h3>Игроки</h3></div>
     <div class="premades">
-        <form id="create-form">
-        <div>
-            Введите имя новый игры:
-            <input type="text" name="name">
-            <input type="submit" value="Создать">
-        </div>
-        </form>
-        <h3>Идущие игры</h3>
+        <a href="#" id="create-game">Начните новую игру</a>
+        <span>или зайдите в уже созданную:</span>
     </div>
     <div class="chat">
         <div class="chat-log">
@@ -74,8 +68,30 @@
     </div>
 </div>
 
-<div id="createGame">
-
+<div id="create" style="display: none;">
+    <h3>Выберите тип игры</h3>
+    <ul class="game-modes">
+        <li id="classic">
+            <img src="/img/client/classic.png" width="208" height="208" alt="classic"/>
+            <h4>Классический</h4>
+            <p>Тут вы можете пройти все 35 уровней старых добрых танчиков. После 
+            завершения каждого уровня нажимайте "Старт!", чтобы начать следующий.</p>
+        </li>
+        <li id="teamvsteam">
+            <img src="/img/client/teamvsteam.png" width="208" height="208" alt="teamvsteam"/>
+            <h4>Командный</h4>
+            <p>В командном режиме вы можете сразиться с другимим игроками 2 на 2. Доступен только один уровень.</p>
+        </li>
+    </ul>
+    <form id="create-form">
+    <div>
+        Введите имя новый игры:
+        <input type="hidden" name="type" value="classic">
+        <input type="text" name="name">
+        <input type="submit" value="Создать">
+    </div>
+    </form>
+    <div><a id="create-to-public" href="#">&#8592; Вернуться в чат</a></div>
 </div>
 
 <div id="premade" style="display: none;">

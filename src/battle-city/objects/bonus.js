@@ -110,7 +110,7 @@ BonusHelmet.prototype.constructor = BonusHelmet;
 
 BonusHelmet.prototype.applyTo = function(tank)
 {
-    tank.armoredTimer = 10 * 1000/30; // 30ms step
+    tank.armoredTimer = tank.clan.defaultArmoredTimer;
 };
 
 BonusLive = function BonusLive(x, y)

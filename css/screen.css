@@ -3,7 +3,7 @@
     margin: 0;
 }
 
-html, body, #public, #premade, #gameChat {
+html, body, #public, #premade, #gameChat, #create {
     height: 100%;
 }
 
@@ -16,6 +16,10 @@ body {
     background: #222;
     width: 550px;
     color: #fff;
+}
+
+a {
+    color: white;
 }
 
 #login>form {
@@ -94,4 +98,29 @@ body {
 
 .current {
     font-weight: bold;
+}
+
+#create {
+    padding: 10px;
+}
+#create-form {
+    margin: 10px 0 30px;
+}
+.game-modes {
+    list-style: none;
+    overflow: hidden;
+}
+.game-modes li {
+    float: left;
+    width: 255px;
+    text-align: center;
+    padding: 20px 5px 40px;
+    cursor: pointer;
+}
+.game-modes li.current {
+    background: #444;
+    font-weight: normal;
+}
+.game-modes li p {
+    text-align: left;
 }

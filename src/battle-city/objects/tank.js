@@ -26,7 +26,7 @@ Tank = function Tank(x, y)
     this.bonus = false;
     this.clan = null;
 
-    this.armoredTimer = 10 * 1000/30; // 30ms step
+    this.armoredTimer = Tank.defaultArmoredTimer; // 30ms step
     this.trackStep = 1; // 1 or 2
 
     this.birthTimer = 1 * 1000/30; // 30ms step
@@ -35,6 +35,8 @@ Tank = function Tank(x, y)
     this.onIce = false;
     this.glidingTimer = 0;
 };
+
+Tank.defaultArmoredTimer = 10 * 1000/30; // 30ms step
 
 Tank.prototype = new AbstractGameObject();
 Tank.prototype.constructor = Tank;
@@ -309,7 +311,7 @@ Tank.prototype.resetPosition = function()
     this.setSpeedX(0);
     this.setSpeedY(-this.speed);
     this.bullets = [];
-    this.armoredTimer = 10 * 1000/30; // 30ms step
+    this.armoredTimer = this.clan ? this.clan.defaultArmoredTimer : Tank.defaultArmoredTimer;
     this.birthTimer = 1 * 1000/30; // 30ms step
     if (this.field) {
         this.field.setXY(this, this.initialPosition.x, this.initialPosition.y);

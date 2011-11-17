@@ -234,9 +234,11 @@ $(function() {
                 });
                 $('#create-form').submit(function(){
                     var name = $('input[name=name]', this).val();
+                    var gameType = $('input[name=type]', this).val();
                     if (name) {
                         socket.json.send({
                             type: 'join',
+                            gameType: gameType,
                             name: name
                         });
                     }
@@ -288,6 +290,7 @@ $(function() {
                 break;
             case 'joined':
                 $('#public').hide();
+                $('#create').hide();
                 $('#premade').show();
                 premade = data.premade;
                 registry.premadeUsers.importItems(registry.users.items);
@@ -369,5 +372,21 @@ $(function() {
             nick: $('#login input[name=nick]').val()
         });
         return false;
+    });
+
+    $('a#create-game').click(function(){
+        $('#public').hide();
+        $('#create').show();
+        return false;
+    });
+    $('a#create-to-public').click(function(){
+        $('#create').hide();
+        $('#public').show();
+        return false;
+    });
+    $('.game-modes li').click(function(){
+        $('#create-form input[name=type]').val(this.id);
+        $('.game-modes li').removeClass('current');
+        $(this).addClass('current');
     });
 });

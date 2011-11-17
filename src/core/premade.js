@@ -9,10 +9,10 @@ Premade = function Premade(name, type)
     this.users = new TList(); // todo move to clan?
     switch (this.type) {
         case 'classic':
-            this.clans = [new Clan(1), new BotsClan(2)];
+            this.clans = [new Clan(1, 10*30/*~30step per seconds*/), new BotsClan(2, 10*30/*~30step per seconds*/)];
             break;
         case 'teamvsteam':
-            this.clans = [new Clan(1), new Clan(2)];
+            this.clans = [new Clan(1, 2*30/*~30step per seconds*/), new Clan(2, 2*30/*~30step per seconds*/)];
             break;
     }
     this.clans[0].premade = this.clans[1].premade = this;

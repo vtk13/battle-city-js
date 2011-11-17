@@ -1,7 +1,8 @@
 
-Clan = function Clan(n)
+Clan = function Clan(n, defaultArmoredTimer)
 {
     this.n = n;
+    this.defaultArmoredTimer = defaultArmoredTimer;
     this.timer = 0;
     this.enemiesClan = null;
     this.users = [];
