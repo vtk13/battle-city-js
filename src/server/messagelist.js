@@ -1,6 +1,7 @@
 
 TMessageList = function TMessageList()
 {
+    TList.apply(this, arguments);
 };
 
 TMessageList.prototype = new TList();

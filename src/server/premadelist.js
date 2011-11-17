@@ -1,6 +1,7 @@
 
 TPremadeList = function TPremadeList()
 {
+    TList.apply(this, arguments);
 };
 
 TPremadeList.prototype = new TList();
