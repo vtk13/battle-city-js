@@ -38,7 +38,7 @@ Tank = function Tank(x, y)
 
 Tank.prototype = new AbstractGameObject();
 Tank.prototype.constructor = Tank;
-Tank.prototype.imgBase = 'img/tank1';
+Tank.prototype.imgBase = 'img/tank';
 Tank.prototype.speed = 2; // default speed
 Tank.prototype.bulletSpeed = 5; // default speed
 
@@ -153,8 +153,8 @@ Tank.prototype.setDirectionImage = function()
  } else if (this.speedX  < 0) {
      dir = 'left';
  }
- this.img[0] = (this.imgBase + '-' + dir + '-s' + this.trackStep +
-         (this.blink ? '-blink' : '') + '.png');
+ this.img[0] = (((this.imgBase == 'img/tank') ? this.imgBase + this.clanN : this.imgBase) // todo clanN hack
+         + '-' + dir + '-s' + this.trackStep + (this.blink ? '-blink' : '') + '.png');
 };
 
 Tank.prototype.serialize = function()
@@ -168,7 +168,8 @@ Tank.prototype.serialize = function()
         this.speedY, // 5
         this.bonus, // 6
         Math.round(this.armoredTimer), // 7
-        Math.round(this.birthTimer) // 8
+        Math.round(this.birthTimer), // 8
+        this.clan.n
     ];
 };
 
@@ -187,6 +188,7 @@ Tank.prototype.unserialize = function(data)
     this.bonus = data[6];
     this.armoredTimer = data[7];
     this.birthTimer = data[8];
+    this.clanN = data[9];
 };
 
 Tank.prototype.animateStep = function(step)

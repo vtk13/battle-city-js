@@ -101,7 +101,7 @@ Field.prototype.terrain = function(map)
         }
     }
 
-    this.add(new BonusTimer(10*16, 20*16));
+//    this.add(new BonusTimer(10*16, 20*16));
 };
 
 Field.prototype.canPutTank = function(x, y)

@@ -80,7 +80,7 @@ Premade.prototype.unjoin = function(user)
 Premade.prototype.startGame = function()
 {
     this.locked = true;
-    this.game = new Game('../battle-city/maps/level' + this.level, this);
+    this.game = new Game('../battle-city/maps/' + this.type + '/level' + this.level, this);
     this.clans[0].startGame(this.game);
     this.clans[1].startGame(this.game);
     this.users.traversal(function(user){

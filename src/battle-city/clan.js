@@ -81,6 +81,8 @@ Clan.prototype.startGame = function(game)
         this.game.field.add(this.users[i].tank);
     }
     if (this.base) {
+        this.base.shootDown = false;
+        this.base.shootDownTimer = Base.shootDownTimer;
         this.base.x = this.game.field.width /  2;
         this.base.y = (this.n == 1) ? (this.game.field.height - 16) : 16;
         this.game.field.add(this.base);
