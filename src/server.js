@@ -156,7 +156,7 @@ io.listen(server, {'log level': 1}).sockets.on('connection', function(socket) {
                 break;
             case 'start':
                 if (user.premade) {
-                    user.premade.level = event.level;
+                    user.premade.level = event.level || 1;
                     user.premade.emit('change', {type: 'change', object: user.premade});
                     user.premade.startGame();
                     console.log(new Date().toLocaleTimeString() + ': User ' + user.nick + ' starts game ' + user.premade.name + ', level ' + user.premade.level);
@@ -175,7 +175,7 @@ io.listen(server, {'log level': 1}).sockets.on('connection', function(socket) {
         if (user) {
             console.log(new Date().toLocaleTimeString() + ': User ' + user.nick + ' disconnected');
             clearInterval(user.updateIntervalId);
-            user.socket = null; // to be on the safe side
+            user.socket = null;
             if (user.premade) {
                 user.premade.unjoin(user);
             }

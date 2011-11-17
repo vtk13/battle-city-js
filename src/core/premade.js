@@ -3,7 +3,7 @@ Premade = function Premade(name, type)
 {
     this.name = name;
     this.type = type || 'classic';
-    this.level = 10;
+    this.level = 1;
     this.userCount = 0;
     this.locked = false; // lock for new users
     this.users = new TList(); // todo move to clan?

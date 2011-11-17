@@ -303,7 +303,7 @@ $(function() {
                 premade = data.premade;
                 registry.premadeUsers.importItems(registry.users.items);
                 registry.premadeUsers.setCurrent(registry.currentId);
-                $('.level .value').text(premade.level);
+                updatePremades(['c', premade]);
                 break;
             case 'unjoined':
                 $('#premade').hide();
