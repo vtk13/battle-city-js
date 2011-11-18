@@ -72,7 +72,7 @@ User.prototype.sendUpdatesToClient = function()
 
 User.prototype.control = function(event)
 {
-    if (this.tank) {
+    if (this.tank && this.tank.field) {
         if (event.move) {
             this.tank.startMove(event.move);
         }
