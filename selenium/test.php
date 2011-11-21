@@ -15,7 +15,7 @@ class TankTest extends PHPUnit_Extensions_SeleniumTestCase
     {
         $this->open("/");
         $this->type("nick", rand(1000, 9999));
-        $this->click('//input[@value="Вход"]');
+        $this->click('//input[@value="Войти"]');
         sleep(1);
         $this->type('name', rand(1000, 9999));
         $this->click('//input[@value="Создать"]');

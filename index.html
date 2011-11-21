@@ -39,8 +39,8 @@
                 связанно со скорость моего интернет подключения.</li>
             <li>Конструктивную критику, баги и предложения направлять на vtk666@gmail.com</li>
         </ul>
-        <div><span>Ник:</span><input type="text" name="nick"></div>
-        <div class="submit"><input type="submit" value="Вход"></div>
+        <div><span>Введите ник:</span><input type="text" name="nick"></div>
+        <div class="submit"><input type="submit" value="Войти"></div>
     </form>
     <div id="message-connecting">Подключение...</div>
 </div>
@@ -121,6 +121,18 @@
         <div class="player3-stats"></div>
         <div class="player4-stats"></div>
     </div>
+</div>
+
+<div class="like-wrapper">
+    <div id="fb-root"></div>
+    <script>(function(d, s, id) {
+      var js, fjs = d.getElementsByTagName(s)[0];
+      if (d.getElementById(id)) {return;}
+      js = d.createElement(s); js.id = id;
+      js.src = "//connect.facebook.net/en_US/all.js#xfbml=1";
+      fjs.parentNode.insertBefore(js, fjs);
+    }(document, 'script', 'facebook-jssdk'));</script>
+    <div class="fb-like" data-href="http://vtk.tom.ru:8124/" data-send="false" data-layout="button_count" data-width="100" data-show-faces="true" data-colorscheme="dark"></div>
 </div>
 </body>
 </html>

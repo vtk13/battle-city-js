@@ -16,6 +16,7 @@ body {
     background: #222;
     width: 550px;
     color: #fff;
+    position: relative;
 }
 
 a {
@@ -151,4 +152,10 @@ a {
 }
 .game-modes li p {
     text-align: left;
+}
+
+.like-wrapper {
+    position: absolute;
+    top: 5px;
+    right: -110px;
 }
