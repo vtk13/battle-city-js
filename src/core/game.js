@@ -37,10 +37,7 @@ Game.prototype._stepItem = function(item)
 Game.prototype.step = function()
 {
     this._stepCounter++;
-    if ((this._stepCounter % 300) == 0) { // ~10 seconds (30ms step)
-        this.field.clearRemoved(Date.now() - 10 * 1000);
-    }
-    this.field.objects.traversal(this._stepItem, this);
+    this.field.traversal(this._stepItem, this);
     this.premade.clans[0].step();
     this.premade.clans[1].step();
 };

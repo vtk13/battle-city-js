@@ -23,7 +23,7 @@ MapTiled.prototype.tileSize = 16;
 
 MapTiled.prototype.add = function(item)
 {
-    if (typeof item.id == 'undefined') {
+    if (item.id === undefined) {
         console.trace();
         throw {message: 'item.id must be set', item: item};
     }

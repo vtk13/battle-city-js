@@ -60,6 +60,8 @@ Premade.prototype.join = function(user, clanId)
         user.lives = 4;
         user.points = 0;
         user.emit('change', {type: 'change', object: user});
+        user.watchCollection(this.users, 'premade.users');
+        user.watchCollection(this.messages, 'premade.messages');
     } else {
         throw {message: 'К этой игре уже нельзя присоединиться.'};
     }
@@ -67,6 +69,10 @@ Premade.prototype.join = function(user, clanId)
 
 Premade.prototype.unjoin = function(user)
 {
+    user.unwatchCollection('premade.users');
+    user.unwatchCollection('premade.messages');
+    user.unwatchCollection('f');
+    user.unwatchCollection('game.botStack');
     user.clan.detachUser(user);
     this.users.remove(user);
     this.userCount--;
@@ -84,6 +90,10 @@ Premade.prototype.startGame = function()
     this.clans[0].startGame(this.game);
     this.clans[1].startGame(this.game);
     this.users.traversal(function(user){
+        user.watchCollection(this.game.field, 'f');
+        if (user.clan.enemiesClan.botStack) {
+            user.watchCollection(user.clan.enemiesClan.botStack, 'game.botStack');
+        }
         if (user.premade.type == 'teamvsteam') {
             user.lives = 4;
             user.emit('change', {type: 'change', object: user});
@@ -105,8 +115,10 @@ Premade.prototype.gameOver = function(winnerClan)
             this.emit('change', {type: 'change', object: this});
         }
         this.users.traversal(function(user){
+            user.unwatchCollection('f');
+            user.unwatchCollection('game.botStack');
             user.sendToClient({type: 'gameover'});
-            console.log(new Date().toLocaleTimeString() + ': User ' + user.nick +
+            console.log(new Date().toLocaleTimeString() + ': user ' + user.nick +
                     ' has left game ' + user.premade.name);
         }, this);
         this.clans[0].game = this.clans[1].game = this.game = null;

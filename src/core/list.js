@@ -4,9 +4,6 @@
  */
 TList = function TList()
 {
-    if (typeof Loggable == 'function') {
-        Loggable(this);
-    }
     this.items = [];
 };
 
@@ -14,19 +11,23 @@ Eventable(TList.prototype);
 
 TList.prototype.add = function(item)
 {
-    if (item.id) {
+    if (item.id !== undefined) {
         this.items[item.id] = item;
     } else {
         item.id = this.items.push(item) - 1;
     }
-    // is this event for myself?
-    this.emit('add', {type: 'add', object: item});
+
+    this.emit('update', item, 'add');
+
+    var list = this;
+    item.on('change', function(){
+        list.emit('update', this, 'change', arguments);
+    });
 };
 
 TList.prototype.remove = function(item)
 {
-    // is this event for myself?
-    this.emit('remove', {type: 'remove', object: item});
+    this.emit('update', item, 'remove');
     delete this.items[item.id];
 };
 
@@ -39,7 +40,7 @@ TList.prototype.pop = function()
         return null;
     }
     var item = this.items[i];
-    this.emit('remove', {type: 'remove', object: item});
+    this.emit('update', item, 'remove');
     delete this.items[i];
     return item;
 };

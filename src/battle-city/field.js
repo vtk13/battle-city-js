@@ -6,9 +6,6 @@ Field = function Field(width, height)
     this.step       = 1;
     this.clear();
     this.setMaxListeners(100); // @todo
-    if (typeof Loggable == 'function') {
-        Loggable(this);
-    }
 };
 
 Eventable(Field.prototype);
@@ -22,19 +19,26 @@ Field.prototype.clear = function()
 
 Field.prototype.add = function(object)
 {
-    if (typeof object.id == 'undefined') {
+    if (object.id === undefined) {
         object.id = Field.autoIncrement++;
     }
     object.field = this;
     this.objects.add(object);
-    this.emit('add', {type: 'add', object: object});
-    object.onAddToField && object.onAddToField();
+    if (!isClient()) {
+        this.emit('update', object, 'add');
+        var field = this;
+        object.on('change', function(){
+            field.emit('update', this, 'change', arguments);
+        });
+        object.onAddToField && object.onAddToField();
+    }
 };
 
 Field.prototype.remove = function(object)
 {
-    if (this.objects.remove(object)) {
-        this.emit('remove', {type: 'remove', object: object});
+    if (this.objects.remove(object) && !isClient()) {
+        this.emit('update', object, 'remove');
+        this.emit('remove', object);
         object.removeAllListeners && object.removeAllListeners();
     }
     if (isClient() && object instanceof Bullet) {
@@ -102,6 +106,11 @@ Field.prototype.terrain = function(map)
     }
 
 //    this.add(new BonusTimer(10*16, 20*16));
+};
+
+Field.prototype.traversal = function(callback, thisObj)
+{
+    this.objects.traversal(callback, thisObj);
 };
 
 Field.prototype.canPutTank = function(x, y)

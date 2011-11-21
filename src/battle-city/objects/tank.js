@@ -50,9 +50,9 @@ Eventable(Tank.prototype);
 Tank.prototype.onAddToField = function()
 {
     var tank = this;
-    this.field.on('remove', function(event) {
+    this.field.on('remove', function(object) {
         for (var i in tank.bullets) {
-            if (tank.bullets[i] == event.object) {
+            if (tank.bullets[i] == object) {
                 tank.bullets.splice(i, 1);
             }
         }

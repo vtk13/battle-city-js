@@ -10,8 +10,7 @@ isClient = function isClient()
     return false;
 };
 
-var sys      = require("sys"),
-    http     = require("http"),
+var http     = require("http"),
     url      = require("url"),
     path     = require("path"),
     fs       = require("fs");
@@ -19,7 +18,6 @@ var sys      = require("sys"),
 registry = {};
 
 require('./core/event');
-require('./server/loggable');
 require('./core/list');
 require('./core/game');
 require('./core/premade');
@@ -29,7 +27,7 @@ require('./server/user');
 require('./core/message');
 require('./server/messagelist');
 require('./utils/func');
-require('./utils/map_tiled'); // require('./utils/map_arrayed');
+require('./utils/map_tiled');
 require('./battle-city/field');
 require('./battle-city/bot-emitter');
 require('./battle-city/keyboard');
@@ -50,13 +48,6 @@ require('./battle-city/clan');
 registry.users = new TList();
 registry.premades = new TPremadeList();
 registry.messages = new TMessageList();
-
-setInterval(function(){
-    var timestamp = Date.now() - 1 /* minutes */ * 60 * 1000;
-    registry.users.clearRemoved(timestamp);
-    registry.premades.clearRemoved(timestamp);
-    registry.messages.clearRemoved(timestamp);
-}, 1 /* minutes */ * 60 * 1000);
 
 process.on('uncaughtException', function(ex) {
     if (ex.stack) {
@@ -116,7 +107,7 @@ io.listen(server, {'log level': 1}).sockets.on('connection', function(socket) {
         switch (event.type) {
             case 'connect':
                 if (user == null && event.nick) {
-                    user = new User();
+                    user = new ServerUser();
                     user.lastSync = 0;
                     user.socket = socket;
                     user.nick = event.nick;
@@ -126,7 +117,10 @@ io.listen(server, {'log level': 1}).sockets.on('connection', function(socket) {
                         type: 'connected',
                         userId: user.id
                     });
-                    console.log(new Date().toLocaleTimeString() + ': User ' + event.nick + ' connected');
+                    user.watchCollection(registry.users, 'users');
+                    user.watchCollection(registry.premades, 'premades');
+                    user.watchCollection(registry.messages, 'messages');
+                    console.log(new Date().toLocaleTimeString() + ': user ' + event.nick + ' connected');
                 }
                 break;
             case 'join':
@@ -136,7 +130,7 @@ io.listen(server, {'log level': 1}).sockets.on('connection', function(socket) {
                         type: 'joined',
                         premade: user.premade.serialize()
                     });
-                    console.log(new Date().toLocaleTimeString() + ': User ' + user.nick
+                    console.log(new Date().toLocaleTimeString() + ': user ' + user.nick
                             + ' join premade ' + user.premade.name + ' (' + event.gameType + ')');
                 } catch (ex) {
                     user.sendToClient({
@@ -147,7 +141,7 @@ io.listen(server, {'log level': 1}).sockets.on('connection', function(socket) {
                 break;
             case 'unjoin':
                 if (user.premade) {
-                    console.log(new Date().toLocaleTimeString() + ': User ' + user.nick + ' unjoin premade ' + user.premade.name);
+                    console.log(new Date().toLocaleTimeString() + ': user ' + user.nick + ' unjoin premade ' + user.premade.name);
                     user.premade.unjoin(user);
                     user.sendToClient({
                         type: 'unjoined'
@@ -159,7 +153,7 @@ io.listen(server, {'log level': 1}).sockets.on('connection', function(socket) {
                     user.premade.level = event.level || 1;
                     user.premade.emit('change', {type: 'change', object: user.premade});
                     user.premade.startGame();
-                    console.log(new Date().toLocaleTimeString() + ': User ' + user.nick + ' starts game ' + user.premade.name + ', level ' + user.premade.level);
+                    console.log(new Date().toLocaleTimeString() + ': user ' + user.nick + ' starts game ' + user.premade.name + ', level ' + user.premade.level);
                 }
                 break;
             case 'control':
@@ -167,14 +161,15 @@ io.listen(server, {'log level': 1}).sockets.on('connection', function(socket) {
                 break;
             case 'say':
                 user.say(event.text);
-                console.log(new Date().toLocaleTimeString() + ': User ' + user.nick + ' say ' + event.text);
+                console.log(new Date().toLocaleTimeString() + ': user ' + user.nick + ' say ' + event.text);
                 break;
         }
     });
     socket.on('disconnect', function(event) {
         if (user) {
-            console.log(new Date().toLocaleTimeString() + ': User ' + user.nick + ' disconnected');
+            console.log(new Date().toLocaleTimeString() + ': user ' + user.nick + ' disconnected');
             clearInterval(user.updateIntervalId);
+            user.unwatchAll();
             user.socket = null;
             if (user.premade) {
                 user.premade.unjoin(user);

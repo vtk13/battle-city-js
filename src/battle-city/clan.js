@@ -120,7 +120,7 @@ BotsClan.prototype.step = function()
     if (!this.isFull() && this.botStack.count() > 0 && Math.random() < 0.01) {
         var botX = this.tankPositions[this.currentBotPosition].x;
         var botY = this.tankPositions[this.currentBotPosition].y;
-        if (this.game.field.canPutTank(botX, botY)) {
+        if (this.game && this.game.field.canPutTank(botX, botY)) {
             var bot = this.botStack.pop();
             delete bot['id'];
             bot.removeAllListeners('change');
@@ -144,9 +144,9 @@ BotsClan.prototype.startGame = function(game)
 {
     this.game = game;
     var bots = this.users = [];
-    this.game.field.on('remove', function(event) {
+    this.game.field.on('remove', function(object) {
         for (var i in bots) {
-            if (bots[i].tank == event.object) {
+            if (bots[i].tank == object) {
                 bots.splice(i, 1);
             }
         }

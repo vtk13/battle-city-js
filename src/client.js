@@ -310,9 +310,6 @@ $(function() {
                 $('#premade').hide();
                 $('#public').show();
                 premade = {};
-                registry.premadeUsers.clear();
-                // todo sync bugs when join unjoin different premades?
-                $('#premade .messages').empty();
                 break;
             case 'started':
                 $('#premade').hide();
@@ -322,10 +319,24 @@ $(function() {
             case 'gameover':
                 $('#game').hide();
                 $('#premade').show();
-                field.clear();
                 clearInterval(field.animateIntervalId);
-                registry.tankStack.clear();
                 break;
+        }
+    });
+    socket.on('clearCollection', function(data){
+        switch (data) {
+        case 'f':
+            field.clear();
+            break;
+        case 'game.botStack':
+            registry.tankStack.clear();
+            break;
+        case 'premade.users':
+            registry.premadeUsers.clear();
+            break;
+        case 'premade.messages':
+            $('#premade .messages').empty();
+            break;
         }
     });
     socket.on('sync', function(data) {

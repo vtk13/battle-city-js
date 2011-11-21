@@ -1,9 +1,20 @@
 
-Eventable(User.prototype);
+isArray = Array.isArray;
 
-// rename to ServerUser if constructor needed?
+ServerUser = function ServerUser()
+{
+    User.call(this, arguments);
+    this.collections = {};
+    this.updateCollector = {};
+};
 
-User.prototype.serialize = function()
+ServerUser.prototype = new User();
+
+ServerUser._eventTypeMap = {'add': 'a', 'change': 'c', 'remove': 'r'};
+
+Eventable(ServerUser.prototype);
+
+ServerUser.prototype.serialize = function()
 {
     var res = {
         "1": this.id, // todo hack
@@ -31,46 +42,31 @@ User.prototype.serialize = function()
  *
  * @return
  */
-User.prototype.sendUpdatesToClient = function()
+ServerUser.prototype.sendUpdatesToClient = function()
 {
-    var lastSync = this.lastSync, chunk, data = {};
+    var lastSync = this.lastSync, data = {}, itemData;
     // events may occur is this milliseconds, so do not record it as synced, and "- 1"
     this.lastSync = Date.now() - 1;
 
-    data['users'] = registry.users.sync(lastSync);
-    if (data['users'].length == 0) delete data['users'];
-
-    data['messages'] = registry.messages.sync(lastSync);
-    if (data['messages'].length == 0) delete data['messages'];
-
-    data['premades'] = registry.premades.sync(lastSync);
-    if (data['premades'].length == 0) delete data['premades'];
-
-    if (this.premade) {
-        data['premade.users'] = this.premade.users.sync(lastSync);
-        if (data['premade.users'].length == 0) delete data['premade.users'];
-
-        data['premade.messages'] = this.premade.messages.sync(lastSync);
-        if (data['premade.messages'].length == 0) delete data['premade.messages'];
-
-        if (this.premade.game && this.premade.game.field) {
-            data['f'] = this.premade.game.field.sync(lastSync);
-            if (data['f'].length == 0) delete data['f'];
-
-            if (this.clan.enemiesClan.botStack) {
-                data['game.botStack'] = this.clan.enemiesClan.botStack.sync(lastSync);
-                if (data['game.botStack'].length == 0) delete data['game.botStack'];
-            }
+    var collections = 0;
+    for (var key in this.updateCollector) {
+        data[key] = [];
+        for (var i in this.updateCollector[key]) {
+            data[key].push(this.updateCollector[key][i]);
+            delete this.updateCollector[key][i];
+        }
+        if (data[key].length == 0) {
+            delete data[key];
+        } else {
+            collections++;
         }
     }
-    if (data['users'] || data['messages'] || data['premades'] ||
-            data['premade.users'] || data['premade.messages'] ||
-            data['f'] || data['game.botStack']) {
+    if (collections) {
         this.clientMessage('sync', data);
     }
 };
 
-User.prototype.control = function(event)
+ServerUser.prototype.control = function(event)
 {
     if (this.tank && this.tank.field) {
         if (event.move) {
@@ -85,7 +81,7 @@ User.prototype.control = function(event)
     }
 };
 
-User.prototype.say = function(text)
+ServerUser.prototype.say = function(text)
 {
     var message = new Message(text);
     message.user = this;
@@ -96,7 +92,7 @@ User.prototype.say = function(text)
     }
 };
 
-User.prototype.hit = function()
+ServerUser.prototype.hit = function()
 {
     if (this.premade) {
         this.lives -= 1;
@@ -110,28 +106,76 @@ User.prototype.hit = function()
     }
 };
 
-User.prototype.addReward = function(reward)
+ServerUser.prototype.addReward = function(reward)
 {
     this.points += reward;
     this.emit('change', {type: 'change', object: this});
 };
 
-User.prototype.clientMessage = function(type, data)
+ServerUser.prototype.clientMessage = function(type, data)
 {
     if (this.socket) {
         this.socket.emit(type, data);
     } else {
         console.log('Trying to send data to disconnected client.'); // todo bug?
-        console.trace();
+//        console.trace();
     }
 };
 
-User.prototype.sendToClient = function(data)
+ServerUser.prototype.sendToClient = function(data)
 {
     if (this.socket) {
         this.socket.json.send(data);
     } else {
         console.log('Trying to send data to disconnected client.'); // todo bug?
-        console.trace();
+//        console.trace();
+    }
+};
+
+ServerUser.prototype.onCollectionUpdate = function(syncKey, item, type /*, fields*/)
+{
+    var data = item.serialize();
+    this.updateCollector[syncKey][item.id] = [ServerUser._eventTypeMap[type], data];
+};
+
+/**
+ * @param collection
+ * @param syncKey ключ, по которому клиент узнает к какой группе относятся объекты
+ */
+ServerUser.prototype.watchCollection = function(collection, syncKey)
+{
+    this.unwatchCollection(syncKey);
+    // суда будут складываться объновления объектов
+    this.updateCollector[syncKey] = [];
+    var user = this;
+    var cb = function(item, type) {
+        user.onCollectionUpdate(syncKey, item, type);
+    };
+    // подписываемся на обновления
+    collection.on('update', cb);
+    // запоминаем callback, чтобы при отключении от группы, можно было удалить обработчик
+    this.collections[syncKey] = {'callback': cb, 'collection': collection};
+    // отправляем клиенту все объекты группы, как вновь созданные
+    collection.traversal(function(item){
+        this.onCollectionUpdate(syncKey, item, 'add');
+    }, this);
+};
+
+ServerUser.prototype.unwatchCollection = function(syncKey)
+{
+    if (this.collections[syncKey]) {
+        // удаляем обработчик
+        this.collections[syncKey].collection.removeListener('update', this.collections[syncKey].callback);
+        // сообщаем клиенту, чтобы он удалил у себя эту группу
+        this.clientMessage('clearCollection', syncKey);
+        delete this.collections[syncKey];
+        delete this.updateCollector[syncKey];
+    }
+};
+
+ServerUser.prototype.unwatchAll = function()
+{
+    for (var syncKey in this.collections) {
+        this.unwatchCollection(syncKey);
     }
 };
