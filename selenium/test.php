@@ -21,7 +21,7 @@ class TankTest extends PHPUnit_Extensions_SeleniumTestCase
         $this->click('//input[@value="Создать"]');
         sleep(1);
         $this->click('//input[@value="Старт!"]');
-        sleep(10);
+        sleep(30);
 
     }
 }

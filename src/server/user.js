@@ -145,7 +145,7 @@ ServerUser.prototype.onCollectionUpdate = function(syncKey, item, type /*, field
 ServerUser.prototype.watchCollection = function(collection, syncKey)
 {
     this.unwatchCollection(syncKey);
-    // суда будут складываться объновления объектов
+    // сюда будут складываться объновления объектов
     this.updateCollector[syncKey] = [];
     var user = this;
     var cb = function(item, type) {

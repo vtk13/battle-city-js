@@ -34,6 +34,7 @@ Tank = function Tank(x, y)
 
     this.onIce = false;
     this.glidingTimer = 0;
+    this.blink = false;
 };
 
 Tank.defaultArmoredTimer = 10 * 1000/30; // 30ms step
@@ -205,6 +206,8 @@ Tank.prototype.animateStep = function(step)
         }
         if (this.bonus) {
             this.blink = (step % 10) > 5;
+        } else if(this.blink) {
+            this.blink = false;
         }
         this.setDirectionImage();
         if (this.armoredTimer > 0) {
