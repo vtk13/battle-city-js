@@ -159,3 +159,13 @@ a {
     top: 5px;
     right: -110px;
 }
+#credits {
+    position: absolute;
+    width: 100%;
+    bottom: 10px;
+    text-align: center;
+    font-size: 11px;
+}
+#credits a {
+    padding-right: 20px;
+}
