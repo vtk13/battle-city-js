@@ -155,9 +155,10 @@ a {
 }
 
 .like-wrapper {
+    width: 98px;
     position: absolute;
-    top: 5px;
-    right: -110px;
+    bottom: 50px;
+    right: 0;
 }
 #credits {
     position: absolute;
