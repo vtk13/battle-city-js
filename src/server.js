@@ -101,7 +101,15 @@ var server = require('http').createServer(function(request, response) {
 server.listen(8124);
 
 var io = require('socket.io');
-io.listen(server, {'log level': 1}).sockets.on('connection', function(socket) {
+var config = {
+        'browser client minification': true,
+        'browser client etag': true,
+        'browser client gzip': true,
+//        'transports': ['websocket'],
+        'log level': 1
+};
+
+io.listen(server, config).sockets.on('connection', function(socket) {
     var user = null;
     socket.on('message', function(event) {
         switch (event.type) {
@@ -149,7 +157,7 @@ io.listen(server, {'log level': 1}).sockets.on('connection', function(socket) {
                 }
                 break;
             case 'start':
-                if (user.premade) {
+                if (user.premade && !user.premade.game) {
                     user.premade.level = event.level || 1;
                     user.premade.emit('change', {type: 'change', object: user.premade});
                     user.premade.startGame();
@@ -166,8 +174,14 @@ io.listen(server, {'log level': 1}).sockets.on('connection', function(socket) {
         }
     });
     socket.on('disconnect', function(event) {
+        try {
+            var connections = 0;
+            for (var i in socket.manager.connected) {
+                connections++;
+            }
+        } catch(e) {}
         if (user) {
-            console.log(new Date().toLocaleTimeString() + ': user ' + user.nick + ' disconnected');
+            console.log(new Date().toLocaleTimeString() + ': user ' + user.nick + ' disconnected (' + connections , ' total)');
             clearInterval(user.updateIntervalId);
             user.unwatchAll();
             user.socket = null;
@@ -175,9 +189,17 @@ io.listen(server, {'log level': 1}).sockets.on('connection', function(socket) {
                 user.premade.unjoin(user);
             }
             registry.users.remove(user);
+        } else {
+            console.log(new Date().toLocaleTimeString() + ': anonymous disconnected (' + connections , ' total)');
         }
     });
-    console.log(new Date().toLocaleTimeString() + ': Connection accepted');
+    try {
+        var connections = 0;
+        for (var i in socket.manager.connected) {
+            connections++;
+        }
+    } catch(e) {}
+    console.log(new Date().toLocaleTimeString() + ': Connection accepted (' + connections , ' total)');
     socket.json.send({
         'type': 'init'
     });

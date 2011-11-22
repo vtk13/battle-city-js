@@ -166,6 +166,6 @@ a {
     text-align: center;
     font-size: 11px;
 }
-#credits a {
+#credits a.span {
     padding-right: 20px;
 }

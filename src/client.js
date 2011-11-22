@@ -206,7 +206,9 @@ $(function() {
         images[sprites[i]].src = sprites[i];
     }
 
-    var socket = io.connect(location.href);
+    var socket = io.connect(location.href, {
+        'reconnect': false // todo learn reconnection abilities
+    });
 
     socket.on('message', function(data) {
         switch (data.type) {
@@ -215,11 +217,17 @@ $(function() {
                     $('#message-connecting').hide();
                     $('#login-form').show();
                 } else {
-                    $('#message-connecting').text('Извините, но подключение произошло не через websocket. ' +
-                        'Или ваш браузер не поддерживает websockets (Рекомендуемые браузеры - Google Chrome версии 14 и выше, и Firefox версии 7), ' +
-                        'или вы находитесь за прокси, ' +
-                        'которая рубит websocket траффик (в будущем, когда будет поддержка websockets через ssl, ' +
-                        'шанс подключиться через такие прокси будет значительно выше).');
+                    if (typeof WebSocket == 'function' || typeof MozWebSocket == 'function') {
+                    $('#message-connecting').html('Извините, но подключение произошло не через WebSocket,' +
+                        ' хотя ваш браузер поддерживает WebSocket.' +
+                        ' Вероятно вы находитесь за прокси, которая рубит WebSocket траффик (в ' +
+                        'будущем шанс подключиться через такие прокси будет увеличен с помошью ssl-соединения).');
+                    } else {
+                        $('#message-connecting').html('Извините, но ваш браузер не поддерживает websocket. ' +
+                            'Рекомендуемые браузеры - Google Chrome версии 14 и выше, и Firefox версии 7 и выше.');
+                    }
+                    $('body').addClass('message');
+                    socket.disconnect();
                 }
                 break;
             case 'user-message':
@@ -386,7 +394,9 @@ $(function() {
         }
     });
     socket.on('disconnect', function() {
-        $('body').html('<h3 style="text-align: center;">Извините, подключени прервано. Перезагрузите страницу, чтобы начать заново.</h3>');
+        if (!$('body').hasClass('message')) {
+            $('body').html('<h3 style="text-align: center;">Извините, подключение прервано. Перезагрузите страницу, чтобы начать заново.</h3>');
+        }
     });
 
     $('#login-form').submit(function(){
