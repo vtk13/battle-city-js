@@ -81,6 +81,12 @@ function updatePremades(event) {
 };
 
 $(function() {
+    if (typeof WebSocket != 'function' && typeof MozWebSocket != 'function') {
+        $('#message-connecting').html('Извините, но ваш браузер не поддерживает websocket. ' +
+            'Рекомендуемые браузеры - <a href="http://www.google.com/chrome/">Google Chrome</a> версии 14 и выше, и <a href="http://www.mozilla.org/">Firefox</a> версии 7 и выше.');
+        return;
+    }
+
     window.registry.users = new TUserList($('#public .user-list'), undefined, 'user');
         // todo move to premade object
     window.registry.premadeUsers = new TUserList($('#premade .user-list'), function(user) {
@@ -207,29 +213,24 @@ $(function() {
     }
 
     var socket = io.connect(location.href, {
+        'auto connect': false,
         'reconnect': false // todo learn reconnection abilities
     });
 
+    socket.on('connect', function(){
+        $('#message-connecting').hide();
+        $('#login-form').show();
+    });
+
+    function socketErrorHandler(){
+        $('#message-connecting').html('Извините, не удалось подключиться к серверу.' +
+                ' Возможно вы находитесь за прокси, которая рубит WebSocket трафик (в ' +
+                'будущем шанс подключиться через такие прокси будет увеличен с помошью ssl-соединения).');
+    }
+    socket.on('connect_failed', socketErrorHandler).on('error', socketErrorHandler);
+
     socket.on('message', function(data) {
         switch (data.type) {
-            case 'init':
-                if (socket.socket.transport.name == 'websocket') {
-                    $('#message-connecting').hide();
-                    $('#login-form').show();
-                } else {
-                    if (typeof WebSocket == 'function' || typeof MozWebSocket == 'function') {
-                    $('#message-connecting').html('Извините, но подключение произошло не через WebSocket,' +
-                        ' хотя ваш браузер поддерживает WebSocket.' +
-                        ' Вероятно вы находитесь за прокси, которая рубит WebSocket траффик (в ' +
-                        'будущем шанс подключиться через такие прокси будет увеличен с помошью ssl-соединения).');
-                    } else {
-                        $('#message-connecting').html('Извините, но ваш браузер не поддерживает websocket. ' +
-                            'Рекомендуемые браузеры - Google Chrome версии 14 и выше, и Firefox версии 7 и выше.');
-                    }
-                    $('body').addClass('message');
-                    socket.disconnect();
-                }
-                break;
             case 'user-message':
                 alert(data.message);
                 break;
@@ -394,9 +395,7 @@ $(function() {
         }
     });
     socket.on('disconnect', function() {
-        if (!$('body').hasClass('message')) {
-            $('body').html('<h3 style="text-align: center;">Извините, подключение прервано. Перезагрузите страницу, чтобы начать заново.</h3>');
-        }
+        $('body').html('<h3 style="text-align: center;">Извините, подключение прервано. Перезагрузите страницу, чтобы начать заново.</h3>');
     });
 
     $('#login-form').submit(function(){
@@ -422,4 +421,5 @@ $(function() {
         $('.game-modes li').removeClass('current');
         $(this).addClass('current');
     });
+    socket.socket.connect();
 });

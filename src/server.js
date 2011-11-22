@@ -105,7 +105,7 @@ var config = {
         'browser client minification': true,
         'browser client etag': true,
         'browser client gzip': true,
-//        'transports': ['websocket'],
+        'transports': ['websocket'],
         'log level': 1
 };
 
@@ -175,7 +175,7 @@ io.listen(server, config).sockets.on('connection', function(socket) {
     });
     socket.on('disconnect', function(event) {
         try {
-            var connections = 0;
+            var connections = -1;
             for (var i in socket.manager.connected) {
                 connections++;
             }
@@ -200,7 +200,4 @@ io.listen(server, config).sockets.on('connection', function(socket) {
         }
     } catch(e) {}
     console.log(new Date().toLocaleTimeString() + ': Connection accepted (' + connections , ' total)');
-    socket.json.send({
-        'type': 'init'
-    });
 });
