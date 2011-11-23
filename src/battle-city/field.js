@@ -25,10 +25,10 @@ Field.prototype.add = function(object)
     object.field = this;
     this.objects.add(object);
     if (!isClient()) {
-        this.emit('update', object, 'add');
+        this.emit('add', object);
         var field = this;
         object.on('change', function(){
-            field.emit('update', this, 'change', arguments);
+            field.emit('change', this);
         });
         object.onAddToField && object.onAddToField();
     }
@@ -37,7 +37,6 @@ Field.prototype.add = function(object)
 Field.prototype.remove = function(object)
 {
     if (this.objects.remove(object) && !isClient()) {
-        this.emit('update', object, 'remove');
         this.emit('remove', object);
         object.removeAllListeners && object.removeAllListeners();
     }

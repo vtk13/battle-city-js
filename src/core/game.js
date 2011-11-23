@@ -2,14 +2,26 @@
 Game = function Game(level, premade)
 {
     this.premade = premade;
-    this._stepCounter = 0;
+    this.steableItems = [];
 
     this.field = new Field(13*32, 13*32);
     this.field.game = this;
+    this.field.on('add', this.onAddObject.bind(this));
+    this.field.on('remove', this.onRemoveObject.bind(this));
 
     var level = require(level);
     this.enemies = level.enemies;
     this.field.terrain(level.map);
+};
+
+Game.prototype.onAddObject = function(object) {
+    if (object.step && !(object instanceof Tank) && !(object instanceof Base)) {
+        this.steableItems[object.id] = object;
+    }
+};
+
+Game.prototype.onRemoveObject = function(object) {
+    delete this.steableItems[object.id];
 };
 
 Game.prototype.start = function()
@@ -22,22 +34,15 @@ Game.prototype.gameOver = function()
 {
     clearInterval(this.stepIntervalId);
     this.field.removeAllListeners();
-//    this.field.game = null; // todo when game finished, next _stepItem() failed
+//    this.field.game = null; // todo when game finished, next item.step() failed
 //    this.field = null;
-};
-
-Game.prototype._stepItem = function(item)
-{
-    // tanks and Base processing within Clan.step
-    if (item.step && !(item instanceof Tank) && !(item instanceof Base)) { // todo
-        item.step();
-    }
 };
 
 Game.prototype.step = function()
 {
-    this._stepCounter++;
-    this.field.traversal(this._stepItem, this);
+    for (var i in this.steableItems) {
+        this.steableItems[i].step();
+    }
     this.premade.clans[0].step();
     this.premade.clans[1].step();
 };

@@ -17,17 +17,17 @@ TList.prototype.add = function(item)
         item.id = this.items.push(item) - 1;
     }
 
-    this.emit('update', item, 'add');
+    this.emit('add', item);
 
     var list = this;
     item.on('change', function(){
-        list.emit('update', this, 'change', arguments);
+        list.emit('change', this);
     });
 };
 
 TList.prototype.remove = function(item)
 {
-    this.emit('update', item, 'remove');
+    this.emit('remove', item);
     delete this.items[item.id];
 };
 
@@ -40,7 +40,7 @@ TList.prototype.pop = function()
         return null;
     }
     var item = this.items[i];
-    this.emit('update', item, 'remove');
+    this.emit('remove', item);
     delete this.items[i];
     return item;
 };
