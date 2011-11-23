@@ -2,7 +2,7 @@
 Game = function Game(level, premade)
 {
     this.premade = premade;
-    this.steableItems = [];
+    this.stepableItems = [];
 
     this.field = new Field(13*32, 13*32);
     this.field.game = this;
@@ -16,12 +16,12 @@ Game = function Game(level, premade)
 
 Game.prototype.onAddObject = function(object) {
     if (object.step && !(object instanceof Tank) && !(object instanceof Base)) {
-        this.steableItems[object.id] = object;
+        this.stepableItems[object.id] = object;
     }
 };
 
 Game.prototype.onRemoveObject = function(object) {
-    delete this.steableItems[object.id];
+    delete this.stepableItems[object.id];
 };
 
 Game.prototype.start = function()
@@ -40,8 +40,8 @@ Game.prototype.gameOver = function()
 
 Game.prototype.step = function()
 {
-    for (var i in this.steableItems) {
-        this.steableItems[i].step();
+    for (var i in this.stepableItems) {
+        this.stepableItems[i].step();
     }
     this.premade.clans[0].step();
     this.premade.clans[1].step();
