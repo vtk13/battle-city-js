@@ -115,9 +115,10 @@ io.listen(server, config).sockets.on('connection', function(socket) {
         switch (event.type) {
             case 'connect': // todo rename to login
                 if (user == null && event.nick) {
+                    var nick = event.nick && event.nick.substr(0,20);
                     var nickAllowed = true;
                     registry.users.traversal(function(user){
-                        if (event.nick == user.nick) {
+                        if (nick == user.nick) {
                             nickAllowed = false;
                         }
                     });
@@ -125,7 +126,7 @@ io.listen(server, config).sockets.on('connection', function(socket) {
                         user = new ServerUser();
                         user.lastSync = 0;
                         user.socket = socket;
-                        user.nick = event.nick;
+                        user.nick = nick;
                         registry.users.add(user);
                         user.updateIntervalId = setInterval(callback(user.sendUpdatesToClient, user), 50);
                         user.sendToClient({
@@ -135,7 +136,7 @@ io.listen(server, config).sockets.on('connection', function(socket) {
                         user.watchCollection(registry.users, 'users');
                         user.watchCollection(registry.premades, 'premades');
                         user.watchCollection(registry.messages, 'messages');
-                        console.log(new Date().toLocaleTimeString() + ': user ' + event.nick + ' connected');
+                        console.log(new Date().toLocaleTimeString() + ': user ' + nick + ' connected');
                     } else {
                         socket.emit('nickNotAllowed');
                     }
@@ -178,8 +179,12 @@ io.listen(server, config).sockets.on('connection', function(socket) {
                 user.control(event);
                 break;
             case 'say':
-                user.say(event.text);
-                console.log(new Date().toLocaleTimeString() + ': user ' + user.nick + ' say ' + event.text);
+                var message = event.text;
+                if (typeof message == 'string') {
+                    message = message.substr(0, 200);
+                }
+                user.say(message);
+                console.log(new Date().toLocaleTimeString() + ': user ' + user.nick + ' say ' + message);
                 break;
         }
     });

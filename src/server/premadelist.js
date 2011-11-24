@@ -9,10 +9,11 @@ TPremadeList.prototype.constructor = TPremadeList;
 
 TPremadeList.prototype.join = function(event, user)
 {
+    var gameName = event.name && event.name.substr(0,20);
     if (!user.premade) {
         var premade;
         for (var i in this.items) {
-            if (this.items[i].name == event.name) {
+            if (this.items[i].name == gameName) {
                 premade = this.items[i];
                 break;
             }
@@ -21,7 +22,7 @@ TPremadeList.prototype.join = function(event, user)
             if (this.count() >= 10) { // games limit
                 throw {message: "Не получается создать игру. Достигнут максимум одновременных игр на сервере."};
             } else {
-                premade = new Premade(event.name, event.gameType);
+                premade = new Premade(gameName, event.gameType);
                 this.add(premade);
             }
         }
