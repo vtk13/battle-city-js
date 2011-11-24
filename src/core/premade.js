@@ -101,22 +101,23 @@ Premade.prototype.startGame = function()
         user.sendToClient({type: 'started'});
     }, this);
     this.game.start();
+    this.emit('change', {type: 'change', object: this});
 };
 
 Premade.prototype.gameOver = function(winnerClan)
 {
-    if (this.type == 'teamvsteam') {
-        this.locked = false;
-    }
     if (this.game) {
         this.game.gameOver();
+        if (this.type == 'teamvsteam') {
+            this.locked = false;
+        }
         if (this.type == 'classic' && this.clans[0] == winnerClan) {
             this.level++;
             if (this.level > 35) {
                 this.level = 1;
             }
-            this.emit('change', {type: 'change', object: this});
         }
+        this.emit('change', {type: 'change', object: this});
         this.users.traversal(function(user){
             user.unwatchCollection('f');
             user.unwatchCollection('game.botStack');
@@ -136,6 +137,7 @@ Premade.prototype.serialize = function()
         name: this.name,
         level: this.level,
         type: this.type,
+        locked: this.locked,
         // todo rename?
         users: this.userCount
     };

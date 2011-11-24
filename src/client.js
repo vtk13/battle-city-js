@@ -75,6 +75,11 @@ function updatePremades(event) {
             $('#public .premades').append($('<div class="premade premade' +
                 data.id + '"><span class="name"/><span class="stat"/></div>'));
         }
+        if (data.locked) {
+            $('#public .premades .premade' + data.id).addClass('locked');
+        } else {
+            $('#public .premades .premade' + data.id).removeClass('locked');
+        }
         $('#public .premades .premade' + data.id + ' .name').text(data.name);
         $('#public .premades .premade' + data.id + ' .stat').text(stat);
         break;

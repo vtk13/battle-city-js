@@ -173,3 +173,6 @@ a {
     clear: both;
     margin-top: 40px;
 }
+.locked {
+    text-decoration: line-through;
+}
