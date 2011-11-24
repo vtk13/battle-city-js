@@ -18,7 +18,7 @@ TPremadeList.prototype.join = function(event, user)
             }
         }
         if (!premade) {
-            if (this.count() >= 5) { // games limit
+            if (this.count() >= 10) { // games limit
                 throw {message: "Не получается создать игру. Достигнут максимум одновременных игр на сервере."};
             } else {
                 premade = new Premade(event.name, event.gameType);

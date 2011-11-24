@@ -394,6 +394,9 @@ $(function() {
             registry.tankStack.updateWith(data['game.botStack']);
         }
     });
+    socket.on('nickNotAllowed', function(){
+        alert('Ник занят. Выберите другой.');
+    });
     socket.on('disconnect', function() {
         $('body').html('<h3 style="text-align: center;">Извините, подключение прервано. Перезагрузите страницу, чтобы начать заново.</h3>');
     });

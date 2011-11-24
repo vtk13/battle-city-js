@@ -115,20 +115,30 @@ io.listen(server, config).sockets.on('connection', function(socket) {
         switch (event.type) {
             case 'connect': // todo rename to login
                 if (user == null && event.nick) {
-                    user = new ServerUser();
-                    user.lastSync = 0;
-                    user.socket = socket;
-                    user.nick = event.nick;
-                    registry.users.add(user);
-                    user.updateIntervalId = setInterval(callback(user.sendUpdatesToClient, user), 50);
-                    user.sendToClient({
-                        type: 'connected', // todo rename to logged
-                        userId: user.id
+                    var nickAllowed = true;
+                    registry.users.traversal(function(user){
+                        if (event.nick == user.nick) {
+                            nickAllowed = false;
+                        }
                     });
-                    user.watchCollection(registry.users, 'users');
-                    user.watchCollection(registry.premades, 'premades');
-                    user.watchCollection(registry.messages, 'messages');
-                    console.log(new Date().toLocaleTimeString() + ': user ' + event.nick + ' connected');
+                    if (nickAllowed) {
+                        user = new ServerUser();
+                        user.lastSync = 0;
+                        user.socket = socket;
+                        user.nick = event.nick;
+                        registry.users.add(user);
+                        user.updateIntervalId = setInterval(callback(user.sendUpdatesToClient, user), 50);
+                        user.sendToClient({
+                            type: 'connected', // todo rename to logged
+                            userId: user.id
+                        });
+                        user.watchCollection(registry.users, 'users');
+                        user.watchCollection(registry.premades, 'premades');
+                        user.watchCollection(registry.messages, 'messages');
+                        console.log(new Date().toLocaleTimeString() + ': user ' + event.nick + ' connected');
+                    } else {
+                        socket.emit('nickNotAllowed');
+                    }
                 }
                 break;
             case 'join':
