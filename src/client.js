@@ -89,7 +89,7 @@ $(function() {
 
     window.registry.users = new TUserList($('#public .user-list'), undefined, 'user');
         // todo move to premade object
-    window.registry.premadeUsers = new TUserList($('#premade .user-list'), function(user) {
+    window.registry.premadeUsers = new TPremadeUserList($('#premade .user-list'), function(user) {
             return user.premadeId == premade.id;
         }, 'user');
     window.registry.tankStack = new TTankStack($('#game #bot-stack'), undefined, 'bot');

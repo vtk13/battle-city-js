@@ -107,6 +107,25 @@ TUserList.prototype.setCurrent = function(id)
     $('div.' + this.itemClass + this.currentId, this.container).addClass('current');
 };
 
+function TPremadeUserList(container, filter, itemClass)
+{
+    TUserList.apply(this, arguments);
+};
+
+TPremadeUserList.prototype = new TUserList();
+TPremadeUserList.prototype.constructor = TPremadeUserList;
+
+TPremadeUserList.prototype.itemDomElement = function(item)
+{
+    var text = item.nick;
+    if (window.premade && window.premade.type == 'teamvsteam') {
+        text = item.nick + (item.clan == 1 ? ' (внизу)' : ' (вверху)');
+    }
+    return $('<div class="' + this.itemClass + ' ' +
+        (this.currentId == item.id ? 'current ' : '') +
+        this.itemClass + item.id + '"></div>').text(text);
+};
+
 /*----------------------------------------------------------------------------*/
 
 function TTankStack(container, filter, itemClass)

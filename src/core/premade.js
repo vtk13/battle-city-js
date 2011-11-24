@@ -105,6 +105,9 @@ Premade.prototype.startGame = function()
 
 Premade.prototype.gameOver = function(winnerClan)
 {
+    if (this.type == 'teamvsteam') {
+        this.locked = false;
+    }
     if (this.game) {
         this.game.gameOver();
         if (this.type == 'classic' && this.clans[0] == winnerClan) {

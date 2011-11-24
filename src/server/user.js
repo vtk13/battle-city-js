@@ -21,7 +21,8 @@ ServerUser.prototype.serialize = function()
         id:   this.id,
         nick: this.nick,
         lives: this.lives,
-        points: this.points
+        points: this.points,
+        clan: this.clan ? this.clan.n : 0
     };
     if (this.premade) {
         res.premadeId = this.premade.id;
