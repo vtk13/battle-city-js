@@ -80,6 +80,7 @@ Premade.prototype.unjoin = function(user)
     this.emit('change', {type: 'change', object: this});
     if (this.userCount == 0) {
         registry.premades.remove(this);
+        this.removed = true; // dirty hack
     }
 };
 
@@ -117,7 +118,9 @@ Premade.prototype.gameOver = function(winnerClan)
                 this.level = 1;
             }
         }
-        this.emit('change', {type: 'change', object: this});
+        if (this.removed === undefined) { // todo dirty hack
+            this.emit('change', {type: 'change', object: this});
+        }
         this.users.traversal(function(user){
             user.unwatchCollection('f');
             user.unwatchCollection('game.botStack');
