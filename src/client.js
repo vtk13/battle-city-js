@@ -35,7 +35,9 @@ function appendPublicMessages(event) {
         message.append($('<span/>').text('<' + event[1/*data*/].nick + '> '));
         message.append($('<span/>').text(event[1/*data*/].text));
         $('#public .messages').append(message);
-        $('#public .chat-log').get(0).scrollTop = $('#public .chat-log').get(0).scrollHeight;
+        if (($('#public .chat-log').get(0).scrollHeight - $('#public .chat-log').get(0).scrollTop) < ($('#public .chat').height() + 100)) {
+            $('#public .chat-log').get(0).scrollTop = $('#public .chat-log').get(0).scrollHeight;
+        }
     }
 };
 
@@ -48,7 +50,9 @@ function appendPremadeMessages(event) {
         message.append($('<span/>').text('<' + event[1/*data*/].nick + '> '));
         message.append($('<span/>').text(event[1/*data*/].text));
         $('#premade .messages').append(message);
-        $('#premade .chat-log').get(0).scrollTop = $('#premade .chat-log').get(0).scrollHeight;
+        if (($('$premade .chat-log').get(0).scrollHeight - $('$premade .chat-log').get(0).scrollTop) < ($('$premade .chat').height() + 100)) {
+            $('$premade .chat-log').get(0).scrollTop = $('$premade .chat-log').get(0).scrollHeight;
+        }
     }
 };
 
@@ -81,7 +85,7 @@ function updatePremades(event) {
 };
 
 $(function() {
-    if (typeof WebSocket != 'function' && typeof MozWebSocket != 'function') {
+    if (typeof WebSocket == 'undefined' && typeof MozWebSocket == 'undefined') {
         $('#message-connecting').html('Извините, но ваш браузер не поддерживает websocket. ' +
             'Рекомендуемые браузеры - <a href="http://www.google.com/chrome/">Google Chrome</a> версии 14 и выше, и <a href="http://www.mozilla.org/">Firefox</a> версии 7 и выше.');
         return;

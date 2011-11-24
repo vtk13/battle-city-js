@@ -29,3 +29,4 @@
 - unserialize for all serialize
 - https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Function/bind
 - Child.prototype.__proto__ = Parent.prototype
+- <bc.rj12.ru> vtk: по поводу передачи бинарных данных, если кодировать их в base64 и передавать должно выйти около 16 байт
