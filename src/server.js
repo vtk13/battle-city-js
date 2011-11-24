@@ -183,8 +183,11 @@ io.listen(server, config).sockets.on('connection', function(socket) {
                 if (typeof message == 'string') {
                     message = message.substr(0, 200);
                 }
-                user.say(message);
-                console.log(new Date().toLocaleTimeString() + ': user ' + user.nick + ' say ' + message);
+                if (user.say(message)) {
+                    console.log(new Date().toLocaleTimeString() + ': user ' + user.nick + ' say ' + message);
+                } else {
+                    user.clientMessage('doNotFlood');
+                }
                 break;
         }
     });

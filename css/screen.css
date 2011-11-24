@@ -71,6 +71,7 @@ a {
     width: 100px;
     height: 100%;
     border-right: solid 1px #ccc;
+    overflow: auto;
 }
 .user:hover {
     background: #444;

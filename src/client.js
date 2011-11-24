@@ -35,7 +35,7 @@ function appendPublicMessages(event) {
         message.append($('<span/>').text('<' + event[1/*data*/].nick + '> '));
         message.append($('<span/>').text(event[1/*data*/].text));
         $('#public .messages').append(message);
-        $('#public .messages').get(0).scrollTop = $('#public .messages').get(0).scrollHeight;
+        $('#public .chat-log').get(0).scrollTop = $('#public .chat-log').get(0).scrollHeight;
     }
 };
 
@@ -48,7 +48,7 @@ function appendPremadeMessages(event) {
         message.append($('<span/>').text('<' + event[1/*data*/].nick + '> '));
         message.append($('<span/>').text(event[1/*data*/].text));
         $('#premade .messages').append(message);
-        $('#premade .messages').get(0).scrollTop = $('#premade .messages').get(0).scrollHeight;
+        $('#premade .chat-log').get(0).scrollTop = $('#premade .chat-log').get(0).scrollHeight;
     }
 };
 
@@ -396,6 +396,9 @@ $(function() {
     });
     socket.on('nickNotAllowed', function(){
         alert('Ник занят. Выберите другой.');
+    });
+    socket.on('doNotFlood', function() {
+        alert('Слишком много сообщений за минуту.');
     });
     socket.on('disconnect', function() {
         $('body').html('<h3 style="text-align: center;">Извините, подключение прервано. Перезагрузите страницу, чтобы начать заново.</h3>');

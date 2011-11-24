@@ -6,7 +6,11 @@ ServerUser = function ServerUser()
     User.call(this, arguments);
     this.collections = {};
     this.updateCollector = {};
+    this.messages = 0;
+    this.countMessageFrom = Date.now();
 };
+
+ServerUser.maxMessages = 10; // per minute
 
 ServerUser.prototype = new User();
 
@@ -45,6 +49,11 @@ ServerUser.prototype.serialize = function()
  */
 ServerUser.prototype.sendUpdatesToClient = function()
 {
+    if ((this.countMessageFrom + 60*1000) < Date.now()) {
+        this.countMessageFrom = Date.now();
+        this.messages = 0;
+    }
+
     var lastSync = this.lastSync, data = {}, itemData;
     // events may occur is this milliseconds, so do not record it as synced, and "- 1"
     this.lastSync = Date.now() - 1;
@@ -84,12 +93,18 @@ ServerUser.prototype.control = function(event)
 
 ServerUser.prototype.say = function(text)
 {
-    var message = new Message(text);
-    message.user = this;
-    if (this.premade) {
-        this.premade.say(message);
+    if (this.messages < ServerUser.maxMessages) {
+        var message = new Message(text);
+        message.user = this;
+        if (this.premade) {
+            this.premade.say(message);
+        } else {
+            registry.messages.say(message);
+        }
+        this.messages++;
+        return true;
     } else {
-        registry.messages.say(message);
+        return false;
     }
 };
 
