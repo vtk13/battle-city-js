@@ -168,3 +168,7 @@ a {
 #credits a.span {
     padding-right: 20px;
 }
+#game .fb-like {
+    clear: both;
+    margin-top: 40px;
+}

@@ -113,7 +113,7 @@ io.listen(server, config).sockets.on('connection', function(socket) {
     var user = null;
     socket.on('message', function(event) {
         switch (event.type) {
-            case 'connect':
+            case 'connect': // todo rename to login
                 if (user == null && event.nick) {
                     user = new ServerUser();
                     user.lastSync = 0;
@@ -122,7 +122,7 @@ io.listen(server, config).sockets.on('connection', function(socket) {
                     registry.users.add(user);
                     user.updateIntervalId = setInterval(callback(user.sendUpdatesToClient, user), 50);
                     user.sendToClient({
-                        type: 'connected',
+                        type: 'connected', // todo rename to logged
                         userId: user.id
                     });
                     user.watchCollection(registry.users, 'users');
