@@ -20,12 +20,9 @@ Clan.tankPositions = {
 Clan.prototype.attachUser = function(user)
 {
     if (user.clan) user.clan.detachUser(user);
-    var userId = this.users.push(user) - 1;
+    this.users.push(user);
     user.tank = new Tank();
     user.tank.user = user;
-    // before add to field, may set x y directly
-    user.tank.initialPosition.x = user.tank.x = 32*this.tankPositions[userId].x + user.tank.hw;
-    user.tank.initialPosition.y = user.tank.y = 32*this.tankPositions[userId].y + user.tank.hh;
     user.tank.clan = user.clan = this;
     user.emit('change', {type: 'change', object: user});
 };
@@ -77,9 +74,13 @@ Clan.prototype.startGame = function(game)
 {
     this.game = game;
     for (var i in this.users) {
-        if (this.users[i].lives < 0) this.users[i].lives = 0; // todo hack
-        this.users[i].tank.resetPosition();
-        this.game.field.add(this.users[i].tank);
+        var user = this.users[i];
+        if (user.lives < 0) user.lives = 0; // todo hack
+        // before add to field, may set x y directly
+        user.tank.initialPosition.x = user.tank.x = 32*this.tankPositions[i].x + user.tank.hw;
+        user.tank.initialPosition.y = user.tank.y = 32*this.tankPositions[i].y + user.tank.hh;
+        user.tank.resetPosition();
+        this.game.field.add(user.tank);
     }
     if (this.base) {
         this.base.shootDown = false;
