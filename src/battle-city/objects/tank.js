@@ -299,8 +299,8 @@ Tank.prototype.hit = function(bullet)
             this.bonus = false;
             var bonuses = [BonusStar, BonusGrenade, BonusShovel, BonusHelmet, BonusLive, BonusTimer];
             this.field.add(new (bonuses[Math.floor(Math.random()*(bonuses.length-0.0001))])(
-                Math.round((Math.random() * this.field.width  / 16 - 1)) * 16,
-                Math.round((Math.random() * this.field.height / 16 - 1)) * 16
+                Math.round((Math.random() * (this.field.width  / 16 - 2))) * 16 + 16,
+                Math.round((Math.random() * (this.field.height / 16 - 2))) * 16 + 16
             ));
         }
     }
