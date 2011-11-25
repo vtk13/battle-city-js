@@ -26,7 +26,7 @@ Game.prototype.onRemoveObject = function(object) {
 
 Game.prototype.start = function()
 {
-    this.stepIntervalId = setInterval(callback(this.step, this), 30);
+    this.stepIntervalId = setInterval(this.step.bind(this), 30);
 };
 
 

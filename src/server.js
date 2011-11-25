@@ -1,10 +1,3 @@
-callback = function(method, context)
-{
-    return function() {
-        method.apply(context, arguments);
-    };
-};
-
 isClient = function isClient()
 {
     return false;
@@ -17,17 +10,17 @@ var http     = require("http"),
 
 registry = {};
 
-require('./core/event');
-require('./core/list');
-require('./core/game');
-require('./core/premade');
+require('./common/event');
+require('./common/list');
+require('./common/game');
+require('./common/premade');
 require('./server/premadelist');
-require('./core/user');
+require('./common/user');
 require('./server/user');
-require('./core/message');
+require('./common/message');
 require('./server/messagelist');
-require('./utils/func');
-require('./utils/map_tiled');
+require('./common/func');
+require('./common/map_tiled');
 require('./battle-city/field');
 require('./battle-city/bot-emitter');
 require('./battle-city/keyboard');
@@ -128,7 +121,7 @@ io.listen(server, config).sockets.on('connection', function(socket) {
                         user.socket = socket;
                         user.nick = nick;
                         registry.users.add(user);
-                        user.updateIntervalId = setInterval(callback(user.sendUpdatesToClient, user), 50);
+                        user.updateIntervalId = setInterval(user.sendUpdatesToClient.bind(user), 50);
                         user.sendToClient({
                             type: 'connected', // todo rename to logged
                             userId: user.id
