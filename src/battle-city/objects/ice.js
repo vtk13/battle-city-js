@@ -20,7 +20,7 @@ Eventable(Ice.prototype);
 Ice.prototype.serialize = function()
 {
     return [
-        battleCityTypesSerialize['Ice'], // 0
+        serializeTypeMatches['Ice'], // 0
         this.id, // 1
         this.x,
         this.y

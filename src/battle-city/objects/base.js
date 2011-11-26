@@ -37,7 +37,7 @@ Eventable(Base.prototype);
 Base.prototype.serialize = function()
 {
     return [
-        battleCityTypesSerialize['Base'],
+        serializeTypeMatches['Base'],
         this.id,
         this.x,
         this.y,

@@ -29,7 +29,7 @@ AbstractGameObject.prototype.serialize = function()
 {
     // zero element is always type, first - id
     return [
-        battleCityTypesSerialize['AbstractGameObject'],
+        serializeTypeMatches['AbstractGameObject'],
         this.id
         // ...
     ];

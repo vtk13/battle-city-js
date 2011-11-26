@@ -20,7 +20,7 @@ Eventable(Water.prototype);
 Water.prototype.serialize = function()
 {
     return [
-            battleCityTypesSerialize['Water'], // 0
+            serializeTypeMatches['Water'], // 0
             this.id, // 1
             this.x,
             this.y

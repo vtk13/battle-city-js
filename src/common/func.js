@@ -7,7 +7,7 @@ vector = function vector(x)
     }
 };
 
-battleCityTypesSerialize = {
+serializeTypeMatches = {
     'Bullet'            : 1,
     'Tank'              : 2,
     'TankBot'           : 3,
@@ -29,7 +29,18 @@ battleCityTypesSerialize = {
     'Base'              : 19
 };
 
-battleCityTypesUnserialize = {};
-for (var i in battleCityTypesSerialize) {
-    battleCityTypesUnserialize[battleCityTypesSerialize[i]] = i;
+unserializeTypeMatches = {};
+for (var i in serializeTypeMatches) {
+    unserializeTypeMatches[serializeTypeMatches[i]] = i;
+}
+
+/**
+ * need object (or object getter) to fill with
+ *
+ * @param event
+ * @return
+ */
+function unserialize(event)
+{
+
 }

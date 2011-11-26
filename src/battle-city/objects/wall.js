@@ -20,7 +20,7 @@ Eventable(Wall.prototype);
 Wall.prototype.serialize = function()
 {
     return [
-        battleCityTypesSerialize[this.constructor.name], // 0
+        serializeTypeMatches[this.constructor.name], // 0
         this.id, // 1
         this.x,
         this.y

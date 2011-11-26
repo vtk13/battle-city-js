@@ -6,19 +6,21 @@ Premade = function Premade(name, type)
     this.level = 1;
     this.userCount = 0;
     this.locked = false; // lock for new users
-    this.users = new TList(); // todo move to clan?
-    switch (this.type) {
-        case 'classic':
-            this.clans = [new Clan(1, 10*30/*~30step per seconds*/), new BotsClan(2, 10*30/*~30step per seconds*/)];
-            break;
-        case 'teamvsteam':
-            this.clans = [new Clan(1, 2*30/*~30step per seconds*/), new Clan(2, 2*30/*~30step per seconds*/)];
-            break;
+    if (!isClient()) {
+        this.users = new TList(); // todo move to clan?
+        switch (this.type) {
+            case 'classic':
+                this.clans = [new Clan(1, 10*30/*~30step per seconds*/), new BotsClan(2, 10*30/*~30step per seconds*/)];
+                break;
+            case 'teamvsteam':
+                this.clans = [new Clan(1, 2*30/*~30step per seconds*/), new Clan(2, 2*30/*~30step per seconds*/)];
+                break;
+        }
+        this.clans[0].premade = this.clans[1].premade = this;
+        this.clans[0].enemiesClan = this.clans[1];
+        this.clans[1].enemiesClan = this.clans[0];
+        this.messages = new TList();
     }
-    this.clans[0].premade = this.clans[1].premade = this;
-    this.clans[0].enemiesClan = this.clans[1];
-    this.clans[1].enemiesClan = this.clans[0];
-    this.messages = new TList();
 };
 
 Eventable(Premade.prototype);
@@ -134,14 +136,22 @@ Premade.prototype.gameOver = function(winnerClan)
 
 Premade.prototype.serialize = function()
 {
-    return {
-        "1": this.id, // todo hack
-        id: this.id,
-        name: this.name,
-        level: this.level,
-        type: this.type,
-        locked: this.locked,
-        // todo rename?
-        users: this.userCount
-    };
+    return [
+        this.id, // 0
+        this.name, // 1
+        this.level, // 2
+        this.type, // 3
+        this.locked, // 4
+        this.userCount // 5
+    ];
+};
+
+Premade.prototype.unserialize = function(data)
+{
+    this.id = data[0];
+    this.name = data[1];
+    this.level = data[2];
+    this.type = data[3];
+    this.locked = data[4];
+    this.userCount = data[5];
 };

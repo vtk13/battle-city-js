@@ -18,7 +18,7 @@ Eventable(Delimiter.prototype);
 Delimiter.prototype.serialize = function()
 {
     return [
-        battleCityTypesSerialize['Delimiter'], // 0
+        serializeTypeMatches['Delimiter'], // 0
         this.id, // 1
         this.x,
         this.y,

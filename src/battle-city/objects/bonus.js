@@ -19,7 +19,7 @@ Eventable(Bonus.prototype);
 Bonus.prototype.serialize = function()
 {
     return [
-        battleCityTypesSerialize[this.constructor.name],
+        serializeTypeMatches[this.constructor.name],
         this.id,
         this.x,
         this.y

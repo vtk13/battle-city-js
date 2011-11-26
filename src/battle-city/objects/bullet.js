@@ -72,7 +72,7 @@ Bullet.prototype.onIntersect = function(items)
 Bullet.prototype.serialize = function()
 {
     return [
-        battleCityTypesSerialize['Bullet'], // 0
+        serializeTypeMatches['Bullet'], // 0
         this.id, // 1
         this.x, // 2
         this.y, // 3

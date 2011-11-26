@@ -20,7 +20,7 @@ Eventable(Trees.prototype);
 Trees.prototype.serialize = function()
 {
     return [
-        battleCityTypesSerialize['Trees'], // 0
+        serializeTypeMatches['Trees'], // 0
         this.id, // 1
         this.x,
         this.y

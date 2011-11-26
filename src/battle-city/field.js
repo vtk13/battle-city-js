@@ -130,7 +130,7 @@ Field.prototype.updateWith = function(events)
     for (var i in events) {
         var eventType = events[i][0/*type*/];
         var eventData = events[i][1/*data*/];
-        var type = battleCityTypesUnserialize[eventData[0/*type*/]];
+        var type = unserializeTypeMatches[eventData[0/*type*/]];
         var id = parseInt(eventData[1/*id*/]);
         switch (eventType) {
         case 'r'/*remove*/:
@@ -176,4 +176,24 @@ Field.prototype.animateStep = function()
 
     this.draw();
 //    console.log('animate step');
+};
+
+Field.prototype.drawItem = function(current)
+{
+    if (current.z == this.z) {
+        for (var i in current.img) {
+            this.context.drawImage(window.images[current.img[i]],
+                    current.x - current.hw,
+                    current.y - current.hh);
+        }
+    }
+};
+
+Field.prototype.draw = function()
+{
+    this.context.fillStyle = 'rgba(0, 0, 0, 1)';
+    this.context.fillRect(0, 0, this.width, this.height);
+    for (this.z = 0 ; this.z <= 2 ; this.z++) { // this.z hack?
+        this.objects.traversal(this.drawItem, this);
+    }
 };

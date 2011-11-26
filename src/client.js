@@ -1,25 +1,5 @@
 
-var registry = {}, field, premade = {};
-
-Field.prototype.drawItem = function(current)
-{
-    if (current.z == this.z) {
-        for (var i in current.img) {
-            this.context.drawImage(window.images[current.img[i]],
-                    current.x - current.hw,
-                    current.y - current.hh);
-        }
-    }
-};
-
-Field.prototype.draw = function()
-{
-    this.context.fillStyle = 'rgba(0, 0, 0, 1)';
-    this.context.fillRect(0, 0, this.width, this.height);
-    for (this.z = 0 ; this.z <= 2 ; this.z++) { // this.z hack?
-        this.objects.traversal(this.drawItem, this);
-    }
-};
+var registry = {}, field, premade = new Premade();
 
 function isClient()
 {
@@ -57,12 +37,13 @@ function appendPremadeMessages(event) {
 };
 
 function updatePremades(event) {
-    var data = event[1/*data*/];
+    var _premade = new Premade();
+    _premade.unserialize(event[1/*data*/]);
     switch (event[0/*type*/]) {
     case 'a'/*add*/:
     case 'c'/*change*/:
-        if (data.id == premade.id) {
-            premade = data;
+        if (_premade.id == premade.id) {
+            premade = _premade;
             var levelSelect = $('.level select');
             levelSelect.empty();
             for (var i = 1; i <= (premade.type == 'classic' ? 35 : 1); i++) {
@@ -70,21 +51,21 @@ function updatePremades(event) {
             }
             levelSelect.val(premade.level);
         }
-        var stat = ' (' + data.users + '/' + (data.type == 'classic' ? 2 : 4) + ')';
-        if ($('#public .premades .premade' + data.id).size() == 0) {
+        var stat = ' (' + _premade.userCount + '/' + (_premade.type == 'classic' ? 2 : 4) + ')';
+        if ($('#public .premades .premade' + _premade.id).size() == 0) {
             $('#public .premades').append($('<div class="premade premade' +
-                data.id + '"><span class="name"/><span class="stat"/></div>'));
+                _premade.id + '"><span class="name"/><span class="stat"/></div>'));
         }
-        if (data.locked) {
-            $('#public .premades .premade' + data.id).addClass('locked');
+        if (_premade.locked) {
+            $('#public .premades .premade' + _premade.id).addClass('locked');
         } else {
-            $('#public .premades .premade' + data.id).removeClass('locked');
+            $('#public .premades .premade' + _premade.id).removeClass('locked');
         }
-        $('#public .premades .premade' + data.id + ' .name').text(data.name);
-        $('#public .premades .premade' + data.id + ' .stat').text(stat);
+        $('#public .premades .premade' + _premade.id + ' .name').text(_premade.name);
+        $('#public .premades .premade' + _premade.id + ' .stat').text(stat);
         break;
     case 'r'/*remove*/:
-        $('#public .premades .premade' + data.id).remove();
+        $('#public .premades .premade' + _premade.id).remove();
         break;
     }
 };
@@ -107,120 +88,6 @@ $(function() {
     field = new Field(canvas.width, canvas.height);
     field.context = canvas.getContext('2d');
 
-    window.images = {};
-    var sprites = [
-        'img/tank1-down-s1.png'
-      , 'img/tank1-down-s2.png'
-      , 'img/tank1-up-s1.png'
-      , 'img/tank1-up-s2.png'
-      , 'img/tank1-right-s1.png'
-      , 'img/tank1-right-s2.png'
-      , 'img/tank1-left-s1.png'
-      , 'img/tank1-left-s2.png'
-      , 'img/tank2-down-s1.png'
-      , 'img/tank2-down-s2.png'
-      , 'img/tank2-up-s1.png'
-      , 'img/tank2-up-s2.png'
-      , 'img/tank2-right-s1.png'
-      , 'img/tank2-right-s2.png'
-      , 'img/tank2-left-s1.png'
-      , 'img/tank2-left-s2.png'
-      , 'img/normal-bot-down-s1.png'
-      , 'img/normal-bot-down-s2.png'
-      , 'img/normal-bot-down-s1-blink.png'
-      , 'img/normal-bot-down-s2-blink.png'
-      , 'img/normal-bot-up-s1.png'
-      , 'img/normal-bot-up-s2.png'
-      , 'img/normal-bot-up-s1-blink.png'
-      , 'img/normal-bot-up-s2-blink.png'
-      , 'img/normal-bot-right-s1.png'
-      , 'img/normal-bot-right-s2.png'
-      , 'img/normal-bot-right-s1-blink.png'
-      , 'img/normal-bot-right-s2-blink.png'
-      , 'img/normal-bot-left-s1.png'
-      , 'img/normal-bot-left-s2.png'
-      , 'img/normal-bot-left-s1-blink.png'
-      , 'img/normal-bot-left-s2-blink.png'
-      , 'img/fast-bullet-bot-down-s1.png'
-      , 'img/fast-bullet-bot-down-s2.png'
-      , 'img/fast-bullet-bot-down-s1-blink.png'
-      , 'img/fast-bullet-bot-down-s2-blink.png'
-      , 'img/fast-bullet-bot-up-s1.png'
-      , 'img/fast-bullet-bot-up-s2.png'
-      , 'img/fast-bullet-bot-up-s1-blink.png'
-      , 'img/fast-bullet-bot-up-s2-blink.png'
-      , 'img/fast-bullet-bot-right-s1.png'
-      , 'img/fast-bullet-bot-right-s2.png'
-      , 'img/fast-bullet-bot-right-s1-blink.png'
-      , 'img/fast-bullet-bot-right-s2-blink.png'
-      , 'img/fast-bullet-bot-left-s1.png'
-      , 'img/fast-bullet-bot-left-s2.png'
-      , 'img/fast-bullet-bot-left-s1-blink.png'
-      , 'img/fast-bullet-bot-left-s2-blink.png'
-      , 'img/fast-bot-down-s1.png'
-      , 'img/fast-bot-down-s2.png'
-      , 'img/fast-bot-down-s1-blink.png'
-      , 'img/fast-bot-down-s2-blink.png'
-      , 'img/fast-bot-up-s1.png'
-      , 'img/fast-bot-up-s2.png'
-      , 'img/fast-bot-up-s1-blink.png'
-      , 'img/fast-bot-up-s2-blink.png'
-      , 'img/fast-bot-right-s1.png'
-      , 'img/fast-bot-right-s2.png'
-      , 'img/fast-bot-right-s1-blink.png'
-      , 'img/fast-bot-right-s2-blink.png'
-      , 'img/fast-bot-left-s1.png'
-      , 'img/fast-bot-left-s2.png'
-      , 'img/fast-bot-left-s1-blink.png'
-      , 'img/fast-bot-left-s2-blink.png'
-      , 'img/heavy-bot-down-s1.png'
-      , 'img/heavy-bot-down-s2.png'
-      , 'img/heavy-bot-down-s1-blink.png'
-      , 'img/heavy-bot-down-s2-blink.png'
-      , 'img/heavy-bot-up-s1.png'
-      , 'img/heavy-bot-up-s2.png'
-      , 'img/heavy-bot-up-s1-blink.png'
-      , 'img/heavy-bot-up-s2-blink.png'
-      , 'img/heavy-bot-right-s1.png'
-      , 'img/heavy-bot-right-s2.png'
-      , 'img/heavy-bot-right-s1-blink.png'
-      , 'img/heavy-bot-right-s2-blink.png'
-      , 'img/heavy-bot-left-s1.png'
-      , 'img/heavy-bot-left-s2.png'
-      , 'img/heavy-bot-left-s1-blink.png'
-      , 'img/heavy-bot-left-s2-blink.png'
-      , 'img/bullet-up.png'
-      , 'img/bullet-down.png'
-      , 'img/bullet-left.png'
-      , 'img/bullet-right.png'
-      , 'img/brick-wall.png'
-      , 'img/black.png'
-      , 'img/base.png'
-      , 'img/base-hit.png'
-      , 'img/birth1.png'
-      , 'img/birth2.png'
-      , 'img/steel-wall.png'
-      , 'img/star.png'
-      , 'img/grenade.png'
-      , 'img/shovel.png'
-      , 'img/trees.png'
-      , 'img/water1.png'
-      , 'img/water2.png'
-      , 'img/hit1.png'
-      , 'img/hit2.png'
-      , 'img/hit3.png'
-      , 'img/helmet.png'
-      , 'img/live.png'
-      , 'img/timer.png'
-      , 'img/armored1.png'
-      , 'img/armored2.png'
-      , 'img/ice.png'
-    ];
-    for (var i in sprites) {
-        images[sprites[i]] = new Image();
-        images[sprites[i]].src = sprites[i];
-    }
-
     var socket = io.connect(location.href, {
         'auto connect': false,
         'reconnect': false // todo learn reconnection abilities
@@ -238,96 +105,94 @@ $(function() {
     }
     socket.on('connect_failed', socketErrorHandler).on('error', socketErrorHandler);
 
+    socket.on('logged', function(data){
+        $('#login').hide();
+        $('#public').show();
+        registry.users.setCurrent(registry.currentId = data.userId);
+        $('form.message-form').submit(function(){
+            var text = $(':text', this).val();
+            if (text) {
+                socket.emit('say', {
+                    text: text
+                });
+            }
+            $(':text', this).val('').focus();
+            return false;
+        });
+        $('#create-form').submit(function(){
+            var name = $('input[name=name]', this).val();
+            var gameType = $('input[name=type]', this).val();
+            if (name) {
+                socket.json.send({
+                    type: 'join',
+                    gameType: gameType,
+                    name: name
+                });
+            }
+            return false;
+        });
+        $('.premade').live('click', function(){
+            socket.json.send({
+                type: 'join',
+                name: $('.name', this).text()
+            });
+            return false;
+        });
+        $('#public .user').live('click', function(){
+            var nick = $(this).text();
+            var input = $('#public .message-form :text');
+            input.val(nick + ': ' + input.val());
+            input.focus();
+        });
+        $('#premade .user').live('click', function(){
+            var nick = $(this).text();
+            var input = $('#premade .message-form :text');
+            input.val(nick + ': ' + input.val());
+            input.focus();
+        });
+        $('input.exit-game').click(function(){
+            socket.json.send({
+                type: 'unjoin'
+            });
+        });
+        $('input.start-game').click(function(){
+            socket.json.send({
+                type: 'start',
+                level: $('#premade select[name=level]').val()
+            });
+        });
+        new TankController({
+            startMove: function(direction)
+            {
+                socket.json.send({type: 'control', move: direction});
+            },
+            stopMove: function()
+            {
+                socket.json.send({type: 'control', stop: 1});
+            },
+            fire: function()
+            {
+                socket.json.send({type: 'control', fire: 1});
+            }
+        });
+    });
     socket.on('message', function(data) {
         switch (data.type) {
             case 'user-message':
                 alert(data.message);
                 break;
-            case 'connected':
-                $('#login').hide();
-                $('#public').show();
-                registry.users.setCurrent(registry.currentId = data.userId);
-                $('form.message-form').submit(function(){
-                    var text = $(':text', this).val();
-                    if (text) {
-                        socket.json.send({
-                            type: 'say',
-                            text: text
-                        });
-                    }
-                    $(':text', this).val('').focus();
-                    return false;
-                });
-                $('#create-form').submit(function(){
-                    var name = $('input[name=name]', this).val();
-                    var gameType = $('input[name=type]', this).val();
-                    if (name) {
-                        socket.json.send({
-                            type: 'join',
-                            gameType: gameType,
-                            name: name
-                        });
-                    }
-                    return false;
-                });
-                $('.premade').live('click', function(){
-                    socket.json.send({
-                        type: 'join',
-                        name: $('.name', this).text()
-                    });
-                    return false;
-                });
-                $('#public .user').live('click', function(){
-                    var nick = $(this).text();
-                    var input = $('#public .message-form :text');
-                    input.val(nick + ': ' + input.val());
-                    input.focus();
-                });
-                $('#premade .user').live('click', function(){
-                    var nick = $(this).text();
-                    var input = $('#premade .message-form :text');
-                    input.val(nick + ': ' + input.val());
-                    input.focus();
-                });
-                $('input.exit-game').click(function(){
-                    socket.json.send({
-                        type: 'unjoin'
-                    });
-                });
-                $('input.start-game').click(function(){
-                    socket.json.send({
-                        type: 'start',
-                        level: $('#premade select[name=level]').val()
-                    });
-                });
-                new TankController({
-                    startMove: function(direction)
-                    {
-                        socket.json.send({type: 'control', move: direction});
-                    },
-                    stopMove: function()
-                    {
-                        socket.json.send({type: 'control', stop: 1});
-                    },
-                    fire: function()
-                    {
-                        socket.json.send({type: 'control', fire: 1});
-                    }
-                });
-                break;
             case 'joined':
                 $('#public').hide();
                 $('#create').hide();
                 $('#premade').show();
-                premade = data.premade;
+                premade.unserialize(data.premade);
                 registry.premadeUsers.importItems(registry.users.items);
                 registry.premadeUsers.setCurrent(registry.currentId);
-                updatePremades(['c', premade]);
                 break;
             case 'unjoined':
                 $('#premade').hide();
                 $('#public').show();
-                premade = {};
+                premade = new Premade();
                 break;
             case 'started':
                 $('#premade').hide();
@@ -395,7 +260,7 @@ $(function() {
         if (data['game.botStack']) {
             // todo quick hack
             for (var i in data['game.botStack']) {
-                var type = battleCityTypesUnserialize[data['game.botStack'][i][1/*data*/][0/*type*/]];
+                var type = unserializeTypeMatches[data['game.botStack'][i][1/*data*/][0/*type*/]];
                 obj = new (window[type])();
                 obj.unserialize(data['game.botStack'][i][1/*data*/]);
                 data['game.botStack'][i][1/*data*/] = obj;
@@ -414,8 +279,7 @@ $(function() {
     });
 
     $('#login-form').submit(function(){
-        socket.json.send({
-            type: 'connect',
+        socket.emit('login', {
             nick: $('#login input[name=nick]').val()
         });
         return false;

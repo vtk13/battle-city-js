@@ -104,37 +104,36 @@ var config = {
 
 io.listen(server, config).sockets.on('connection', function(socket) {
     var user = null;
+    socket.on('login', function(event){
+        if (user == null && event.nick) {
+            var nick = event.nick && event.nick.substr(0,20);
+            var nickAllowed = true;
+            registry.users.traversal(function(user){
+                if (nick == user.nick) {
+                    nickAllowed = false;
+                }
+            });
+            if (nickAllowed) {
+                user = new ServerUser();
+                user.lastSync = 0;
+                user.socket = socket;
+                user.nick = nick;
+                registry.users.add(user);
+                user.updateIntervalId = setInterval(user.sendUpdatesToClient.bind(user), 50);
+                socket.emit('logged', {
+                    userId: user.id
+                });
+                user.watchCollection(registry.users, 'users');
+                user.watchCollection(registry.premades, 'premades');
+                user.watchCollection(registry.messages, 'messages');
+                console.log(new Date().toLocaleTimeString() + ': user ' + nick + ' connected');
+            } else {
+                socket.emit('nickNotAllowed');
+            }
+        }
+    });
     socket.on('message', function(event) {
         switch (event.type) {
-            case 'connect': // todo rename to login
-                if (user == null && event.nick) {
-                    var nick = event.nick && event.nick.substr(0,20);
-                    var nickAllowed = true;
-                    registry.users.traversal(function(user){
-                        if (nick == user.nick) {
-                            nickAllowed = false;
-                        }
-                    });
-                    if (nickAllowed) {
-                        user = new ServerUser();
-                        user.lastSync = 0;
-                        user.socket = socket;
-                        user.nick = nick;
-                        registry.users.add(user);
-                        user.updateIntervalId = setInterval(user.sendUpdatesToClient.bind(user), 50);
-                        user.sendToClient({
-                            type: 'connected', // todo rename to logged
-                            userId: user.id
-                        });
-                        user.watchCollection(registry.users, 'users');
-                        user.watchCollection(registry.premades, 'premades');
-                        user.watchCollection(registry.messages, 'messages');
-                        console.log(new Date().toLocaleTimeString() + ': user ' + nick + ' connected');
-                    } else {
-                        socket.emit('nickNotAllowed');
-                    }
-                }
-                break;
             case 'join':
                 try {
                     registry.premades.join(event, user);
@@ -171,17 +170,17 @@ io.listen(server, config).sockets.on('connection', function(socket) {
             case 'control':
                 user.control(event);
                 break;
-            case 'say':
-                var message = event.text;
-                if (typeof message == 'string') {
-                    message = message.substr(0, 200);
-                }
-                if (user.say(message)) {
-                    console.log(new Date().toLocaleTimeString() + ': user ' + user.nick + ' say ' + message);
-                } else {
-                    user.clientMessage('doNotFlood');
-                }
-                break;
+        }
+    });
+    socket.on('say', function(event) {
+        var message = event.text;
+        if (typeof message == 'string') {
+            message = message.substr(0, 200);
+        }
+        if (user.say(message)) {
+            console.log(new Date().toLocaleTimeString() + ': user ' + user.nick + ' say ' + message);
+        } else {
+            user.clientMessage('doNotFlood');
         }
     });
     socket.on('disconnect', function(event) {

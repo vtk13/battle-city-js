@@ -164,7 +164,7 @@ Tank.prototype.setDirectionImage = function()
 Tank.prototype.serialize = function()
 {
     return [
-        battleCityTypesSerialize[this.constructor.name], // 0
+        serializeTypeMatches[this.constructor.name], // 0
         this.id, // 1
         this.x, // 2
         this.y, // 3
