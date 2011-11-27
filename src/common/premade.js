@@ -57,11 +57,11 @@ Premade.prototype.join = function(user, clanId)
         this.clans[clanId].attachUser(user);
         this.users.add(user);
         this.userCount++;
-        this.emit('change', {type: 'change', object: this});
+        this.emit('change');
         // todo extract to user methods setLives(), setPoints() ?
         user.lives = 4;
         user.points = 0;
-        user.emit('change', {type: 'change', object: user});
+        user.emit('change');
         user.watchCollection(this.users, 'premade.users');
         user.watchCollection(this.messages, 'premade.messages');
     } else {
@@ -79,7 +79,7 @@ Premade.prototype.unjoin = function(user)
     this.users.remove(user);
     this.userCount--;
     user.premade = null;
-    this.emit('change', {type: 'change', object: this});
+    this.emit('change');
     if (this.userCount == 0) {
         registry.premades.remove(this);
         this.removed = true; // dirty hack
@@ -99,12 +99,12 @@ Premade.prototype.startGame = function()
         }
         if (user.premade.type == 'teamvsteam') {
             user.lives = 4;
-            user.emit('change', {type: 'change', object: user});
+            user.emit('change');
         }
-        user.sendToClient({type: 'started'});
+        user.clientMessage('started');
     }, this);
     this.game.start();
-    this.emit('change', {type: 'change', object: this});
+    this.emit('change');
 };
 
 Premade.prototype.gameOver = function(winnerClan)
@@ -121,12 +121,12 @@ Premade.prototype.gameOver = function(winnerClan)
             }
         }
         if (this.removed === undefined) { // todo dirty hack
-            this.emit('change', {type: 'change', object: this});
+            this.emit('change');
         }
         this.users.traversal(function(user){
             user.unwatchCollection('f');
             user.unwatchCollection('game.botStack');
-            user.sendToClient({type: 'gameover'});
+            user.clientMessage('gameover');
             console.log(new Date().toLocaleTimeString() + ': user ' + user.nick +
                     ' has left game ' + user.premade.name);
         }, this);
@@ -137,21 +137,22 @@ Premade.prototype.gameOver = function(winnerClan)
 Premade.prototype.serialize = function()
 {
     return [
-        this.id, // 0
-        this.name, // 1
-        this.level, // 2
-        this.type, // 3
-        this.locked, // 4
-        this.userCount // 5
+        serializeTypeMatches[this.constructor.name], // 0
+        this.id, // 1
+        this.name, // 2
+        this.level, // 3
+        this.type, // 4
+        this.locked, // 5
+        this.userCount // 6
     ];
 };
 
 Premade.prototype.unserialize = function(data)
 {
-    this.id = data[0];
-    this.name = data[1];
-    this.level = data[2];
-    this.type = data[3];
-    this.locked = data[4];
-    this.userCount = data[5];
+    this.id         = data[1];
+    this.name       = data[2];
+    this.level      = data[3];
+    this.type       = data[4];
+    this.locked     = data[5];
+    this.userCount  = data[6];
 };

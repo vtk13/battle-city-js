@@ -50,11 +50,11 @@ Eventable(Tank.prototype);
 
 Tank.prototype.onAddToField = function()
 {
-    var tank = this;
+    var self = this;
     this.field.on('remove', function(object) {
-        for (var i in tank.bullets) {
-            if (tank.bullets[i] == object) {
-                tank.bullets.splice(i, 1);
+        for (var i in self.bullets) {
+            if (self.bullets[i] == object) {
+                self.bullets.splice(i, 1);
             }
         }
     });
@@ -87,14 +87,14 @@ Tank.prototype.step = function(paused)
     if (this.fireTimer > 0) this.fireTimer--;
     if ((this.birthTimer > 0)) {
         this.birthTimer--;
-        this.emit('change', {type: 'change', object: this});
+        this.emit('change');
         return;
     }
 
     if (this.armoredTimer > 0) {
         this.armoredTimer--;
         if (this.armoredTimer <= 0) {
-            this.emit('change', {type: 'change', object: this});
+            this.emit('change');
         }
     }
     if (paused) return;
@@ -134,7 +134,7 @@ Tank.prototype.step = function(paused)
              onIce && this.glidingTimer--;
             !onIce && (this.glidingTimer = 0);
         }
-        this.emit('change', {type: 'change', object: this});
+        this.emit('change');
     }
 };
 
@@ -255,7 +255,7 @@ Tank.prototype.startMove = function(direction)
                 break;
         }
         this.field.setXY(this, newX, newY);
-        this.emit('change', {type: 'change', object: this});
+        this.emit('change');
     }
 };
 
@@ -320,5 +320,5 @@ Tank.prototype.resetPosition = function()
     if (this.field) {
         this.field.setXY(this, this.initialPosition.x, this.initialPosition.y);
     }
-    this.emit('change', {type: 'change', object: this});
+    this.emit('change');
 };

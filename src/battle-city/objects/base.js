@@ -6,10 +6,10 @@ Base = function Base(x, y)
     this.y = y;
     this.img[0] = 'img/base.png';
     this.shootDown = false;
-    this.shootDownTimer = 5 * 1000/30; // 30ms step
+    this.shootDownTimer = Base.shootDownTimer;
 };
 
-Base.shootDownTimer = 5 * 1000/30; // 30ms step
+Base.shootDownTimer = 2 * 1000/30; // 30ms step
 
 Base.prototype = new AbstractGameObject();
 Base.prototype.constructor = Base;
@@ -62,7 +62,7 @@ Base.prototype.unserialize = function(data)
 Base.prototype.hit = function()
 {
     this.shootDown = true;
-    this.emit('change', {type: 'change', object: this});
+    this.emit('change');
     return true;
 };
 

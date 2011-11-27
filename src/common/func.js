@@ -26,21 +26,33 @@ serializeTypeMatches = {
     'Trees'             : 16,
     'Ice'               : 17,
     'Delimiter'         : 18,
-    'Base'              : 19
+    'Base'              : 19,
+    'ServerUser'        : 20,
+    'Premade'           : 21,
+    'Message'           : 22
 };
 
-unserializeTypeMatches = {};
-for (var i in serializeTypeMatches) {
-    unserializeTypeMatches[serializeTypeMatches[i]] = i;
-}
-
-/**
- * need object (or object getter) to fill with
- *
- * @param event
- * @return
- */
-function unserialize(event)
-{
-
-}
+unserializeTypeMatches = {
+    1: 'Bullet',
+    2: 'Tank',
+    3: 'TankBot',
+    4: 'HeavyTankBot',
+    5: 'FastBulletTankBot',
+    6: 'FastTankBot',
+    7: 'Wall',
+    8: 'SteelWall',
+    9: 'BonusTimer',
+    10: 'BonusShovel',
+    11: 'BonusStar',
+    12: 'BonusHelmet',
+    13: 'BonusLive',
+    14: 'BonusGrenade',
+    15: 'Water',
+    16: 'Trees',
+    17: 'Ice',
+    18: 'Delimiter',
+    19: 'Base',
+    20: 'User',
+    21: 'Premade',
+    22: 'Message'
+};

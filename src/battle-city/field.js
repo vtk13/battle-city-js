@@ -3,7 +3,6 @@ Field = function Field(width, height)
     this.width      = width;
     this.height     = height;
     this.objects    = null;
-    this.step       = 1;
     this.clear();
     this.setMaxListeners(100); // @todo
 };
@@ -26,9 +25,9 @@ Field.prototype.add = function(object)
     this.objects.add(object);
     if (!isClient()) {
         this.emit('add', object);
-        var field = this;
+        var self = this;
         object.on('change', function(){
-            field.emit('change', this);
+            self.emit('change', this);
         });
         object.onAddToField && object.onAddToField();
     }
@@ -36,19 +35,9 @@ Field.prototype.add = function(object)
 
 Field.prototype.remove = function(object)
 {
-    if (this.objects.remove(object) && !isClient()) {
+    if (this.objects.remove(object)) {
         this.emit('remove', object);
         object.removeAllListeners && object.removeAllListeners();
-    }
-    if (isClient() && object instanceof Bullet) {
-        var anim = new BulletHitAnimation(this.step, object.finalX, object.finalY);
-        anim.id = object.id;
-        this.add(anim);
-    }
-    if (isClient() && object instanceof Tank) { // todo hit myself without splash ((
-        var anim = new TankHitAnimation(this.step, object.x, object.y);
-        anim.id = object.id;
-        this.add(anim);
     }
 };
 
@@ -124,7 +113,11 @@ Field.prototype.canPutTank = function(x, y)
     return res;
 };
 
-// client methods
+//===== client methods =========================================================
+
+/**
+ * todo almost copy of TList.prototype.updateWith
+ */
 Field.prototype.updateWith = function(events)
 {
     for (var i in events) {
@@ -151,49 +144,5 @@ Field.prototype.updateWith = function(events)
                 }
                 break;
         }
-    }
-};
-
-Field.prototype._animateStepItem = function(item)
-{
-    if (item instanceof Water) { // todo move to Water
-        if (this.step % 10 == 0) {
-            if (this.step % 20 >= 10) {
-                item.img[0] = 'img/water2.png';
-            } else {
-                item.img[0] = 'img/water1.png';
-            }
-        }
-    }
-    item.animateStep && item.animateStep(this.step);
-};
-
-Field.prototype.animateStep = function()
-{
-//    this.animateQueue || (this.animateQueue = []);
-    this.objects.traversal(Field.prototype._animateStepItem, this);
-    this.step++;
-
-    this.draw();
-//    console.log('animate step');
-};
-
-Field.prototype.drawItem = function(current)
-{
-    if (current.z == this.z) {
-        for (var i in current.img) {
-            this.context.drawImage(window.images[current.img[i]],
-                    current.x - current.hw,
-                    current.y - current.hh);
-        }
-    }
-};
-
-Field.prototype.draw = function()
-{
-    this.context.fillStyle = 'rgba(0, 0, 0, 1)';
-    this.context.fillRect(0, 0, this.width, this.height);
-    for (this.z = 0 ; this.z <= 2 ; this.z++) { // this.z hack?
-        this.objects.traversal(this.drawItem, this);
     }
 };

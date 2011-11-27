@@ -44,3 +44,14 @@ Water.prototype.hit = function(bullet)
 {
     return false;
 };
+
+Water.prototype.animateStep = function(step)
+{
+    if (step % 10 == 0) {
+        if (step % 20 >= 10) {
+            this.img[0] = 'img/water2.png';
+        } else {
+            this.img[0] = 'img/water1.png';
+        }
+    }
+};

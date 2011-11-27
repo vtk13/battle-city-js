@@ -47,20 +47,20 @@ a {
     border: solid 1px gray;
     margin-top: 50px;
 }
-#game .player1-stats {
+#game .player0-stats {
     float: left;
     padding-left: 10px;
     width: 340px;
 }
-#game .player2-stats {
+#game .player1-stats {
     float: left;
 }
-#game .player3-stats {
+#game .player2-stats {
     position: absolute;
     top: 10px;
     left: 10px;
 }
-#game .player4-stats {
+#game .player3-stats {
     position: absolute;
     top: 10px;
     left: 350px;

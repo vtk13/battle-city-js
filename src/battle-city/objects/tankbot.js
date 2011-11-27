@@ -20,7 +20,7 @@ TankBot.prototype.step = function(paused)
     if ((this.birthTimer <= 0) && !paused) {
         if ((this.stuck || Math.random() < 0.03) && this.fireTimer <= 0) {
             this.fire();
-            this.fireTimer = 1 * 1000/30; // 30ms step
+            this.fireTimer = 0.5 * 1000/30; // 30ms step
         }
         if (this.stuck || Math.random() < 0.007) {
             // move percents

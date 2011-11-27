@@ -11,42 +11,27 @@ ServerUser = function ServerUser()
 };
 
 ServerUser.maxMessages = 10; // per minute
-
-ServerUser.prototype = new User();
-
 ServerUser._eventTypeMap = {'add': 'a', 'change': 'c', 'remove': 'r'};
 
+ServerUser.prototype = new User();
+ServerUser.prototype.constructor = ServerUser;
 Eventable(ServerUser.prototype);
+
 
 ServerUser.prototype.serialize = function()
 {
-    var res = {
-        "1": this.id, // todo hack
-        id:   this.id,
-        nick: this.nick,
-        lives: this.lives,
-        points: this.points,
-        clan: this.clan ? this.clan.n : 0
-    };
-    if (this.premade) {
-        res.premadeId = this.premade.id;
-    }
-    return res;
+    return [
+        serializeTypeMatches[this.constructor.name] // 0
+      , this.id // 1
+      , this.nick // 2
+      , this.lives // 3
+      , this.points // 4
+      , this.clan ? this.clan.n : 0 // 5
+      , this.premade ? this.premade.id : 0 // 6
+      , this.positionId // 7
+    ];
 };
 
-/**
- * data = {
- *  'users'
- *  'messages'
- *  'premades'
- *  'premade.users'
- *  'premade.messages'
- *  'f' // field.objects
- *  'game.botStack'
- * }
- *
- * @return
- */
 ServerUser.prototype.sendUpdatesToClient = function()
 {
     if ((this.countMessageFrom + 60*1000) < Date.now()) {
@@ -118,14 +103,14 @@ ServerUser.prototype.hit = function()
             this.tank.lives = 1;
             this.tank.resetPosition();
         }
-        this.emit('change', {type: 'change', object: this});
+        this.emit('change');
     }
 };
 
 ServerUser.prototype.addReward = function(reward)
 {
     this.points += reward;
-    this.emit('change', {type: 'change', object: this});
+    this.emit('change');
 };
 
 ServerUser.prototype.clientMessage = function(type, data)

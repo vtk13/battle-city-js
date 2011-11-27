@@ -125,7 +125,7 @@ BonusLive.prototype.constructor = BonusLive;
 BonusLive.prototype.applyTo = function(tank)
 {
     tank.user.lives++;
-    tank.user.emit('change', {type: 'change', object: tank.user});
+    tank.user.emit('change');
 };
 
 BonusTimer = function BonusTimer(x, y)

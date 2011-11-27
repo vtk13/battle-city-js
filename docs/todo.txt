@@ -31,3 +31,11 @@
 - https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Function/bind
 - Child.prototype.__proto__ = Parent.prototype
 - <bc.rj12.ru> vtk: по поводу передачи бинарных данных, если кодировать их в base64 и передавать должно выйти около 16 байт
+- 15:45 <vtk > не думал как проксировать на 80 порт
+  15:50 <vtk> да не проблема. у меня он просто занят.
+  15:51 <vtk> а как через апач проксировать - нет, не думал
+  15:51 <vtk > через haproxy
+  15:53 <vtk > ставишь haproxy перед апачем, но лучше перед жниксом проксируешь вебсокеты на ноду а http на апач или жникс
+  15:58 <vtk> вроде интересная штука - haproxy, надо будет разобраться. а нет статейки про haproxy имено по моему случаю?
+  16:00 <vtk > http://storage8.static.itmages.ru/i/11/1126/h_1322301626_3909609_b14c38f5d2.png
+  16:01 <vtk > есть такая статейка http://artursabirov.ru/2011/10/19/assync-servers

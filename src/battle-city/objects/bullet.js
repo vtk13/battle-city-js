@@ -41,7 +41,7 @@ Bullet.prototype.setDirectionImage = function()
 Bullet.prototype.step = function()
 {
     if (this.field.move(this, this.x + this.speedX, this.y + this.speedY)) {
-        this.emit('change', {type: 'change', object: this});
+        this.emit('change');
     }
 };
 

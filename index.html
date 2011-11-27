@@ -10,10 +10,14 @@
     <script type="text/javascript" src="/src/common/func.js"></script>
     <script type="text/javascript" src="/src/common/event.js"></script>
     <script type="text/javascript" src="/src/common/list.js"></script>
-    <script type="text/javascript" src="/src/client/list.js"></script>
+    <script type="text/javascript" src="/src/client/widgets.js"></script>
+    <script type="text/javascript" src="/src/client/ui-list.js"></script>
     <script type="text/javascript" src="/src/common/map_tiled.js"></script>
     <script type="text/javascript" src="/src/common/premade.js"></script>
+    <script type="text/javascript" src="/src/common/message.js"></script>
+    <script type="text/javascript" src="/src/common/user.js"></script>
     <script type="text/javascript" src="/src/battle-city/field.js"></script>
+    <script type="text/javascript" src="/src/client/field-view.js"></script>
     <script type="text/javascript" src="/src/battle-city/keyboard.js"></script>
     <script type="text/javascript" src="/src/battle-city/objects/abstract.js"></script>
     <script type="text/javascript" src="/src/battle-city/objects/animation.js"></script>
@@ -28,7 +32,9 @@
     <script type="text/javascript" src="/src/battle-city/objects/water.js"></script>
     <script type="text/javascript" src="/src/battle-city/objects/ice.js"></script>
     <script type="text/javascript" src="/src/battle-city/client/graphic-loader.js"></script>
-    <script type="text/javascript" src="/src/client.js"></script><!-- should be last -->
+    <script type="text/javascript" src="/src/client/bc-client.js"></script>
+    <script type="text/javascript" src="/src/client/bc-ui.js"></script>
+    <script type="text/javascript" src="/src/init.js"></script>
 </head>
 <body>
 <div id="login">
@@ -117,10 +123,10 @@
         <input class="start-game" type="button" value="Старт!">
         <input class="exit-game" type="button" value="Выйти">
         <div class="level">Уровень: <select name="level"></select></div>
-        <div>1: <span class="player1-stats"></span></div>
-        <div>2: <span class="player2-stats"></span></div>
-        <div>3: <span class="player3-stats"></span></div>
-        <div>4: <span class="player4-stats"></span></div>
+        <div>1: <span class="player0-stats"></span></div>
+        <div>2: <span class="player1-stats"></span></div>
+        <div>3: <span class="player2-stats"></span></div>
+        <div>4: <span class="player3-stats"></span></div>
     </div>
     <div class="chat">
         <div class="chat-log">
@@ -137,10 +143,10 @@
     <div id="bot-stack"></div>
     <canvas id="field" width="416" height="416"></canvas>
     <div id="game-stat">
+        <div class="player0-stats"></div>
         <div class="player1-stats"></div>
         <div class="player2-stats"></div>
         <div class="player3-stats"></div>
-        <div class="player4-stats"></div>
     </div>
     <div class="fb-like" data-href="http://vtk.tom.ru:8124/" data-send="false" data-layout="button_count" data-width="100" data-show-faces="true" data-colorscheme="dark"></div>
 </div>

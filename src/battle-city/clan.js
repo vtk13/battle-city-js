@@ -1,6 +1,7 @@
 
 Clan = function Clan(n, defaultArmoredTimer)
 {
+    this.capacity = 2; // max users
     this.n = n;
     this.defaultArmoredTimer = defaultArmoredTimer;
     this.timer = 0;
@@ -20,38 +21,47 @@ Clan.tankPositions = {
 Clan.prototype.attachUser = function(user)
 {
     if (user.clan) user.clan.detachUser(user);
-    this.users.push(user);
+    for (var positionId = 0; positionId < this.capacity; positionId++) {
+        if (this.users[positionId] === undefined) {
+            this.users[positionId] = user;
+            user.positionId = positionId;
+            break;
+        }
+    }
     user.tank = new Tank();
     user.tank.user = user;
     user.tank.clan = user.clan = this;
-    user.emit('change', {type: 'change', object: user});
+    user.emit('change');
 };
 
 Clan.prototype.detachUser = function(user)
 {
-    if (user.clan) {
+    if (this.users[user.positionId] == user) {
+        delete this.users[user.positionId];
         if (user.tank.field) {
             user.tank.field.remove(user.tank);
         }
         user.tank.clan = null;
         user.tank = null;
-        var i = this.users.indexOf(user);
-        if (i >= 0) {
-            this.users.splice(i, 1);
-        }
         user.clan = null;
-        user.emit('change', {type: 'change', object: user});
+        user.emit('change');
     }
 };
 
 Clan.prototype.size = function()
 {
-    return this.users.length;
+    var res = 0;
+    for (var i = 0; i < this.capacity; i++) {
+        if (this.users[i]) {
+            res++;
+        }
+    }
+    return res;
 };
 
 Clan.prototype.isFull = function()
 {
-    return this.users.length == 2;
+    return this.size() == this.capacity;
 };
 
 Clan.prototype.step = function()
@@ -99,18 +109,13 @@ Clan.prototype.pauseTanks = function()
 BotsClan = function BotsClan(n)
 {
     Clan.apply(this, arguments);
+    this.capacity = 6;
     this.base = null;
     this.tankPositions = Clan.tankPositions['bots'];
 };
 
 BotsClan.prototype = new Clan();
 BotsClan.prototype.constructor = BotsClan;
-
-
-BotsClan.prototype.isFull = function()
-{
-    return this.users.length == 6;
-};
 
 BotsClan.prototype.step = function()
 {
@@ -176,7 +181,7 @@ BotsClan.prototype.startGame = function(game)
                 break;
         }
         bot.clan = this;
-        bot.id = Field.autoIncrement++; // todo hack, to bots in stack have id on client (see TItemList.prototype.add)
+        bot.id = Field.autoIncrement++; // todo hack, to bots in stack have id on client
         this.botStack.add(bot);
     }
 };

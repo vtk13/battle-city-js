@@ -95,11 +95,11 @@ server.listen(8124);
 
 var io = require('socket.io');
 var config = {
-        'browser client minification': true,
-        'browser client etag': true,
-        'browser client gzip': true,
-        'transports': ['websocket'],
-        'log level': 1
+    'browser client minification': true,
+    'browser client etag': true,
+    'browser client gzip': true,
+    'transports': ['websocket'],
+    'log level': 1
 };
 
 io.listen(server, config).sockets.on('connection', function(socket) {
@@ -132,45 +132,39 @@ io.listen(server, config).sockets.on('connection', function(socket) {
             }
         }
     });
-    socket.on('message', function(event) {
-        switch (event.type) {
-            case 'join':
-                try {
-                    registry.premades.join(event, user);
-                    user.sendToClient({
-                        type: 'joined',
-                        premade: user.premade.serialize()
-                    });
-                    console.log(new Date().toLocaleTimeString() + ': user ' + user.nick
-                            + ' join premade ' + user.premade.name + ' (' + event.gameType + ')');
-                } catch (ex) {
-                    user.sendToClient({
-                        type: 'user-message',
-                        message: ex.message
-                    });
-                }
-                break;
-            case 'unjoin':
-                if (user.premade) {
-                    console.log(new Date().toLocaleTimeString() + ': user ' + user.nick + ' unjoin premade ' + user.premade.name);
-                    user.premade.unjoin(user);
-                    user.sendToClient({
-                        type: 'unjoined'
-                    });
-                }
-                break;
-            case 'start':
-                if (user.premade && !user.premade.game) {
-                    user.premade.level = event.level || 1;
-                    user.premade.emit('change', {type: 'change', object: user.premade});
-                    user.premade.startGame();
-                    console.log(new Date().toLocaleTimeString() + ': user ' + user.nick + ' starts game ' + user.premade.name + ', level ' + user.premade.level);
-                }
-                break;
-            case 'control':
-                user.control(event);
-                break;
+    socket.on('join', function(event){
+        try {
+            registry.premades.join(event, user);
+            socket.emit('joined', {
+                // user not likely synced this premade yet
+                premade: user.premade.serialize()
+            });
+            console.log(new Date().toLocaleTimeString() + ': user ' + user.nick
+                    + ' join premade ' + user.premade.name + ' (' + event.gameType + ')');
+        } catch (ex) {
+            console.log(ex.message);
+            socket.emit('user-message', {
+                message: ex.message
+            });
         }
+    });
+    socket.on('unjoin', function(){
+        if (user.premade) {
+            console.log(new Date().toLocaleTimeString() + ': user ' + user.nick + ' unjoin premade ' + user.premade.name);
+            user.premade.unjoin(user);
+            socket.emit('unjoined');
+        }
+    });
+    socket.on('start', function(event){
+        if (user.premade && !user.premade.game) {
+            user.premade.level = event.level || 1;
+            user.premade.emit('change');
+            user.premade.startGame();
+            console.log(new Date().toLocaleTimeString() + ': user ' + user.nick + ' starts game ' + user.premade.name + ', level ' + user.premade.level);
+        }
+    });
+    socket.on('control', function(event) {
+        user.control(event);
     });
     socket.on('say', function(event) {
         var message = event.text;
