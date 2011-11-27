@@ -58,9 +58,13 @@ function BcUi(bcClient)
 
 BcUi.prototype.onLogged = function()
 {
-    $('#login').hide();
+    $('body').css('overflow', 'hidden');
     $('#public').show();
     $('#create').show();
+    $('body').animate({scrollTop: $('body').height()}, function(){
+        $('#login').hide();
+        $('body').css('overflow', 'auto');
+    });
 };
 
 BcUi.prototype.onCurrentPremadeChange = function(premade)
@@ -75,19 +79,29 @@ BcUi.prototype.onCurrentPremadeChange = function(premade)
 
 BcUi.prototype.onJoined = function()
 {
-    $('#public').hide();
-    $('#create').hide();
+    $('body').css('overflow', 'hidden');
     $('#premade').show();
     $('#game').show();
+    $('body').animate({scrollTop: $('body').height()}, function(){
+        $('#public').hide();
+        $('#create').hide();
+        $('body').css('overflow', 'auto');
+    });
 };
 
 BcUi.prototype.onUnjoined = function()
 {
+    $('body').css('overflow', 'hidden');
     clearInterval(this.fieldView.animateIntervalId);
-    $('#premade').hide();
-    $('#game').hide();
     $('#public').show();
     $('#create').show();
+    $('body').scrollTop($('body').height());
+
+    $('body').animate({scrollTop: 0}, function(){
+        $('#premade').hide();
+        $('#game').hide();
+        $('body').css('overflow', 'auto');
+    });
 };
 
 BcUi.prototype.onUserMessage = function(data)

@@ -8,7 +8,6 @@ html, body {
 }
 #public, #premade, #gameChat, #game, #create {
     position: relative;
-    overflow: hidden;
     height: 100%;
 }
 
@@ -83,8 +82,6 @@ a {
     width: 20%;
     overflow: auto;
     background: #222;
-    padding-bottom: 32000px;
-    margin-bottom: -32000px;
 }
 .user:hover {
     background: #444;
@@ -94,8 +91,6 @@ a {
 .premades, .game-controls {
     float: left;
     width: 20%;
-    padding-bottom: 32000px;
-    margin-bottom: -32000px;
     margin-left: 60%;
     background: #222;
 }
