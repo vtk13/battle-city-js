@@ -3,10 +3,13 @@
     margin: 0;
 }
 
-html, body, #public, #premade, #gameChat, #game, #create {
-    position: relative;
+html, body {
     height: 100%;
+}
+#public, #premade, #gameChat, #game, #create {
+    position: relative;
     overflow: hidden;
+    height: 100%;
 }
 
 body {
@@ -38,9 +41,14 @@ a {
     padding-left: 120px;
 }
 
-#public, #create, #premade, #game {
+#public, #premade, #game {
     float: left;
     width: 50%;
+}
+#create {
+    float: left;
+    width: 48%;
+    padding: 0 0 0 2%;
 }
 #public h1, #create h1 {
     background: #444;
@@ -106,22 +114,23 @@ a {
     float: left;
     width: 60%;
     margin-left: -80%;
-    height: 100%;
     background: #333;
 }
 .chat .chat-log {
     overflow: auto;
 }
-.chat .message-form {
+.message-form {
     position: absolute;
     bottom: 0;
+    left: 20%;
+    width: 60%;
     height: 30px;
     line-height: 30px;
 }
-.chat .message-form input[type="text"] {
+.message-form input[type="text"] {
     width: 250px;
 }
-.chat .message-form input[type="submit"] {
+.message-form input[type="submit"] {
     width: 70px;
 }
 #bot-stack {
