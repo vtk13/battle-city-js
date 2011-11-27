@@ -47,15 +47,11 @@ function BcUi(bcClient)
     });
     bcClient.socket.on('joined', this.onJoined.bind(this));
     bcClient.socket.on('started', function(){
-        $('#premade').hide();
-        $('#game').show();
         clearInterval(self.fieldView.animateIntervalId);
         self.fieldView.animateIntervalId =
             setInterval(self.fieldView.animateStep.bind(self.fieldView), 50);
     });
     bcClient.socket.on('gameover', function() {
-        $('#game').hide();
-        $('#premade').show();
         clearInterval(self.fieldView.animateIntervalId);
     });
 };
@@ -64,6 +60,7 @@ BcUi.prototype.onLogged = function()
 {
     $('#login').hide();
     $('#public').show();
+    $('#create').show();
 };
 
 BcUi.prototype.onCurrentPremadeChange = function(premade)
@@ -81,13 +78,16 @@ BcUi.prototype.onJoined = function()
     $('#public').hide();
     $('#create').hide();
     $('#premade').show();
+    $('#game').show();
 };
 
 BcUi.prototype.onUnjoined = function()
 {
     clearInterval(this.fieldView.animateIntervalId);
     $('#premade').hide();
+    $('#game').hide();
     $('#public').show();
+    $('#create').show();
 };
 
 BcUi.prototype.onUserMessage = function(data)
@@ -154,17 +154,6 @@ BcUi.prototype.initHandlers = function()
         startMove   : bcClient.startMove.bind(bcClient),
         stopMove    : bcClient.stopMove.bind(bcClient),
         fire        : bcClient.fire.bind(bcClient)
-    });
-
-    $('a#create-game').click(function(){
-        $('#public').hide();
-        $('#create').show();
-        return false;
-    });
-    $('a#create-to-public').click(function(){
-        $('#create').hide();
-        $('#public').show();
-        return false;
     });
     $('.game-modes li').click(function(){
         $('#create-form input[name=type]').val(this.id);

@@ -4,17 +4,15 @@
 }
 
 html, body, #public, #premade, #gameChat, #game, #create {
+    position: relative;
     height: 100%;
-}
-
-html {
-    background: #000;
+    overflow: hidden;
 }
 
 body {
     margin: 0 auto;
     background: #222;
-    width: 550px;
+    min-width: 980px;
     color: #fff;
     position: relative;
 }
@@ -40,9 +38,15 @@ a {
     padding-left: 120px;
 }
 
-#game {
-    position: relative;
+#public, #create, #premade, #game {
+    float: left;
+    width: 50%;
 }
+#public h1, #create h1 {
+    background: #444;
+    text-align: center;
+}
+
 #field {
     border: solid 1px gray;
     margin-top: 50px;
@@ -68,10 +72,11 @@ a {
 
 .user-list {
     float: left;
-    width: 100px;
-    height: 100%;
-    border-right: solid 1px #ccc;
+    width: 20%;
     overflow: auto;
+    background: #222;
+    padding-bottom: 32000px;
+    margin-bottom: -32000px;
 }
 .user:hover {
     background: #444;
@@ -80,10 +85,11 @@ a {
 
 .premades, .game-controls {
     float: left;
-    width: 100px;
-    height: 100%;
-    margin-left: 348px;
-    border-left: solid 1px #ccc;
+    width: 20%;
+    padding-bottom: 32000px;
+    margin-bottom: -32000px;
+    margin-left: 60%;
+    background: #222;
 }
 .game-controls select {
     width: 60px;
@@ -98,20 +104,17 @@ a {
 
 .chat {
     float: left;
-    width: 347px;
-    margin-left: -448px;
+    width: 60%;
+    margin-left: -80%;
     height: 100%;
     background: #333;
 }
 .chat .chat-log {
-    height: 100%;
-    margin-bottom: -30px;
     overflow: auto;
 }
-.chat .chat-log .messages {
-    padding-bottom: 30px;
-}
 .chat .message-form {
+    position: absolute;
+    bottom: 0;
     height: 30px;
     line-height: 30px;
 }
@@ -128,10 +131,6 @@ a {
 
 .current {
     font-weight: bold;
-}
-
-#create {
-    padding: 10px;
 }
 #create-form {
     margin: 10px 0 30px;

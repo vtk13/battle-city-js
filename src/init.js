@@ -14,4 +14,11 @@ $(function() {
     bcClient = new BcClient(location.href);
     bcUi = new BcUi(bcClient);
     bcClient.connect();
+
+    $(window).resize();
+});
+
+$(window).resize(function(){
+    $('.chat-log').height($(this).height() - 70);
+    ;
 });
