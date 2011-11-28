@@ -79,6 +79,14 @@ function UiPremadeList(list, container, itemClass)
 UiPremadeList.prototype = new UiList();
 UiPremadeList.prototype.constructor = UiPremadeList;
 
+
+UiPremadeList.prototype.onAdd = function(premade)
+{
+    if (premade.type != 'createbot') {
+        this.container.append(this.itemDomElement(premade));
+    }
+};
+
 UiPremadeList.prototype.itemDomElement = function(premade)
 {
     var res = $('<div class="' + this.itemClass + ' ' +

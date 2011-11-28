@@ -3,6 +3,7 @@
 function BcUi(bcClient)
 {
     this.bcClient = bcClient;
+    this.codeMirror = null;
     this.initHandlers();
     this.users = new UiUserList(
             bcClient.users,
@@ -77,10 +78,27 @@ BcUi.prototype.onCurrentPremadeChange = function(premade)
     levelSelect.val(premade.level);
 };
 
-BcUi.prototype.onJoined = function()
+BcUi.prototype.onJoined = function(event)
 {
     $('body').css('overflow', 'hidden');
-    $('#premade').show();
+    if (this.bcClient.currentPremade.type == 'createbot') {
+        $('#bot-editor').show();
+        if (this.codeMirror === null) {
+            this.codeMirror = CodeMirror(document.getElementById('editor'), {
+                value: "/**\n\
+ * API:\n\
+ * tank.startMove('up'|'down'|'left'|'right');\n\
+ * tank.stopMove();\n\
+ * tank.fire();\n\
+ * \n\
+ * field.intersect(x, y, halfWidth, halfHeight);\n\
+ */\n",
+                mode:  "javascript"
+            });
+        }
+    } else {
+        $('#premade').show();
+    }
     $('#game').show();
     $('body').animate({scrollTop: $('body').height()}, function(){
         $('#public').hide();
@@ -98,6 +116,7 @@ BcUi.prototype.onUnjoined = function()
     $('body').scrollTop($('body').height());
 
     $('body').animate({scrollTop: 0}, function(){
+        $('#bot-editor').hide();
         $('#premade').hide();
         $('#game').hide();
         $('body').css('overflow', 'auto');
@@ -142,6 +161,12 @@ BcUi.prototype.initHandlers = function()
         }
         return false;
     });
+    $('#create-bot').click(function(){
+        var name = 'createbot-' + bcClient.userId;
+        var gameType = 'createbot';
+        bcClient.join(name, gameType);
+        return false;
+    });
     $('.premade').live('click', function(){
         bcClient.join($('.name', this).text());
         return false;
@@ -162,7 +187,13 @@ BcUi.prototype.initHandlers = function()
         bcClient.unjoin();
     });
     $('input.start-game').click(function(){
+        if (bcClient.currentPremade.type == 'createbot') {
+            bcClient.botSource = self.codeMirror.getValue();
+        }
         bcClient.startGame($('#premade select[name=level]').val());
+    });
+    $('input.stop-game').click(function(){
+        bcClient.stopGame();
     });
     new TankController({
         startMove   : bcClient.startMove.bind(bcClient),

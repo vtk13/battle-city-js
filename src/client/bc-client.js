@@ -1,20 +1,19 @@
-
-function isClient()
-{
+function isClient() {
     return true;
 };
 
-function BcClient(href)
-{
+function BcClient(href) {
     this.userId = null;
+    this.botSource = null;
     this.socket = io.connect(href, {
-        'auto connect': false,
-        'reconnect': false // todo learn reconnection abilities
-    });
+        'auto connect' : false,
+        'reconnect' : false
+    // todo learn reconnection abilities
+            });
     this.users = new TList();
     this.premades = new TList();
     this.currentPremade = new Premade(); // do not replace
-    this.premades.on('add'   , this.onPremadeChange.bind(this));
+    this.premades.on('add', this.onPremadeChange.bind(this));
     this.premades.on('change', this.onPremadeChange.bind(this));
     this.premades.on('remove', this.onPremadeChange.bind(this));
 
@@ -26,14 +25,15 @@ function BcClient(href)
     this.socket.on('sync', this.onSync.bind(this));
     this.socket.on('clearCollection', this.onClearCollection.bind(this));
     this.socket.on('logged', this.onLogged.bind(this));
-    this.socket.on('unjoined', this.onUnjoined.bind(this));
     this.socket.on('joined', this.onJoined.bind(this));
+    this.socket.on('unjoined', this.onUnjoined.bind(this));
+    this.socket.on('started', this.onStarted.bind(this));
+    this.socket.on('gameover', this.onGameOver.bind(this));
 
-    this.field = new Field(13*32, 13*32);
+    this.field = new Field(13 * 32, 13 * 32);
 };
 
-BcClient.prototype.onSync = function(data)
-{
+BcClient.prototype.onSync = function(data) {
     if (data['users']) {
         this.users.updateWith(data['users']);
     }
@@ -59,8 +59,7 @@ BcClient.prototype.onSync = function(data)
     }
 };
 
-BcClient.prototype.onClearCollection = function(data)
-{
+BcClient.prototype.onClearCollection = function(data) {
     switch (data) {
     case 'premade.users':
         this.premadeUsers.clear();
@@ -77,94 +76,127 @@ BcClient.prototype.onClearCollection = function(data)
     }
 };
 
-BcClient.prototype.onLogged = function(data)
-{
+BcClient.prototype.onLogged = function(data) {
     this.userId = data.userId;
 };
 
-BcClient.prototype.onJoined = function(data){
+BcClient.prototype.onJoined = function(data) {
     // do not replace this.currentPremade
     this.currentPremade.unserialize(data.premade);
 };
 
-BcClient.prototype.onUnjoined = function()
-{
+BcClient.prototype.onUnjoined = function() {
     // do not replace this.currentPremade
-    this.currentPremade.unserialize([]);
+    this.currentPremade.unserialize( []);
 };
 
-BcClient.prototype.onPremadeChange = function(premade)
-{
+BcClient.prototype.onStarted = function() {
+    if (this.botSource) {
+        var self = this;
+        this.botCodeInterval = setInterval(function() {
+            var tank = {
+                startMove : self.startMove.bind(self),
+                stopMove : self.stopMove.bind(self),
+                fire : self.fire.bind(self)
+            };
+            var field = {
+                intersect: function(x, y, hw, hh)
+                {
+                    var res = [];
+                    var tmp = self.field.intersect.call(self.field, {}, x, y, hw, hh);
+                    for (var i in tmp) {
+                        res.push(tmp[i]);
+                    }
+                    return res;
+                }
+            };
+            eval(self.botSource);
+        }, 1000);
+    }
+};
+
+BcClient.prototype.onGameOver = function() {
+    if (this.botSource) {
+        clearInterval(this.botCodeInterval);
+        this.botSource = null;
+    }
+};
+
+BcClient.prototype.onPremadeChange = function(premade) {
     if (this.currentPremade.id == premade.id) {
         this.currentPremade.unserialize(premade.serialize());
         this.currentPremade.emit('change');
     }
 };
 
-//===== actions ================================================================
+// ===== actions
+// ================================================================
 
-BcClient.prototype.connect = function()
-{
+BcClient.prototype.connect = function() {
     this.socket.socket.connect();
 };
 
-BcClient.prototype.login = function(nick)
-{
+BcClient.prototype.login = function(nick) {
     this.socket.emit('login', {
-        nick: nick
+        nick : nick
     });
 };
 
-BcClient.prototype.say = function(text)
-{
+BcClient.prototype.say = function(text) {
     this.socket.emit('say', {
-        text: text
+        text : text
     });
 };
 
-BcClient.prototype.join = function(name, gameType)
-{
+BcClient.prototype.join = function(name, gameType) {
     this.socket.emit('join', {
-        name: name,
-        gameType: gameType
+        name : name,
+        gameType : gameType
     });
 };
 
-BcClient.prototype.unjoin = function()
-{
+BcClient.prototype.unjoin = function() {
     this.socket.emit('unjoin');
 };
 
-BcClient.prototype.startGame = function(level)
-{
+BcClient.prototype.startGame = function(level) {
     this.socket.emit('start', {
-        level: level
+        level : level
     });
 };
 
-BcClient.prototype.startMove = function(direction)
-{
-    this.socket.emit('control', {move: direction});
+BcClient.prototype.stopGame = function() {
+    if (this.currentPremade.type == 'createbot') {
+        this.socket.emit('stop-game');
+    }
 };
 
-BcClient.prototype.stopMove = function()
-{
-    this.socket.emit('control', {stop: 1});
+BcClient.prototype.startMove = function(direction) {
+    this.socket.emit('control', {
+        move : direction
+    });
 };
 
-BcClient.prototype.fire = function()
-{
-    this.socket.emit('control', {fire: 1});
+BcClient.prototype.stopMove = function() {
+    this.socket.emit('control', {
+        stop : 1
+    });
 };
 
-//===== events =================================================================
+BcClient.prototype.fire = function() {
+    this.socket.emit('control', {
+        fire : 1
+    });
+};
 
-BcClient.prototype.onConnect = function(handler)
-{
+// ===== events
+// =================================================================
+
+// todo named similar to handlers onLogged, onJoined, etc
+BcClient.prototype.onConnect = function(handler) {
     this.socket.on('connect', handler);
 };
 
-BcClient.prototype.onConnectFail = function(handler)
-{
+BcClient.prototype.onConnectFail = function(handler) {
     this.socket.on('connect_failed', handler).on('error', handler);
 };

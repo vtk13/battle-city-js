@@ -142,7 +142,7 @@ io.listen(server, config).sockets.on('connection', function(socket) {
             console.log(new Date().toLocaleTimeString() + ': user ' + user.nick
                     + ' join premade ' + user.premade.name + ' (' + event.gameType + ')');
         } catch (ex) {
-            console.log(ex.message);
+            console.log(ex.message, ex.stack);
             socket.emit('user-message', {
                 message: ex.message
             });
@@ -161,6 +161,11 @@ io.listen(server, config).sockets.on('connection', function(socket) {
             user.premade.emit('change');
             user.premade.startGame();
             console.log(new Date().toLocaleTimeString() + ': user ' + user.nick + ' starts game ' + user.premade.name + ', level ' + user.premade.level);
+        }
+    });
+    socket.on('stop-game', function(){
+        if (user.premade) {
+            user.premade.gameOver();
         }
     });
     socket.on('control', function(event) {

@@ -35,6 +35,11 @@
     <script type="text/javascript" src="/src/client/bc-client.js"></script>
     <script type="text/javascript" src="/src/client/bc-ui.js"></script>
     <script type="text/javascript" src="/src/init.js"></script>
+
+    <script src="lib/code-mirror/codemirror.js"></script>
+    <link  href="lib/code-mirror/codemirror.css" rel="stylesheet">
+    <script src="lib/code-mirror/javascript.js"></script>
+    <link  href="lib/code-mirror/default.css" rel="stylesheet">
 </head>
 <body>
 <div id="login">
@@ -115,6 +120,7 @@
         <input type="submit" value="Создать">
     </div>
     </form>
+    <div class="create-bot">или<br/><a id="create-bot" href="#">Запрогать бота (pre-alpha) &rarr;</a></div>
 </div>
 
 <div id="premade" style="display: none;">
@@ -137,6 +143,20 @@
         <input type="text" name="message">
         <input type="submit" value="Отправить">
     </form>
+</div>
+
+<div id="bot-editor" style="display: none;">
+    <div id="editor"></div>
+    <div class="game-controls">
+        <input class="start-game" type="button" value="Старт!">
+        <input class="stop-game" type="button" value="Стоп">
+        <input class="exit-game" type="button" value="Выйти">
+        <div class="level">Уровень: <select name="level"></select></div>
+        <div>1: <span class="player0-stats"></span></div>
+        <div>2: <span class="player1-stats"></span></div>
+        <div>3: <span class="player2-stats"></span></div>
+        <div>4: <span class="player3-stats"></span></div>
+    </div>
 </div>
 
 <div id="game" style="display: none;">

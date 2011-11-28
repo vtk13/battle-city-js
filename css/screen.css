@@ -6,7 +6,7 @@
 html, body {
     height: 100%;
 }
-#public, #premade, #gameChat, #game, #create {
+#public, #premade, #gameChat, #game, #create, #bot-editor {
     position: relative;
     height: 100%;
 }
@@ -40,7 +40,7 @@ a {
     padding-left: 120px;
 }
 
-#public, #premade, #game {
+#public, #premade, #game, #bot-editor {
     float: left;
     width: 50%;
 }
@@ -178,4 +178,20 @@ a {
 }
 .locked {
     text-decoration: line-through;
+}
+
+.create-bot {
+    background: #333;
+    padding: 20px;
+}
+
+#bot-editor #editor {
+    height: 100%;
+    width: 80%;
+    background: white;
+    color: black;
+    float: left;
+}
+#bot-editor .game-controls {
+    margin-left: 0;
 }
