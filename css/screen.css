@@ -49,7 +49,7 @@ a {
     width: 48%;
     padding: 0 0 0 2%;
 }
-#public h1, #create h1 {
+#public h1, #create h1, #premade h1 {
     background: #444;
     text-align: center;
 }
