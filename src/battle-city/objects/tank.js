@@ -294,8 +294,7 @@ Tank.prototype.hit = function(bullet)
                 this.field.remove(this);
             }
         }
-        // this.clan.enemiesClan.base means enemies is people, not bots
-        if (bullet && (this.bonus || (this.user && this.clan.enemiesClan.base))) {
+        if (bullet && (this.bonus || (this.user && !this.clan.enemiesClan.isBots()))) {
             this.bonus = false;
             var bonuses = [BonusStar, BonusGrenade, BonusShovel, BonusHelmet, BonusLive, BonusTimer];
             this.field.add(new (bonuses[Math.floor(Math.random()*(bonuses.length-0.0001))])(

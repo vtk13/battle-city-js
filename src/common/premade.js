@@ -128,7 +128,9 @@ Premade.prototype.gameOver = function(winnerClan)
         this.users.traversal(function(user){
             user.unwatchCollection('f');
             user.unwatchCollection('game.botStack');
-            user.clientMessage('gameover');
+            user.clientMessage('gameover', {
+                winnerClan: winnerClan ? winnerClan.n : 0
+            });
             console.log(new Date().toLocaleTimeString() + ': user ' + user.nick +
                     ' has left game ' + user.premade.name);
         }, this);

@@ -41,7 +41,7 @@ Game.prototype.gameOver = function()
 Game.prototype.step = function()
 {
     for (var i in this.stepableItems) {
-        this.stepableItems[i].step();
+        this.stepableItems[i].step(); // bullets only now
     }
     this.premade.clans[0].step();
     this.premade.clans[1].step();

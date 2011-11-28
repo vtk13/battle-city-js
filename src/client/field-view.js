@@ -3,6 +3,7 @@ function FieldView(field)
 {
     this.field = field;
     this.context = document.getElementById('field').getContext('2d');
+    this.context.font ="bold 25px Arial";
     this.step = 1;
     var self = this;
     field.on('remove', function(object){
@@ -50,4 +51,12 @@ FieldView.prototype.draw = function()
     for (this.z = 0 ; this.z <= 2 ; this.z++) { // this.z hack?
         this.field.objects.traversal(this.drawItem, this);
     }
+};
+
+FieldView.prototype.message = function(message)
+{
+    this.context.fillStyle = '#fff';
+    this.context.fillText(message, 100, 200);
+    this.context.strokeStyle = '#000';
+    this.context.strokeText(message, 100, 200);
 };

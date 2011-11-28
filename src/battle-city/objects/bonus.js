@@ -94,7 +94,7 @@ BonusShovel.prototype.constructor = BonusShovel;
 
 BonusShovel.prototype.applyTo = function(tank)
 {
-    if (tank.clan.base) {
+    if (!tank.clan.isBots()) {
         tank.clan.base.armor();
     }
 };

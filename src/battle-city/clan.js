@@ -64,6 +64,15 @@ Clan.prototype.isFull = function()
     return this.size() == this.capacity;
 };
 
+/**
+ * is this clan of classic bot team
+ * @return
+ */
+Clan.prototype.isBots = function()
+{
+    return false;
+};
+
 Clan.prototype.step = function()
 {
     var activeUsers = 0;
@@ -92,13 +101,11 @@ Clan.prototype.startGame = function(game)
         user.tank.resetPosition();
         this.game.field.add(user.tank);
     }
-    if (this.base) {
-        this.base.shootDown = false;
-        this.base.shootDownTimer = Base.shootDownTimer;
-        this.base.x = this.game.field.width /  2;
-        this.base.y = (this.n == 1) ? (this.game.field.height - 16) : 16;
-        this.game.field.add(this.base);
-    }
+    this.base.shootDown = false;
+    this.base.shootDownTimer = Base.shootDownTimer;
+    this.base.x = this.game.field.width /  2;
+    this.base.y = (this.n == 1) ? (this.game.field.height - 16) : 16;
+    this.game.field.add(this.base);
 };
 
 Clan.prototype.pauseTanks = function()
@@ -110,18 +117,22 @@ BotsClan = function BotsClan(n)
 {
     Clan.apply(this, arguments);
     this.capacity = 6;
-    this.base = null;
     this.tankPositions = Clan.tankPositions['bots'];
 };
 
 BotsClan.prototype = new Clan();
 BotsClan.prototype.constructor = BotsClan;
 
+BotsClan.prototype.isBots = function()
+{
+    return true;
+};
 BotsClan.prototype.step = function()
 {
     if (this.users.length == 0 && this.botStack.count() == 0) {
-        this.premade.gameOver(this.enemiesClan);
+        this.base.hit();
     }
+    this.base.step();
 
     if (!this.isFull() && this.botStack.count() > 0 && Math.random() < 0.01) {
         var botX = this.tankPositions[this.currentBotPosition].x;
@@ -184,6 +195,9 @@ BotsClan.prototype.startGame = function(game)
         bot.id = Field.autoIncrement++; // todo hack, to bots in stack have id on client
         this.botStack.add(bot);
     }
+
+    this.base.shootDown = false;
+    this.base.shootDownTimer = Base.shootDownTimer;
 };
 
 BotsClan.prototype.pauseTanks = function()

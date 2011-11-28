@@ -4,13 +4,21 @@ function isClient() {
 
 function BcClient(href) {
     this.userId = null;
+    this.currentClan = null;
     this.botSource = null;
     this.socket = io.connect(href, {
         'auto connect' : false,
-        'reconnect' : false
-    // todo learn reconnection abilities
-            });
+        'reconnect' : false // todo learn reconnection abilities
+    });
+
+    var self = this;
+
     this.users = new TList();
+    this.users.on('change', function(user){
+        if (user.id == self.userId) {
+            self.currentClan = user.clan;
+        }
+    });
     this.premades = new TList();
     this.currentPremade = new Premade(); // do not replace
     this.premades.on('add', this.onPremadeChange.bind(this));

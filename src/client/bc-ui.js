@@ -52,8 +52,13 @@ function BcUi(bcClient)
         self.fieldView.animateIntervalId =
             setInterval(self.fieldView.animateStep.bind(self.fieldView), 50);
     });
-    bcClient.socket.on('gameover', function() {
+    bcClient.socket.on('gameover', function(event) {
         clearInterval(self.fieldView.animateIntervalId);
+        if (event.winnerClan == self.bcClient.currentClan) {
+            self.fieldView.message('Победа!');
+        } else {
+            self.fieldView.message('Вы проиграли');
+        }
     });
 };
 
