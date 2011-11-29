@@ -7,6 +7,25 @@ User = function User()
 
 };
 
+/**
+ * @todo hack for BcClient.onUserChange()
+ * @param data
+ * @return
+ */
+User.prototype.serialize = function()
+{
+    var res = [];
+    res[1] = this.id;
+    res[2] = this.nick;
+    res[3] = this.lives;
+    res[4] = this.points;
+    res[5] = this.clan;
+    res[6] = this.premadeId;
+    res[7] = this.positionId;
+    res[8] = this.tankId;
+    return res;
+};
+
 User.prototype.unserialize = function(data)
 {
     this.id     = data[1];
@@ -16,4 +35,5 @@ User.prototype.unserialize = function(data)
     this.clan   = data[5];
     this.premadeId  = data[6];
     this.positionId = data[7];
+    this.tankId = data[8];
 };

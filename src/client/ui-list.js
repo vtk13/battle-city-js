@@ -43,7 +43,7 @@ UiUserList.prototype.constructor = UiUserList;
 UiUserList.prototype.itemDomElement = function(user)
 {
     return $('<div class="' + this.itemClass + ' ' +
-        (window.bcClient.userId === user.id ? 'current ' : '') +
+        (window.bcClient.user.id === user.id ? 'current ' : '') +
         this.itemClass + user.id + '"></div>').text(user.nick);
 };
 
@@ -65,7 +65,7 @@ UiPremadeUserList.prototype.itemDomElement = function(user)
         text = user.nick + (user.clan == 1 ? ' (внизу)' : ' (вверху)');
     }
     return $('<div class="' + this.itemClass + ' ' +
-        (window.bcClient.userId == user.id ? 'current ' : '') +
+        (window.bcClient.user.id == user.id ? 'current ' : '') +
         this.itemClass + user.id + '"></div>').text(text);
 };
 

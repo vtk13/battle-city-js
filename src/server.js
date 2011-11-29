@@ -121,7 +121,7 @@ io.listen(server, config).sockets.on('connection', function(socket) {
                 registry.users.add(user);
                 user.updateIntervalId = setInterval(user.sendUpdatesToClient.bind(user), 50);
                 socket.emit('logged', {
-                    userId: user.id
+                    user: user.serialize()
                 });
                 user.watchCollection(registry.users, 'users');
                 user.watchCollection(registry.premades, 'premades');
@@ -157,7 +157,6 @@ io.listen(server, config).sockets.on('connection', function(socket) {
     });
     socket.on('start', function(event){
         if (user.premade && !user.premade.game) {
-            console.log(event.level);
             user.premade.level = event.level || 1;
             user.premade.emit('change');
             user.premade.startGame();

@@ -43,6 +43,7 @@ function BcUi(bcClient)
     });
     bcClient.socket.on('disconnect', function() {
         clearInterval(self.fieldView.animateIntervalId);
+        clearInterval(self.bcClient.botCodeInterval);
         $('body').html('<h3 style="text-align: center;">Извините, подключение '
             + 'прервано. Перезагрузите страницу, чтобы начать заново.</h3>');
     });
@@ -54,7 +55,7 @@ function BcUi(bcClient)
     });
     bcClient.socket.on('gameover', function(event) {
         clearInterval(self.fieldView.animateIntervalId);
-        if (event.winnerClan == self.bcClient.currentClan) {
+        if (event.winnerClan == self.bcClient.user.clan) {
             self.fieldView.message('Победа!');
         } else {
             self.fieldView.message('Вы проиграли');
@@ -87,22 +88,33 @@ BcUi.prototype.onJoined = function(event)
 {
     $('body').css('overflow', 'hidden');
     if (this.bcClient.currentPremade.type == 'createbot') {
+        $('#field').addClass('create-bot');
         $('#bot-editor').show();
         if (this.codeMirror === null) {
             this.codeMirror = CodeMirror(document.getElementById('editor'), {
                 value: "/**\n\
+ * Этот код будет вызываться каждые 50мс.\n\
+ * Для хранение данных используйту store.\n\
+ * Сохраняйте код самостоятельно.\n\
+ * \n\
  * API:\n\
+ * tank.getX()\n\
+ * tank.getY()\n\
  * tank.startMove('up'|'down'|'left'|'right');\n\
  * tank.stopMove();\n\
  * tank.fire();\n\
  * \n\
- * field.intersect(x, y, halfWidth, halfHeight);\n\
+ * field.intersect(x, y, halfWidth, halfHeight,\n\
+ *     undefined|Wall|SteelWall|Tank|TankBot|Bullet|...|[]);\n\
+ * \n\
+ * store = {}\n\
  */\n",
                 mode:  "javascript"
             });
         }
     } else {
         $('#premade').show();
+        $('#field').removeClass('create-bot');
     }
     $('#game').show();
     $('body').animate({scrollTop: $('body').height()}, function(){
@@ -167,7 +179,7 @@ BcUi.prototype.initHandlers = function()
         return false;
     });
     $('#create-bot').click(function(){
-        var name = 'createbot-' + bcClient.userId;
+        var name = 'createbot-' + bcClient.user.id;
         var gameType = 'createbot';
         bcClient.join(name, gameType);
         return false;

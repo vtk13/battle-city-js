@@ -29,6 +29,7 @@ ServerUser.prototype.serialize = function()
       , this.clan ? this.clan.n : 0 // 5
       , this.premade ? this.premade.id : 0 // 6
       , this.positionId // 7
+      , this.tank ? this.tank.id : 0 // 8
     ];
 };
 

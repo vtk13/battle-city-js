@@ -3,25 +3,20 @@ function isClient() {
 };
 
 function BcClient(href) {
-    this.userId = null;
-    this.currentClan = null;
+    this.user = new User(); // do not replace
     this.botSource = null;
     this.socket = io.connect(href, {
         'auto connect' : false,
         'reconnect' : false // todo learn reconnection abilities
     });
 
-    var self = this;
-
     this.users = new TList();
-    this.users.on('change', function(user){
-        if (user.id == self.userId) {
-            self.currentClan = user.clan;
-        }
-    });
+    this.users.on('add'   , this.onUserChange.bind(this));
+    this.users.on('change', this.onUserChange.bind(this));
+
     this.premades = new TList();
     this.currentPremade = new Premade(); // do not replace
-    this.premades.on('add', this.onPremadeChange.bind(this));
+    this.premades.on('add'   , this.onPremadeChange.bind(this));
     this.premades.on('change', this.onPremadeChange.bind(this));
     this.premades.on('remove', this.onPremadeChange.bind(this));
 
@@ -39,6 +34,13 @@ function BcClient(href) {
     this.socket.on('gameover', this.onGameOver.bind(this));
 
     this.field = new Field(13 * 32, 13 * 32);
+};
+
+BcClient.prototype.onUserChange = function(user)
+{
+    if (user.id == this.user.id) {
+        this.user.unserialize(user.serialize());
+    }
 };
 
 BcClient.prototype.onSync = function(data) {
@@ -85,7 +87,7 @@ BcClient.prototype.onClearCollection = function(data) {
 };
 
 BcClient.prototype.onLogged = function(data) {
-    this.userId = data.userId;
+    this.user.unserialize(data.user);
 };
 
 BcClient.prototype.onJoined = function(data) {
@@ -95,31 +97,64 @@ BcClient.prototype.onJoined = function(data) {
 
 BcClient.prototype.onUnjoined = function() {
     // do not replace this.currentPremade
-    this.currentPremade.unserialize( []);
+    this.currentPremade.unserialize([]);
+    clearInterval(this.botCodeInterval);
 };
 
 BcClient.prototype.onStarted = function() {
     if (this.botSource) {
         var self = this;
+        var store = {};
         this.botCodeInterval = setInterval(function() {
             var tank = {
-                startMove : self.startMove.bind(self),
-                stopMove : self.stopMove.bind(self),
-                fire : self.fire.bind(self)
+                getX        : function()
+                    {
+                        return self.field.get(self.user.tankId).x;
+                    },
+                getY        : function()
+                    {
+                        return self.field.get(self.user.tankId).y;
+                    },
+                startMove   : self.startMove.bind(self),
+                stopMove    : self.stopMove.bind(self),
+                fire        : self.fire.bind(self)
             };
             var field = {
-                intersect: function(x, y, hw, hh)
+                intersect: function(x, y, hw, hh, types)
                 {
                     var res = [];
-                    var tmp = self.field.intersect.call(self.field, {}, x, y, hw, hh);
-                    for (var i in tmp) {
-                        res.push(tmp[i]);
+                    switch (true) {
+                        case types === undefined:
+                            var tmp = self.field.intersect.call(self.field, {}, x, y, hw, hh);
+                            for (var i in tmp) {
+                                res.push(tmp[i]);
+                            }
+                        break;
+                        case Array.isArray(types):
+                            var tmp = self.field.intersect.call(self.field, {}, x, y, hw, hh);
+                            for (var i in tmp) {
+                                for (var t in types) {
+                                    if (tmp[i] instanceof types[t]) {
+                                        res.push(tmp[i]);
+                                        break;
+                                    }
+                                }
+                            }
+                        break;
+                        case types instanceof Function:
+                            var tmp = self.field.intersect.call(self.field, {}, x, y, hw, hh);
+                            for (var i in tmp) {
+                                if (tmp[i] instanceof types) {
+                                    res.push(tmp[i]);
+                                }
+                            }
+                        break;
                     }
                     return res;
                 }
             };
             eval(self.botSource);
-        }, 1000);
+        }, 50);
     }
 };
 

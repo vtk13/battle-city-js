@@ -58,6 +58,9 @@ a {
     border: solid 1px gray;
     margin-top: 50px;
 }
+#field.create-bot {
+    margin-top: 0;
+}
 #game .player0-stats {
     float: left;
     padding-left: 10px;
@@ -191,6 +194,12 @@ a {
     background: white;
     color: black;
     float: left;
+}
+#editor .CodeMirror {
+    height: 100%;
+}
+#editor .CodeMirror-scroll {
+    height: 100%;
 }
 #bot-editor .game-controls {
     margin-left: 0;

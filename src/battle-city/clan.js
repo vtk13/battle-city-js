@@ -100,6 +100,7 @@ Clan.prototype.startGame = function(game)
         user.tank.initialPosition.y = user.tank.y = 32*this.tankPositions[i].y + user.tank.hh;
         user.tank.resetPosition();
         this.game.field.add(user.tank);
+        user.emit('change'); // user.tankId
     }
     this.base.shootDown = false;
     this.base.shootDownTimer = Base.shootDownTimer;

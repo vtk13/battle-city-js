@@ -51,6 +51,11 @@ Field.prototype.move = function(item, newX, newY)
     return this.objects.move(item, newX, newY);
 };
 
+Field.prototype.get = function(id)
+{
+    return this.objects.get(id);
+};
+
 /**
  *
  * @param object AbstractGameObject
