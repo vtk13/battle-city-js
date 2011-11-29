@@ -77,7 +77,7 @@ BcUi.prototype.onCurrentPremadeChange = function(premade)
 {
     var levelSelect = $('.level select');
     levelSelect.empty();
-    for (var i = 1; i <= (premade.type == 'classic' ? 35 : 1); i++) {
+    for (var i = 1; i <= (premade.type != 'teamvsteam' ? 35 : 1); i++) {
         levelSelect.append($('<option value="' + i + '">' + i + '</option>'));
     }
     levelSelect.val(premade.level);
@@ -191,11 +191,12 @@ BcUi.prototype.initHandlers = function()
     $('input.exit-game').click(function(){
         bcClient.unjoin();
     });
-    $('input.start-game').click(function(){
-        if (bcClient.currentPremade.type == 'createbot') {
-            bcClient.botSource = self.codeMirror.getValue();
-        }
+    $('#premade input.start-game').click(function(){
         bcClient.startGame($('#premade select[name=level]').val());
+    });
+    $('#bot-editor input.start-game').click(function(){
+        bcClient.botSource = self.codeMirror.getValue();
+        bcClient.startGame($('#bot-editor select[name=level]').val());
     });
     $('input.stop-game').click(function(){
         bcClient.stopGame();

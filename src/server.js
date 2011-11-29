@@ -157,6 +157,7 @@ io.listen(server, config).sockets.on('connection', function(socket) {
     });
     socket.on('start', function(event){
         if (user.premade && !user.premade.game) {
+            console.log(event.level);
             user.premade.level = event.level || 1;
             user.premade.emit('change');
             user.premade.startGame();
@@ -169,7 +170,9 @@ io.listen(server, config).sockets.on('connection', function(socket) {
         }
     });
     socket.on('control', function(event) {
-        user.control(event);
+        if (user) {
+            user.control(event);
+        }
     });
     socket.on('say', function(event) {
         var message = event.text;
