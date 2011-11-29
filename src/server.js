@@ -157,6 +157,15 @@ io.listen(server, config).sockets.on('connection', function(socket) {
     });
     socket.on('start', function(event){
         if (user.premade && !user.premade.game) {
+            if (event.botSource) {
+                var userFolder = path.join(process.cwd(), 'bots/'+user.id);
+                try {
+                    fs.mkdirSync(userFolder, 0777);
+                } catch (ex) {/*ignore EEXIST*/}
+                var tries = fs.readdirSync(userFolder);
+                var botSourceFile = path.join(userFolder, 'try'+tries.length);
+                fs.writeFileSync(botSourceFile, event.botSource);
+            }
             user.premade.level = event.level || 1;
             user.premade.emit('change');
             user.premade.startGame();

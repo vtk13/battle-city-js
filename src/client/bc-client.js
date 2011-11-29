@@ -203,8 +203,10 @@ BcClient.prototype.unjoin = function() {
 };
 
 BcClient.prototype.startGame = function(level) {
+    var self = this;
     this.socket.emit('start', {
-        level : level
+        botSource: self.botSource,
+        level: level
     });
 };
 
