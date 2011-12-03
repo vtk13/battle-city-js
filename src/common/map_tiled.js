@@ -19,6 +19,7 @@ MapTiled = function MapTiled(width, height)
     }
 };
 
+// todo convert to bytes for right shift ">>"
 MapTiled.prototype.tileSize = 16;
 
 MapTiled.prototype.add = function(item)
@@ -93,8 +94,8 @@ MapTiled.prototype.move = function(item, newX, newY)
 /**
  *
  * @param item not always needed, but should be object
- * @param x int|null
- * @param y int|null
+ * @param ix int|null
+ * @param iy int|null
  * @param hw int|null
  * @param hh int|null
  * @return
