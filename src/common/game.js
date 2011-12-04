@@ -1,5 +1,5 @@
 
-Game = function Game(level, premade)
+Game = function Game(map, premade)
 {
     this.premade = premade;
     this.stepableItems = [];
@@ -9,9 +9,7 @@ Game = function Game(level, premade)
     this.field.on('add', this.onAddObject.bind(this));
     this.field.on('remove', this.onRemoveObject.bind(this));
 
-    var level = require(level);
-    this.enemies = level.enemies;
-    this.field.terrain(level.map);
+    this.field.terrain(map);
 };
 
 Game.prototype.onAddObject = function(object) {

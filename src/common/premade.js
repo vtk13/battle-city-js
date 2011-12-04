@@ -10,8 +10,10 @@ Premade = function Premade(name, type)
         this.users = new TList(); // todo move to clan?
         switch (this.type) {
             case 'classic':
-            case 'createbot':
                 this.clans = [new Clan(1, 10*30/*~30step per seconds*/), new BotsClan(2, 10*30/*~30step per seconds*/)];
+                break;
+            case 'createbot':
+                this.clans = [new Clan(1, 10*30/*~30step per seconds*/), new LearnerClan(2, 10*30/*~30step per seconds*/)];
                 break;
             case 'teamvsteam':
                 this.clans = [new Clan(1, 2*30/*~30step per seconds*/), new Clan(2, 2*30/*~30step per seconds*/)];
@@ -90,10 +92,10 @@ Premade.prototype.unjoin = function(user)
 Premade.prototype.startGame = function()
 {
     this.locked = true;
-    var folder = (this.type == 'createbot' ? 'classic' : this.type);
-    this.game = new Game('../battle-city/maps/' + folder + '/level' + this.level, this);
-    this.clans[0].startGame(this.game);
-    this.clans[1].startGame(this.game);
+    var level = require('../battle-city/maps/' + this.type + '/level' + this.level);
+    this.game = new Game(level.map, this);
+    this.clans[0].startGame(this.game, level);
+    this.clans[1].startGame(this.game, level);
     this.users.traversal(function(user){
         user.watchCollection(this.game.field, 'f');
         if (user.clan.enemiesClan.botStack) {

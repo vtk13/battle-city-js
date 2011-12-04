@@ -29,7 +29,8 @@ serializeTypeMatches = {
     'Base'              : 19,
     'ServerUser'        : 20,
     'Premade'           : 21,
-    'Message'           : 22
+    'Message'           : 22,
+    'Checkpoint'        : 23
 };
 
 unserializeTypeMatches = {
@@ -54,5 +55,6 @@ unserializeTypeMatches = {
     19: 'Base',
     20: 'User',
     21: 'Premade',
-    22: 'Message'
+    22: 'Message',
+    23: 'Checkpoint'
 };

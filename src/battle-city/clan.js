@@ -158,7 +158,7 @@ BotsClan.prototype.step = function()
     this.timer > 0 && this.timer--;
 };
 
-BotsClan.prototype.startGame = function(game)
+BotsClan.prototype.startGame = function(game, level)
 {
     this.game = game;
     var bots = this.users = [];
@@ -174,11 +174,11 @@ BotsClan.prototype.startGame = function(game)
     this.botStack = new TList();
 
     // todo move from this function
-    for (var i in this.game.enemies) {
-        var bonus = ['4','11','18'].indexOf(i) >= 0;
+    for (var i = level.enemies.length - 1; i >= 0; i-- ) {
+        var bonus = [3,10,17].indexOf(i) >= 0;
         var bot;
 //        var bonus = true;
-        switch (this.game.enemies[i]) {
+        switch (level.enemies[i]) {
             case 1:
                 bot = new TankBot(0, 0, bonus);
                 break;
@@ -204,4 +204,46 @@ BotsClan.prototype.startGame = function(game)
 BotsClan.prototype.pauseTanks = function()
 {
     this.timer = 10 * 1000/30; // 30ms step
+};
+
+
+LearnerClan = function LearnerClan(n)
+{
+    Clan.apply(this, arguments);
+};
+
+LearnerClan.prototype = new Clan();
+LearnerClan.prototype.constructor = LearnerClan;
+
+LearnerClan.prototype.startGame = function(game, level)
+{
+    this.game = game;
+
+    this.base.shootDown = false;
+    this.base.shootDownTimer = Base.shootDownTimer;
+    this.base.x = this.game.field.width /  2;
+    this.base.y = (this.n == 1) ? (this.game.field.height - 16) : 16;
+    
+    if (level.checkpoint) {
+        this.checkpoint = new Checkpoint(level.checkpoint.x, level.checkpoint.y);
+    }
+    this.game.field.add(this.checkpoint);
+//    this.game.field.add(this.base);
+};
+
+LearnerClan.prototype.step = function()
+{
+    if (this.checkpoint) {
+        var res = this.game.field.intersect(this.checkpoint);
+        for (var i in res) {
+            if (res[i].clan == this.enemiesClan && res[i] instanceof Tank) {
+                var self = this;
+                // todo move all endgame timeouts to premade
+                setTimeout(function(){
+                    self.premade.gameOver(self.enemiesClan);
+                }, 1000);
+            }
+        }
+    }
+    this.base.step();
 };

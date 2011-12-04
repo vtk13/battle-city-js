@@ -78,7 +78,8 @@ BcUi.prototype.onCurrentPremadeChange = function(premade)
 {
     var levelSelect = $('.level select');
     levelSelect.empty();
-    for (var i = 1; i <= (premade.type != 'teamvsteam' ? 35 : 1); i++) {
+    // todo get level count from somewhere else
+    for (var i = 1; i <= (premade.type == 'classic' ? 35 : 1); i++) {
         levelSelect.append($('<option value="' + i + '">' + i + '</option>'));
     }
     levelSelect.val(premade.level);
@@ -92,23 +93,7 @@ BcUi.prototype.onJoined = function(event)
         $('#bot-editor').show();
         if (this.codeMirror === null) {
             this.codeMirror = CodeMirror(document.getElementById('editor'), {
-                value: "/**\n\
- * Этот код будет вызываться каждые 50мс.\n\
- * Для хранение данных используйту store.\n\
- * Сохраняйте код самостоятельно.\n\
- * \n\
- * API:\n\
- * tank.getX()\n\
- * tank.getY()\n\
- * tank.startMove('up'|'down'|'left'|'right');\n\
- * tank.stopMove();\n\
- * tank.fire();\n\
- * \n\
- * field.intersect(x, y, halfWidth, halfHeight,\n\
- *     undefined|Wall|SteelWall|Tank|TankBot|Bullet|...|[]);\n\
- * \n\
- * store = {}\n\
- */\n",
+                value: "",
                 mode:  "javascript"
             });
         }
@@ -207,8 +192,10 @@ BcUi.prototype.initHandlers = function()
         bcClient.startGame($('#premade select[name=level]').val());
     });
     $('#bot-editor input.start-game').click(function(){
-        bcClient.botSource = self.codeMirror.getValue();
         bcClient.startGame($('#bot-editor select[name=level]').val());
+    });
+    $('#bot-editor input.execute-code').click(function(){
+        bcClient.executeCode(self.codeMirror.getValue());
     });
     $('input.stop-game').click(function(){
         bcClient.stopGame();

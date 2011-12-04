@@ -36,6 +36,7 @@ require('./battle-city/objects/bonus');
 require('./battle-city/objects/trees');
 require('./battle-city/objects/water');
 require('./battle-city/objects/ice');
+require('./battle-city/objects/checkpoint');
 require('./battle-city/clan');
 
 registry.users = new TList();
@@ -155,17 +156,20 @@ io.listen(server, config).sockets.on('connection', function(socket) {
             socket.emit('unjoined');
         }
     });
+    socket.on('execute', function(event){
+        var userFolder = path.join(process.cwd(), 'bots/'+user.id);
+        try {
+            fs.mkdirSync(userFolder, 0777);
+        } catch (ex) {/*ignore EEXIST*/}
+        var tries = fs.readdirSync(userFolder);
+        var botSourceFile = path.join(userFolder, 'try' + tries.length + '.js');
+        fs.writeFileSync(botSourceFile, event.code);
+        socket.emit('execute', {
+            script: botSourceFile.substr(process.cwd().length)
+        });
+    });
     socket.on('start', function(event){
         if (user.premade && !user.premade.game) {
-            if (event.botSource) {
-                var userFolder = path.join(process.cwd(), 'bots/'+user.id);
-                try {
-                    fs.mkdirSync(userFolder, 0777);
-                } catch (ex) {/*ignore EEXIST*/}
-                var tries = fs.readdirSync(userFolder);
-                var botSourceFile = path.join(userFolder, 'try'+tries.length);
-                fs.writeFileSync(botSourceFile, event.botSource);
-            }
             user.premade.level = event.level || 1;
             user.premade.emit('change');
             user.premade.startGame();
