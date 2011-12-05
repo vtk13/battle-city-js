@@ -1,6 +1,10 @@
 /**
  * drawable
  * coordinates
+ * 
+ * interface:
+ *  fire()
+ *  
  */
 
 Tank = function Tank(x, y)
@@ -13,9 +17,11 @@ Tank = function Tank(x, y)
     this.x = x;
     this.y = y;
     this.z = 1;
+
     this.moveOn = 0;
     this.setSpeedX(0);
     this.setSpeedY(-this.speed);
+
     this.setDirectionImage();
     this.maxBullets = 1;
     this.bulletPower = 1;
@@ -218,44 +224,110 @@ Tank.prototype.animateStep = function(step)
     }
 };
 
-Tank.prototype.startMove = function(direction)
+/**
+ * There are circumstances when turning is impossible.
+ * 
+ * @todo too long function
+ * @param direction
+ * @return
+ */
+Tank.prototype.turn = function(direction)
 {
     if (this.direction != direction) {
-        this.direction = direction;
-        this.moveOn = true;
         // emulate move back tank for 1 pixel
         // doto this may be a bug, if tank just change direction to opposite
         var vx = this.speedX > 0 ? 1 : -1;
         var vy = this.speedY > 0 ? 1 : -1;
-        var newX, newY;
+        // 1, 2 - first try turn with backward adjust, second try turn with forward adjust
+        var newX1, newY1, newX2, newY2, newSpeedX, newSpeedY;
         switch (direction) {
             case 'up':
-                this.setSpeedX(0);
-                this.setSpeedY(-this.speed);
-                newX = this.x + ((this.x % 16 > 8 + vx) ? 16 - this.x % 16 : - this.x % 16);
-                newY = this.y;
+                newSpeedX = 0;
+                newSpeedY = -this.speed;
+                if (this.x % 16 > 8 + vx) {
+                    newX1 = this.x + 16 - this.x % 16;
+                    newX2 = this.x - this.x % 16;
+                } else {
+                    newX1 = this.x - this.x % 16;
+                    newX2 = this.x + 16 - this.x % 16;
+                }
+                newY1 = newY2 = this.y;
                 break;
             case 'right':
-                this.setSpeedX(this.speed);
-                this.setSpeedY(0);
-                newX = this.x;
-                newY = this.y + ((this.y % 16 > 8 + vy) ? 16 - this.y % 16 : - this.y % 16);
+                newSpeedX = this.speed;
+                newSpeedY = 0;
+                newX1 = newX2 = this.x;
+                if (this.y % 16 > 8 + vy) {
+                    newY1 = this.y + 16 - this.y % 16;
+                    newY2 = this.y - this.y % 16;
+                } else {
+                    newY1 = this.y - this.y % 16;
+                    newY2 = this.y + 16 - this.y % 16;
+                }
                 break;
             case 'down':
-                this.setSpeedX(0);
-                this.setSpeedY(this.speed);
-                newX = this.x + ((this.x % 16 > 8 + vx) ? 16 - this.x % 16 : - this.x % 16);
-                newY = this.y;
+                newSpeedX = 0;
+                newSpeedY = this.speed;
+                if (this.x % 16 > 8 + vx) {
+                    newX1 = this.x + 16 - this.x % 16;
+                    newX2 = this.x - this.x % 16;
+                } else {
+                    newX1 = this.x - this.x % 16;
+                    newX2 = this.x + 16 - this.x % 16;
+                }
+                newY1 = newY2 = this.y;
                 break;
             case 'left':
-                this.setSpeedX(-this.speed);
-                this.setSpeedY(0);
-                newX = this.x;
-                newY = this.y + ((this.y % 16 > 8 + vy) ? 16 - this.y % 16 : - this.y % 16);
+                newSpeedX = -this.speed;
+                newSpeedY = 0;
+                newX1 = newX2 = this.x;
+                if (this.y % 16 > 8 + vy) {
+                    newY1 = this.y + 16 - this.y % 16;
+                    newY2 = this.y - this.y % 16;
+                } else {
+                    newY1 = this.y - this.y % 16;
+                    newY2 = this.y + 16 - this.y % 16;
+                }
                 break;
+            default:
+                throw "Unknown direction";
         }
-        this.field.setXY(this, newX, newY);
-        this.emit('change');
+        var firstTry = true;
+        var intersects = this.field.intersect(this, newX1, newY1);
+        for (var i in intersects) {
+            if (intersects[i].z == this.z) {
+                firstTry = false;
+            }
+        }
+        if (firstTry) {
+            // new place is clear, turn:
+            this.field.setXY(this, newX1, newY1);
+            this.setSpeedX(newSpeedX);
+            this.setSpeedY(newSpeedY);
+            this.direction = direction;
+            this.emit('change');
+        } else {
+            var intersects = this.field.intersect(this, newX2, newY2);
+            for (var i in intersects) {
+                if (intersects[i].z == this.z) {
+                    return false;
+                }
+            }
+            // new place is clear, turn:
+            this.field.setXY(this, newX2, newY2);
+            this.setSpeedX(newSpeedX);
+            this.setSpeedY(newSpeedY);
+            this.direction = direction;
+            this.emit('change');
+        }
+    }
+    return true;
+};
+
+Tank.prototype.startMove = function(direction)
+{
+    if (this.turn(direction)) {
+        this.moveOn = true;
     }
 };
 
