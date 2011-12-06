@@ -28,7 +28,17 @@ Premade = function Premade(name, type)
 
 Eventable(Premade.prototype);
 
-Premade.types = ['classic', 'teamvsteam', 'createbot'];
+Premade.types = {
+    'classic': {
+        'levels': 35
+    },
+    'teamvsteam': {
+        'levels': 1
+    },
+    'createbot': {
+        'levels': 2
+    }
+};
 
 Premade.prototype.say = function(message)
 {
@@ -118,9 +128,9 @@ Premade.prototype.gameOver = function(winnerClan)
         if (this.type == 'teamvsteam') {
             this.locked = false;
         }
-        if (this.type == 'classic' && this.clans[0] == winnerClan) {
+        if (this.type != 'teamvsteam' && this.clans[0] == winnerClan) {
             this.level++;
-            if (this.level > 35) {
+            if (this.level > Premade.types[this.type].levels) {
                 this.level = 1;
             }
         }

@@ -81,10 +81,18 @@ BcUi.prototype.onLogged = function()
 
 BcUi.prototype.onCurrentPremadeChange = function(premade)
 {
-    var levelSelect = $('.level select');
+    var levelSelect = $('#premade .level select');
     levelSelect.empty();
     // todo get level count from somewhere else
-    for (var i = 1; i <= (premade.type == 'classic' ? 35 : 1); i++) {
+    for (var i = 1; i <= Premade.types[premade.type].levels; i++) {
+        levelSelect.append($('<option value="' + i + '">' + i + '</option>'));
+    }
+    levelSelect.val(premade.level);
+
+    var levelSelect = $('#bot-editor .level select');
+    levelSelect.empty();
+    // todo get level count from somewhere else
+    for (var i = 1; i <= Premade.types[premade.type].levels; i++) {
         levelSelect.append($('<option value="' + i + '">' + i + '</option>'));
     }
     levelSelect.val(premade.level);
