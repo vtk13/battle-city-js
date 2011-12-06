@@ -34,7 +34,7 @@ TankBot.prototype.step = function(paused)
             for (var i in mp) {
                 percent -= mp[i];
                 if (percent < 0) {
-                    this.startMove(i);
+                    this.turn(i);
                     break;
                 }
             }

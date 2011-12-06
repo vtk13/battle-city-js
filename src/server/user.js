@@ -64,11 +64,15 @@ ServerUser.prototype.sendUpdatesToClient = function()
 
 ServerUser.prototype.control = function(event)
 {
+    // if have tank and tank is on the field
     if (this.tank && this.tank.field) {
-        if (event.move) {
-            this.tank.startMove(event.move);
+        if (event.turn) {
+            this.tank.turn(event.turn);
         }
-        if (event.stop) {
+        if (event.startMove) {
+            this.tank.startMove();
+        }
+        if (event.stopMove) {
             this.tank.stopMove();
         }
         if (event.fire) {

@@ -93,8 +93,10 @@ BcUi.prototype.onJoined = function(event)
         $('#bot-editor').show();
         if (this.codeMirror === null) {
             this.codeMirror = CodeMirror(document.getElementById('editor'), {
-                value: "",
-                mode:  "javascript"
+                value: "move(10);\n" +
+                        "turn('left');\n" +
+                        "move(20);",
+                mode:  "pascal"
             });
         }
     } else {
@@ -201,6 +203,7 @@ BcUi.prototype.initHandlers = function()
         bcClient.stopGame();
     });
     new TankController({
+        turn        : bcClient.turn.bind(bcClient),
         startMove   : bcClient.startMove.bind(bcClient),
         stopMove    : bcClient.stopMove.bind(bcClient),
         fire        : bcClient.fire.bind(bcClient)

@@ -162,7 +162,7 @@ io.listen(server, config).sockets.on('connection', function(socket) {
             fs.mkdirSync(userFolder, 0777);
         } catch (ex) {/*ignore EEXIST*/}
         var tries = fs.readdirSync(userFolder);
-        var botSourceFile = path.join(userFolder, 'try' + tries.length + '.js');
+        var botSourceFile = path.join(userFolder, 'try' + tries.length + '.pas');
         fs.writeFileSync(botSourceFile, event.code);
         socket.emit('execute', {
             script: botSourceFile.substr(process.cwd().length)

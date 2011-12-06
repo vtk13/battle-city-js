@@ -6,7 +6,6 @@ function isClient()
 function BcClient(href)
 {
     this.user = new User(); // do not replace
-    this.worker = null;
     this.socket = io.connect(href, {
         'auto connect' : false,
         'reconnect' : false // todo learn reconnection abilities
@@ -117,11 +116,7 @@ BcClient.prototype.onStarted = function()
 
 BcClient.prototype.onGameOver = function()
 {
-	this.gameRun = false;
-    if (this.worker) {
-        this.worker.terminate();
-        this.worker = null;
-    }
+    this.gameRun = false;
 };
 
 BcClient.prototype.onPremadeChange = function(premade)
@@ -132,16 +127,14 @@ BcClient.prototype.onPremadeChange = function(premade)
     }
 };
 
+/**
+ * @todo implement
+ * @param data
+ * @return
+ */
 BcClient.prototype.onExecute = function(data)
 {
-    if (this.worker) {
-        this.worker.terminate();
-    }
-    this.worker = new Worker(data.script);
-    this.worker.addEventListener('message', function(event) {
-        var data = event.data;
-        console.log(data);
-    });
+//    data.script
 };
 
 // ===== actions ================================================================
@@ -202,24 +195,36 @@ BcClient.prototype.executeCode = function(code)
     }
 };
 
-BcClient.prototype.startMove = function(direction)
+BcClient.prototype.control = function(commands)
 {
-    this.socket.emit('control', {
-        move : direction
+    this.socket.emit('control', commands);
+};
+
+BcClient.prototype.turn = function(direction)
+{
+    this.control({
+        turn: direction
+    });
+};
+
+BcClient.prototype.startMove = function()
+{
+    this.control({
+        startMove: 1
     });
 };
 
 BcClient.prototype.stopMove = function()
 {
-    this.socket.emit('control', {
-        stop : 1
+    this.control({
+        stopMove: 1
     });
 };
 
 BcClient.prototype.fire = function()
 {
-    this.socket.emit('control', {
-        fire : 1
+    this.control({
+        fire: 1
     });
 };
 

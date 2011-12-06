@@ -1,10 +1,12 @@
 /**
  * drawable
  * coordinates
- * 
+ *
  * interface:
  *  fire()
- *  
+ *  turn(direction)
+ *  startMove()
+ *  stopMove()
  */
 
 Tank = function Tank(x, y)
@@ -18,7 +20,7 @@ Tank = function Tank(x, y)
     this.y = y;
     this.z = 1;
 
-    this.moveOn = 0;
+    this.moveOn = 0; // flag used in Tank.step()
     this.setSpeedX(0);
     this.setSpeedY(-this.speed);
 
@@ -225,11 +227,11 @@ Tank.prototype.animateStep = function(step)
 };
 
 /**
- * There are circumstances when turning is impossible.
- * 
+ * There are circumstances when turning is impossible, so return bool
+ *
  * @todo too long function
  * @param direction
- * @return
+ * @return bool
  */
 Tank.prototype.turn = function(direction)
 {
@@ -324,16 +326,13 @@ Tank.prototype.turn = function(direction)
     return true;
 };
 
-Tank.prototype.startMove = function(direction)
+Tank.prototype.startMove = function()
 {
-    if (this.turn(direction)) {
-        this.moveOn = true;
-    }
+    this.moveOn = true;
 };
 
 Tank.prototype.stopMove = function()
 {
-    this.direction = null;
     this.moveOn = false;
     if (this.onIce) {
         this.glidingTimer = 1000/30; // 30ms step

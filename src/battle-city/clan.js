@@ -233,7 +233,7 @@ LearnerClan.prototype.startGame = function(game, level)
 
 LearnerClan.prototype.step = function()
 {
-    if (this.checkpoint) {
+    if (this.checkpoint && this.game) {
         var res = this.game.field.intersect(this.checkpoint);
         for (var i in res) {
             if (res[i].clan == this.enemiesClan && res[i] instanceof Tank) {
