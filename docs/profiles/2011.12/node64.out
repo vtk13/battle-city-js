@@ -1,0 +1,439 @@
+line 44538: unknown code state: 0x311b31f4
+line 44543: unknown code state: 0x311b9571
+Code delete event for unknown code: 0x58d50a80
+Code delete event for unknown code: 0x58d507a0
+Statistical profiling result from v8.log, (281476 ticks, 5 unaccounted, 0 excluded).
+
+ [Unknown]:
+   ticks  total  nonlib   name
+      5    0.0%
+
+ [Shared libraries]:
+   ticks  total  nonlib   name
+  275524   97.9%    0.0%  b7877000-b7878000
+   2698    1.0%    0.0%  /usr/lib/libv8-3.5.10.24.so
+    170    0.1%    0.0%  /lib/libc-2.12.2.so
+     73    0.0%    0.0%  /usr/bin/node
+
+ [JavaScript]:
+   ticks  total  nonlib   name
+     54    0.0%    1.8%  LazyCompile: MapTiled.remove src/common/map_tiled.js:54
+     44    0.0%    1.5%  LazyCompile: MapTiled.intersects src/common/map_tiled.js:109
+     34    0.0%    1.1%  LazyCompile: MapTiled.add src/common/map_tiled.js:25
+     31    0.0%    1.0%  Stub: KeyedLoadElementStub {1}
+     28    0.0%    0.9%  LazyCompile: *EventEmitter.emit events.js:40
+     17    0.0%    0.6%  Stub: CEntryStub
+     14    0.0%    0.5%  Builtin: FunctionApply
+     11    0.0%    0.4%  LazyCompile: Field.add src/battle-city/field.js:19
+     11    0.0%    0.4%  Function: Buffer buffer.js:210
+     10    0.0%    0.3%  Stub: NumberToStringStub
+     10    0.0%    0.3%  Stub: BinaryOpStub_DIV_OverwriteLeft_SMI
+     10    0.0%    0.3%  Function: ~Buffer.write buffer.js:323
+      9    0.0%    0.3%  Stub: KeyedLoadElementStub
+      9    0.0%    0.3%  Stub: ArgumentsAccessStub_NewNonStrictFast
+      9    0.0%    0.3%  LazyCompile: TankBot.step src/battle-city/objects/tankbot.js:18
+      9    0.0%    0.3%  LazyCompile: *Socket._write net.js:430
+      9    0.0%    0.3%  LazyCompile: *EventEmitter.addListener events.js:99
+      9    0.0%    0.3%  LazyCompile: *BasicSerializeArray native json.js:181
+      9    0.0%    0.3%  Builtin: JSConstructStubGeneric
+      9    0.0%    0.3%  Builtin: ArgumentsAdaptorTrampoline
+      8    0.0%    0.3%  Stub: StringAddStub
+      8    0.0%    0.3%  LazyCompile: *Tank.serialize src/battle-city/objects/tank.js:172
+      7    0.0%    0.2%  LazyCompile: *onread net.js:309
+      7    0.0%    0.2%  LazyCompile: *exports.active timers.js:127
+      7    0.0%    0.2%  Function: ~config.browser client minification src/server.js:73
+      7    0.0%    0.2%  Builtin: FunctionCall
+      6    0.0%    0.2%  Stub: ToBooleanStub_UndefinedSpecObject
+      6    0.0%    0.2%  Stub: ToBooleanStub_Bool
+      6    0.0%    0.2%  LazyCompile: Tank.step src/battle-city/objects/tank.js:93
+      6    0.0%    0.2%  LazyCompile: *test native regexp.js:223
+      6    0.0%    0.2%  LazyCompile: *ceil native math.js:80
+      6    0.0%    0.2%  LazyCompile: *Field.terrain src/battle-city/field.js:69
+      6    0.0%    0.2%  Function: ~ReadStream._read fs.js:1078
+      6    0.0%    0.2%  Function: ~Buffer.toString buffer.js:390
+      6    0.0%    0.2%  Function: walk /usr/lib/node_modules/socket.io/node_modules/socket.io-client/node_modules/uglify-js/lib/process.js:207
+      6    0.0%    0.2%  CallMegamorphic: args_count: 3
+      5    0.0%    0.2%  Stub: CompareStub_GE
+      5    0.0%    0.2%  Stub: CompareICStub {2}
+      5    0.0%    0.2%  Stub: CompareICStub
+      5    0.0%    0.2%  Stub: CallFunctionStub_Args1
+      5    0.0%    0.2%  LazyCompile: ~Wall.serialize src/battle-city/objects/wall.js:20
+      5    0.0%    0.2%  LazyCompile: ~MapTiled.add src/common/map_tiled.js:25
+      5    0.0%    0.2%  LazyCompile: ServerUser.sendUpdatesToClient src/server/user.js:36
+      5    0.0%    0.2%  LazyCompile: *toLowerCase native string.js:741
+      5    0.0%    0.2%  LazyCompile: *isArrayIsh buffer.js:269
+      5    0.0%    0.2%  LazyCompile: *Wall src/battle-city/objects/wall.js:6
+      5    0.0%    0.2%  Function: ~urlParse url.js:88
+      5    0.0%    0.2%  Function: ~parser.onHeadersComplete http.js:60
+      5    0.0%    0.2%  Function: ~fs.read fs.js:233
+      5    0.0%    0.2%  Function: ~exports.active timers.js:127
+      5    0.0%    0.2%  Builtin: JSConstructCall
+      4    0.0%    0.1%  Stub: ToBooleanStub_SpecObject
+      4    0.0%    0.1%  Stub: StringAddStub {2}
+      4    0.0%    0.1%  Stub: JSEntryStub
+      4    0.0%    0.1%  Stub: InstanceofStub
+      4    0.0%    0.1%  Stub: FastNewClosureStub
+      4    0.0%    0.1%  Stub: FastCloneShallowArrayStub
+      4    0.0%    0.1%  Stub: CompareStub_EQ_STRICT
+      4    0.0%    0.1%  Stub: CompareStub_EQ
+      4    0.0%    0.1%  Stub: CompareICStub {1}
+      4    0.0%    0.1%  LazyCompile: ~stringify native json.js:307
+      4    0.0%    0.1%  LazyCompile: ~join native array.js:399
+      4    0.0%    0.1%  LazyCompile: Clan.step src/battle-city/clan.js:76
+      4    0.0%    0.1%  LazyCompile: COMPARE native runtime.js:119
+      4    0.0%    0.1%  LazyCompile: *Socket.write net.js:393
+      4    0.0%    0.1%  LazyCompile: *ServerUser.onCollectionUpdate src/server/user.js:141
+      4    0.0%    0.1%  LazyCompile: *Field.setXY src/battle-city/field.js:44
+      4    0.0%    0.1%  LazyCompile: *BasicJSONSerialize native json.js:273
+      4    0.0%    0.1%  Function: ~remove _linklist.js:47
+      4    0.0%    0.1%  Function: ~parser.onIncoming.res._expect_continue http.js:1446
+      4    0.0%    0.1%  Function: ~OutgoingMessage._writeRaw http.js:380
+      3    0.0%    0.1%  Stub: SubStringStub
+      3    0.0%    0.1%  Stub: StackCheckStub
+      3    0.0%    0.1%  Stub: RegExpExecStub
+      3    0.0%    0.1%  Stub: CompareStub_LT
+      3    0.0%    0.1%  Stub: CallFunctionStub_Args1_Implicit
+      3    0.0%    0.1%  Stub: BinaryOpStub_SUB_Alloc_SMI
+      3    0.0%    0.1%  RegExp: ^(\\/?)([\\s\\S]+\\/(?!$)|\\/)?((?:[\\s\\S]+?)?(\\.[^.]*)?)$
+      3    0.0%    0.1%  LazyCompile: ~indexOf native string.js:115
+      3    0.0%    0.1%  LazyCompile: ~exports.toArray /usr/lib/node_modules/socket.io/lib/util.js:18
+      3    0.0%    0.1%  LazyCompile: ~TimeClip native date.js:378
+      3    0.0%    0.1%  LazyCompile: ~Game.onAddObject src/common/game.js:15
+      3    0.0%    0.1%  LazyCompile: ~AbstractGameObject src/battle-city/objects/abstract.js:2
+      3    0.0%    0.1%  LazyCompile: stringify native json.js:307
+      3    0.0%    0.1%  LazyCompile: b native string.js:36
+      3    0.0%    0.1%  LazyCompile: ToString native runtime.js:533
+      3    0.0%    0.1%  LazyCompile: Game.step src/common/game.js:39
+      3    0.0%    0.1%  LazyCompile: *MapTiled.remove src/common/map_tiled.js:54
+      3    0.0%    0.1%  KeyedLoadIC: args_count: 0 {11}
+      3    0.0%    0.1%  Function: ~fs.readFile fs.js:92
+      3    0.0%    0.1%  Function: ~ServerResponse.writeHead http.js:799
+      3    0.0%    0.1%  Function: ~OutgoingMessage.end http.js:648
+      3    0.0%    0.1%  Function: ~OutgoingMessage._storeHeader http.js:431
+      3    0.0%    0.1%  Function: levels.forEach.Logger.(anonymous function) /usr/lib/node_modules/socket.io/lib/logger.js:94
+      3    0.0%    0.1%  Function: IncomingMessage._addHeaderLine http.js:270
+      3    0.0%    0.1%  Function: <anonymous> src/server.js:58
+      3    0.0%    0.1%  CallMegamorphic: args_count: 0 {4}
+      3    0.0%    0.1%  Builtin: JSEntryTrampoline
+      2    0.0%    0.1%  Stub: ToNumberStub
+      2    0.0%    0.1%  Stub: ToBooleanStub_UndefinedNullSpecObject
+      2    0.0%    0.1%  Stub: RegExpConstructResultStub
+      2    0.0%    0.1%  Stub: FastNewContextStub
+      2    0.0%    0.1%  Stub: CompareICStub {5}
+      2    0.0%    0.1%  Stub: CompareICStub {4}
+      2    0.0%    0.1%  Stub: CallFunctionStub_Args2
+      2    0.0%    0.1%  Stub: BinaryOpStub_SUB_Alloc_HeapNumbers
+      2    0.0%    0.1%  Stub: BinaryOpStub_ADD_Alloc_Generic
+      2    0.0%    0.1%  RegExp: ;*\\s*$
+      2    0.0%    0.1%  LazyCompile: ~isFinite native v8natives.js:86
+      2    0.0%    0.1%  LazyCompile: ~indexOf native array.js:1122
+      2    0.0%    0.1%  LazyCompile: ~ToUint32 native runtime.js:569
+      2    0.0%    0.1%  LazyCompile: ~ToObject native runtime.js:550
+      2    0.0%    0.1%  LazyCompile: ~ServerUser.sendUpdatesToClient src/server/user.js:36
+      2    0.0%    0.1%  LazyCompile: ~Encode native uri.js:167
+      2    0.0%    0.1%  LazyCompile: ~Clan.size src/battle-city/clan.js:51
+      2    0.0%    0.1%  LazyCompile: ~Base.step src/battle-city/objects/base.js:113
+      2    0.0%    0.1%  LazyCompile: FILTER_KEY native runtime.js:398
+      2    0.0%    0.1%  LazyCompile: BotsClan.step src/battle-city/clan.js:131
+      2    0.0%    0.1%  LazyCompile: APPLY_PREPARE native runtime.js:423
+      2    0.0%    0.1%  LazyCompile: *is /usr/lib/node_modules/socket.io/node_modules/socket.io-client/node_modules/uglify-js/lib/parse-js.js:697
+      2    0.0%    0.1%  LazyCompile: *indexOf native array.js:1122
+      2    0.0%    0.1%  LazyCompile: *d native v8natives.js:1444
+      2    0.0%    0.1%  LazyCompile: *append _linklist.js:63
+      2    0.0%    0.1%  LazyCompile: *afterWrite net.js:449
+      2    0.0%    0.1%  LazyCompile: *TankBot src/battle-city/objects/tankbot.js:2
+      2    0.0%    0.1%  LazyCompile: *OutgoingMessage.write http.js:589
+      2    0.0%    0.1%  LazyCompile: *Base.step src/battle-city/objects/base.js:113
+      2    0.0%    0.1%  LazyCompile: *AbstractGameObject.setSpeedX src/battle-city/objects/abstract.js:15
+      2    0.0%    0.1%  KeyedLoadIC: args_count: 0 {2}
+      2    0.0%    0.1%  Function: ~start_token /usr/lib/node_modules/socket.io/node_modules/socket.io-client/node_modules/uglify-js/lib/parse-js.js:322
+      2    0.0%    0.1%  Function: ~socket.ondrain http.js:1307
+      2    0.0%    0.1%  Function: ~ok assert.js:123
+      2    0.0%    0.1%  Function: ~next /usr/lib/node_modules/socket.io/node_modules/socket.io-client/node_modules/uglify-js/lib/parse-js.js:298
+      2    0.0%    0.1%  Function: ~isBuffer buffer.js:288
+      2    0.0%    0.1%  Function: ~fs.ReadStream fs.js:1013
+      2    0.0%    0.1%  Function: ~equal assert.js:132
+      2    0.0%    0.1%  Function: ~d native v8natives.js:1444
+      2    0.0%    0.1%  Function: ~append _linklist.js:63
+      2    0.0%    0.1%  Function: ~afterRead fs.js:1102
+      2    0.0%    0.1%  Function: ~Stream stream.js:25
+      2    0.0%    0.1%  Function: ~Socket.packet /usr/lib/node_modules/socket.io/lib/socket.js:206
+      2    0.0%    0.1%  Function: ~Premade.serialize src/common/premade.js:143
+      2    0.0%    0.1%  Function: ~IncomingMessage http.js:213
+      2    0.0%    0.1%  Function: ~HOP /usr/lib/node_modules/socket.io/node_modules/socket.io-client/node_modules/uglify-js/lib/process.js:1739
+      2    0.0%    0.1%  Function: ~EventEmitter events.js:24
+      2    0.0%    0.1%  Function: ~Buffer buffer.js:210
+      2    0.0%    0.1%  Function: ~<anonymous> src/server/user.js:178
+      2    0.0%    0.1%  Function: ~<anonymous> src/battle-city/objects/tank.js:62
+      2    0.0%    0.1%  Function: socket.ondata http.js:1373
+      2    0.0%    0.1%  Function: exports.encodePacket /usr/lib/node_modules/socket.io/lib/parser.js:55
+      2    0.0%    0.1%  Function: d native v8natives.js:1444
+      1    0.0%    0.0%  Stub: UnaryOpStub_BIT_NOT_Alloc_Smi
+      1    0.0%    0.0%  Stub: ToBooleanStub_UndefinedNull
+      1    0.0%    0.0%  Stub: ToBooleanStub_NullString
+      1    0.0%    0.0%  Stub: ToBooleanStub_NullSpecObject
+      1    0.0%    0.0%  Stub: ToBooleanStub_BoolSmi
+      1    0.0%    0.0%  Stub: StringDictionaryNegativeLookupStub
+      1    0.0%    0.0%  Stub: StringAddStub {1}
+      1    0.0%    0.0%  Stub: FastCloneShallowArrayStub {4}
+      1    0.0%    0.0%  Stub: FastCloneShallowArrayStub {3}
+      1    0.0%    0.0%  Stub: FastCloneShallowArrayStub {2}
+      1    0.0%    0.0%  Stub: FastCloneShallowArrayStub {1}
+      1    0.0%    0.0%  Stub: CompareICStub {9}
+      1    0.0%    0.0%  Stub: CompareICStub {8}
+      1    0.0%    0.0%  Stub: CompareICStub {7}
+      1    0.0%    0.0%  Stub: CompareICStub {6}
+      1    0.0%    0.0%  Stub: CompareICStub {3}
+      1    0.0%    0.0%  Stub: CompareICStub {11}
+      1    0.0%    0.0%  Stub: CompareICStub {10}
+      1    0.0%    0.0%  Stub: CallFunctionStub_Args3
+      1    0.0%    0.0%  Stub: CallFunctionStub_Args1_InLoop
+      1    0.0%    0.0%  Stub: BinaryOpStub_SHR_Alloc_SMI
+      1    0.0%    0.0%  Stub: BinaryOpStub_ADD_OverwriteRight_BothStrings
+      1    0.0%    0.0%  Stub: BinaryOpStub_ADD_OverwriteLeft_Strings
+      1    0.0%    0.0%  Stub: BinaryOpStub_ADD_Alloc_Strings
+      1    0.0%    0.0%  Stub: BinaryOpStub_ADD_Alloc_SMI
+      1    0.0%    0.0%  RegExp: [\\+\\-]$
+      1    0.0%    0.0%  LazyCompile: ~substr native string.js:697
+      1    0.0%    0.0%  LazyCompile: ~slice native string.js:524
+      1    0.0%    0.0%  LazyCompile: ~setTime native date.js:771
+      1    0.0%    0.0%  LazyCompile: ~replace native string.js:216
+      1    0.0%    0.0%  LazyCompile: ~isArray native array.js:1311
+      1    0.0%    0.0%  LazyCompile: ~hasOwnProperty native v8natives.js:237
+      1    0.0%    0.0%  LazyCompile: ~ceil native math.js:80
+      1    0.0%    0.0%  LazyCompile: ~UseSparseVariant native array.js:111
+      1    0.0%    0.0%  LazyCompile: ~ToPrimitive native runtime.js:489
+      1    0.0%    0.0%  LazyCompile: ~ToNumber native runtime.js:510
+      1    0.0%    0.0%  LazyCompile: ~TankBot.step src/battle-city/objects/tankbot.js:18
+      1    0.0%    0.0%  LazyCompile: ~Tank.turn src/battle-city/objects/tank.js:236
+      1    0.0%    0.0%  LazyCompile: ~Tank.startMove src/battle-city/objects/tank.js:334
+      1    0.0%    0.0%  LazyCompile: ~Tank.serialize src/battle-city/objects/tank.js:172
+      1    0.0%    0.0%  LazyCompile: ~TList.count src/common/list.js:61
+      1    0.0%    0.0%  LazyCompile: ~Store.client /usr/lib/node_modules/socket.io/lib/store.js:44
+      1    0.0%    0.0%  LazyCompile: ~ServerUser.serialize src/server/user.js:21
+      1    0.0%    0.0%  LazyCompile: ~ServerUser.clientMessage src/server/user.js:121
+      1    0.0%    0.0%  LazyCompile: ~PropertyDescriptor native v8natives.js:467
+      1    0.0%    0.0%  LazyCompile: ~MapTiled.remove src/common/map_tiled.js:54
+      1    0.0%    0.0%  LazyCompile: ~MapTiled.intersects src/common/map_tiled.js:109
+      1    0.0%    0.0%  LazyCompile: ~Game.onRemoveObject src/common/game.js:21
+      1    0.0%    0.0%  LazyCompile: ~BasicSerializeObject native json.js:244
+      1    0.0%    0.0%  LazyCompile: ~<anonymous> src/battle-city/objects/base.js:1
+      1    0.0%    0.0%  LazyCompile: join native array.js:399
+      1    0.0%    0.0%  LazyCompile: encodeURIComponent native uri.js:314
+      1    0.0%    0.0%  LazyCompile: TList.add src/common/list.js:17
+      1    0.0%    0.0%  LazyCompile: EQUALS native runtime.js:53
+      1    0.0%    0.0%  LazyCompile: BasicSerializeObject native json.js:244
+      1    0.0%    0.0%  LazyCompile: *vector src/common/func.js:1
+      1    0.0%    0.0%  LazyCompile: *urlParse url.js:88
+      1    0.0%    0.0%  LazyCompile: *token /usr/lib/node_modules/socket.io/node_modules/socket.io-client/node_modules/uglify-js/lib/parse-js.js:328
+      1    0.0%    0.0%  LazyCompile: *slice native string.js:524
+      1    0.0%    0.0%  LazyCompile: *read_name /usr/lib/node_modules/socket.io/node_modules/socket.io-client/node_modules/uglify-js/lib/parse-js.js:491
+      1    0.0%    0.0%  LazyCompile: *parser.onHeadersComplete http.js:60
+      1    0.0%    0.0%  LazyCompile: *isArray native array.js:1311
+      1    0.0%    0.0%  LazyCompile: *filter native array.js:990
+      1    0.0%    0.0%  LazyCompile: *exports.setInterval.timer.ontimeout timers.js:202
+      1    0.0%    0.0%  LazyCompile: *exports.resolve path.js:267
+      1    0.0%    0.0%  LazyCompile: *exports.normalize path.js:296
+      1    0.0%    0.0%  LazyCompile: *exports.extname path.js:400
+      1    0.0%    0.0%  LazyCompile: *exec native regexp.js:167
+      1    0.0%    0.0%  LazyCompile: *Transport.handleRequest.req /usr/lib/node_modules/socket.io/lib/transport.js:40
+      1    0.0%    0.0%  LazyCompile: *Socket.packet /usr/lib/node_modules/socket.io/lib/socket.js:206
+      1    0.0%    0.0%  LazyCompile: *OutgoingMessage.end http.js:648
+      1    0.0%    0.0%  LazyCompile: *MapTiled.move src/common/map_tiled.js:89
+      1    0.0%    0.0%  LazyCompile: *MapTiled.intersects src/common/map_tiled.js:109
+      1    0.0%    0.0%  LazyCompile: *MapTiled.add src/common/map_tiled.js:25
+      1    0.0%    0.0%  LazyCompile: *Manager.handleRequest /usr/lib/node_modules/socket.io/lib/manager.js:526
+      1    0.0%    0.0%  LazyCompile: *Manager.get /usr/lib/node_modules/socket.io/lib/manager.js:156
+      1    0.0%    0.0%  LazyCompile: *EventEmitter.removeListener events.js:163
+      1    0.0%    0.0%  LazyCompile: *BuildResultFromMatchInfo native regexp.js:126
+      1    0.0%    0.0%  LazyCompile: *AbstractGameObject.setSpeedY src/battle-city/objects/abstract.js:21
+      1    0.0%    0.0%  KeyedLoadMegamorphicIC: args_count: 0 {12}
+      1    0.0%    0.0%  KeyedLoadIC: args_count: 0 {9}
+      1    0.0%    0.0%  KeyedLoadIC: args_count: 0 {8}
+      1    0.0%    0.0%  KeyedLoadIC: args_count: 0 {7}
+      1    0.0%    0.0%  KeyedLoadIC: args_count: 0 {6}
+      1    0.0%    0.0%  KeyedLoadIC: args_count: 0 {5}
+      1    0.0%    0.0%  KeyedLoadIC: args_count: 0 {3}
+      1    0.0%    0.0%  KeyedLoadIC: args_count: 0 {1}
+      1    0.0%    0.0%  KeyedLoadIC: args_count: 0 {13}
+      1    0.0%    0.0%  KeyedLoadIC: args_count: 0 {10}
+      1    0.0%    0.0%  KeyedLoadIC: args_count: 0
+      1    0.0%    0.0%  Function: ~walkers.sub /usr/lib/node_modules/socket.io/node_modules/socket.io-client/node_modules/uglify-js/lib/process.js:172
+      1    0.0%    0.0%  Function: ~walkers.call /usr/lib/node_modules/socket.io/node_modules/socket.io-client/node_modules/uglify-js/lib/process.js:136
+      1    0.0%    0.0%  Function: ~w.with_walkers.var /usr/lib/node_modules/socket.io/node_modules/socket.io-client/node_modules/uglify-js/lib/process.js:400
+      1    0.0%    0.0%  Function: ~token /usr/lib/node_modules/socket.io/node_modules/socket.io-client/node_modules/uglify-js/lib/parse-js.js:328
+      1    0.0%    0.0%  Function: ~store http.js:443
+      1    0.0%    0.0%  Function: ~splitPath path.js:260
+      1    0.0%    0.0%  Function: ~socket.ondata http.js:1373
+      1    0.0%    0.0%  Function: ~parser.onMessageComplete http.js:119
+      1    0.0%    0.0%  Function: ~parser.onIncoming http.js:1429
+      1    0.0%    0.0%  Function: ~onread net.js:309
+      1    0.0%    0.0%  Function: ~next_token /usr/lib/node_modules/socket.io/node_modules/socket.io-client/node_modules/uglify-js/lib/parse-js.js:591
+      1    0.0%    0.0%  Function: ~next /usr/lib/node_modules/socket.io/node_modules/socket.io-client/node_modules/uglify-js/lib/parse-js.js:703
+      1    0.0%    0.0%  Function: ~make_real_if /usr/lib/node_modules/socket.io/node_modules/socket.io-client/node_modules/uglify-js/lib/process.js:996
+      1    0.0%    0.0%  Function: ~make_num /usr/lib/node_modules/socket.io/node_modules/socket.io-client/node_modules/uglify-js/lib/process.js:1318
+      1    0.0%    0.0%  Function: ~make_name /usr/lib/node_modules/socket.io/node_modules/socket.io-client/node_modules/uglify-js/lib/process.js:1229
+      1    0.0%    0.0%  Function: ~is_token /usr/lib/node_modules/socket.io/node_modules/socket.io-client/node_modules/uglify-js/lib/parse-js.js:275
+      1    0.0%    0.0%  Function: ~fs.readFile.readStream.on.buffer fs.js:82
+      1    0.0%    0.0%  Function: ~fs.ReadStream fs.js:1056
+      1    0.0%    0.0%  Function: ~currentBotPosition src/battle-city/clan.js:165
+      1    0.0%    0.0%  Function: ~coerce buffer.js:199
+      1    0.0%    0.0%  Function: ~close fs.js:1158
+      1    0.0%    0.0%  Function: ~changeCallback src/server/user.js:160
+      1    0.0%    0.0%  Function: ~afterWrite net.js:449
+      1    0.0%    0.0%  Function: ~WebSocket /usr/lib/node_modules/socket.io/lib/transports/websocket.js:27
+      1    0.0%    0.0%  Function: ~Socket.setFlags /usr/lib/node_modules/socket.io/lib/socket.js:137
+      1    0.0%    0.0%  Function: ~ServerResponse http.js:773
+      1    0.0%    0.0%  Function: ~Scope.get_mangled /usr/lib/node_modules/socket.io/node_modules/socket.io-client/node_modules/uglify-js/lib/process.js:346
+      1    0.0%    0.0%  Function: ~ReadStream.destroy fs.js:1159
+      1    0.0%    0.0%  Function: ~ReadStream._emitData fs.js:1144
+      1    0.0%    0.0%  Function: ~Parser.expect /usr/lib/node_modules/socket.io/lib/transports/websocket/hybi-07-12.js:490
+      1    0.0%    0.0%  Function: ~OutgoingMessage.assignSocket http.js:341
+      1    0.0%    0.0%  Function: ~OutgoingMessage._send http.js:363
+      1    0.0%    0.0%  Function: ~OutgoingMessage._finish http.js:715
+      1    0.0%    0.0%  Function: ~Module._load module.js:274
+      1    0.0%    0.0%  Function: ~Module._findPath module.js:158
+      1    0.0%    0.0%  Function: ~Manager.get /usr/lib/node_modules/socket.io/lib/manager.js:182
+      1    0.0%    0.0%  Function: ~Manager.checkRequest /usr/lib/node_modules/socket.io/lib/manager.js:897
+      1    0.0%    0.0%  Function: ~Logger.log /usr/lib/node_modules/socket.io/lib/logger.js:72
+      1    0.0%    0.0%  Function: ~IncomingMessage._addHeaderLine http.js:270
+      1    0.0%    0.0%  Function: ~HOP /usr/lib/node_modules/socket.io/node_modules/socket.io-client/node_modules/uglify-js/lib/parse-js.js:1317
+      1    0.0%    0.0%  Function: ~EventEmitter.emit events.js:40
+      1    0.0%    0.0%  Function: ~Buffer.slice buffer.js:514
+      1    0.0%    0.0%  Function: ~Buffer.copy buffer.js:473
+      1    0.0%    0.0%  Function: ~<anonymous> /usr/lib/node_modules/socket.io/node_modules/socket.io-client/node_modules/uglify-js/lib/parse-js.js:1072
+      1    0.0%    0.0%  Function: ~<anonymous> src/server.js:65
+      1    0.0%    0.0%  Function: ~<anonymous> src/battle-city/field.js:29
+      1    0.0%    0.0%  Function: prog1 /usr/lib/node_modules/socket.io/node_modules/socket.io-client/node_modules/uglify-js/lib/parse-js.js:1287
+      1    0.0%    0.0%  Function: fs.readFileSync fs.js:119
+      1    0.0%    0.0%  Function: fs.readFile fs.js:74
+      1    0.0%    0.0%  Function: exports.setInterval.timer.ontimeout timers.js:202
+      1    0.0%    0.0%  Function: as_name /usr/lib/node_modules/socket.io/node_modules/socket.io-client/node_modules/uglify-js/lib/parse-js.js:1152
+      1    0.0%    0.0%  Function: WebSocket.write /usr/lib/node_modules/socket.io/lib/transports/websocket/hybi-07-12.js:184
+      1    0.0%    0.0%  Function: Socket.emit /usr/lib/node_modules/socket.io/lib/socket.js:340
+      1    0.0%    0.0%  CallNormal: args_count: 1
+      1    0.0%    0.0%  CallMegamorphic: args_count: 2
+      1    0.0%    0.0%  CallMegamorphic: args_count: 1 {1}
+      1    0.0%    0.0%  Builtin: NotifyDeoptimized
+      1    0.0%    0.0%  Builtin: HandleApiCallConstruct
+      1    0.0%    0.0%  Builtin: ArraySlice
+
+ [C++]:
+   ticks  total  nonlib   name
+    813    0.3%   27.0%  node::StreamWrap::Write(v8::Arguments const&)
+    452    0.2%   15.0%  __pthread_cond_signal
+     98    0.0%    3.3%  _init
+     87    0.0%    2.9%  node::Parser::Execute(v8::Arguments const&)
+     74    0.0%    2.5%  node::WrappedScript::CompileRunInThisContext(v8::Arguments const&)
+     72    0.0%    2.4%  _IO_vfprintf
+     34    0.0%    1.1%  node::Buffer::New(v8::Arguments const&)
+     33    0.0%    1.1%  __pthread_getspecific
+     29    0.0%    1.0%  _IO_default_xsputn
+     18    0.0%    0.6%  strchrnul
+     16    0.0%    0.5%  __vsnprintf_chk
+     15    0.0%    0.5%  ev_run
+     14    0.0%    0.5%  __libc_free
+     14    0.0%    0.5%  _IO_fwrite
+     13    0.0%    0.4%  v8::Object::Get(v8::Handle<v8::Value>)
+     13    0.0%    0.4%  __libc_malloc
+     12    0.0%    0.4%  __pthread_mutex_lock
+     11    0.0%    0.4%  node::Encode(void const*, unsigned int, node::encoding)
+     11    0.0%    0.4%  node::Buffer::BinaryWrite(v8::Arguments const&)
+     11    0.0%    0.4%  http_parser_execute
+     10    0.0%    0.3%  wcrtomb
+     10    0.0%    0.3%  __i686.get_pc_thunk.bx
+      8    0.0%    0.3%  node::Buffer::Utf8Write(v8::Arguments const&)
+      7    0.0%    0.2%  v8::Value::ToObject() const
+      7    0.0%    0.2%  v8::HandleScope::HandleScope()
+      7    0.0%    0.2%  ceil
+      7    0.0%    0.2%  __pthread_mutex_unlock_usercnt
+      6    0.0%    0.2%  v8::Function::Call(v8::Handle<v8::Object>, int, v8::Handle<v8::Value>*)
+      6    0.0%    0.2%  node::HandleWrap::Close(v8::Arguments const&)
+      6    0.0%    0.2%  node::DecodeWrite(char*, unsigned int, v8::Handle<v8::Value>, node::encoding)
+      6    0.0%    0.2%  _IO_file_sync
+      5    0.0%    0.2%  v8::Value::ToString() const
+      5    0.0%    0.2%  v8::Object::Set(v8::Handle<v8::Value>, v8::Handle<v8::Value>, v8::PropertyAttribute)
+      5    0.0%    0.2%  operator delete(void*)
+      4    0.0%    0.1%  v8::Value::IsFunction() const
+      4    0.0%    0.1%  v8::String::WriteUtf8(char*, int, int*, int) const
+      4    0.0%    0.1%  v8::String::New(char const*, int)
+      4    0.0%    0.1%  v8::Object::InternalFieldCount()
+      4    0.0%    0.1%  node::Buffer::Copy(v8::Arguments const&)
+      4    0.0%    0.1%  floor
+      4    0.0%    0.1%  ev_invoke_pending
+      4    0.0%    0.1%  __strcasecmp
+      4    0.0%    0.1%  _IO_setb
+      4    0.0%    0.1%  _IO_fflush
+      3    0.0%    0.1%  v8::TryCatch::TryCatch()
+      3    0.0%    0.1%  v8::Object::GetIndexedPropertiesExternalArrayDataType()
+      3    0.0%    0.1%  v8::Object::GetHiddenValue(v8::Handle<v8::String>)
+      3    0.0%    0.1%  v8::Locker::IsActive()
+      3    0.0%    0.1%  v8::Integer::New(int)
+      3    0.0%    0.1%  v8::HandleScope::~HandleScope()
+      3    0.0%    0.1%  node::Parser::on_headers_complete(http_parser*)
+      3    0.0%    0.1%  ev_feed_event
+      3    0.0%    0.1%  _dl_mcount_wrapper_check
+      3    0.0%    0.1%  _IO_do_write
+      2    0.0%    0.1%  v8::String::Utf8Length() const
+      2    0.0%    0.1%  v8::String::New(unsigned short const*, int)
+      2    0.0%    0.1%  v8::Object::New()
+      2    0.0%    0.1%  v8::Date::New(double)
+      2    0.0%    0.1%  v8::Context::GetCurrent()
+      2    0.0%    0.1%  syscall
+      2    0.0%    0.1%  node::TimerWrap::OnTimeout(uv_timer_s*, int)
+      2    0.0%    0.1%  node::TimerWrap::New(v8::Arguments const&)
+      2    0.0%    0.1%  node::ProcessWrap::Spawn(v8::Arguments const&)
+      2    0.0%    0.1%  node::Buffer::Utf8Slice(v8::Arguments const&)
+      2    0.0%    0.1%  node::Buffer::ByteLength(v8::Arguments const&)
+      2    0.0%    0.1%  node::Buffer::BinarySlice(v8::Arguments const&)
+      2    0.0%    0.1%  memchr
+      2    0.0%    0.1%  __libc_calloc
+      1    0.0%    0.0%  v8::Value::Uint32Value() const
+      1    0.0%    0.0%  v8::Value::IsTrue() const
+      1    0.0%    0.0%  v8::Value::Int32Value() const
+      1    0.0%    0.0%  v8::V8::DisposeGlobal(v8::internal::Object**)
+      1    0.0%    0.0%  v8::V8::AdjustAmountOfExternalAllocatedMemory(int)
+      1    0.0%    0.0%  v8::TryCatch::~TryCatch()
+      1    0.0%    0.0%  v8::String::Utf8Value::Utf8Value(v8::Handle<v8::Value>)
+      1    0.0%    0.0%  v8::Object::SetHiddenValue(v8::Handle<v8::String>, v8::Handle<v8::Value>)
+      1    0.0%    0.0%  v8::Object::GetIndexedPropertiesExternalArrayData()
+      1    0.0%    0.0%  v8::Null()
+      1    0.0%    0.0%  v8::HandleScope::RawClose(v8::internal::Object**)
+      1    0.0%    0.0%  v8::HandleScope::Leave()
+      1    0.0%    0.0%  v8::HandleScope::CreateHandle(v8::internal::Object*)
+      1    0.0%    0.0%  v8::Function::NewInstance(int, v8::Handle<v8::Value>*) const
+      1    0.0%    0.0%  v8::Function::NewInstance() const
+      1    0.0%    0.0%  uv_translate_sys_error
+      1    0.0%    0.0%  uv_fs_close
+      1    0.0%    0.0%  uv_eio_init
+      1    0.0%    0.0%  uv__stream_io
+      1    0.0%    0.0%  qsort_r
+      1    0.0%    0.0%  operator new[](unsigned int)
+      1    0.0%    0.0%  operator new(unsigned int)
+      1    0.0%    0.0%  node::TimerWrap::StateChange()
+      1    0.0%    0.0%  node::Parser::on_header_value(http_parser*, char const*, unsigned int)
+      1    0.0%    0.0%  node::Parser::on_header_field(http_parser*, char const*, unsigned int)
+      1    0.0%    0.0%  node::ParseEncoding(v8::Handle<v8::Value>, node::encoding)
+      1    0.0%    0.0%  node::ObjectWrap::WeakCallback(v8::Persistent<v8::Value>, void*)
+      1    0.0%    0.0%  eio_poll
+      1    0.0%    0.0%  eio_close
+      1    0.0%    0.0%  __write
+      1    0.0%    0.0%  __pthread_mutex_unlock
+      1    0.0%    0.0%  __i686.get_pc_thunk.cx
+      1    0.0%    0.0%  __gettimeofday
+      1    0.0%    0.0%  __fpclassify
+      1    0.0%    0.0%  __finite
+      1    0.0%    0.0%  _IO_file_xsputn
+      1    0.0%    0.0%  _IO_file_write
+
+ [GC]:
+   ticks  total  nonlib   name
+   1117    0.4%
+
+ [Bottom up (heavy) profile]:
+  Note: percentage shows a share of a particular caller in the total
+  amount of its parent calls.
+  Callers occupying less than 2.0% are not shown.
+
+   ticks parent  name
+  275524   97.9%  b7877000-b7878000
