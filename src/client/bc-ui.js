@@ -44,6 +44,7 @@ function BcUi(bcClient)
     bcClient.socket.on('disconnect', function() {
         clearInterval(self.fieldView.animateIntervalId);
         clearInterval(self.bcClient.botCodeInterval);
+        clearInterval(self.bcClient.codeInterval);
         $('body').html('<h3 style="text-align: center;">Извините, подключение '
             + 'прервано. Перезагрузите страницу, чтобы начать заново.</h3>');
     });

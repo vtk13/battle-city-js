@@ -11,6 +11,9 @@ function BcClient(href)
         'reconnect' : false // todo learn reconnection abilities
     });
 
+    this.code = null;
+    this.codeInterval = null;
+
     this.users = new TList();
     this.users.on('add'   , this.onUserChange.bind(this));
     this.users.on('change', this.onUserChange.bind(this));
@@ -140,8 +143,12 @@ BcClient.prototype.onExecute = function(data)
 
 BcClient.prototype.onTaskDone = function()
 {
+    var self = this;
     if (this.code) {
-        this.code.step();
+        clearInterval(this.codeInterval);
+        this.codeInterval = setInterval(function(){
+            self.code.step();
+        }, 1);
     }
 };
 
@@ -176,6 +183,12 @@ BcClient.prototype.join = function(name, gameType)
 
 BcClient.prototype.unjoin = function()
 {
+    if (this.code) {
+        clearInterval(this.codeInterval);
+        this.code.removeAllListeners();
+        this.code = null;
+    }
+
     this.socket.emit('unjoin');
 };
 
@@ -194,6 +207,7 @@ BcClient.prototype.stopGame = function()
     }
 
     if (this.code) {
+        clearInterval(this.codeInterval);
         this.code.removeAllListeners();
         this.code = null;
     }
@@ -207,11 +221,13 @@ BcClient.prototype.executeCode = function(code)
         });
 
         if (this.code) {
+            clearInterval(this.codeInterval);
             this.code.removeAllListeners();
         }
         this.code = new Interpreter(code);
         var self = this;
         this.code.on('action', function(action){
+            clearInterval(self.codeInterval);
             if (action.move) {
                 self.move(action.move);
             }
@@ -220,9 +236,12 @@ BcClient.prototype.executeCode = function(code)
             }
         });
         this.code.on('terminate', function(action){
+            clearInterval(self.codeInterval);
             console.log('terminate');
         });
-        this.code.step();
+        this.codeInterval = setInterval(function(){
+            self.code.step();
+        }, 1);
     }
 };
 

@@ -36,24 +36,24 @@ PascalParser.prototype.parse = function()
 
 PascalParser.prototype.parseProgram = function()
 {
-    var res = [];
+    var code = [];
     this.eatIdentifier('Program');
     var name = this.parseIdentifier();
     this.token(';');
     this.eatIdentifier('begin');
     while (true) {
         if (!this.testIdentifier('end')) {
-            res.push(this.parseStatement());
+            this.parseStatement(code);
         } else {
             break;
         }
     }
     this.eatIdentifier('end');
     this.token('.');
-    return res;
+    return code;
 };
 
-PascalParser.prototype.parseStatement = function()
+PascalParser.prototype.parseStatement = function(code)
 {
     var name = this.parseIdentifier();
     this.token('(');
@@ -64,9 +64,10 @@ PascalParser.prototype.parseStatement = function()
     }
     switch (name) {
     case 'move':
-        return new ActionMove(param);
     case 'turn':
-        return new ActionTurn(param);
+        code.push(name);
+        code.push(param);
+        break;
     default:
         throw 'Undefined name "' + name + '" at ' + this.cur;
     }
