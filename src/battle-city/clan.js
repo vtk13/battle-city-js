@@ -29,6 +29,9 @@ Clan.prototype.attachUser = function(user)
         }
     }
     user.tank = new Tank();
+    user.tank.on('task-done', function(){
+        user.clientMessage('task-done');
+    });
     user.tank.user = user;
     user.tank.clan = user.clan = this;
     user.emit('change');
@@ -223,7 +226,7 @@ LearnerClan.prototype.startGame = function(game, level)
     this.base.shootDownTimer = Base.shootDownTimer;
     this.base.x = this.game.field.width /  2;
     this.base.y = (this.n == 1) ? (this.game.field.height - 16) : 16;
-    
+
     if (level.checkpoint) {
         this.checkpoint = new Checkpoint(level.checkpoint.x, level.checkpoint.y);
     }

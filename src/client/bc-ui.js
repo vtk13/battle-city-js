@@ -60,6 +60,10 @@ function BcUi(bcClient)
         } else {
             self.fieldView.message('Вы проиграли');
         }
+
+        $('#bot-editor input.start-game').removeAttr('disabled');
+        $('#bot-editor input.stop-game').attr('disabled', 'disabled');
+        $('#bot-editor input.execute-code').attr('disabled', 'disabled');
     });
 };
 
@@ -93,9 +97,12 @@ BcUi.prototype.onJoined = function(event)
         $('#bot-editor').show();
         if (this.codeMirror === null) {
             this.codeMirror = CodeMirror(document.getElementById('editor'), {
-                value: "move(10);\n" +
-                        "turn('left');\n" +
-                        "move(20);",
+                value: "Program Level1;\n" +
+                       "begin\n" +
+                       "  move(176);\n" +
+                       "  turn(\"right\");\n" +
+                       "  move(160);\n" +
+                       "end.",
                 mode:  "pascal"
             });
         }
@@ -109,6 +116,10 @@ BcUi.prototype.onJoined = function(event)
         $('#create').hide();
         $('body').css('overflow', 'auto');
     });
+
+    $('#bot-editor input.start-game').removeAttr('disabled');
+    $('#bot-editor input.stop-game').attr('disabled', 'disabled');
+    $('#bot-editor input.execute-code').attr('disabled', 'disabled');
 };
 
 BcUi.prototype.onUnjoined = function()
@@ -195,12 +206,18 @@ BcUi.prototype.initHandlers = function()
     });
     $('#bot-editor input.start-game').click(function(){
         bcClient.startGame($('#bot-editor select[name=level]').val());
+        $('#bot-editor input.start-game').attr('disabled', 'disabled');
+        $('#bot-editor input.stop-game').removeAttr('disabled');
+        $('#bot-editor input.execute-code').removeAttr('disabled');
     });
     $('#bot-editor input.execute-code').click(function(){
         bcClient.executeCode(self.codeMirror.getValue());
     });
-    $('input.stop-game').click(function(){
+    $('#bot-editor input.stop-game').click(function(){
         bcClient.stopGame();
+        $('#bot-editor input.start-game').removeAttr('disabled');
+        $('#bot-editor input.stop-game').attr('disabled', 'disabled');
+        $('#bot-editor input.execute-code').attr('disabled', 'disabled');
     });
     new TankController({
         turn        : bcClient.turn.bind(bcClient),

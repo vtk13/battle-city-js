@@ -21,8 +21,10 @@ Tank = function Tank(x, y)
     this.z = 1;
 
     this.moveOn = 0; // flag used in Tank.step()
+    this.distanceLeft = null;
     this.setSpeedX(0);
     this.setSpeedY(-this.speed);
+    this.direction = null;
 
     this.setDirectionImage();
     this.maxBullets = 1;
@@ -110,13 +112,10 @@ Tank.prototype.step = function(paused)
     var onIce = false;
     if (this.moveOn || this.glidingTimer > 0) {
         // todo field.move()?
-        var x = this.x;
-        var y = this.y;
+        var sx = this.distanceLeft && this.distanceLeft < this.speedX ? vector(this.speedX) * this.distanceLeft : this.speedX;
+        var sy = this.distanceLeft && this.distanceLeft < this.speedY ? vector(this.speedY) * this.distanceLeft : this.speedY;
         this.stuck = false;
-        if (this.field) {
-            this.field.setXY(this, this.x + this.speedX, this.y + this.speedY);
-        }
-        var intersect = this.field.intersect(this);
+        var intersect = this.field.intersect(this, this.x + sx, this.y + sy);
         if (intersect.length > 0) {
             for (var i in intersect) {
                 switch (true) {
@@ -127,20 +126,32 @@ Tank.prototype.step = function(paused)
                     onIce = true;
                     // no break! before default!
                 default:
-                    if (intersect[i].z == this.z) {
-                        if (this.field) {
-                            this.field.setXY(this, x, y);
-                        }
+                    // power === undefined is a hack for fast bullet detection
+                    if (intersect[i].z == this.z && intersect[i].power === undefined) {
                         this.stuck = true;
                         this.glidingTimer = 0;
                     }
                 }
             }
         }
+        if (!this.stuck) {
+            this.field.setXY(this, this.x + sx, this.y + sy);
+            if (this.distanceLeft) {
+                this.distanceLeft -= Math.abs(sx + sy); // sx == 0 || sy == 0
+                if (this.distanceLeft == 0) {
+                    this.emit('task-done');
+                    this.distanceLeft = null;
+                    this.moveOn = false;
+                }
+            }
+        }
         this.onIce = onIce;
         if (this.glidingTimer > 0) {
-             onIce && this.glidingTimer--;
-            !onIce && (this.glidingTimer = 0);
+            if (onIce) {
+                this.glidingTimer--;
+            } else {
+                this.glidingTimer = 0;
+            }
         }
         this.emit('change');
     }
@@ -181,7 +192,7 @@ Tank.prototype.serialize = function()
         this.bonus, // 6
         Math.round(this.armoredTimer), // 7
         Math.round(this.birthTimer), // 8
-        this.clan.n
+        this.clan.n // 9
     ];
 };
 
@@ -235,6 +246,7 @@ Tank.prototype.animateStep = function(step)
  */
 Tank.prototype.turn = function(direction)
 {
+    var canTurn = true;
     if (this.direction != direction) {
         // emulate move back tank for 1 pixel
         // doto this may be a bug, if tank just change direction to opposite
@@ -294,14 +306,13 @@ Tank.prototype.turn = function(direction)
             default:
                 throw "Unknown direction";
         }
-        var firstTry = true;
         var intersects = this.field.intersect(this, newX1, newY1);
         for (var i in intersects) {
             if (intersects[i].z == this.z) {
-                firstTry = false;
+                canTurn = false;
             }
         }
-        if (firstTry) {
+        if (canTurn) {
             // new place is clear, turn:
             this.field.setXY(this, newX1, newY1);
             this.setSpeedX(newSpeedX);
@@ -309,30 +320,42 @@ Tank.prototype.turn = function(direction)
             this.direction = direction;
             this.emit('change');
         } else {
+            canTurn = true;
             var intersects = this.field.intersect(this, newX2, newY2);
             for (var i in intersects) {
                 if (intersects[i].z == this.z) {
-                    return false;
+                    canTurn = false;
                 }
             }
-            // new place is clear, turn:
-            this.field.setXY(this, newX2, newY2);
-            this.setSpeedX(newSpeedX);
-            this.setSpeedY(newSpeedY);
-            this.direction = direction;
-            this.emit('change');
+            if (canTurn) {
+                // new place is clear, turn:
+                this.field.setXY(this, newX2, newY2);
+                this.setSpeedX(newSpeedX);
+                this.setSpeedY(newSpeedY);
+                this.direction = direction;
+                this.emit('change');
+            };
         }
     }
-    return true;
+    this.emit('task-done');
+    return canTurn;
+};
+
+Tank.prototype.move = function(distance)
+{
+    this.distanceLeft = distance;
+    this.moveOn = true;
 };
 
 Tank.prototype.startMove = function()
 {
+    this.distanceLeft = null;
     this.moveOn = true;
 };
 
 Tank.prototype.stopMove = function()
 {
+    this.distanceLeft = null;
     this.moveOn = false;
     if (this.onIce) {
         this.glidingTimer = 1000/30; // 30ms step
@@ -381,6 +404,8 @@ Tank.prototype.resetPosition = function()
 {
     this.maxBullets = 1;
     this.bulletPower = 1;
+    this.distanceLeft = null;
+    this.direction = null;
     this.moveOn = 0;
     this.setSpeedX(0);
     this.setSpeedY(-this.speed);

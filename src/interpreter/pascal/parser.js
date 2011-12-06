@@ -37,9 +37,19 @@ PascalParser.prototype.parse = function()
 PascalParser.prototype.parseProgram = function()
 {
     var res = [];
-    while (this.cur < this.code.length) {
-        res.push(this.parseStatement());
+    this.eatIdentifier('Program');
+    var name = this.parseIdentifier();
+    this.token(';');
+    this.eatIdentifier('begin');
+    while (true) {
+        if (!this.testIdentifier('end')) {
+            res.push(this.parseStatement());
+        } else {
+            break;
+        }
     }
+    this.eatIdentifier('end');
+    this.token('.');
     return res;
 };
 
@@ -102,6 +112,21 @@ PascalParser.prototype.parseString = function()
     this.eat('"');
     this.eatWs();
     return res;
+};
+
+PascalParser.prototype.testIdentifier = function(identifier)
+{
+    var cur = this.cur;
+    var res = this.parseIdentifier();
+    this.cur = cur;
+    return res == identifier;
+};
+
+PascalParser.prototype.eatIdentifier = function(identifier)
+{
+    if (this.parseIdentifier() != identifier) {
+        throw identifier + ' expected at ' + this.cur;
+    }
 };
 
 PascalParser.prototype.parseIdentifier = function()

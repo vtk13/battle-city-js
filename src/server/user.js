@@ -78,6 +78,9 @@ ServerUser.prototype.control = function(event)
         if (event.fire) {
             this.tank.fire();
         }
+        if (event.move) {
+            this.tank.move(event.move);
+        }
     }
 };
 

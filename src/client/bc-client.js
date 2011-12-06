@@ -34,6 +34,7 @@ function BcClient(href)
     this.socket.on('started', this.onStarted.bind(this));
     this.socket.on('gameover', this.onGameOver.bind(this));
     this.socket.on('execute', this.onExecute.bind(this));
+    this.socket.on('task-done', this.onTaskDone.bind(this));
 
     this.field = new Field(13 * 32, 13 * 32);
     this.gameRun = false; // todo another way?
@@ -137,6 +138,13 @@ BcClient.prototype.onExecute = function(data)
 //    data.script
 };
 
+BcClient.prototype.onTaskDone = function()
+{
+    if (this.code) {
+        this.code.step();
+    }
+};
+
 // ===== actions ================================================================
 
 BcClient.prototype.connect = function()
@@ -184,6 +192,11 @@ BcClient.prototype.stopGame = function()
     if (this.currentPremade.type == 'createbot') {
         this.socket.emit('stop-game');
     }
+
+    if (this.code) {
+        this.code.removeAllListeners();
+        this.code = null;
+    }
 };
 
 BcClient.prototype.executeCode = function(code)
@@ -192,6 +205,24 @@ BcClient.prototype.executeCode = function(code)
         this.socket.emit('execute', {
             code: code
         });
+
+        if (this.code) {
+            this.code.removeAllListeners();
+        }
+        this.code = new Interpreter(code);
+        var self = this;
+        this.code.on('action', function(action){
+            if (action.move) {
+                self.move(action.move);
+            }
+            if (action.turn) {
+                self.turn(action.turn);
+            }
+        });
+        this.code.on('terminate', function(action){
+            console.log('terminate');
+        });
+        this.code.step();
     }
 };
 
@@ -204,6 +235,13 @@ BcClient.prototype.turn = function(direction)
 {
     this.control({
         turn: direction
+    });
+};
+
+BcClient.prototype.move = function(distance)
+{
+    this.control({
+        move: distance
     });
 };
 
