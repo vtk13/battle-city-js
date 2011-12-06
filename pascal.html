@@ -10,14 +10,13 @@
     <script type="text/javascript" src="/src/common/event.js"></script>
     
     <script type="text/javascript" src="/src/interpreter/pascal/parser.js"></script>
-    <script type="text/javascript" src="/src/interpreter/pascal/tokens.js"></script>
     <script type="text/javascript" src="/src/interpreter/code.js"></script>
     <script type="text/javascript" src="/src/interpreter/interpreter.js"></script>
 </head>
 <body>
 <script type="text/javascript">
 $(function(){
-    var code = new Interpreter('move ( 10  );');
+    var code = new Interpreter('move(10);turn("right");move(20);');
     code.on('action', function(action){
         console.log(action);
         setTimeout(code.step.bind(code), 0);

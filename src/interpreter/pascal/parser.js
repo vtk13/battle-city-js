@@ -55,6 +55,8 @@ PascalParser.prototype.parseStatement = function()
     switch (name) {
     case 'move':
         return new ActionMove(param);
+    case 'turn':
+        return new ActionTurn(param);
     default:
         throw 'Undefined name "' + name + '" at ' + this.cur;
     }
@@ -64,8 +66,10 @@ PascalParser.prototype.parseExpression = function()
 {
     if (this.test(this.isNum)) {
         return this.parseNumber();
+    } else if (this.test('"')) {
+        return this.parseString();
     } else {
-        throw 'Unexpected "' + char + '" at ' + this.cur;
+        throw 'Unexpected "' + this.look() + '". Expression expected at ' + this.cur;
     }
 };
 
@@ -83,6 +87,21 @@ PascalParser.prototype.parseNumber = function()
     } else {
         throw 'Unexpected "' + this.look() + '". Num expected at ' + this.cur;
     }
+};
+
+PascalParser.prototype.parseString = function()
+{
+    this.eat('"');
+    var next;
+    var res = '';
+    while (!this.test('"')) {
+        next = this.look();
+        res += next;
+        this.eat(next);
+    }
+    this.eat('"');
+    this.eatWs();
+    return res;
 };
 
 PascalParser.prototype.parseIdentifier = function()
