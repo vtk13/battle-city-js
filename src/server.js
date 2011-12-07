@@ -56,6 +56,7 @@ process.on('uncaughtException', function(ex) {
  * Server is responsible for accepting user connections.
  */
 var server = require('http').createServer(function(request, response) {
+    // FIXME deprecated
     // serve static files
     var uri = url.parse(request.url).pathname;
     if (uri == '/') {
