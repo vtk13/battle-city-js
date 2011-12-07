@@ -14,7 +14,7 @@ MapTiled = function MapTiled(width, height)
     for (var x = 0 ; x <= this.maxX ; x++) {
         this.items[x] = [];
         for (var y = 0 ; y <= this.maxY ; y++) {
-            this.items[x][y] = [];
+            this.items[x][y] = {};
         }
     }
 };
@@ -39,7 +39,7 @@ MapTiled.prototype.add = function(item)
 	    if (toY < 0) toY = 0; else if (toY > this.maxX) toY = this.maxY;
 	    for (var x = fromX ; x <= toX ; x++) {
 	        for (var y = fromY ; y <= toY ; y++) {
-	            this.items[x][y].push(item);
+	            this.items[x][y][item.id]= item;
 	        }
 	    }
 	    this.all[item.id] = item;
@@ -65,11 +65,7 @@ MapTiled.prototype.remove = function(item)
         if (toY < 0) toY = 0; else if (toY > this.maxX) toY = this.maxY;
         for (var x = fromX ; x <= toX ; x++) {
             for (var y = fromY ; y <= toY ; y++) {
-            	for (var i = this.items[x][y].length - 1 ; i >= 0 ; i--) {
-            		if (this.items[x][y][i].id == item.id) {
-            			this.items[x][y].splice(i, 1);
-            		}
-            	}
+                delete this.items[x][y][item.id];
             }
         }
         return true;
@@ -123,7 +119,7 @@ MapTiled.prototype.intersects = function(item, ix, iy, hw, hh)
     if (toY < 0) toY = 0; else if (toY > this.maxX) toY = this.maxY;
     for (var x = fromX ; x <= toX ; x++) {
         for (var y = fromY ; y <= toY ; y++) {
-            for (var i = this.items[x][y].length - 1 ; i >= 0 ; i--) {
+            for (var i in this.items[x][y]) {
                 var each = this.items[x][y][i];
                 if (each.id == item.id || res[each.id]) continue;
                 if (Math.abs(each.x - ix) < (each.boundX + hw) &&
