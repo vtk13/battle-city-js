@@ -56,7 +56,7 @@ process.on('uncaughtException', function(ex) {
  * Server is responsible for accepting user connections.
  */
 var server = require('http').createServer(function(request, response) {
-    // static served with haproxy
+    // static served with haproxy + nginx
     response.writeHead(301, {'Location':'http://'+request.headers.host.replace(/:\d+$/, '')});
     response.end();
 });
