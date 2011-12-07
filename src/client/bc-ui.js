@@ -51,8 +51,10 @@ function BcUi(bcClient)
     bcClient.socket.on('joined', this.onJoined.bind(this));
     bcClient.socket.on('started', function(){
         clearInterval(self.fieldView.animateIntervalId);
-        self.fieldView.animateIntervalId =
-            setInterval(self.fieldView.animateStep.bind(self.fieldView), 50);
+        if (window.location.hash != '#test') {
+            self.fieldView.animateIntervalId =
+                setInterval(self.fieldView.animateStep.bind(self.fieldView), 50);
+        }
     });
     bcClient.socket.on('gameover', function(event) {
         clearInterval(self.fieldView.animateIntervalId);

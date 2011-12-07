@@ -13,7 +13,7 @@ class TankTest extends PHPUnit_Extensions_SeleniumTestCase
 
     public function testTank()
     {
-        $this->open("/");
+        $this->open("/#test");
         $this->type("nick", rand(1000, 9999));
         $this->click('//input[@value="Войти"]');
         sleep(1);
