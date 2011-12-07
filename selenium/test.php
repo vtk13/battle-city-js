@@ -8,7 +8,7 @@ class TankTest extends PHPUnit_Extensions_SeleniumTestCase
     function setUp()
     {
         $this->setBrowser("*firefox");
-        $this->setBrowserUrl("http://localhost:8124/");
+        $this->setBrowserUrl("http://vtk.tom.ru/");
     }
 
     public function testTank()
