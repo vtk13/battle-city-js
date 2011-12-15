@@ -200,12 +200,6 @@ BcUi.prototype.initHandlers = function()
         input.val(nick + ': ' + input.val());
         input.focus();
     });
-    $('#premade input.exit-game').click(function(){
-        bcClient.unjoin();
-    });
-    $('#premade input.start-game').click(function(){
-        bcClient.startGame($('#premade select[name=level]').val());
-    });
     new TankController({
         turn        : bcClient.turn.bind(bcClient),
         startMove   : bcClient.startMove.bind(bcClient),
