@@ -7,7 +7,7 @@
  */
 function UiGameControls(context, client)
 {
-    UiChunk.call(this, context);
+    Widget.call(this, context);
     this.resetState();
     var self = this;
 
@@ -29,7 +29,7 @@ function UiGameControls(context, client)
     });
 };
 
-UiGameControls.prototype = new UiChunk();
+UiGameControls.prototype = new Widget();
 UiGameControls.prototype.constructor = UiGameControls;
 
 UiGameControls.prototype.resetState =
