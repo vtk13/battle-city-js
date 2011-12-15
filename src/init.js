@@ -1,7 +1,4 @@
 
-//FIXME move to BcClient
-var field;
-
 var bcClient, bcUi;
 
 $(function() {
@@ -21,9 +18,4 @@ $(function() {
     }
 
     $(window).resize();
-});
-
-$(window).resize(function(){
-    $('.chat-log').height($(this).height() - 70);
-    ;
 });
