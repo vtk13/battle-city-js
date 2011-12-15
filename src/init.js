@@ -1,6 +1,6 @@
 
+// there are all existing global vars below
 var bcClient, bcUi, uiManager;
-
 var codeMirror = null; // todo better place?
 
 $(function() {

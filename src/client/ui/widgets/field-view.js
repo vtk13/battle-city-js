@@ -1,12 +1,14 @@
 
-function FieldView(field)
+function FieldView(client)
 {
-    this.field = field;
+    this.field = client.field;
     this.context = document.getElementById('field').getContext('2d');
     this.context.font ="bold 25px Arial";
     this.step = 1;
+    this.animateIntervalId = null;
     var self = this;
-    field.on('remove', function(object){
+
+    this.field.on('remove', function(object){
         if (object instanceof Bullet) {
             var anim = new BulletHitAnimation(self.step, object.finalX, object.finalY);
             anim.id = object.id;
@@ -16,6 +18,28 @@ function FieldView(field)
             var anim = new TankHitAnimation(self.step, object.x, object.y);
             anim.id = object.id;
             self.field.add(anim);
+        }
+    });
+
+    client.socket.on('gameover', function(event) {
+        clearInterval(self.animateIntervalId);
+        if (event.winnerClan == client.user.clan) {
+            self.message('Победа!');
+        } else {
+            self.message('Вы проиграли');
+        }
+    });
+    client.socket.on('disconnect', function() {
+        clearInterval(self.animateIntervalId);
+    });
+    client.socket.on('unjoined', function(){
+        clearInterval(self.animateIntervalId);
+    });
+    client.socket.on('started', function(){
+        clearInterval(self.animateIntervalId);
+        if (window.location.hash != '#test') {
+            self.animateIntervalId =
+                setInterval(self.animateStep.bind(self), 50);
         }
     });
 };

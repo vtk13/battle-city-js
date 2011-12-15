@@ -24,15 +24,12 @@ function BcUi(bcClient)
             bcClient.tankStack,
             $('#game #bot-stack'), 'bot');
     this.userPoints = new UserPoint(bcClient.premadeUsers);
-    this.fieldView = new FieldView(bcClient.field);
 
     var self = this;
     bcClient.currentPremade.on('change', function() {
         self.onCurrentPremadeChange(this);
     });
 
-    bcClient.socket.on('logged', this.onLogged.bind(this));
-    bcClient.socket.on('unjoined', this.onUnjoined.bind(this));
     bcClient.socket.on('user-message', this.onUserMessage.bind(this));
     bcClient.socket.on('nickNotAllowed', function(){
         alert('Ник занят. Выберите другой.');
@@ -41,38 +38,10 @@ function BcUi(bcClient)
         alert('Слишком много сообщений за минуту.');
     });
     bcClient.socket.on('disconnect', function() {
-        clearInterval(self.fieldView.animateIntervalId);
         clearInterval(self.bcClient.botCodeInterval);
         clearInterval(self.bcClient.codeInterval);
         $('body').html('<h3 style="text-align: center;">Извините, подключение '
             + 'прервано. Перезагрузите страницу, чтобы начать заново.</h3>');
-    });
-    bcClient.socket.on('joined', this.onJoined.bind(this));
-    bcClient.socket.on('started', function(){
-        clearInterval(self.fieldView.animateIntervalId);
-        if (window.location.hash != '#test') {
-            self.fieldView.animateIntervalId =
-                setInterval(self.fieldView.animateStep.bind(self.fieldView), 50);
-        }
-    });
-    bcClient.socket.on('gameover', function(event) {
-        clearInterval(self.fieldView.animateIntervalId);
-        if (event.winnerClan == self.bcClient.user.clan) {
-            self.fieldView.message('Победа!');
-        } else {
-            self.fieldView.message('Вы проиграли');
-        }
-    });
-};
-
-BcUi.prototype.onLogged = function()
-{
-    $('body').css('overflow', 'hidden');
-    $('#public').show();
-    $('#create').show();
-    $('body').animate({scrollTop: $('body').height()}, function(){
-        $('#login').hide();
-        $('body').css('overflow', 'auto');
     });
 };
 
@@ -93,51 +62,6 @@ BcUi.prototype.onCurrentPremadeChange = function(premade)
         levelSelect.append($('<option value="' + i + '">' + i + '</option>'));
     }
     levelSelect.val(premade.level);
-};
-
-BcUi.prototype.onJoined = function(event)
-{
-    $('body').css('overflow', 'hidden');
-    if (this.bcClient.currentPremade.type == 'createbot') {
-        $('#field').addClass('create-bot');
-        $('#bot-editor').show();
-        if (window.codeMirror === null) {
-            window.codeMirror = CodeMirror(document.getElementById('editor'), {
-                value: "Program Level1;\n" +
-                       "begin\n" +
-                       "  move(176);\n" +
-                       "  turn(\"right\");\n" +
-                       "  move(160);\n" +
-                       "end.",
-                mode:  "pascal"
-            });
-        }
-    } else {
-        $('#premade').show();
-        $('#field').removeClass('create-bot');
-    }
-    $('#game').show();
-    $('body').animate({scrollTop: $('body').height()}, function(){
-        $('#public').hide();
-        $('#create').hide();
-        $('body').css('overflow', 'auto');
-    });
-};
-
-BcUi.prototype.onUnjoined = function()
-{
-    $('body').css('overflow', 'hidden');
-    clearInterval(this.fieldView.animateIntervalId);
-    $('#public').show();
-    $('#create').show();
-    $('body').scrollTop($('body').height());
-
-    $('body').animate({scrollTop: 0}, function(){
-        $('#bot-editor').hide();
-        $('#premade').hide();
-        $('#game').hide();
-        $('body').css('overflow', 'auto');
-    });
 };
 
 BcUi.prototype.onUserMessage = function(data)
