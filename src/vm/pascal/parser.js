@@ -18,23 +18,23 @@
  * @return
  */
 
-PascalParser = function PascalParser(code)
+PascalCompiler = function PascalCompiler(code)
 {
     this.code = code;
     this.cur = 0;
 };
 
-PascalParser.prototype.isSpace = /\s/;
-PascalParser.prototype.isNum = /[0-9]/;
-PascalParser.prototype.isChar = /[a-z]/i;
-PascalParser.prototype.isSymbol = /\w/i;
+PascalCompiler.prototype.isSpace = /\s/;
+PascalCompiler.prototype.isNum = /[0-9]/;
+PascalCompiler.prototype.isChar = /[a-z]/i;
+PascalCompiler.prototype.isSymbol = /\w/i;
 
-PascalParser.prototype.parse = function()
+PascalCompiler.prototype.parse = function()
 {
     return this.parseProgram();
 };
 
-PascalParser.prototype.parseProgram = function()
+PascalCompiler.prototype.parseProgram = function()
 {
     var code = [];
     this.eatIdentifier('Program');
@@ -53,7 +53,7 @@ PascalParser.prototype.parseProgram = function()
     return code;
 };
 
-PascalParser.prototype.parseStatement = function(code)
+PascalCompiler.prototype.parseStatement = function(code)
 {
     var name = this.parseIdentifier();
     this.token('(');
@@ -73,7 +73,7 @@ PascalParser.prototype.parseStatement = function(code)
     }
 };
 
-PascalParser.prototype.parseExpression = function()
+PascalCompiler.prototype.parseExpression = function()
 {
     if (this.test(this.isNum)) {
         return this.parseNumber();
@@ -84,7 +84,7 @@ PascalParser.prototype.parseExpression = function()
     }
 };
 
-PascalParser.prototype.parseNumber = function()
+PascalCompiler.prototype.parseNumber = function()
 {
     var next;
     if (next = this.test(this.isNum)) {
@@ -100,7 +100,7 @@ PascalParser.prototype.parseNumber = function()
     }
 };
 
-PascalParser.prototype.parseString = function()
+PascalCompiler.prototype.parseString = function()
 {
     this.eat('"');
     var next;
@@ -115,7 +115,7 @@ PascalParser.prototype.parseString = function()
     return res;
 };
 
-PascalParser.prototype.testIdentifier = function(identifier)
+PascalCompiler.prototype.testIdentifier = function(identifier)
 {
     var cur = this.cur;
     var res = this.parseIdentifier();
@@ -123,14 +123,14 @@ PascalParser.prototype.testIdentifier = function(identifier)
     return res == identifier;
 };
 
-PascalParser.prototype.eatIdentifier = function(identifier)
+PascalCompiler.prototype.eatIdentifier = function(identifier)
 {
     if (this.parseIdentifier() != identifier) {
         throw identifier + ' expected at ' + this.cur;
     }
 };
 
-PascalParser.prototype.parseIdentifier = function()
+PascalCompiler.prototype.parseIdentifier = function()
 {
     var next;
     if (next = this.test(this.isChar)) {
@@ -146,7 +146,7 @@ PascalParser.prototype.parseIdentifier = function()
     }
 };
 
-PascalParser.prototype.look = function()
+PascalCompiler.prototype.look = function()
 {
     return this.code.charAt(this.cur);
 };
@@ -155,7 +155,7 @@ PascalParser.prototype.look = function()
  * @param char char || RegExp
  * @return
  */
-PascalParser.prototype.test = function(check)
+PascalCompiler.prototype.test = function(check)
 {
     var res = this.look();
     if (check) {
@@ -167,7 +167,7 @@ PascalParser.prototype.test = function(check)
     return res;
 };
 
-PascalParser.prototype.eat = function(char)
+PascalCompiler.prototype.eat = function(char)
 {
     if (this.look() == char) {
         this.cur++;
@@ -176,13 +176,13 @@ PascalParser.prototype.eat = function(char)
     }
 };
 
-PascalParser.prototype.token = function(char)
+PascalCompiler.prototype.token = function(char)
 {
     this.eat(char);
     this.eatWs();
 };
 
-PascalParser.prototype.eatWs = function()
+PascalCompiler.prototype.eatWs = function()
 {
     while (this.isSpace.test(this.code.charAt(this.cur))) {
         this.cur++;

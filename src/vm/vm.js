@@ -13,7 +13,7 @@
 Vm = function Vm(codeStr)
 {
     this.data = [];
-    this.code = new PascalParser(codeStr).parse();
+    this.code = new PascalCompiler(codeStr).parse();
     this.pointer = 0;
 };
 
