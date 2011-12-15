@@ -10,16 +10,16 @@
  */
 
 
-Interpreter = function Interpreter(codeStr)
+Vm = function Vm(codeStr)
 {
     this.data = [];
     this.code = new PascalParser(codeStr).parse();
     this.pointer = 0;
 };
 
-Eventable(Interpreter.prototype);
+Eventable(Vm.prototype);
 
-Interpreter.prototype.step = function()
+Vm.prototype.step = function()
 {
     var command = this.code[this.pointer];
     if (command) {
@@ -30,14 +30,14 @@ Interpreter.prototype.step = function()
     }
 };
 
-Interpreter.prototype.move = function()
+Vm.prototype.move = function()
 {
     this.emit('action', {
         'move': this.code[this.pointer++]
     });
 };
 
-Interpreter.prototype.turn = function()
+Vm.prototype.turn = function()
 {
     this.emit('action', {
         'turn': this.code[this.pointer++]

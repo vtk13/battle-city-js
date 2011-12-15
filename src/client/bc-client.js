@@ -224,7 +224,7 @@ BcClient.prototype.executeCode = function(code)
             clearInterval(this.codeInterval);
             this.code.removeAllListeners();
         }
-        this.code = new Interpreter(code);
+        this.code = new Vm(code);
         var self = this;
         this.code.on('action', function(action){
             clearInterval(self.codeInterval);
