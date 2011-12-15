@@ -1,5 +1,7 @@
 
-var bcClient, bcUi;
+var bcClient, bcUi, uiManager;
+
+var codeMirror = null; // todo better place?
 
 $(function() {
 
@@ -13,6 +15,7 @@ $(function() {
         $.getScript(src, function(){
             bcClient = new BcClient(wsDomain);
             bcUi = new BcUi(bcClient);
+            uiManager = new UiManager(bcClient);
             bcClient.connect();
         });
     }

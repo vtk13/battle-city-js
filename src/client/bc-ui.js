@@ -3,7 +3,6 @@
 function BcUi(bcClient)
 {
     this.bcClient = bcClient;
-    this.codeMirror = null;
     this.initHandlers();
     this.users = new UiUserList(
             bcClient.users,
@@ -63,10 +62,6 @@ function BcUi(bcClient)
         } else {
             self.fieldView.message('Вы проиграли');
         }
-
-        $('#bot-editor input.start-game').removeAttr('disabled');
-        $('#bot-editor input.stop-game').attr('disabled', 'disabled');
-        $('#bot-editor input.execute-code').attr('disabled', 'disabled');
     });
 };
 
@@ -106,8 +101,8 @@ BcUi.prototype.onJoined = function(event)
     if (this.bcClient.currentPremade.type == 'createbot') {
         $('#field').addClass('create-bot');
         $('#bot-editor').show();
-        if (this.codeMirror === null) {
-            this.codeMirror = CodeMirror(document.getElementById('editor'), {
+        if (window.codeMirror === null) {
+            window.codeMirror = CodeMirror(document.getElementById('editor'), {
                 value: "Program Level1;\n" +
                        "begin\n" +
                        "  move(176);\n" +
@@ -127,10 +122,6 @@ BcUi.prototype.onJoined = function(event)
         $('#create').hide();
         $('body').css('overflow', 'auto');
     });
-
-    $('#bot-editor input.start-game').removeAttr('disabled');
-    $('#bot-editor input.stop-game').attr('disabled', 'disabled');
-    $('#bot-editor input.execute-code').attr('disabled', 'disabled');
 };
 
 BcUi.prototype.onUnjoined = function()
@@ -209,26 +200,11 @@ BcUi.prototype.initHandlers = function()
         input.val(nick + ': ' + input.val());
         input.focus();
     });
-    $('input.exit-game').click(function(){
+    $('#premade input.exit-game').click(function(){
         bcClient.unjoin();
     });
     $('#premade input.start-game').click(function(){
         bcClient.startGame($('#premade select[name=level]').val());
-    });
-    $('#bot-editor input.start-game').click(function(){
-        bcClient.startGame($('#bot-editor select[name=level]').val());
-        $('#bot-editor input.start-game').attr('disabled', 'disabled');
-        $('#bot-editor input.stop-game').removeAttr('disabled');
-        $('#bot-editor input.execute-code').removeAttr('disabled');
-    });
-    $('#bot-editor input.execute-code').click(function(){
-        bcClient.executeCode(self.codeMirror.getValue());
-    });
-    $('#bot-editor input.stop-game').click(function(){
-        bcClient.stopGame();
-        $('#bot-editor input.start-game').removeAttr('disabled');
-        $('#bot-editor input.stop-game').attr('disabled', 'disabled');
-        $('#bot-editor input.execute-code').attr('disabled', 'disabled');
     });
     new TankController({
         turn        : bcClient.turn.bind(bcClient),
