@@ -3,26 +3,19 @@ function UiManager(client)
 {
     this.client = client;
 
-    this.users = new UiUserList(
-            client.users,
-            $('#public .user-list'), 'user');
     this.premades = new UiPremadeList(
             client.premades,
             $('#public .premades'), 'premade');
-    this.messages = new UiMessageList(
-            client.messages,
-            $('#public .messages'), 'message');
-    this.premadeUsers = new UiPremadeUserList(
-            client.premadeUsers,
-            $('#premade .user-list'), 'user',
-            client.currentPremade);
-    this.premadeMessages = new UiMessageList(
-            client.premadeMessages,
-            $('#premade .messages'), 'message');
     this.tankStack = new UiTankStack(
             client.tankStack,
             $('#game #bot-stack'), 'bot');
     this.userPoints = new UserPoint(client.premadeUsers);
+
+    this.levelSelector1 = new WidgetLevelSelector($('#premade .level'), client); // extract to premade widget
+    this.levelSelector2 = new WidgetLevelSelector($('#bot-editor .level'), client); // extract to create bot widget
+
+    this.publicChat = new WidgetPublicChat($('#public'), client);
+    this.premadeChat = new WidgetPremadeChat($('#premade'), client);
 
     var self = this;
 
