@@ -1,10 +1,9 @@
 TankController = function TankController(tank)
 {
     this.tank = tank;
-    this.keys = new Array();
     var controller = this;
-    $(window.document).keydown(function(e){controller.controlEvent(e);});
-    $(window.document).keyup  (function(e){controller.controlEvent(e);});
+    $(window.document).keydown(this.controlEvent.bind(this));
+    $(window.document).keyup  (this.controlEvent.bind(this));
 };
 
 TankController.prototype.controlEvent = function(e)

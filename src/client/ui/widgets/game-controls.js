@@ -7,7 +7,7 @@
  */
 function UiGameControls(context, client)
 {
-    Widget.call(this, context);
+    this.context = context;
     this.resetState();
     var self = this;
 
@@ -28,9 +28,6 @@ function UiGameControls(context, client)
         client.stopGame();
     });
 };
-
-UiGameControls.prototype = new Widget();
-UiGameControls.prototype.constructor = UiGameControls;
 
 UiGameControls.prototype.resetState =
 UiGameControls.prototype.setStateGameOver = function()

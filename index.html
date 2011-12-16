@@ -34,7 +34,6 @@
     <script type="text/javascript" src="/src/battle-city/client/graphic-loader.js"></script>
     <script type="text/javascript" src="/src/client/bc-client.js"></script>
     <script type="text/javascript" src="/src/client/bc-ui.js"></script>
-    <script type="text/javascript" src="/src/client/ui/widgets/widget.js"></script>
     <script type="text/javascript" src="/src/client/ui/widgets/field-view.js"></script>
     <script type="text/javascript" src="/src/client/ui/widgets/game-controls.js"></script>
     <script type="text/javascript" src="/src/client/ui/manager.js"></script>
@@ -49,8 +48,15 @@
     <script type="text/javascript" src="/src/vm/vm.js"></script>
 </head>
 <body>
-<div id="login">
-    <form id="login-form" style="display: none;">
+<div id="connecting" class="ui-block" style="display: block;">Подключение...</div>
+<div id="connection-fail" class="ui-block">Извините, не удалось подключиться к серверу.
+    Возможно вы находитесь за прокси, которая рубит WebSocket трафик (в 
+    будущем шанс подключиться через такие прокси будет увеличен с помошью ssl-соединения).</div>
+<div id="disconnect" class="ui-block">
+    <h3 style="text-align: center;">Извините, подключение прервано. Перезагрузите страницу, чтобы начать заново.</h3>
+</div>
+<div id="login" class="ui-block">
+    <form id="login-form">
         <h4>Прочитайте пожалуйста:</h4>
         <ul class="faq">
             <li>Не верьте всему что пишут в чате, потому-что любой троль может зайти под моим ником.</li>
@@ -63,9 +69,6 @@
         <div><span>Введите ник:</span><input type="text" name="nick"></div>
         <div class="submit"><input type="submit" value="Войти"></div>
     </form>
-    <!-- todo extract into separate state -->
-    <div id="message-connecting">Подключение...</div>
-    
     <div class="like-wrapper">
         <div id="fb-root"></div>
         <script>(function(d, s, id) {
@@ -85,7 +88,7 @@
     </div>
 </div>
 
-<div id="public" style="display: none;">
+<div id="public" class="ui-block">
     <h1>Общий чат</h1>
     <div class="user-list"><h3>Игроки</h3></div>
     <div class="premades">
@@ -102,7 +105,7 @@
     </form>
 </div>
 
-<div id="create" style="display: none;">
+<div id="create" class="ui-block">
     <h1>Создать игру</h1>
     <form id="create-form">
     <h3>Выберите тип игры:</h3>
@@ -131,7 +134,7 @@
     <div class="create-bot">или<br/><a id="create-bot" href="#">Запрогать бота (pre-alpha) &rarr;</a></div>
 </div>
 
-<div id="premade" style="display: none;">
+<div id="premade" class="ui-block">
     <h1>Чат игры</h1>
     <div class="user-list"><h3>Игроки</h3></div>
     <div class="game-controls">
@@ -154,7 +157,7 @@
     </form>
 </div>
 
-<div id="bot-editor" style="display: none;">
+<div id="bot-editor" class="ui-block">
     <div id="editor"></div>
     <div class="game-controls">
         <input class="start-game" type="button" value="Старт!">
@@ -169,7 +172,7 @@
     </div>
 </div>
 
-<div id="game" style="display: none;">
+<div id="game" class="ui-block">
     <div id="bot-stack"></div>
     <canvas id="field" width="416" height="416"></canvas>
     <div id="game-stat">

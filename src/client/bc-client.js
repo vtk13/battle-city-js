@@ -38,6 +38,7 @@ function BcClient(href)
     this.socket.on('gameover', this.onGameOver.bind(this));
     this.socket.on('execute', this.onExecute.bind(this));
     this.socket.on('task-done', this.onTaskDone.bind(this));
+    this.socket.on('disconnect', this.onDisconnect.bind(this));
 
     this.field = new Field(13 * 32, 13 * 32);
     this.gameRun = false; // todo another way?
@@ -93,6 +94,12 @@ BcClient.prototype.onClearCollection = function(data)
         this.field.clear();
         break;
     }
+};
+
+BcClient.prototype.onDisconnect = function()
+{
+    clearInterval(this.botCodeInterval);
+    clearInterval(this.codeInterval);
 };
 
 BcClient.prototype.onLogged = function(data)

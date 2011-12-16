@@ -23,6 +23,10 @@ a {
     color: white;
 }
 
+.ui-block {
+    display: none;
+}
+
 #login>form {
     padding: 60px 60px 0;
 }
