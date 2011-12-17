@@ -67,10 +67,15 @@ UiManager.prototype.setStateCreateBot = function()
 {
     this.createBot.reset();
     $('#field').addClass('create-bot');
-    this._slideTo($('#bot-editor').add('#game'));
+    this._slideTo($('#bot-editor').add('#game'), function() {
+        if (window.codeMirror) {
+            // hack to force codeMirror to show code
+            window.codeMirror.setValue(window.codeMirror.getValue());
+        }
+    });
 };
 
-UiManager.prototype._slideTo = function(toShow)
+UiManager.prototype._slideTo = function(toShow, callback)
 {
     var body = $('body');
     body.css('overflow', 'hidden');
@@ -83,5 +88,6 @@ UiManager.prototype._slideTo = function(toShow)
     body.animate({scrollTop: up ? 0 : body.height()}, function(){
         $('.ui-block').not(toShow).hide();
         body.css('overflow', 'auto');
+        callback && callback();
     });
 };
