@@ -25,7 +25,13 @@ function UiManager(client)
             self.setStatePremade();
         }
     });
-    client.socket.on('unjoined', this.setStatePublic.bind(this));
+    client.socket.on('unjoined', function(){
+        if ($('#premade').css('display') == 'block') {
+            self.setStatePublic();
+        } else {
+            self.setStateExercises();
+        }
+    });
     client.socket.on('disconnect', this.setStateDiconnected.bind(this));
 };
 

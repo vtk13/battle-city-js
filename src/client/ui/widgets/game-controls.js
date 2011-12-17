@@ -18,7 +18,11 @@ function UiGameControls(context, client)
     $('.exit-game', context).click(function(){
         client.unjoin();
     });
-    $('.exit-game', context).removeAttr('disabled'); // stupid crazy firefox!!!
+
+    $('.exit-exercise', context).click(function(){
+        client.unjoin();
+    });
+
     $('.start-game', context).click(function(){
         client.startGame($('select[name=level]', context).val());
     });
