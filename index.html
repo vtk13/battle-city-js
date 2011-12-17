@@ -40,6 +40,7 @@
     <script type="text/javascript" src="/src/client/ui/widgets/premade.js"></script>
     <script type="text/javascript" src="/src/client/ui/widgets/game.js"></script>
     <script type="text/javascript" src="/src/client/ui/widgets/create-bot.js"></script>
+    <script type="text/javascript" src="/src/client/ui/widgets/exercises.js"></script>
     <script type="text/javascript" src="/src/client/ui/widgets/notifier.js"></script>
     <script type="text/javascript" src="/src/client/ui/manager.js"></script>
     <script type="text/javascript" src="/src/init.js"></script>
@@ -148,7 +149,6 @@
         <input type="submit" value="Создать">
     </div>
     </form>
-    <div class="create-bot">или<br/><a id="create-bot" href="#">Запрогать бота (pre-alpha) &rarr;</a></div>
 </div>
 
 <div id="premade" class="ui-block">
@@ -158,10 +158,6 @@
         <input class="start-game" type="button" value="Старт!">
         <input class="exit-game" type="button" value="Выйти">
         <div class="level">Уровень: <select name="level"></select></div>
-        <div>1: <span class="player0-stats"></span></div>
-        <div>2: <span class="player1-stats"></span></div>
-        <div>3: <span class="player2-stats"></span></div>
-        <div>4: <span class="player3-stats"></span></div>
     </div>
     <div class="chat">
         <div class="chat-log">
@@ -174,8 +170,21 @@
     </form>
 </div>
 
-<div id="tasks" class="ui-block">
-    tasks
+<div id="exercises" class="ui-block">
+    <div class="exercise-list">
+        <div class="exercise">qwe</div>
+        <div class="exercise">asd</div>
+        <div class="exercise">zxc</div>
+        <div class="exercise">rty</div>
+        <div class="exercise">fgh</div>
+        <div class="exercise">vbn</div>
+    </div>
+    <div class="selected-exercise">
+        <div class="desc">
+        
+        </div>
+        <div class="create-bot"><a id="create-bot" href="#">Запрогать бота (pre-alpha) &rarr;</a></div>
+    </div>
 </div>
 
 <div id="bot-editor" class="ui-block">
@@ -186,10 +195,6 @@
         <input class="exit-game" type="button" value="Выйти">
         <input class="execute-code" type="button" value="Выполнить">
         <div class="level">Уровень: <select name="level"></select></div>
-        <div>1: <span class="player0-stats"></span></div>
-        <div>2: <span class="player1-stats"></span></div>
-        <div>3: <span class="player2-stats"></span></div>
-        <div>4: <span class="player3-stats"></span></div>
     </div>
 </div>
 

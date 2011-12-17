@@ -50,12 +50,6 @@ function WidgetCreateGame(context, client)
         }
         return false;
     });
-    $('#create-bot', context).click(function(){
-        var name = 'createbot-' + client.user.id;
-        var gameType = 'createbot';
-        client.join(name, gameType);
-        return false;
-    });
     $('.game-modes li', context).click(function(){
         $('#create-form input[name=type]').val(this.id);
         $('.game-modes li').removeClass('current');
@@ -75,7 +69,7 @@ function WidgetLoginForm(context, client)
     });
 
     $('#tutor-login', context).submit(function(){
-        toPage = 'setStateTasks';
+        toPage = 'setStateExercises';
         client.login($('input[name=nick]', this).val());
         return false;
     });

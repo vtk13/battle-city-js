@@ -9,6 +9,7 @@ function UiManager(client)
     this.premade    = new WidgetPremade($('#premade'), client);
     this.game       = new WidgetGame($('#game'), client);
     this.createBot  = new WidgetCreateBot($('#bot-editor'), client);
+    this.exercises  = new WidgetExercises($('#exercises'), client);
 
     this.notifier   = new WidgetNotifier(client);
 
@@ -51,9 +52,9 @@ UiManager.prototype.setStatePublic = function()
     this._slideTo($('#public').add('#create'));
 };
 
-UiManager.prototype.setStateTasks = function()
+UiManager.prototype.setStateExercises = function()
 {
-    this._slideTo($('#tasks'));
+    this._slideTo($('#exercises'));
 };
 
 UiManager.prototype.setStatePremade = function()

@@ -6,7 +6,7 @@
 html, body {
     height: 100%;
 }
-#public, #premade, #gameChat, #game, #create, #bot-editor, #tasks {
+#public, #premade, #gameChat, #game, #create, #bot-editor, #exercises {
     position: relative;
     height: 100%;
 }
@@ -220,4 +220,24 @@ a {
 }
 #bot-editor .game-controls {
     margin-left: 0;
+}
+
+#exercises .exercise-list {
+    float: left;
+    width: 40%;
+    height: 80%;
+    margin: 5%;
+    overflow: scroll;
+    background: #333;
+}
+#exercises .exercise-list .exercise {
+    height: 100px;
+    padding: 10px;
+}
+#exercises .exercise-list .exercise:hover {
+    background: #444;
+}
+#exercises .selected-exercise {
+    float: left;
+    width: 50%;
 }

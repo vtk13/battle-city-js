@@ -15,16 +15,17 @@ function UiGameControls(context, client)
     client.socket.on('started', this.setStateGameRunning.bind(this));
     client.socket.on('joined', this.resetState.bind(this));
 
-    $('input.exit-game', context).click(function(){
+    $('.exit-game', context).click(function(){
         client.unjoin();
     });
-    $('input.start-game', context).click(function(){
+    $('.exit-game', context).removeAttr('disabled'); // stupid crazy firefox!!!
+    $('.start-game', context).click(function(){
         client.startGame($('select[name=level]', context).val());
     });
-    $('input.execute-code', context).click(function(){
+    $('.execute-code', context).click(function(){
         client.executeCode(window.codeMirror.getValue());
     });
-    $('input.stop-game', context).click(function(){
+    $('.stop-game', context).click(function(){
         client.stopGame();
     });
 };
@@ -32,14 +33,14 @@ function UiGameControls(context, client)
 UiGameControls.prototype.resetState =
 UiGameControls.prototype.setStateGameOver = function()
 {
-    $('input.start-game'  , this.context).removeAttr('disabled');
-    $('input.stop-game'   , this.context).attr('disabled', 'disabled');
-    $('input.execute-code', this.context).attr('disabled', 'disabled');
+    $('.start-game'  , this.context).removeAttr('disabled');
+    $('.stop-game'   , this.context).attr('disabled', 'disabled');
+    $('.execute-code', this.context).attr('disabled', 'disabled');
 };
 
 UiGameControls.prototype.setStateGameRunning = function()
 {
-    $('input.start-game'  , this.context).attr('disabled', 'disabled');
-    $('input.stop-game'   , this.context).removeAttr('disabled');
-    $('input.execute-code', this.context).removeAttr('disabled');
+    $('.start-game'  , this.context).attr('disabled', 'disabled');
+    $('.stop-game'   , this.context).removeAttr('disabled');
+    $('.execute-code', this.context).removeAttr('disabled');
 };
