@@ -67,9 +67,21 @@ function WidgetCreateGame(context, client)
 
 function WidgetLoginForm(context, client)
 {
-    $('#login-form', context).submit(function(){
+    var toPage = 'setStatePublic';
+
+    $('#game-login', context).submit(function(){
         client.login($('input[name=nick]', this).val());
         return false;
+    });
+
+    $('#tutor-login', context).submit(function(){
+        toPage = 'setStateTasks';
+        client.login($('input[name=nick]', this).val());
+        return false;
+    });
+
+    client.socket.on('logged', function(){
+        window.uiManager[toPage]();
     });
 };
 

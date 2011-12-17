@@ -17,7 +17,6 @@ function UiManager(client)
     client.onConnect(this.setStateLogin.bind(this));
     client.onConnectFail(this.setStateConnectionFail.bind(this));
 
-    client.socket.on('logged', this.setStatePublic.bind(this));
     client.socket.on('joined', function(){
         if (client.currentPremade.type == 'createbot') {
             self.setStateCreateBot();
@@ -50,6 +49,11 @@ UiManager.prototype.setStateDiconnected = function()
 UiManager.prototype.setStatePublic = function()
 {
     this._slideTo($('#public').add('#create'));
+};
+
+UiManager.prototype.setStateTasks = function()
+{
+    this._slideTo($('#tasks'));
 };
 
 UiManager.prototype.setStatePremade = function()

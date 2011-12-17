@@ -61,7 +61,7 @@
     <h3 style="text-align: center;">Извините, подключение прервано. Перезагрузите страницу, чтобы начать заново.</h3>
 </div>
 <div id="login" class="ui-block">
-    <form id="login-form">
+    <div class="login">
         <h4>Прочитайте пожалуйста:</h4>
         <ul class="faq">
             <li>Не верьте всему что пишут в чате, потому-что любой троль может зайти под моим ником.</li>
@@ -71,19 +71,31 @@
                 связанно со скорость моего интернет подключения.</li>
             <li>Конструктивную критику, баги и предложения направлять на vtk666@gmail.com</li>
         </ul>
-        <div><span>Введите ник:</span><input type="text" name="nick"></div>
-        <div class="submit"><input type="submit" value="Войти"></div>
-    </form>
-    <div class="like-wrapper">
-        <div id="fb-root"></div>
-        <script>(function(d, s, id) {
-          var js, fjs = d.getElementsByTagName(s)[0];
-          if (d.getElementById(id)) {return;}
-          js = d.createElement(s); js.id = id;
-          js.src = "//connect.facebook.net/en_US/all.js#xfbml=1";
-          fjs.parentNode.insertBefore(js, fjs);
-        }(document, 'script', 'facebook-jssdk'));</script>
-        <div class="fb-like" data-href="http://vtk.tom.ru/" data-send="false" data-layout="button_count" data-width="100" data-show-faces="true" data-colorscheme="dark"></div>
+        <form id="game-login" action="#">
+            <fieldset>
+                <legend>Поиграть</legend>
+                <div><span>Введите ник:</span><input type="text" name="nick"></div>
+                <div class="submit"><input type="submit" value="Поиграть"></div>
+            </fieldset>
+        </form>
+        <form id="tutor-login" action="#">
+            <fieldset>
+                <legend>Поучиться программировать</legend>
+                <div><span>Введите ник:</span><input type="text" name="nick"></div>
+                <div class="submit"><input type="submit" value="Поучиться"></div>
+            </fieldset>
+        </form>
+        <div class="like-wrapper">
+            <div id="fb-root"></div>
+            <script>(function(d, s, id) {
+              var js, fjs = d.getElementsByTagName(s)[0];
+              if (d.getElementById(id)) {return;}
+              js = d.createElement(s); js.id = id;
+              js.src = "//connect.facebook.net/en_US/all.js#xfbml=1";
+              fjs.parentNode.insertBefore(js, fjs);
+            }(document, 'script', 'facebook-jssdk'));</script>
+            <div class="fb-like" data-href="http://vtk.tom.ru/" data-send="false" data-layout="button_count" data-width="100" data-show-faces="true" data-colorscheme="dark"></div>
+        </div>
     </div>
     
     <div id="credits">
@@ -160,6 +172,10 @@
         <input type="text" name="message">
         <input type="submit" value="Отправить">
     </form>
+</div>
+
+<div id="tasks" class="ui-block">
+    tasks
 </div>
 
 <div id="bot-editor" class="ui-block">

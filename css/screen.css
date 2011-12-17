@@ -6,7 +6,7 @@
 html, body {
     height: 100%;
 }
-#public, #premade, #gameChat, #game, #create, #bot-editor {
+#public, #premade, #gameChat, #game, #create, #bot-editor, #tasks {
     position: relative;
     height: 100%;
 }
@@ -27,20 +27,33 @@ a {
     display: none;
 }
 
-#login>form {
-    padding: 60px 60px 0;
+#login>.login {
+    padding: 30px;
 }
+
+#login form {
+    float: left;
+    width: 300px;
+    padding: 30px 60px 30px;
+}
+
+
+#login form fieldset {
+    padding: 10px;
+}
+
 #login ul.faq {
     margin-bottom: 20px;
+    padding-left: 40px;
 }
-#login>form span {
+#login form span {
     float: left;
     width: 120px;
 }
-#login>form div {
+#login form div {
     padding: 0 0 5px;
 }
-#login>form div.submit {
+#login form div.submit {
     padding-left: 120px;
 }
 
