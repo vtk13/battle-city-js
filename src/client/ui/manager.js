@@ -10,6 +10,8 @@ function UiManager(client)
     this.game       = new WidgetGame($('#game'), client);
     this.createBot  = new WidgetCreateBot($('#bot-editor'), client);
 
+    this.notifier   = new WidgetNotifier(client);
+
     var self = this;
 
     client.onConnect(this.setStateLogin.bind(this));
@@ -24,16 +26,6 @@ function UiManager(client)
         }
     });
     client.socket.on('unjoined', this.setStatePublicFromPremade.bind(this));
-    client.socket.on('user-message', function(data) {
-        alert(data.message);
-    });
-
-    client.socket.on('nickNotAllowed', function(){
-        alert('Ник занят. Выберите другой.');
-    });
-    client.socket.on('doNotFlood', function() {
-        alert('Слишком много сообщений за минуту.');
-    });
     client.socket.on('disconnect', this.setStateDiconnected.bind(this));
 };
 
