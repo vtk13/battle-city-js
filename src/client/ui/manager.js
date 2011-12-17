@@ -3,9 +3,8 @@ function UiManager(client)
 {
     this.client = client;
 
-    this.premades = new UiPremadeList(
-            client.premades,
-            $('#public .premades'), 'premade');
+    this.premade = new WidgetPublic($('#public'), client);
+
     this.tankStack = new UiTankStack(
             client.tankStack,
             $('#game #bot-stack'), 'bot');
@@ -14,8 +13,9 @@ function UiManager(client)
     this.levelSelector1 = new WidgetLevelSelector($('#premade .level'), client); // extract to premade widget
     this.levelSelector2 = new WidgetLevelSelector($('#bot-editor .level'), client); // extract to create bot widget
 
-    this.publicChat = new WidgetPublicChat($('#public'), client);
     this.premadeChat = new WidgetPremadeChat($('#premade'), client);
+
+    this.createGame = new WidgetCreateGame(client);
 
     var self = this;
 
