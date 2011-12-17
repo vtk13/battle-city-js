@@ -3,27 +3,14 @@ function UiManager(client)
 {
     this.client = client;
 
-    this.premade = new WidgetPublic($('#public'), client);
-
-    this.tankStack = new UiTankStack(
-            client.tankStack,
-            $('#game #bot-stack'), 'bot');
-    this.userPoints = new UserPoint(client.premadeUsers);
-
-    this.levelSelector1 = new WidgetLevelSelector($('#premade .level'), client); // extract to premade widget
-    this.levelSelector2 = new WidgetLevelSelector($('#bot-editor .level'), client); // extract to create bot widget
-
-    this.premadeChat = new WidgetPremadeChat($('#premade'), client);
-
-    this.loginForm = new WidgetLoginForm('#login', client);
+    this.loginForm  = new WidgetLoginForm($('#login'), client);
+    this.publicArea = new WidgetPublic($('#public'), client);
     this.createGame = new WidgetCreateGame($('#create'), client);
+    this.premade    = new WidgetPremade($('#premade'), client);
+    this.game       = new WidgetGame($('#game'), client);
+    this.createBot  = new WidgetCreateBot($('#bot-editor'), client);
 
     var self = this;
-
-    this.fieldView = new FieldView(client);
-    this.premadeGameControls = new UiGameControls($('#premade'), client);
-    this.botGameControls = new UiGameControls($('#bot-editor'), client);
-
 
     client.onConnect(this.setStateLogin.bind(this));
     client.onConnectFail(this.setStateConnectionFail.bind(this));
@@ -48,8 +35,6 @@ function UiManager(client)
         alert('Слишком много сообщений за минуту.');
     });
     client.socket.on('disconnect', this.setStateDiconnected.bind(this));
-
-    new TankController(client);
 };
 
 UiManager.prototype.setStateLogin = function()
