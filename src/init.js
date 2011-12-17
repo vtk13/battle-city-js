@@ -1,6 +1,6 @@
 
 // there are all existing global vars below
-var bcClient, bcUi, uiManager;
+var bcClient, uiManager;
 var codeMirror = null; // todo better place?
 
 $(function() {
@@ -14,7 +14,6 @@ $(function() {
         var src = 'http://' + wsDomain + '/socket.io/socket.io.js';
         $.getScript(src, function(){
             bcClient = new BcClient(wsDomain);
-            bcUi = new BcUi(bcClient);
             uiManager = new UiManager(bcClient);
             bcClient.connect();
         });

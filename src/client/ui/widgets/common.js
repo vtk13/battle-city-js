@@ -38,11 +38,11 @@ UserPoint.prototype.onRemove = function(user)
     $('.player' + pos + '-stats').text('');
 };
 
-//======
+//====== WidgetCreateGame ======================================================
 
-function WidgetCreateGame(client)
+function WidgetCreateGame(context, client)
 {
-    $('#create-form').submit(function(){
+    $('#create-form', context).submit(function(){
         var name = $('input[name=name]', this).val();
         var gameType = $('input[name=type]', this).val();
         if (name) {
@@ -50,16 +50,26 @@ function WidgetCreateGame(client)
         }
         return false;
     });
-    $('#create-bot').click(function(){
+    $('#create-bot', context).click(function(){
         var name = 'createbot-' + client.user.id;
         var gameType = 'createbot';
         client.join(name, gameType);
         return false;
     });
-    $('.game-modes li').click(function(){
+    $('.game-modes li', context).click(function(){
         $('#create-form input[name=type]').val(this.id);
         $('.game-modes li').removeClass('current');
         $(this).addClass('current');
+    });
+};
+
+//====== WidgetLoginForm =======================================================
+
+function WidgetLoginForm(context, client)
+{
+    $('#login-form', context).submit(function(){
+        client.login($('input[name=nick]', this).val());
+        return false;
     });
 };
 

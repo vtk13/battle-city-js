@@ -15,7 +15,8 @@ function UiManager(client)
 
     this.premadeChat = new WidgetPremadeChat($('#premade'), client);
 
-    this.createGame = new WidgetCreateGame(client);
+    this.loginForm = new WidgetLoginForm('#login', client);
+    this.createGame = new WidgetCreateGame($('#create'), client);
 
     var self = this;
 
