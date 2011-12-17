@@ -17,7 +17,7 @@ function UiManager(client)
     client.onConnect(this.setStateLogin.bind(this));
     client.onConnectFail(this.setStateConnectionFail.bind(this));
 
-    client.socket.on('logged', this.setStatePublicFromLogin.bind(this));
+    client.socket.on('logged', this.setStatePublic.bind(this));
     client.socket.on('joined', function(){
         if (client.currentPremade.type == 'createbot') {
             self.setStateCreateBot();
@@ -25,19 +25,19 @@ function UiManager(client)
             self.setStatePremade();
         }
     });
-    client.socket.on('unjoined', this.setStatePublicFromPremade.bind(this));
+    client.socket.on('unjoined', this.setStatePublic.bind(this));
     client.socket.on('disconnect', this.setStateDiconnected.bind(this));
 };
 
 UiManager.prototype.setStateLogin = function()
 {
-    $('#connecting').hide();
+    $('.ui-block').hide();
     $('#login').show();
 };
 
 UiManager.prototype.setStateConnectionFail = function()
 {
-    $('#connecting').hide();
+    $('.ui-block').hide();
     $('#connecting-fail').hide();
 };
 
@@ -47,67 +47,36 @@ UiManager.prototype.setStateDiconnected = function()
     $('#disconnect').show();
 };
 
-UiManager.prototype.setStatePublicFromPremade = function()
+UiManager.prototype.setStatePublic = function()
 {
-    var body = $('body');
-    body.css('overflow', 'hidden');
-    $('#public').show();
-    $('#create').show();
-    body.scrollTop(body.height());
-
-    body.animate({scrollTop: 0}, function(){
-        $('#bot-editor').hide();
-        $('#premade').hide();
-        $('#game').hide();
-        body.css('overflow', 'auto');
-    });
-};
-
-UiManager.prototype.setStatePublicFromLogin = function()
-{
-    var body = $('body');
-    body.css('overflow', 'hidden');
-    $('#public').show();
-    $('#create').show();
-    body.animate({scrollTop: body.height()}, function(){
-        $('#login').hide();
-        body.css('overflow', 'auto');
-    });
+    this._slideTo($('#public').add('#create'));
 };
 
 UiManager.prototype.setStatePremade = function()
 {
-    $('body').css('overflow', 'hidden');
-    $('#premade').show();
     $('#field').removeClass('create-bot');
-    $('#game').show();
-    $('body').animate({scrollTop: $('body').height()}, function(){
-        $('#public').hide();
-        $('#create').hide();
-        $('body').css('overflow', 'auto');
-    });
+    this._slideTo($('#premade').add('#game'));
 };
 
 UiManager.prototype.setStateCreateBot = function()
 {
-    $('body').css('overflow', 'hidden');
+    this.createBot.reset();
     $('#field').addClass('create-bot');
-    $('#bot-editor').show();
-    if (window.codeMirror === null) {
-        window.codeMirror = CodeMirror(document.getElementById('editor'), {
-            value: "Program Level1;\n" +
-                   "begin\n" +
-                   "  move(176);\n" +
-                   "  turn(\"right\");\n" +
-                   "  move(160);\n" +
-                   "end.",
-            mode:  "pascal"
-        });
+    this._slideTo($('#bot-editor').add('#game'));
+};
+
+UiManager.prototype._slideTo = function(toShow)
+{
+    var body = $('body');
+    body.css('overflow', 'hidden');
+    toShow.show();
+    var up = toShow.offset().top < 10; // slide up or down
+    if (up) {
+        body.scrollTop(body.height());
     }
-    $('#game').show();
-    $('body').animate({scrollTop: $('body').height()}, function(){
-        $('#public').hide();
-        $('#create').hide();
-        $('body').css('overflow', 'auto');
+
+    body.animate({scrollTop: up ? 0 : body.height()}, function(){
+        $('.ui-block').not(toShow).hide();
+        body.css('overflow', 'auto');
     });
 };
