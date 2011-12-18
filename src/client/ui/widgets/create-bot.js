@@ -12,7 +12,7 @@ WidgetCreateBot.prototype.reset = function()
             value: "Program Level1;\n" +
                    "begin\n" +
                    "  move(176);\n" +
-                   "  turn(\"right\");\n" +
+                   "  turn(\'right\');\n" +
                    "  move(160);\n" +
                    "end.",
             mode:  "pascal"

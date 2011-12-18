@@ -77,7 +77,7 @@ PascalCompiler.prototype.parseExpression = function()
 {
     if (this.test(this.isNum)) {
         return this.parseNumber();
-    } else if (this.test('"')) {
+    } else if (this.test("'")) {
         return this.parseString();
     } else {
         throw 'Unexpected "' + this.look() + '". Expression expected at ' + this.cur;
@@ -102,15 +102,15 @@ PascalCompiler.prototype.parseNumber = function()
 
 PascalCompiler.prototype.parseString = function()
 {
-    this.eat('"');
+    this.eat("'");
     var next;
     var res = '';
-    while (!this.test('"')) {
+    while (!this.test("'")) {
         next = this.look();
         res += next;
         this.eat(next);
     }
-    this.eat('"');
+    this.eat("'");
     this.eatWs();
     return res;
 };
