@@ -1,0 +1,41 @@
+body {
+    background: #222;
+    color: #fff;
+}
+a {
+    color: white;
+}
+#public h1, #create h1, #premade h1 {
+    background: #444;
+}
+#field {
+    border: solid 1px gray;
+}
+.user-list {
+    background: #222;
+}
+.user:hover {
+    background: #444;
+}
+.premades, .game-controls {
+    background: #222;
+}
+.premade:hover {
+    background: #444;
+}
+.chat {
+    background: #333;
+}
+.game-modes li.current {
+    background: #444;
+}
+#bot-editor #editor {
+    background: white;
+    color: black;
+}
+#exercises .exercise-list {
+    background: #333;
+}
+#exercises .exercise-list .exercise:hover {
+    background: #444;
+}

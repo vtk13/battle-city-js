@@ -13,14 +13,8 @@ html, body {
 
 body {
     margin: 0 auto;
-    background: #222;
     min-width: 980px;
-    color: #fff;
     position: relative;
-}
-
-a {
-    color: white;
 }
 
 .ui-block {
@@ -66,7 +60,6 @@ a {
     padding: 0 0 0 2%;
 }
 #public h1, #create h1, #premade h1 {
-    background: #444;
     text-align: center;
 }
 
@@ -100,10 +93,8 @@ a {
     float: left;
     width: 20%;
     overflow: auto;
-    background: #222;
 }
 .user:hover {
-    background: #444;
     cursor: pointer;
 }
 
@@ -111,7 +102,6 @@ a {
     float: left;
     width: 20%;
     margin-left: 60%;
-    background: #222;
 }
 .game-controls select {
     width: 60px;
@@ -120,7 +110,6 @@ a {
     width: 90px;
 }
 .premade:hover {
-    background: #444;
     cursor: pointer;
 }
 
@@ -128,7 +117,6 @@ a {
     float: left;
     width: 60%;
     margin-left: -80%;
-    background: #333;
 }
 .chat .chat-log {
     overflow: auto;
@@ -167,7 +155,6 @@ a {
     cursor: pointer;
 }
 .game-modes li.current {
-    background: #444;
     font-weight: normal;
 }
 .game-modes li p {
@@ -203,8 +190,6 @@ a {
 #bot-editor #editor {
     height: 100%;
     width: 80%;
-    background: white;
-    color: black;
     float: left;
 }
 #editor .CodeMirror {
@@ -220,14 +205,10 @@ a {
     height: 80%;
     margin: 5%;
     overflow: scroll;
-    background: #333;
 }
 #exercises .exercise-list .exercise {
     height: 100px;
     padding: 10px;
-}
-#exercises .exercise-list .exercise:hover {
-    background: #444;
 }
 #exercises .selected-exercise {
     float: left;
