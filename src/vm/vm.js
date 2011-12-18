@@ -33,7 +33,7 @@ Vm.prototype.step = function()
 Vm.prototype.move = function()
 {
     this.emit('action', {
-        'move': this.code[this.pointer++]
+        'move': this.code[this.pointer++] * 16
     });
 };
 
