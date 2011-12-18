@@ -1,41 +1,58 @@
+/*
+color: 041012 (background)
+color: 1C302C (hover, current items)
+color: 4D694E
+color: A69A5B (links, headers)
+color: F5D277 (text, borders)
+
+*/
+
 body {
-    background: #222;
-    color: #fff;
+    background: #041012;
+    color: #F5D277;
 }
 a {
-    color: white;
+    color: #A69A5B;
 }
-#public h1, #create h1, #premade h1 {
-    background: #444;
+h1, h2, h3, h4, h5, h6 {
+    color: #A69A5B;
 }
 #field {
-    border: solid 1px gray;
+    border: solid 1px #F5D277;
 }
 .user-list {
-    background: #222;
+/*    background: #222;*/
 }
 .user:hover {
-    background: #444;
+    background: #1C302C;
 }
 .premades, .game-controls {
-    background: #222;
+/*    background: #222;*/
 }
 .premade:hover {
-    background: #444;
+    background: #1C302C;
 }
 .chat {
-    background: #333;
+/*    background: #1C302C; */
 }
 .game-modes li.current {
-    background: #444;
+    background: #1C302C;
+}
+.game-modes li img {
+    background: #041012;
 }
 #bot-editor #editor {
-    background: white;
-    color: black;
+    border-right: solid 1px #F5D277;
 }
-#exercises .exercise-list {
-    background: #333;
+#bot-editor .cm-s-night {
+    background: #041012;
+}
+#exercises .exercise-list .exercise {
+    border-bottom: solid 1px #F5D277;
+}
+#exercises .exercise-list .exercise:first-child {
+    border-top: solid 1px #F5D277;
 }
 #exercises .exercise-list .exercise:hover {
-    background: #444;
+    background: #1C302C;
 }

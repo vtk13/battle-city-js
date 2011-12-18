@@ -13,7 +13,8 @@ WidgetCreateBot.prototype.reset = function()
                    "  turn(\'right\');\n" +
                    "  move(10);\n" +
                    "end.",
-            mode:  "pascal"
+            mode:  "pascal",
+            theme: "night"
         });
     }
 };

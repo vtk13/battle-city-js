@@ -71,7 +71,7 @@ FieldView.prototype.drawItem = function(current)
 
 FieldView.prototype.draw = function()
 {
-    this.c2d.fillStyle = 'rgba(0, 0, 0, 1)';
+    this.c2d.fillStyle = '#041012';
     this.c2d.fillRect(0, 0, this.field.width, this.field.height);
 
     if (this.context.hasClass('create-bot')) {
