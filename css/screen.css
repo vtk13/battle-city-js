@@ -37,7 +37,6 @@ a {
     padding: 30px 60px 30px;
 }
 
-
 #login form fieldset {
     padding: 10px;
 }
@@ -145,9 +144,6 @@ a {
 .message-form input[type="text"] {
     width: 250px;
 }
-.message-form input[type="submit"] {
-    width: 70px;
-}
 #bot-stack {
     float: right;
     width: 80px;
@@ -203,6 +199,10 @@ a {
 .create-bot {
     background: #333;
     padding: 20px;
+}
+
+#bot-editor {
+    clear: left;
 }
 
 #bot-editor #editor {
