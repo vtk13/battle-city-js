@@ -6,8 +6,7 @@ function WidgetExercises(context, client)
     });
     $('#create-bot', context).click(function(){
         var name = 'createbot-' + client.user.id;
-        var gameType = 'createbot';
-        client.join(name, gameType);
+        client.join(name, 'createbot');
         return false;
     });
 };

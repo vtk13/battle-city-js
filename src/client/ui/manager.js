@@ -65,14 +65,14 @@ UiManager.prototype.setStateExercises = function()
 
 UiManager.prototype.setStatePremade = function()
 {
-    $('#field').removeClass('create-bot');
+    $('#game').removeClass('create-bot');
     this._slideTo($('#premade').add('#game'));
 };
 
 UiManager.prototype.setStateCreateBot = function()
 {
     this.createBot.reset();
-    $('#field').addClass('create-bot');
+    $('#game').addClass('create-bot');
     this._slideTo($('#bot-editor').add('#game'), function() {
         if (window.codeMirror) {
             // hack to force codeMirror to show code

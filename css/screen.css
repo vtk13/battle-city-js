@@ -74,7 +74,7 @@ a {
     border: solid 1px gray;
     margin-top: 50px;
 }
-#field.create-bot {
+.create-bot #field {
     margin-top: 0;
 }
 #game .player0-stats {
@@ -194,11 +194,6 @@ a {
 }
 .locked {
     text-decoration: line-through;
-}
-
-.create-bot {
-    background: #333;
-    padding: 20px;
 }
 
 #bot-editor {

@@ -6,5 +6,5 @@ function WidgetGame(context, client)
             client.tankStack,
             $('#bot-stack', context), 'bot');
     this.userPoints = new UserPoint(client.premadeUsers);
-    this.fieldView = new FieldView(client);
+    this.fieldView = new FieldView(context, client);
 };

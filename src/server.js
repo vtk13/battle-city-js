@@ -146,6 +146,10 @@ io.listen(server, config).sockets.on('connection', function(socket) {
                 // user not likely synced this premade yet
                 premade: user.premade.serialize()
             });
+            if (event.gameType == 'createbot') {
+                user.premade.startGame();
+            }
+
             console.log(new Date().toLocaleTimeString() + ': user ' + user.nick
                     + ' join premade ' + user.premade.name + ' (' + event.gameType + ')');
         } catch (ex) {
@@ -176,8 +180,10 @@ io.listen(server, config).sockets.on('connection', function(socket) {
     });
     socket.on('start', function(event){
         if (user.premade && !user.premade.game) {
-            user.premade.level = event.level || 1;
-            user.premade.emit('change');
+            if (event.level && user.premade.level != event.level) {
+                user.premade.level = event.level;
+                user.premade.emit('change');
+            }
             user.premade.startGame();
             console.log(new Date().toLocaleTimeString() + ': user ' + user.nick + ' starts game ' + user.premade.name + ', level ' + user.premade.level);
         }

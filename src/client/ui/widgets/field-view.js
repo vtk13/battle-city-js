@@ -1,10 +1,10 @@
 
-function FieldView(client)
+function FieldView(context, client)
 {
     this.field = client.field;
-    this.domField = document.getElementById('field');
-    this.context = this.domField.getContext('2d');
-    this.context.font ="bold 25px Arial";
+    this.context = context;
+    this.c2d = $('#field', context).get(0).getContext('2d');
+    this.c2d.font ="bold 25px Arial";
     this.step = 1;
     this.animateIntervalId = null;
     var self = this;
@@ -62,7 +62,7 @@ FieldView.prototype.drawItem = function(current)
 {
     if (current.z == this.z) {
         for (var i in current.img) {
-            this.context.drawImage(window.images[current.img[i]],
+            this.c2d.drawImage(window.images[current.img[i]],
                     current.x - current.hw,
                     current.y - current.hh);
         }
@@ -71,25 +71,25 @@ FieldView.prototype.drawItem = function(current)
 
 FieldView.prototype.draw = function()
 {
-    this.context.fillStyle = 'rgba(0, 0, 0, 1)';
-    this.context.fillRect(0, 0, this.field.width, this.field.height);
+    this.c2d.fillStyle = 'rgba(0, 0, 0, 1)';
+    this.c2d.fillRect(0, 0, this.field.width, this.field.height);
 
-    if ($(this.domField).hasClass('create-bot')) {
-        this.context.strokeStyle = '#0a0a0a';
-        this.context.lineWidth = 1;
+    if (this.context.hasClass('create-bot')) {
+        this.c2d.strokeStyle = '#0a0a0a';
+        this.c2d.lineWidth = 1;
         for (var i = 1 ; i < 26 ; i++) {
-            this.context.beginPath();
-            this.context.moveTo(0, 16 * i + 0.5);
-            this.context.lineTo(416, 16 * i + 0.5);
-            this.context.closePath();
-            this.context.stroke();
+            this.c2d.beginPath();
+            this.c2d.moveTo(0, 16 * i + 0.5);
+            this.c2d.lineTo(416, 16 * i + 0.5);
+            this.c2d.closePath();
+            this.c2d.stroke();
         }
         for (var i = 1 ; i < 26 ; i++) {
-            this.context.beginPath();
-            this.context.moveTo(16 * i + 0.5, 0);
-            this.context.lineTo(16 * i + 0.5, 416);
-            this.context.closePath();
-            this.context.stroke();
+            this.c2d.beginPath();
+            this.c2d.moveTo(16 * i + 0.5, 0);
+            this.c2d.lineTo(16 * i + 0.5, 416);
+            this.c2d.closePath();
+            this.c2d.stroke();
         }
     }
 
@@ -100,8 +100,8 @@ FieldView.prototype.draw = function()
 
 FieldView.prototype.message = function(message)
 {
-    this.context.fillStyle = '#fff';
-    this.context.fillText(message, 100, 200);
-    this.context.strokeStyle = '#000';
-    this.context.strokeText(message, 100, 200);
+    this.c2d.fillStyle = '#fff';
+    this.c2d.fillText(message, 100, 200);
+    this.c2d.strokeStyle = '#000';
+    this.c2d.strokeText(message, 100, 200);
 };
