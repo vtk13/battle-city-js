@@ -7,4 +7,5 @@ function WidgetGame(context, client)
             $('#bot-stack', context), 'bot');
     this.userPoints = new UserPoint(client.premadeUsers);
     this.fieldView = new FieldView(context, client);
+    this.gameControls = new UiGameControls(context, client);
 };

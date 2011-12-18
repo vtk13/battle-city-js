@@ -1,7 +1,6 @@
 
 function WidgetCreateBot(context, client)
 {
-    this.gameControls = new UiGameControls(context, client);
 };
 
 WidgetCreateBot.prototype.reset = function()

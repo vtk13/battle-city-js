@@ -213,9 +213,6 @@ a {
 #editor .CodeMirror-scroll {
     height: 100%;
 }
-#bot-editor .game-controls {
-    margin-left: 0;
-}
 
 #exercises .exercise-list {
     float: left;
@@ -235,4 +232,14 @@ a {
 #exercises .selected-exercise {
     float: left;
     width: 50%;
+}
+
+.exercise-game-controls {
+    display: none;
+}
+
+#game.create-bot .exercise-game-controls {
+    clear: left;
+    margin-top: 30px;
+    display: block;
 }

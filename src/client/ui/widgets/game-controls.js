@@ -32,6 +32,10 @@ function UiGameControls(context, client)
     $('.stop-game', context).click(function(){
         client.stopGame();
     });
+    $('.restart-game', context).click(function(){
+        client.stopGame();
+        client.startGame($('select[name=level]', context).val());
+    });
 };
 
 UiGameControls.prototype.resetState =
