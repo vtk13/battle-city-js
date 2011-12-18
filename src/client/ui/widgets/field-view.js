@@ -2,7 +2,8 @@
 function FieldView(client)
 {
     this.field = client.field;
-    this.context = document.getElementById('field').getContext('2d');
+    this.domField = document.getElementById('field');
+    this.context = this.domField.getContext('2d');
     this.context.font ="bold 25px Arial";
     this.step = 1;
     this.animateIntervalId = null;
@@ -72,6 +73,26 @@ FieldView.prototype.draw = function()
 {
     this.context.fillStyle = 'rgba(0, 0, 0, 1)';
     this.context.fillRect(0, 0, this.field.width, this.field.height);
+
+    if ($(this.domField).hasClass('create-bot')) {
+        this.context.strokeStyle = '#0a0a0a';
+        this.context.lineWidth = 1;
+        for (var i = 1 ; i < 26 ; i++) {
+            this.context.beginPath();
+            this.context.moveTo(0, 16 * i + 0.5);
+            this.context.lineTo(416, 16 * i + 0.5);
+            this.context.closePath();
+            this.context.stroke();
+        }
+        for (var i = 1 ; i < 26 ; i++) {
+            this.context.beginPath();
+            this.context.moveTo(16 * i + 0.5, 0);
+            this.context.lineTo(16 * i + 0.5, 416);
+            this.context.closePath();
+            this.context.stroke();
+        }
+    }
+
     for (this.z = 0 ; this.z <= 2 ; this.z++) { // this.z hack?
         this.field.objects.traversal(this.drawItem, this);
     }
