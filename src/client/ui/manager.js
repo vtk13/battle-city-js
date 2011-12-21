@@ -83,17 +83,21 @@ UiManager.prototype.setStateCreateBot = function()
 
 UiManager.prototype._slideTo = function(toShow, callback)
 {
-    var body = $('body');
-    body.css('overflow', 'hidden');
+    $('.ui-block').hide();
     toShow.show();
-    var up = toShow.offset().top < 10; // slide up or down
-    if (up) {
-        body.scrollTop(body.height());
-    }
+    callback && callback();
 
-    body.animate({scrollTop: up ? 0 : body.height()}, function(){
-        $('.ui-block').not(toShow).hide();
-        body.css('overflow', 'auto');
-        callback && callback();
-    });
+//    var body = $('body');
+//    body.css('overflow', 'hidden');
+//    toShow.show();
+//    var up = toShow.offset().top < 10; // slide up or down
+//    if (up) {
+//        body.scrollTop(body.height());
+//    }
+//
+//    body.animate({scrollTop: up ? 0 : body.height()}, function(){
+//        $('.ui-block').not(toShow).hide();
+//        body.css('overflow', 'auto');
+//        callback && callback();
+//    });
 };
