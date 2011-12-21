@@ -65,28 +65,50 @@ body {
 
 #field {
     border: solid 1px gray;
-    margin-top: 50px;
+    margin-left: 50px;
 }
-.create-bot #field {
-    margin-top: 0;
+#game {
+    height: 420px;
 }
 #game .player0-stats {
-    float: left;
-    padding-left: 10px;
-    width: 340px;
+    position: absolute;
+    left: 0;
+    bottom: 10px;
 }
 #game .player1-stats {
-    float: left;
+    position: absolute;
+    left: 470px;
+    bottom: 10px;
 }
 #game .player2-stats {
     position: absolute;
+    left: 0;
     top: 10px;
-    left: 10px;
 }
 #game .player3-stats {
     position: absolute;
+    left: 470px;
     top: 10px;
-    left: 350px;
+}
+#game .fb-like {
+    position: absolute;
+    right: 10px;
+    bottom: 10px;
+    margin-top: 40px;
+}
+#game .exercise-game-controls {
+    display: none;
+}
+#game .exercise-game-controls input {
+    width: 100px;
+}
+
+#game.create-bot .exercise-game-controls {
+    display: block;
+    position: absolute;
+    bottom: 50px;
+    right: 10px;
+    width: 100px;
 }
 
 .user-list {
@@ -134,7 +156,10 @@ body {
 }
 #bot-stack {
     float: right;
-    width: 80px;
+    width: 40px;
+}
+#bot-stack .bot {
+    float: right;
 }
 
 .current {
@@ -175,10 +200,6 @@ body {
 #credits a.span {
     padding-right: 20px;
 }
-#game .fb-like {
-    clear: both;
-    margin-top: 40px;
-}
 .locked {
     text-decoration: line-through;
 }
@@ -208,16 +229,12 @@ body {
 #exercises .exercise-list .exercise {
     height: 100px;
     padding: 10px;
+    position: relative;
 }
-
-.exercise-game-controls {
-    display: none;
-}
-
-#game.create-bot .exercise-game-controls {
-    clear: left;
-    margin-top: 30px;
-    display: block;
+#exercises .exercise-list .exercise .exercise-controls {
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
 }
 
 .exercise-controls {
