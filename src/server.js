@@ -146,9 +146,6 @@ io.listen(server, config).sockets.on('connection', function(socket) {
                 // user not likely synced this premade yet
                 premade: user.premade.serialize()
             });
-            if (event.gameType == 'createbot') {
-                user.premade.startGame();
-            }
 
             console.log(new Date().toLocaleTimeString() + ': user ' + user.nick
                     + ' join premade ' + user.premade.name + ' (' + event.gameType + ')');

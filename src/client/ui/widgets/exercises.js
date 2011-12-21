@@ -1,12 +1,10 @@
 
 function WidgetExercises(context, client)
 {
-    $('.exercise', context).live('click', function(){
-        $('.selected-exercise .desc', context).html($(this).html());
-    });
-    $('#create-bot', context).click(function(){
+    $('.exercise .select', context).live('click', function(){
         var name = 'createbot-' + client.user.id;
         client.join(name, 'createbot');
+        client.startGame(parseInt($(this).attr('level')));
         return false;
     });
 };

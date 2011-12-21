@@ -1,7 +1,7 @@
 /*
 color: 041012 (background)
 color: 1C302C (hover, current items)
-color: 4D694E
+color: 4D694E ()
 color: A69A5B (links, headers)
 color: F5D277 (text, borders)
 
@@ -55,4 +55,8 @@ h1, h2, h3, h4, h5, h6 {
 }
 #exercises .exercise-list .exercise:hover {
     background: #1C302C;
+}
+
+.exercise-controls>div {
+    background: #4D694E;
 }

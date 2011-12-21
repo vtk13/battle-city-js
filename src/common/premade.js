@@ -128,7 +128,7 @@ Premade.prototype.gameOver = function(winnerClan)
         if (this.type == 'teamvsteam') {
             this.locked = false;
         }
-        if (this.type != 'teamvsteam' && this.clans[0] == winnerClan) {
+        if (this.type == 'classic' && this.clans[0] == winnerClan) {
             this.level++;
             if (this.level > Premade.types[this.type].levels) {
                 this.level = 1;

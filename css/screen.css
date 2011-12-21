@@ -200,19 +200,14 @@ body {
 }
 
 #exercises .exercise-list {
-    float: left;
-    width: 40%;
-    height: 80%;
-    margin: 5%;
-    overflow: scroll;
+
+}
+#exercises .exercise-controls>div {
+    cursor: pointer;
 }
 #exercises .exercise-list .exercise {
     height: 100px;
     padding: 10px;
-}
-#exercises .selected-exercise {
-    float: left;
-    width: 50%;
 }
 
 .exercise-game-controls {
@@ -223,4 +218,16 @@ body {
     clear: left;
     margin-top: 30px;
     display: block;
+}
+
+.exercise-controls {
+    text-align: right;
+}
+.exercise-controls>div {
+    float: right;
+    text-align: center;
+    min-width: 20px;
+    height: 20px;
+    padding: 0 3px;
+    margin-right: 4px;
 }
