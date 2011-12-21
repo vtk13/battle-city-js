@@ -5,8 +5,11 @@
 
 html, body {
     height: 100%;
+    min-height: 650px;
+    text-align: justify;
+    font: normal 14px 'Lucida Grande', Verdana, sans-serif;
 }
-#public, #premade, #gameChat, #game, #create, #bot-editor, #exercises {
+#public, #premade, #gameChat, #game, #create, #bot-editor, #exercises, #help {
     position: relative;
     height: 100%;
 }
@@ -50,7 +53,7 @@ body {
     padding-left: 120px;
 }
 
-#public, #premade, #game, #bot-editor {
+#public, #premade, #game, #bot-editor, #help {
     float: left;
     width: 50%;
 }
@@ -65,29 +68,33 @@ body {
 
 #field {
     border: solid 1px gray;
-    margin-left: 50px;
+    margin-left: 70px;
 }
 #game {
     height: 420px;
 }
 #game .player0-stats {
     position: absolute;
-    left: 0;
+    left: 5px;
     bottom: 10px;
+    width: 60px;
+    text-align: right;
 }
 #game .player1-stats {
     position: absolute;
-    left: 470px;
+    left: 490px;
     bottom: 10px;
 }
 #game .player2-stats {
     position: absolute;
-    left: 0;
+    left: 5px;
     top: 10px;
+    width: 60px;
+    text-align: right;
 }
 #game .player3-stats {
     position: absolute;
-    left: 470px;
+    left: 490px;
     top: 10px;
 }
 #game .fb-like {
@@ -204,14 +211,9 @@ body {
     text-decoration: line-through;
 }
 
-#bot-editor {
-    clear: left;
-}
-
 #bot-editor #editor {
     height: 100%;
-    width: 80%;
-    float: left;
+    width: 100%;
 }
 #editor .CodeMirror {
     height: 100%;
@@ -247,4 +249,16 @@ body {
     height: 20px;
     padding: 0 3px;
     margin-right: 4px;
+}
+
+#help {
+    overflow: auto;
+}
+#help .content {
+    margin: 10px;
+}
+#help .code {
+    margin: 5px 5px 5px 10px;
+    padding: 5px 5px 5px 10px;
+    border-radius: 5px;
 }

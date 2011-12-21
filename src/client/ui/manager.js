@@ -10,6 +10,7 @@ function UiManager(client)
     this.game       = new WidgetGame($('#game'), client);
     this.createBot  = new WidgetCreateBot($('#bot-editor'), client);
     this.exercises  = new WidgetExercises($('#exercises'), client);
+    this.help       = new WidgetHelp($('#help'), client);
 
     this.notifier   = new WidgetNotifier(client);
 
@@ -73,10 +74,12 @@ UiManager.prototype.setStateCreateBot = function()
 {
     this.createBot.reset();
     $('#game').addClass('create-bot');
-    this._slideTo($('#bot-editor').add('#game'), function() {
+    this._slideTo($('#bot-editor').add('#game').add('#help'), function() {
         if (window.codeMirror) {
             // hack to force codeMirror to show code
             window.codeMirror.setValue(window.codeMirror.getValue());
+            window.codeMirror.focus();
+            window.codeMirror.setCursor({line: 2, ch: 2});
         }
     });
 };

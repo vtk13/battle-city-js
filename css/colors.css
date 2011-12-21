@@ -42,10 +42,10 @@ h1, h2, h3, h4, h5, h6 {
     background: #041012;
 }
 #bot-editor #editor {
-    border-right: solid 1px #F5D277;
+    border-left: solid 1px #F5D277;
 }
-#bot-editor .cm-s-night {
-    background: #041012;
+.cm-s-night {
+    background: #1C302C;
 }
 #exercises .exercise-list .exercise {
     border-bottom: solid 1px #F5D277;

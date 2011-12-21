@@ -3,6 +3,12 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <title>Battle city</title>
+    <script src="lib/code-mirror/codemirror.js"></script>
+    <script src="lib/code-mirror/runmode.js"></script>
+    <script src="lib/code-mirror/pascal.js"></script>
+    <link  href="lib/code-mirror/codemirror.css" rel="stylesheet">
+    <link  href="lib/code-mirror/night.css" rel="stylesheet">
+    
     <link rel="stylesheet" type="text/css" href="/css/screen.css">
     <link rel="stylesheet" type="text/css" href="/css/colors.css">
     <script type="text/javascript" src="/lib/jquery.js"></script>
@@ -42,14 +48,10 @@
     <script type="text/javascript" src="/src/client/ui/widgets/game.js"></script>
     <script type="text/javascript" src="/src/client/ui/widgets/create-bot.js"></script>
     <script type="text/javascript" src="/src/client/ui/widgets/exercises.js"></script>
+    <script type="text/javascript" src="/src/client/ui/widgets/help.js"></script>
     <script type="text/javascript" src="/src/client/ui/widgets/notifier.js"></script>
     <script type="text/javascript" src="/src/client/ui/manager.js"></script>
     <script type="text/javascript" src="/src/init.js"></script>
-
-    <script src="lib/code-mirror/codemirror.js"></script>
-    <link  href="lib/code-mirror/codemirror.css" rel="stylesheet">
-    <script src="lib/code-mirror/pascal.js"></script>
-    <link  href="lib/code-mirror/night.css" rel="stylesheet">
 
     <script type="text/javascript" src="/src/vm/pascal/parser.js"></script>
     <script type="text/javascript" src="/src/vm/vm.js"></script>
@@ -194,8 +196,8 @@
     </div>
 </div>
 
-<div id="bot-editor" class="ui-block">
-    <div id="editor"></div>
+<div id="help" class="ui-block">
+    <div class="content"></div>
 </div>
 
 <div id="game" class="ui-block">
@@ -213,6 +215,10 @@
     </div>
     
     <div class="fb-like" data-href="http://vtk.tom.ru/" data-send="false" data-layout="button_count" data-width="100" data-show-faces="true" data-colorscheme="dark"></div>
+</div>
+
+<div id="bot-editor" class="ui-block">
+    <div id="editor"></div>
 </div>
 </body>
 </html>
