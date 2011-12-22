@@ -236,3 +236,6 @@ body {
     padding: 5px 5px 5px 10px;
     border-radius: 5px;
 }
+legend {
+    padding: 0 5px;
+}

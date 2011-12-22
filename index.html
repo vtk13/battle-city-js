@@ -14,8 +14,11 @@
     <link rel="stylesheet" type="text/css" href="/css/text.css">
     <link rel="stylesheet" type="text/css" href="/css/colors.css">
     <script type="text/javascript" src="/lib/jquery.js"></script>
-    <script type="text/javascript" src="/css/screen.js"></script>
     <script type="text/javascript" src="/lib/node/events.js"></script>
+    <script type="text/javascript" src="/css/screen.js"></script>
+    <script type="text/javascript" src="/src/lang/lang.js"></script>
+    <script type="text/javascript" src="/src/lang/ru.js"></script>
+    <script type="text/javascript" src="/src/lang/en.js"></script>
     <script type="text/javascript" src="/src/common/func.js"></script>
     <script type="text/javascript" src="/src/common/event.js"></script>
     <script type="text/javascript" src="/src/common/list.js"></script>
@@ -60,7 +63,10 @@
 </head>
 <body>
 <div id="mainmenu">
-    меню
+    <ul class="lang-select">
+        <li lang="en">en</li>
+        <li lang="ru">ru</li>
+    </ul>
 </div>
 <div id="body">
     <div id="connecting" class="ui-block" style="display: block;">Подключение...</div>
@@ -83,16 +89,16 @@
             </ul>
             <form id="game-login" action="#">
                 <fieldset>
-                    <legend>Поиграть</legend>
-                    <div><span>Введите ник:</span><input type="text" name="nick"></div>
-                    <div class="submit"><input type="submit" value="Поиграть"></div>
+                    <legend class="lang" key="legend-play"></legend>
+                    <div><span class="lang" key="enter-nick"></span><input type="text" name="nick"></div>
+                    <div class="submit"><button type="submit" class="lang" key="submit-play"></button></div>
                 </fieldset>
             </form>
             <form id="tutor-login" action="#">
                 <fieldset>
-                    <legend>Поучиться программировать</legend>
-                    <div><span>Введите ник:</span><input type="text" name="nick"></div>
-                    <div class="submit"><input type="submit" value="Поучиться"></div>
+                    <legend class="lang" key="legend-learn"></legend>
+                    <div><span class="lang" key="enter-nick"></span><input type="text" name="nick"></div>
+                    <div class="submit"><button type="submit" class="lang" key="submit-learn"></button></div>
                 </fieldset>
             </form>
             <div class="like-wrapper">
@@ -116,10 +122,10 @@
     </div>
     
     <div id="public" class="ui-block">
-        <h1>Общий чат</h1>
-        <div class="user-list"><h3>Игроки</h3></div>
+        <h1 class="lang" key="header-public-chat"></h1>
+        <div class="user-list"><h3 class="lang" key="header-players"></h3></div>
         <div class="premades">
-            <div>Присоеди&shy;нитесь в идущую игру:</div>
+            <div class="lang" key="join-existen-game"></div>
         </div>
         <div class="chat">
             <div class="chat-log">
@@ -128,34 +134,31 @@
         </div>
         <form class="message-form">
             <input type="text" name="message">
-            <input type="submit" value="Отправить">
+            <button type="submit" class="lang" key="submit"></button>
         </form>
     </div>
     
     <div id="create" class="ui-block">
-        <h1>Создать игру</h1>
+        <h1 class="lang" key="header-create-game"></h1>
         <form id="create-form">
-        <h3>Выберите тип игры:</h3>
+        <h3 class="lang" key="choose-game-type"></h3>
         <ul class="game-modes">
             <li id="classic" class="current">
                 <img src="/img/client/classic.png" width="208" height="208" alt="classic"/>
-                <h4>Классический</h4>
-                <p>Тут вы можете пройти все 35 уровней старых добрых танчиков. После 
-                завершения каждого уровня нажимайте "Старт!", чтобы начать следующий.</p>
+                <h4 class="lang" key="game-type-classic"></h4>
+                <p class="lang" key="game-type-classic-desc"></p>
             </li>
             <li id="teamvsteam">
                 <img src="/img/client/teamvsteam.png" width="208" height="208" alt="teamvsteam"/>
-                <h4>Командный</h4>
-                <p>В командном режиме вы можете сразиться с другимим игроками 2 на 2.
-                Доступен только один уровень. Первые двое подключившихся страртуют снизу карты,
-                третий и четвертый - сверху.</p>
+                <h4 class="lang" key="game-type-teamvsteam"></h4>
+                <p class="lang" key="game-type-teamvsteam-desc"></p>
             </li>
         </ul>
         <div>
-            Введите имя новый игры:
+            <span class="lang" key="enter-new-game-name"></span>
             <input type="hidden" name="type" value="classic">
             <input type="text" name="name">
-            <input type="submit" value="Создать">
+            <button type="submit" class="lang" key="submit-create"></button>
         </div>
         </form>
     </div>

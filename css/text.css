@@ -4,6 +4,10 @@ html, body {
     font: normal 14px 'Lucida Grande', Verdana, sans-serif;
 }
 
+h1 {
+    font-size: 19px;
+}
+
 #mainmenu {
     line-height: 30px;
 }

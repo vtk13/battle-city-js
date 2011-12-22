@@ -79,3 +79,11 @@ function WidgetLoginForm(context, client)
     });
 };
 
+//====== WidgetLangSelector ====================================================
+
+function WidgetLangSelector()
+{
+    $('.lang-select li').click(function(){
+        applyLang($(this).attr('lang'));
+    });
+};

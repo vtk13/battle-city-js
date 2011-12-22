@@ -20,6 +20,9 @@ h1, h2, h3, h4, h5, h6 {
 #mainmenu {
     background: #1C302C;
 }
+.lang-select li:hover, .lang-select li.current {
+    background: #4D694E;
+}
 #field {
     border: solid 1px #F5D277;
 }

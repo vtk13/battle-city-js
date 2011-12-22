@@ -1,3 +1,14 @@
 #mainmenu {
     height: 30px;
 }
+
+.lang-select {
+    float: right;
+    list-style: none;
+    padding: 0;
+}
+.lang-select li {
+    float: left;
+    padding: 0 4px;
+    cursor: pointer;
+}
