@@ -17,6 +17,9 @@ a {
 h1, h2, h3, h4, h5, h6 {
     color: #A69A5B;
 }
+#mainmenu {
+    background: #1C302C;
+}
 #field {
     border: solid 1px #F5D277;
 }

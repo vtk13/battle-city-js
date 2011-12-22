@@ -1,0 +1,45 @@
+
+html, body {
+    text-align: justify;
+    font: normal 14px 'Lucida Grande', Verdana, sans-serif;
+}
+
+#mainmenu {
+    line-height: 30px;
+}
+.current {
+    font-weight: bold;
+}
+
+.game-modes li.current {
+    font-weight: normal;
+}
+.game-modes li p {
+    text-align: left;
+}
+
+#credits {
+    text-align: center;
+    font-size: 11px;
+}
+.locked {
+    text-decoration: line-through;
+}
+
+.exercise-controls>div {
+    text-align: center;
+}
+
+#public h1, #create h1, #premade h1 {
+    text-align: center;
+}
+
+#game .player0-stats {
+    text-align: right;
+}
+#game .player2-stats {
+    text-align: right;
+}
+.game-modes li {
+    text-align: center;
+}

@@ -9,7 +9,9 @@
     <link  href="lib/code-mirror/codemirror.css" rel="stylesheet">
     <link  href="lib/code-mirror/night.css" rel="stylesheet">
     
+    <link rel="stylesheet" type="text/css" href="/css/layout.css">
     <link rel="stylesheet" type="text/css" href="/css/screen.css">
+    <link rel="stylesheet" type="text/css" href="/css/text.css">
     <link rel="stylesheet" type="text/css" href="/css/colors.css">
     <script type="text/javascript" src="/lib/jquery.js"></script>
     <script type="text/javascript" src="/css/screen.js"></script>
@@ -57,164 +59,169 @@
     <script type="text/javascript" src="/src/vm/vm.js"></script>
 </head>
 <body>
-<div id="connecting" class="ui-block" style="display: block;">Подключение...</div>
-<div id="connection-fail" class="ui-block">Извините, не удалось подключиться к серверу.
-    Возможно вы находитесь за прокси, которая рубит WebSocket трафик (в 
-    будущем шанс подключиться через такие прокси будет увеличен с помошью ssl-соединения).</div>
-<div id="disconnect" class="ui-block">
-    <h3 style="text-align: center;">Извините, подключение прервано. Перезагрузите страницу, чтобы начать заново.</h3>
+<div id="mainmenu">
+    меню
 </div>
-<div id="login" class="ui-block">
-    <div class="login">
-        <h4>Прочитайте пожалуйста:</h4>
-        <ul class="faq">
-            <li>Не верьте всему что пишут в чате, потому-что любой троль может зайти под моим ником.</li>
-            <li>Управление: Стрелки - ездить, пробел - стрелять.</li>
-            <li>Это просто демка, а не законченный продукт. Поэтому дизайн убогий, баги жирные.</li>
-            <li>Максимум может быть только 10 игр одновременно - это
-                связанно со скорость моего интернет подключения.</li>
-            <li>Конструктивную критику, баги и предложения направлять на vtk666@gmail.com</li>
+<div id="body">
+    <div id="connecting" class="ui-block" style="display: block;">Подключение...</div>
+    <div id="connection-fail" class="ui-block">Извините, не удалось подключиться к серверу.
+        Возможно вы находитесь за прокси, которая рубит WebSocket трафик (в 
+        будущем шанс подключиться через такие прокси будет увеличен с помошью ssl-соединения).</div>
+    <div id="disconnect" class="ui-block">
+        <h3 style="text-align: center;">Извините, подключение прервано. Перезагрузите страницу, чтобы начать заново.</h3>
+    </div>
+    <div id="login" class="ui-block">
+        <div class="login">
+            <h4>Прочитайте пожалуйста:</h4>
+            <ul class="faq">
+                <li>Не верьте всему что пишут в чате, потому-что любой троль может зайти под моим ником.</li>
+                <li>Управление: Стрелки - ездить, пробел - стрелять.</li>
+                <li>Это просто демка, а не законченный продукт. Поэтому дизайн убогий, баги жирные.</li>
+                <li>Максимум может быть только 10 игр одновременно - это
+                    связанно со скорость моего интернет подключения.</li>
+                <li>Конструктивную критику, баги и предложения направлять на vtk666@gmail.com</li>
+            </ul>
+            <form id="game-login" action="#">
+                <fieldset>
+                    <legend>Поиграть</legend>
+                    <div><span>Введите ник:</span><input type="text" name="nick"></div>
+                    <div class="submit"><input type="submit" value="Поиграть"></div>
+                </fieldset>
+            </form>
+            <form id="tutor-login" action="#">
+                <fieldset>
+                    <legend>Поучиться программировать</legend>
+                    <div><span>Введите ник:</span><input type="text" name="nick"></div>
+                    <div class="submit"><input type="submit" value="Поучиться"></div>
+                </fieldset>
+            </form>
+            <div class="like-wrapper">
+                <div id="fb-root"></div>
+                <script>(function(d, s, id) {
+                  var js, fjs = d.getElementsByTagName(s)[0];
+                  if (d.getElementById(id)) {return;}
+                  js = d.createElement(s); js.id = id;
+                  js.src = "//connect.facebook.net/en_US/all.js#xfbml=1";
+                  fjs.parentNode.insertBefore(js, fjs);
+                }(document, 'script', 'facebook-jssdk'));</script>
+                <div class="fb-like" data-href="http://vtk.tom.ru/" data-send="false" data-layout="button_count" data-width="100" data-show-faces="true" data-colorscheme="dark"></div>
+            </div>
+        </div>
+        
+        <div id="credits">
+            <a class="span" href="http://www.spriters-resource.com/nes/batcity/sheet/11756">Sprites by Zephiel87</a>
+            <a class="span" href="http://code.google.com/p/battle-city-js/">Source code by vtk</a>
+            Powered by <a href="http://nodejs.org/">node.js</a> and <a href="http://socket.io/">socket.io</a>
+        </div>
+    </div>
+    
+    <div id="public" class="ui-block">
+        <h1>Общий чат</h1>
+        <div class="user-list"><h3>Игроки</h3></div>
+        <div class="premades">
+            <div>Присоеди&shy;нитесь в идущую игру:</div>
+        </div>
+        <div class="chat">
+            <div class="chat-log">
+                <div class="messages"></div>
+            </div>
+        </div>
+        <form class="message-form">
+            <input type="text" name="message">
+            <input type="submit" value="Отправить">
+        </form>
+    </div>
+    
+    <div id="create" class="ui-block">
+        <h1>Создать игру</h1>
+        <form id="create-form">
+        <h3>Выберите тип игры:</h3>
+        <ul class="game-modes">
+            <li id="classic" class="current">
+                <img src="/img/client/classic.png" width="208" height="208" alt="classic"/>
+                <h4>Классический</h4>
+                <p>Тут вы можете пройти все 35 уровней старых добрых танчиков. После 
+                завершения каждого уровня нажимайте "Старт!", чтобы начать следующий.</p>
+            </li>
+            <li id="teamvsteam">
+                <img src="/img/client/teamvsteam.png" width="208" height="208" alt="teamvsteam"/>
+                <h4>Командный</h4>
+                <p>В командном режиме вы можете сразиться с другимим игроками 2 на 2.
+                Доступен только один уровень. Первые двое подключившихся страртуют снизу карты,
+                третий и четвертый - сверху.</p>
+            </li>
         </ul>
-        <form id="game-login" action="#">
-            <fieldset>
-                <legend>Поиграть</legend>
-                <div><span>Введите ник:</span><input type="text" name="nick"></div>
-                <div class="submit"><input type="submit" value="Поиграть"></div>
-            </fieldset>
-        </form>
-        <form id="tutor-login" action="#">
-            <fieldset>
-                <legend>Поучиться программировать</legend>
-                <div><span>Введите ник:</span><input type="text" name="nick"></div>
-                <div class="submit"><input type="submit" value="Поучиться"></div>
-            </fieldset>
-        </form>
-        <div class="like-wrapper">
-            <div id="fb-root"></div>
-            <script>(function(d, s, id) {
-              var js, fjs = d.getElementsByTagName(s)[0];
-              if (d.getElementById(id)) {return;}
-              js = d.createElement(s); js.id = id;
-              js.src = "//connect.facebook.net/en_US/all.js#xfbml=1";
-              fjs.parentNode.insertBefore(js, fjs);
-            }(document, 'script', 'facebook-jssdk'));</script>
-            <div class="fb-like" data-href="http://vtk.tom.ru/" data-send="false" data-layout="button_count" data-width="100" data-show-faces="true" data-colorscheme="dark"></div>
+        <div>
+            Введите имя новый игры:
+            <input type="hidden" name="type" value="classic">
+            <input type="text" name="name">
+            <input type="submit" value="Создать">
         </div>
+        </form>
     </div>
     
-    <div id="credits">
-        <a class="span" href="http://www.spriters-resource.com/nes/batcity/sheet/11756">Sprites by Zephiel87</a>
-        <a class="span" href="http://code.google.com/p/battle-city-js/">Source code by vtk</a>
-        Powered by <a href="http://nodejs.org/">node.js</a> and <a href="http://socket.io/">socket.io</a>
-    </div>
-</div>
-
-<div id="public" class="ui-block">
-    <h1>Общий чат</h1>
-    <div class="user-list"><h3>Игроки</h3></div>
-    <div class="premades">
-        <div>Присоеди&shy;нитесь в идущую игру:</div>
-    </div>
-    <div class="chat">
-        <div class="chat-log">
-            <div class="messages"></div>
+    <div id="premade" class="ui-block">
+        <h1>Чат игры</h1>
+        <div class="user-list"><h3>Игроки</h3></div>
+        <div class="game-controls">
+            <input class="start-game" type="button" value="Старт!">
+            <input class="exit-game" type="button" value="Выйти">
+            <div class="level">Уровень: <select name="level"></select></div>
         </div>
-    </div>
-    <form class="message-form">
-        <input type="text" name="message">
-        <input type="submit" value="Отправить">
-    </form>
-</div>
-
-<div id="create" class="ui-block">
-    <h1>Создать игру</h1>
-    <form id="create-form">
-    <h3>Выберите тип игры:</h3>
-    <ul class="game-modes">
-        <li id="classic" class="current">
-            <img src="/img/client/classic.png" width="208" height="208" alt="classic"/>
-            <h4>Классический</h4>
-            <p>Тут вы можете пройти все 35 уровней старых добрых танчиков. После 
-            завершения каждого уровня нажимайте "Старт!", чтобы начать следующий.</p>
-        </li>
-        <li id="teamvsteam">
-            <img src="/img/client/teamvsteam.png" width="208" height="208" alt="teamvsteam"/>
-            <h4>Командный</h4>
-            <p>В командном режиме вы можете сразиться с другимим игроками 2 на 2.
-            Доступен только один уровень. Первые двое подключившихся страртуют снизу карты,
-            третий и четвертый - сверху.</p>
-        </li>
-    </ul>
-    <div>
-        Введите имя новый игры:
-        <input type="hidden" name="type" value="classic">
-        <input type="text" name="name">
-        <input type="submit" value="Создать">
-    </div>
-    </form>
-</div>
-
-<div id="premade" class="ui-block">
-    <h1>Чат игры</h1>
-    <div class="user-list"><h3>Игроки</h3></div>
-    <div class="game-controls">
-        <input class="start-game" type="button" value="Старт!">
-        <input class="exit-game" type="button" value="Выйти">
-        <div class="level">Уровень: <select name="level"></select></div>
-    </div>
-    <div class="chat">
-        <div class="chat-log">
-            <div class="messages"></div>
-        </div>
-    </div>
-    <form class="message-form">
-        <input type="text" name="message">
-        <input type="submit" value="Отправить">
-    </form>
-</div>
-
-<div id="exercises" class="ui-block">
-    <div class="exercise-list">
-        <div class="exercise">
-            <h3>Задание 1 - Алгоритм</h3>
-            <p>В этом упражнении вам необходимо написать программу управления танком, которая приведет его в точку назначения.</p>
-            <div class="exercise-controls">
-                <div class="select" level="1">&rarr;</div>
+        <div class="chat">
+            <div class="chat-log">
+                <div class="messages"></div>
             </div>
         </div>
-        <div class="exercise">
-            <h3>Задание 2 - Алгоритм</h3>
-            <p>В этом упражнении вам необходимо написать программу управления танком, которая приведет его в точку назначения.</p>
-            <div class="exercise-controls">
-                <div class="select" level="2">&rarr;</div>
+        <form class="message-form">
+            <input type="text" name="message">
+            <input type="submit" value="Отправить">
+        </form>
+    </div>
+    
+    <div id="exercises" class="ui-block">
+        <div class="exercise-list">
+            <div class="exercise">
+                <h3>Задание 1 - Алгоритм</h3>
+                <p>В этом упражнении вам необходимо написать программу управления танком, которая приведет его в точку назначения.</p>
+                <div class="exercise-controls">
+                    <div class="select" level="1">&rarr;</div>
+                </div>
+            </div>
+            <div class="exercise">
+                <h3>Задание 2 - Алгоритм</h3>
+                <p>В этом упражнении вам необходимо написать программу управления танком, которая приведет его в точку назначения.</p>
+                <div class="exercise-controls">
+                    <div class="select" level="2">&rarr;</div>
+                </div>
             </div>
         </div>
     </div>
-</div>
-
-<div id="help" class="ui-block">
-    <div class="content"></div>
-</div>
-
-<div id="game" class="ui-block">
-    <div id="bot-stack"></div>
-    <canvas id="field" width="416" height="416"></canvas>
-    <div class="player0-stats"></div>
-    <div class="player1-stats"></div>
-    <div class="player2-stats"></div>
-    <div class="player3-stats"></div>
     
-    <div class="exercise-game-controls">
-        <input class="execute-code" type="button" value="Выполнить код">
-        <input class="restart-game" type="button" value="Начать заново">
-        <input class="exit-exercise" type="button" value="Выйти">
+    <div id="help" class="ui-block">
+        <div class="content"></div>
     </div>
     
-    <div class="fb-like" data-href="http://vtk.tom.ru/" data-send="false" data-layout="button_count" data-width="100" data-show-faces="true" data-colorscheme="dark"></div>
-</div>
-
-<div id="bot-editor" class="ui-block">
-    <div id="editor"></div>
+    <div id="game" class="ui-block">
+        <div id="bot-stack"></div>
+        <canvas id="field" width="416" height="416"></canvas>
+        <div class="player0-stats"></div>
+        <div class="player1-stats"></div>
+        <div class="player2-stats"></div>
+        <div class="player3-stats"></div>
+        
+        <div class="exercise-game-controls">
+            <input class="execute-code" type="button" value="Выполнить код">
+            <input class="restart-game" type="button" value="Начать заново">
+            <input class="exit-exercise" type="button" value="Выйти">
+        </div>
+        
+        <div class="fb-like" data-href="http://vtk.tom.ru/" data-send="false" data-layout="button_count" data-width="100" data-show-faces="true" data-colorscheme="dark"></div>
+    </div>
+    
+    <div id="bot-editor" class="ui-block">
+        <div id="editor"></div>
+    </div>
 </div>
 </body>
 </html>
