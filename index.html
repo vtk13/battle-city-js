@@ -69,12 +69,17 @@
     </ul>
 </div>
 <div id="body">
-    <div id="connecting" class="ui-block" style="display: block;">Подключение...</div>
-    <div id="connection-fail" class="ui-block">Извините, не удалось подключиться к серверу.
-        Возможно вы находитесь за прокси, которая рубит WebSocket трафик (в 
-        будущем шанс подключиться через такие прокси будет увеличен с помошью ssl-соединения).</div>
+    <div id="connecting" class="ui-block" style="display: block;">
+        <span class="lang" key="message-connection"></span>
+    </div>
+    <div id="connection-fail" class="ui-block">
+        <span class="lang" key="message-connection-fail"></span>
+    </div>
     <div id="disconnect" class="ui-block">
-        <h3 style="text-align: center;">Извините, подключение прервано. Перезагрузите страницу, чтобы начать заново.</h3>
+        <span class="lang" key="message-connection-closed"></span>
+    </div>
+    <div id="nowebsocket" class="ui-block">
+        <span class="lang" key="lack-of-websocket-support"></span>
     </div>
     <div id="login" class="ui-block">
         <div class="login">
@@ -164,12 +169,12 @@
     </div>
     
     <div id="premade" class="ui-block">
-        <h1>Чат игры</h1>
-        <div class="user-list"><h3>Игроки</h3></div>
+        <h1 class="lang" key="header-premade-chat"></h1>
+        <div class="user-list"><h3 class="lang" key="header-players"></h3></div>
         <div class="game-controls">
-            <input class="start-game" type="button" value="Старт!">
-            <input class="exit-game" type="button" value="Выйти">
-            <div class="level">Уровень: <select name="level"></select></div>
+            <button class="start-game lang" key="start"></button>
+            <button class="exit-game lang" key="exit"></button>
+            <div class="level"><span class="lang" key="prompt-level"></span> <select name="level"></select></div>
         </div>
         <div class="chat">
             <div class="chat-log">
@@ -178,7 +183,7 @@
         </div>
         <form class="message-form">
             <input type="text" name="message">
-            <input type="submit" value="Отправить">
+            <button type="submit" class="lang" key="submit"></button>
         </form>
     </div>
     
@@ -214,9 +219,9 @@
         <div class="player3-stats"></div>
         
         <div class="exercise-game-controls">
-            <input class="execute-code" type="button" value="Выполнить код">
-            <input class="restart-game" type="button" value="Начать заново">
-            <input class="exit-exercise" type="button" value="Выйти">
+            <button class="execute-code lang" key="execute-code"></button>
+            <button class="restart-game lang" key="restart"></button>
+            <button class="exit-exercise lang" key="exit"></button>
         </div>
         
         <div class="fb-like" data-href="http://vtk.tom.ru/" data-send="false" data-layout="button_count" data-width="100" data-show-faces="true" data-colorscheme="dark"></div>

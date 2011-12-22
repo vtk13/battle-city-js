@@ -18,6 +18,13 @@ body {
     position: relative;
 }
 
+h1, h2, h3 {
+    margin-bottom: 10px;
+}
+p {
+    margin-bottom: 5px;
+}
+
 .ui-block {
     display: none;
 }
@@ -99,7 +106,7 @@ body {
 #game .exercise-game-controls {
     display: none;
 }
-#game .exercise-game-controls input {
+#game .exercise-game-controls button {
     width: 100px;
 }
 
@@ -128,7 +135,7 @@ body {
 .game-controls select {
     width: 60px;
 }
-.premades input, .game-controls input {
+.premades button, .game-controls button {
     width: 90px;
 }
 .premade:hover {

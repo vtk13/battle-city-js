@@ -13,7 +13,6 @@ function UiManager(client)
     this.help       = new WidgetHelp($('#help'), client);
 
     this.notifier       = new WidgetNotifier(client);
-    this.langSelector   = new WidgetLangSelector();
 
     var self = this;
 

@@ -16,4 +16,15 @@ window.availableLangs['en'] = {
       , 'game-type-teamvsteam': 'Team vs Team'
       , 'game-type-classic-desc': 'Here you can play all 35 levels of classic battle city game. Click "Start!" after each level, to start next level.'
       , 'game-type-teamvsteam-desc': 'In the team mode you can play against other players. There are only one level. First and second players start on the bottom, third and fourth players start on the top.'
+      , 'message-connection': 'Connection...'
+      , 'message-connection-fail': 'Unable to connect to the server. Maybe you are behind the proxy which don\'t pass WebSocket traffic.'
+      , 'message-connection-closed': 'Sorry, but connection was closed. Reload page to start again.'
+      , 'header-premade-chat': 'Premade chat'
+      , 'start': 'Start!'
+      , 'exit': 'Exit'
+      , 'prompt-level': 'Level:'
+      , 'execute-code': 'Execute code'
+      , 'restart': 'Restart'
+      , 'lack-of-websocket-support': 'Sorry, but your browser doesn\'t support websockets. Recommended browsers are <a href="http://www.google.com/chrome/">Google Chrome</a> version 14 or above, and <a href="http://www.mozilla.org/">Firefox</a> version 7 or above.'
+
 };

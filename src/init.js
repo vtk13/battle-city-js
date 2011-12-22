@@ -5,9 +5,10 @@ var codeMirror = null; // todo better place?
 
 $(function() {
 
+    new WidgetLangSelector();
+
     if (typeof WebSocket == 'undefined' && typeof MozWebSocket == 'undefined') {
-        $('#connecting').html('Извините, но ваш браузер не поддерживает websocket. ' +
-            'Рекомендуемые браузеры - <a href="http://www.google.com/chrome/">Google Chrome</a> версии 14 и выше, и <a href="http://www.mozilla.org/">Firefox</a> версии 7 и выше.');
+        $('.ui-block').hide().filter('#nowebsocket').show();
     } else {
         // hack to substitute ws.
         var wsDomain = 'ws.' + location.hostname + (location.port ? ':' + location.port : '');
