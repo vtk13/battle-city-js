@@ -70,16 +70,22 @@ p {
 
 #field {
     border: solid 1px gray;
-    margin-left: 70px;
+    margin: 10px 0 0 70px;
 }
 #game {
-    height: 420px;
+    height: 430px;
+}
+#game.create-bot #field {
+    margin-left: 10px;
 }
 #game .player0-stats {
     position: absolute;
     left: 5px;
     bottom: 10px;
     width: 60px;
+}
+#game.create-bot .player0-stats {
+    left: 490px;
 }
 #game .player1-stats {
     position: absolute;

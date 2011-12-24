@@ -1,9 +1,9 @@
 window.availableLangs['ru'] = {
         'enter-nick': 'Введите ник:'
-      , 'legend-play': 'Поиграть'
-      , 'legend-learn': 'Поучиться программировать'
-      , 'submit-play': 'Поиграть'
-      , 'submit-learn': 'Поучиться'
+      , 'legend-play': 'Игра'
+      , 'legend-learn': 'Учебник программирования'
+      , 'submit-play': 'Вход'
+      , 'submit-learn': 'Вход'
       , 'header-players': 'Игроки'
       , 'header-public-chat': 'Общий чат'
       , 'join-existen-game': 'Присоеди&shy;нитесь в идущую игру:'

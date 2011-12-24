@@ -1,9 +1,9 @@
 window.availableLangs['en'] = {
         'enter-nick': 'Enter nick:'
-      , 'legend-play': 'Play'
-      , 'legend-learn': 'Learn to code'
-      , 'submit-play': 'Play'
-      , 'submit-learn': 'Learn'
+      , 'legend-play': 'Game'
+      , 'legend-learn': 'Code tutorials'
+      , 'submit-play': 'Login'
+      , 'submit-learn': 'Login'
       , 'header-players': 'Players'
       , 'header-public-chat': 'Public chat'
       , 'join-existen-game': 'Join existen game:'
