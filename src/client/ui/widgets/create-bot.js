@@ -11,6 +11,7 @@ WidgetCreateBot.prototype.reset = function()
                    "begin\n" +
                    "  \n" +
                    "end.",
+            lineNumbers: true,
             mode:  "pascal",
             theme: "night"
         });

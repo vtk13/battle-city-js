@@ -25,7 +25,7 @@ h1, h2, h3, h4, h5, h6 {
     background: #4D694E;
 }
 #field {
-    border: solid 1px #F5D277;
+    border: solid 1px #000;
 }
 .user-list {
 /*    background: #222;*/
@@ -48,7 +48,7 @@ h1, h2, h3, h4, h5, h6 {
 .game-modes li img {
     background: #041012;
 }
-.cm-s-night {
+.cm-s-night, .cm-s-night .CodeMirror-gutter {
     background: #041012;
 }
 .code.cm-s-night {
