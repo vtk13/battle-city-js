@@ -12,7 +12,7 @@ function UiList(list, container, itemClass)
 
 UiList.prototype.itemDomElement = function(item)
 {
-    throw 'subclass responsibility';
+    throw new Error('subclass responsibility');
 };
 
 UiList.prototype.onAdd = function(item)

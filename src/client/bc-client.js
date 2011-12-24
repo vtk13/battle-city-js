@@ -44,6 +44,8 @@ function BcClient(href)
     this.gameRun = false; // todo another way?
 };
 
+Eventable(BcClient.prototype);
+
 BcClient.prototype.onUserChange = function(user)
 {
     if (user.id == this.user.id) {
@@ -231,24 +233,28 @@ BcClient.prototype.executeCode = function(code)
             clearInterval(this.codeInterval);
             this.code.removeAllListeners();
         }
-        this.code = new Vm(code);
-        var self = this;
-        this.code.on('action', function(action){
-            clearInterval(self.codeInterval);
-            if (action.move) {
-                self.move(action.move);
-            }
-            if (action.turn) {
-                self.turn(action.turn);
-            }
-        });
-        this.code.on('terminate', function(action){
-            clearInterval(self.codeInterval);
-            console.log('terminate');
-        });
-        this.codeInterval = setInterval(function(){
-            self.code.step();
-        }, 1);
+        try {
+            this.code = new Vm(code);
+            var self = this;
+            this.code.on('action', function(action){
+                clearInterval(self.codeInterval);
+                if (action.move) {
+                    self.move(action.move);
+                }
+                if (action.turn) {
+                    self.turn(action.turn);
+                }
+            });
+            this.code.on('terminate', function(action){
+                clearInterval(self.codeInterval);
+                console.log('terminate');
+            });
+            this.codeInterval = setInterval(function(){
+                self.code.step();
+            }, 1);
+        } catch (ex) {
+            this.emit('compile-error', ex);
+        }
     }
 };
 

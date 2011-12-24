@@ -19,6 +19,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 #mainmenu {
     background: #1C302C;
+    border-bottom: solid 1px #F5D277;
 }
 .lang-select li:hover, .lang-select li.current {
     background: #4D694E;
@@ -47,17 +48,14 @@ h1, h2, h3, h4, h5, h6 {
 .game-modes li img {
     background: #041012;
 }
-#bot-editor #editor {
-    border-left: solid 1px #F5D277;
-}
 .cm-s-night {
+    background: #041012;
+}
+.code.cm-s-night {
     background: #1C302C;
 }
 #exercises .exercise-list .exercise {
     border-bottom: solid 1px #F5D277;
-}
-#exercises .exercise-list .exercise:first-child {
-    border-top: solid 1px #F5D277;
 }
 #exercises .exercise-list .exercise:hover {
     background: #1C302C;
@@ -65,4 +63,7 @@ h1, h2, h3, h4, h5, h6 {
 
 .exercise-controls>div {
     background: #4D694E;
+}
+#console .time {
+    color: #A69A5B;
 }

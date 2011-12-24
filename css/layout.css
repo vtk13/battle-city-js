@@ -12,3 +12,20 @@
     padding: 0 4px;
     cursor: pointer;
 }
+
+#bot-editor #editor {
+    height: 80%;
+    width: 100%;
+}
+#editor .CodeMirror {
+    height: 100%;
+}
+#editor .CodeMirror-scroll {
+    height: 100%;
+    overflow: scroll;
+}
+#bot-editor #console {
+    height: 20%;
+    width: 100%;
+    overflow: auto;
+}

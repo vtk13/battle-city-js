@@ -13,6 +13,7 @@ function UiManager(client)
     this.help       = new WidgetHelp($('#help'), client);
 
     this.notifier       = new WidgetNotifier(client);
+    this.console        = new WidgetConsole($('#console'), client);
 
     var self = this;
 

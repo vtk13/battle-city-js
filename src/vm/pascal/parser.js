@@ -69,7 +69,7 @@ PascalCompiler.prototype.parseStatement = function(code)
         code.push(param);
         break;
     default:
-        throw 'Undefined name "' + name + '" at ' + this.cur;
+        throw new Error('Undefined name "' + name + '" at ' + this.cur);
     }
 };
 
@@ -80,7 +80,7 @@ PascalCompiler.prototype.parseExpression = function()
     } else if (this.test("'")) {
         return this.parseString();
     } else {
-        throw 'Unexpected "' + this.look() + '". Expression expected at ' + this.cur;
+        throw new Error('Unexpected "' + this.look() + '". Expression expected at ' + this.cur);
     }
 };
 
@@ -96,7 +96,7 @@ PascalCompiler.prototype.parseNumber = function()
         this.eatWs();
         return res;
     } else {
-        throw 'Unexpected "' + this.look() + '". Num expected at ' + this.cur;
+        throw new Error('Unexpected "' + this.look() + '". Num expected at ' + this.cur);
     }
 };
 
@@ -126,7 +126,7 @@ PascalCompiler.prototype.testIdentifier = function(identifier)
 PascalCompiler.prototype.eatIdentifier = function(identifier)
 {
     if (this.parseIdentifier() != identifier) {
-        throw identifier + ' expected at ' + this.cur;
+        throw new Error(identifier + ' expected at ' + this.cur);
     }
 };
 
@@ -142,7 +142,7 @@ PascalCompiler.prototype.parseIdentifier = function()
         this.eatWs();
         return res;
     } else {
-        throw 'Unexpected "' + this.look() + '". Identifier expected at ' + this.cur;
+        throw new Error('Unexpected "' + this.look() + '". Identifier expected at ' + this.cur);
     }
 };
 
@@ -172,7 +172,7 @@ PascalCompiler.prototype.eat = function(char)
     if (this.look() == char) {
         this.cur++;
     } else {
-        throw '"' + char + '" expected at ' + this.cur + ', but "' + this.look() + '" given';
+        throw new Error('"' + char + '" expected at ' + this.cur + ', but "' + this.look() + '" given');
     }
 };
 

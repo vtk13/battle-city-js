@@ -196,17 +196,6 @@ p {
     padding-right: 20px;
 }
 
-#bot-editor #editor {
-    height: 100%;
-    width: 100%;
-}
-#editor .CodeMirror {
-    height: 100%;
-}
-#editor .CodeMirror-scroll {
-    height: 100%;
-}
-
 #exercises .exercise-list {
 
 }
@@ -245,4 +234,7 @@ p {
 }
 legend {
     padding: 0 5px;
+}
+#console .time {
+    padding-right: 8px;
 }

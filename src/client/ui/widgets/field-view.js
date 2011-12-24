@@ -75,7 +75,7 @@ FieldView.prototype.draw = function()
     this.c2d.fillRect(0, 0, this.field.width, this.field.height);
 
     if (this.context.hasClass('create-bot')) {
-        this.c2d.strokeStyle = '#0a0a0a';
+        this.c2d.strokeStyle = '#000';
         this.c2d.lineWidth = 1;
         for (var i = 1 ; i < 26 ; i++) {
             this.c2d.beginPath();
