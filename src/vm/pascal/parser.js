@@ -1,22 +1,3 @@
-/**
- * v1:
- *
- * pascal-program:
- *  block5
- *
- * block5:
- *  begin statement-list end
- *
- * statement-list:
- *  statement
- *  statement-list ; statement
- *
- *  statement:
- *     procid ( expression-list )
- *
- * @param code
- * @return
- */
 
 PascalCompiler = function PascalCompiler(code)
 {
@@ -32,6 +13,7 @@ PascalCompiler.prototype.isSpace = /\s/;
 PascalCompiler.prototype.isNum = /[0-9]/;
 PascalCompiler.prototype.isChar = /[a-z]/i;
 PascalCompiler.prototype.isSymbol = /\w/i;
+PascalCompiler.prototype.isKeyword = /program|var|begin|end/i;
 
 PascalCompiler.prototype.parse = function()
 {
@@ -44,36 +26,70 @@ PascalCompiler.prototype.parseProgram = function()
     this.eatIdentifier('Program');
     var name = this.parseIdentifier();
     this.token(';');
-    this.eatIdentifier('begin');
-    while (true) {
-        if (!this.testIdentifier('end')) {
-            this.parseStatement(code);
-        } else {
-            break;
-        }
-    }
-    this.eatIdentifier('end');
+    this.parseBlock(code);
     this.token('.');
     return code;
 };
 
-PascalCompiler.prototype.parseStatement = function(code)
+PascalCompiler.prototype.parseBlock = function(code)
 {
-    var name = this.parseIdentifier();
-    this.token('(');
-    var param = this.parseExpression();
-    this.token(')');
-    if (this.test(';')) {
-        this.token(';');
+    if (this.lookIdentifier() == 'var') {
+        this.parseVariableDeclaration();
     }
-    switch (name) {
-    case 'move':
-    case 'turn':
-        code.push(name);
-        code.push(param);
-        break;
-    default:
-        throw new Error('Undefined name "' + name + '" at ' + this.formatPos());
+    this.parseBlock5(code);
+};
+
+PascalCompiler.prototype.parseVariableDeclaration = function()
+{
+    this.eatIdentifier('var');
+    while (true) {
+        if (this.isKeyword.test(this.lookIdentifier())) {
+            break;
+        }
+        do {
+            this.parseIdentifier();
+        } while (this.look() == ',' && this.token(','));
+        this.token(':');
+        this.parseIdentifier();
+
+        if (this.look() == ';') {
+            this.token(';');
+        } else {
+            break;
+        }
+    }
+};
+
+PascalCompiler.prototype.parseBlock5 = function(code)
+{
+    this.eatIdentifier('begin');
+    this.parseStatementList(code);
+    this.eatIdentifier('end');
+};
+
+PascalCompiler.prototype.parseStatementList = function(code)
+{
+    while (true) {
+        var look = this.lookIdentifier();
+        if (look.length > 0 && !this.isKeyword.test(look)) {
+            var name = this.parseIdentifier();
+            this.token('(');
+            var param = this.parseExpression();
+            this.token(')');
+            switch (name) {
+                case 'move':
+                case 'turn':
+                    code.push(name);
+                    code.push(param);
+                    break;
+                default:
+                    throw new Error('Undefined name "' + name + '" at ' + this.formatPos());
+            }
+        }
+        if (this.lookIdentifier() == 'end') {
+            break;
+        }
+        this.token(';');
     }
 };
 
@@ -157,6 +173,21 @@ PascalCompiler.prototype.look = function()
     return this.code.charAt(this.cur);
 };
 
+PascalCompiler.prototype.lookIdentifier = function()
+{
+    this.pushCur();
+    var next, res = false;
+    if (next = this.test(this.isChar)) {
+        res = '';
+        while (next = this.test(this.isSymbol)) {
+            res += next;
+            this.eat(next);
+        }
+    }
+    this.popCur();
+    return res;
+};
+
 /**
  * @param char char || RegExp
  * @return
@@ -190,6 +221,7 @@ PascalCompiler.prototype.token = function(char)
 {
     this.eat(char);
     this.eatWs();
+    return true;
 };
 
 PascalCompiler.prototype.eatWs = function()
@@ -198,7 +230,6 @@ PascalCompiler.prototype.eatWs = function()
         if (this.look() == '\n') {
             this.line++;
             this.char = 1;
-            console.trace();
         } else {
             this.char++;
         }
