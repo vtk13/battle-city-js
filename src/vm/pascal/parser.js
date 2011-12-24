@@ -22,6 +22,10 @@ PascalCompiler = function PascalCompiler(code)
 {
     this.code = code;
     this.cur = 0;
+
+    this.line = 1;
+    this.char = 1;
+    this.posStack = []; // stack to save cursor positions to properly show error place
 };
 
 PascalCompiler.prototype.isSpace = /\s/;
@@ -69,7 +73,7 @@ PascalCompiler.prototype.parseStatement = function(code)
         code.push(param);
         break;
     default:
-        throw new Error('Undefined name "' + name + '" at ' + this.cur);
+        throw new Error('Undefined name "' + name + '" at ' + this.formatPos());
     }
 };
 
@@ -80,7 +84,7 @@ PascalCompiler.prototype.parseExpression = function()
     } else if (this.test("'")) {
         return this.parseString();
     } else {
-        throw new Error('Unexpected "' + this.look() + '". Expression expected at ' + this.cur);
+        throw new Error('Unexpected "' + this.look() + '". Expression expected at ' + this.formatPos());
     }
 };
 
@@ -96,7 +100,7 @@ PascalCompiler.prototype.parseNumber = function()
         this.eatWs();
         return res;
     } else {
-        throw new Error('Unexpected "' + this.look() + '". Num expected at ' + this.cur);
+        throw new Error('Unexpected "' + this.look() + '". Num expected at ' + this.formatPos());
     }
 };
 
@@ -117,17 +121,19 @@ PascalCompiler.prototype.parseString = function()
 
 PascalCompiler.prototype.testIdentifier = function(identifier)
 {
-    var cur = this.cur;
+    this.pushCur();
     var res = this.parseIdentifier();
-    this.cur = cur;
+    this.popCur();
     return res == identifier;
 };
 
 PascalCompiler.prototype.eatIdentifier = function(identifier)
 {
+    this.pushPos();
     if (this.parseIdentifier() != identifier) {
-        throw new Error(identifier + ' expected at ' + this.cur);
+        throw new Error(identifier + ' expected at ' + this.formatPos());
     }
+    this.popPos();
 };
 
 PascalCompiler.prototype.parseIdentifier = function()
@@ -142,7 +148,7 @@ PascalCompiler.prototype.parseIdentifier = function()
         this.eatWs();
         return res;
     } else {
-        throw new Error('Unexpected "' + this.look() + '". Identifier expected at ' + this.cur);
+        throw new Error('Unexpected "' + this.look() + '". Identifier expected at ' + this.formatPos());
     }
 };
 
@@ -167,12 +173,16 @@ PascalCompiler.prototype.test = function(check)
     return res;
 };
 
+/**
+ * @param char should not be '\n'
+ */
 PascalCompiler.prototype.eat = function(char)
 {
     if (this.look() == char) {
         this.cur++;
+        this.char++;
     } else {
-        throw new Error('"' + char + '" expected at ' + this.cur + ', but "' + this.look() + '" given');
+        throw new Error('"' + char + '" expected at ' + this.formatPos() + ', but "' + this.look() + '" given');
     }
 };
 
@@ -184,7 +194,48 @@ PascalCompiler.prototype.token = function(char)
 
 PascalCompiler.prototype.eatWs = function()
 {
-    while (this.isSpace.test(this.code.charAt(this.cur))) {
+    while (this.isSpace.test(this.look())) {
+        if (this.look() == '\n') {
+            this.line++;
+            this.char = 1;
+            console.trace();
+        } else {
+            this.char++;
+        }
         this.cur++;
     }
+};
+
+PascalCompiler.prototype.formatPos = function()
+{
+    if (this.posStack.length > 0) {
+        var pos = this.popPos();
+        return 'line: ' + pos.line + ', char: ' + pos.char;
+    } else {
+        return 'line: ' + this.line + ', char: ' + this.char;
+    }
+};
+
+PascalCompiler.prototype.pushPos = function()
+{
+    this.posStack.push({line: this.line, char: this.char});
+};
+
+PascalCompiler.prototype.popPos = function()
+{
+    return this.posStack.pop();
+};
+
+PascalCompiler.prototype.pushCur = function()
+{
+
+    this.posStack.push({line: this.line, char: this.char, cur: this.cur});
+};
+
+PascalCompiler.prototype.popCur = function()
+{
+    var pos   = this.posStack.pop();
+    this.line = pos.line;
+    this.char = pos.char;
+    this.cur  = pos.cur;
 };
