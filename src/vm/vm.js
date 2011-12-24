@@ -1,5 +1,5 @@
 /**
- * Интерпретатор эмулирует синхронное выполнение кода оправляя команды обработчику
+ * Интерпритатор эмулирует синхронное выполнение кода оправляя команды обработчику
  * и дожидаясь выполнения каждой команды.
  *
  * @var code массив действий для выполнения
@@ -13,7 +13,8 @@
 Vm = function Vm(codeStr)
 {
     this.data = [];
-    this.code = new PascalCompiler(codeStr).parse();
+    var res = new PascalCompiler(codeStr).parse();
+    this.code = res.code;
     this.pointer = 0;
 };
 

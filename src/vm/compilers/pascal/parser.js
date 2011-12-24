@@ -22,13 +22,17 @@ PascalCompiler.prototype.parse = function()
 
 PascalCompiler.prototype.parseProgram = function()
 {
+    var symbolTable = new SymbolTable();
     var code = [];
     this.eatIdentifier('Program');
     var name = this.parseIdentifier();
     this.token(';');
     this.parseBlock(code);
     this.token('.');
-    return code;
+    return {
+        code: code,
+        stackSize: 0
+    };
 };
 
 PascalCompiler.prototype.parseBlock = function(code)
