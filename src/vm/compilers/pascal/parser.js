@@ -23,8 +23,8 @@ PascalCompiler.prototype.parse = function()
 PascalCompiler.prototype.parseProgram = function()
 {
     var symbolTable = new SymbolTable();
-    symbolTable.addFunc('move', ['integer'], 'move');
-    symbolTable.addFunc('turn', ['string'], 'turn');
+    symbolTable.addFunc('move', ['integer'], 'tank-move');
+    symbolTable.addFunc('turn', ['string'], 'tank-turn');
     var code = [];
     this.eatIdentifier('Program');
     var name = this.parseIdentifier();
@@ -89,21 +89,42 @@ PascalCompiler.prototype.parseStatementList = function(code, symbolTable)
         var look = this.lookIdentifier();
         if (look.length > 0 && !this.isKeyword.test(look)) {
             var name = this.parseIdentifier();
-            this.token('(');
-            var param = this.parseExpression();
-            this.token(')');
-            var func = symbolTable.look(look, [param.type]);
-            console.log(func);
-            if (func) {
-                if (func.inline) {
-                    code.push(func.inline);
-                    code.push(param.value);
+            if (this.look() == ':') {
+                this.token(':=');
+                var ex = this.parseExpression(symbolTable);
+                var v;
+                if (v = symbolTable.look(name)) {
+                    if (v.type == ex.type) {
+                        if (ex.value) {
+                            code.push('move-var-ex', v.name, ex.value);
+                        } else {
+                            code.push('move-var-var', v.name, ex.name);
+                        }
+                    } else {
+                        throw new Error('Mistmatch types "' + v.type + '" and "'
+                                + ex.type + '" at ' + this.formatPos());
+                    }
                 } else {
-                    // todo call user defuned function
+                    throw new Error('Undefined variable "' + name + '" at ' + this.formatPos());
                 }
-            } else {
-                throw new Error('Undefined function or procedure "' + name
-                        + '(' + param.type + ')' + '" at ' + this.formatPos());
+                console.log(param);
+            } else if (this.look() == '(') {
+                this.token('(');
+                var param = this.parseExpression(symbolTable);
+                this.token(')');
+                var func = symbolTable.look(look, [param.type]);
+                console.log(func);
+                if (func) {
+                    if (func.inline) {
+                        code.push(func.inline);
+                        code.push(param.value);
+                    } else {
+                        // todo call user defuned function
+                    }
+                } else {
+                    throw new Error('Undefined function or procedure "' + name
+                            + '(' + param.type + ')' + '" at ' + this.formatPos());
+                }
             }
         }
         if (this.lookIdentifier() == 'end') {
@@ -113,9 +134,17 @@ PascalCompiler.prototype.parseStatementList = function(code, symbolTable)
     }
 };
 
-PascalCompiler.prototype.parseExpression = function()
+PascalCompiler.prototype.parseExpression = function(symbolTable)
 {
-    if (this.test(this.isNum)) {
+    if (this.test(this.isChar)) {
+        var name = this.parseIdentifier();
+        var v;
+        if (v = symbolTable.look(name)) {
+            return v;
+        } else {
+            throw new Error('Undefined variable "' + name + '" at ' + this.formatPos());
+        }
+    } else if (this.test(this.isNum)) {
         return {
             type: 'integer',
             value: this.parseNumber()
@@ -233,19 +262,20 @@ PascalCompiler.prototype.test = function(check)
 /**
  * @param char should not be '\n'
  */
-PascalCompiler.prototype.eat = function(char)
+PascalCompiler.prototype.eat = function(str)
 {
-    if (this.look() == char) {
-        this.cur++;
-        this.char++;
+    var look = this.code.substr(this.cur, str.length);
+    if (look == str) {
+        this.cur += str.length;
+        this.char += str.length;
     } else {
-        throw new Error('"' + char + '" expected at ' + this.formatPos() + ', but "' + this.look() + '" given');
+        throw new Error('"' + str + '" expected at ' + this.formatPos() + ', but "' + look + '" given');
     }
 };
 
-PascalCompiler.prototype.token = function(char)
+PascalCompiler.prototype.token = function(token)
 {
-    this.eat(char);
+    this.eat(token);
     this.eatWs();
     return true;
 };
