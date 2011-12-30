@@ -42,7 +42,7 @@ PascalCompiler.prototype.parseProgram = function()
 {
     this.symbolTable = new SymbolTable();
     this.varOffset = 2;
-    var code = ['jmp', 0];
+    var code = ['jmp', 0 /* will changed */];
     this.eatIdentifier('program');
     var name = this.parseIdentifier();
     this.token(';');
@@ -112,65 +112,75 @@ PascalCompiler.prototype.parseStatementList = function(code)
         if (look.length > 0 && !this.isKeyword.test(look)) {
             var name = this.parseIdentifier();
             if (this.look() == ':') {
-                this.token(':=');
-                var ex = this.parseExpression();
-                var v;
-                if ((v = this.symbolTable.look(name))) {
-                    if (v.type == ex.type) {
-                        if (ex.value) {
-                            code.push('move-mem-val', v.offset + this.varOffset, ex.value);
-                        } else {
-                            code.push('move-mem-mem', v.offset + this.varOffset, ex.offset + this.varOffset);
-                        }
-                    } else {
-                        throw new Error('Mistmatch types "' + v.type + '" and "'
-                                + ex.type + '" at ' + this.formatPos());
-                    }
-                } else {
-                    throw new Error('Undefined variable "' + name + '" at ' + this.formatPos());
-                }
+                this.parseAssignment(name);
             } else if (this.look() == '(' || this.look() == ';' || this.test(this.isChar)) {
-                if ((func = this.buildInFunc[name])) {
-                    code.push(func.inline);
-                    if (func.signature) {
-                        this.token('(');
-                        var param = [];
-                        do {
-                            param.push(this.parseExpression());
-                        } while (this.look() == ',' && this.token(','));
-                        this.token(')');
-                        if (func.signature == 'var') {
-                            code.push(param.length);
-                            for (var i = 0 ; i < param.length ; i++) {
-                                code.push(param[i].value);
-                            }
-                        } else {
-                            if (func.signature.length == param.length) {
-                                for (var i = 0 ; i < param.length ; i++) {
-                                    if (param[i].type == func.signature[i]) {
-                                        code.push(param[i].value);
-                                    } else {
-                                        throw new Error('Mismatch argument type in function "'
-                                                + name + '" call, argument ' + i
-                                                + ', at ' + this.formatPos());
-                                    }
-                                }
-                            } else {
-                                throw new Error('Mismatch parameters count for function "'
-                                        + name + '" at ' + this.formatPos());
-                            }
-                        }
-                    }
-                } else {
-                    throw new Error('Undefined function or procedure "' + name
-                            + '" at ' + this.formatPos());
-                }
+                this.parseFunctionCall(name);
             }
         }
         if (this.lookIdentifier() == 'end') {
             break;
         }
         this.token(';');
+    }
+};
+
+PascalCompiler.prototype.parseAssigment = function(name)
+{
+    this.token(':=');
+    var ex = this.parseExpression();
+    var v;
+    if ((v = this.symbolTable.look(name))) {
+        if (v.type == ex.type) {
+            if (ex.value) {
+                code.push('move-mem-val', v.offset + this.varOffset, ex.value);
+            } else {
+                code.push('move-mem-mem', v.offset + this.varOffset, ex.offset + this.varOffset);
+            }
+        } else {
+            throw new Error('Mistmatch types "' + v.type + '" and "'
+                    + ex.type + '" at ' + this.formatPos());
+        }
+    } else {
+        throw new Error('Undefined variable "' + name + '" at ' + this.formatPos());
+    }
+};
+
+PascalCompiler.prototype.parseFunctionCall = function(name)
+{
+    if ((func = this.buildInFunc[name])) {
+        code.push(func.inline);
+        if (func.signature) {
+            this.token('(');
+            var param = [];
+            do {
+                param.push(this.parseExpression());
+            } while (this.look() == ',' && this.token(','));
+            this.token(')');
+            if (func.signature == 'var') {
+                code.push(param.length);
+                for (var i = 0 ; i < param.length ; i++) {
+                    code.push(param[i].value);
+                }
+            } else {
+                if (func.signature.length == param.length) {
+                    for (var i = 0 ; i < param.length ; i++) {
+                        if (param[i].type == func.signature[i]) {
+                            code.push(param[i].value);
+                        } else {
+                            throw new Error('Mismatch argument type in function "'
+                                    + name + '" call, argument ' + i
+                                    + ', at ' + this.formatPos());
+                        }
+                    }
+                } else {
+                    throw new Error('Mismatch parameters count for function "'
+                            + name + '" at ' + this.formatPos());
+                }
+            }
+        }
+    } else {
+        throw new Error('Undefined function or procedure "' + name
+                + '" at ' + this.formatPos());
     }
 };
 
