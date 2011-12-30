@@ -235,7 +235,7 @@ BcClient.prototype.executeCode = function(code)
         }
         try {
             var res = new PascalCompiler(code).parse();
-//            console.log(res.code);
+            console.log(res.code);
             this.vm = new Vm(res.code);
             var self = this;
             this.vm.on('action', function(action){

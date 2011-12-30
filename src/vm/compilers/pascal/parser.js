@@ -50,7 +50,7 @@ PascalCompiler.prototype.parseProgram = function()
     this.token('.');
     // allocate space for global vars
     for (var i = 0, l = this.symbolTable.length() ; i < l ; i++) {
-        code.push(this.symbolTable.identifiers[i]);
+        code.push(0);
     }
     code = code.concat(chunk);
     // jump over vars space
@@ -132,7 +132,7 @@ PascalCompiler.prototype.parseStatement = function()
         } else {
             var name = this.parseIdentifier();
             if (this.look() == ':') {
-                code = this.parseAssignment(name);
+                code = this.parseAssigment(name);
             } else if (this.look() == '(' || this.look() == ';' || this.test(this.isChar)) {
                 code = this.parseFunctionCall(name);
             }
@@ -153,9 +153,9 @@ PascalCompiler.prototype.parseIf = function(name)
         this.token('else');
         elseStatement = this.parseStatement();
     }
-    code.push('move-reg-val');
+    code = code.concat(ex.code);
+    code.push('pop-reg');
     code.push('ax');
-    code.push(ex.value);
     if (elseStatement.length == 0) {
         code.push('jz');
         code.push(ifStatement.length);
@@ -176,14 +176,13 @@ PascalCompiler.prototype.parseAssigment = function(name)
     var code = [];
     this.token(':=');
     var ex = this.parseExpression();
+    code = code.concat(ex.code);
     var v;
     if ((v = this.symbolTable.look(name))) {
         if (v.type == ex.type) {
-            if (ex.value) {
-                code.push('move-mem-val', v.offset + this.varOffset, ex.value);
-            } else {
-                code.push('move-mem-mem', v.offset + this.varOffset, ex.offset + this.varOffset);
-            }
+            code.push('pop-reg');
+            code.push('ax');
+            code.push('move-mem-reg', v.offset + this.varOffset, 'ax');
         } else {
             throw new Error('Mistmatch types "' + v.type + '" and "'
                     + ex.type + '" at ' + this.formatPos());
@@ -196,27 +195,27 @@ PascalCompiler.prototype.parseAssigment = function(name)
 
 PascalCompiler.prototype.parseFunctionCall = function(name)
 {
-    var code = [];
+    var code = [], ex;
     if ((func = this.buildInFunc[name])) {
-        code.push(func.inline);
         if (func.signature) {
             this.token('(');
             var param = [];
             do {
-                param.push(this.parseExpression());
+                if (this.look() == ')') {
+                    break;
+                }
+                ex = this.parseExpression();
+                param.push(ex);
+                code = code.concat(ex.code);
             } while (this.look() == ',' && this.token(','));
             this.token(')');
             if (func.signature == 'var') {
+                code.push('push-val');
                 code.push(param.length);
-                for (var i = 0 ; i < param.length ; i++) {
-                    code.push(param[i].value);
-                }
             } else {
                 if (func.signature.length == param.length) {
                     for (var i = 0 ; i < param.length ; i++) {
-                        if (param[i].type == func.signature[i]) {
-                            code.push(param[i].value);
-                        } else {
+                        if (param[i].type != func.signature[i]) {
                             throw new Error('Mismatch argument type in function "'
                                     + name + '" call, argument ' + i
                                     + ', at ' + this.formatPos());
@@ -228,6 +227,7 @@ PascalCompiler.prototype.parseFunctionCall = function(name)
                 }
             }
         }
+        code.push(func.inline);
     } else {
         throw new Error('Undefined function or procedure "' + name
                 + '" at ' + this.formatPos());
@@ -235,28 +235,39 @@ PascalCompiler.prototype.parseFunctionCall = function(name)
     return code;
 };
 
+/**
+ * parse an expression and put result in on top of the stack
+ * @return
+ */
 PascalCompiler.prototype.parseExpression = function()
 {
+    var code = [], type, value;
     if (this.test(this.isChar)) {
         var name = this.parseIdentifier();
         var v;
         if (v = this.symbolTable.look(name)) {
-            return v;
+            code.push('push-mem');
+            code.push(v.offset + this.varOffset);
+            type = v.type;
         } else {
             throw new Error('Undefined variable "' + name + '" at ' + this.formatPos());
         }
     } else if (this.test(this.isNum)) {
-        return {
-            type: 'integer',
-            value: this.parseNumber()
-        };
+        value = this.parseNumber();
+        code.push('push-val');
+        code.push(value);
+        type = 'integer';
     } else if (this.test("'")) {
-        return {
-            type: 'string',
-            value: this.parseString()
-        };
+        value = this.parseString();
+        type = 'string';
+        code.push('push-val');
+        code.push(value);
     } else {
         throw new Error('Unexpected "' + this.look() + '". Expression expected at ' + this.formatPos());
+    }
+    return {
+        type: type,
+        code: code
     }
 };
 

@@ -49,9 +49,10 @@ Vm.prototype.step = function()
 
 Vm.prototype['write'] = function()
 {
-    var args = parseInt(this.code[this.pointer++]);
+    var args = parseInt(this.stack.pop()), param;
     for (var i = 0 ; i < args ; i++) {
-        this.emit('write', this.code[this.pointer++]);
+        param = this.stack.pop();
+        this.emit('write', param);
     }
 };
 
@@ -71,6 +72,18 @@ Vm.prototype['push-val'] = function()
 {
     var value = this.code[this.pointer++];
     this.stack.push(value);
+};
+
+Vm.prototype['push-reg'] = function()
+{
+    var registerName = this.code[this.pointer++];
+    this.stack.push(this.registers[registerName]);
+};
+
+Vm.prototype['push-mem'] = function()
+{
+    var offset = parseInt(this.code[this.pointer++]);
+    this.stack.push(this.code[offset]);
 };
 
 Vm.prototype['pop-reg'] = function()
@@ -138,14 +151,16 @@ Vm.prototype['jz'] = function()
 
 Vm.prototype['tank-move'] = function()
 {
+    var steps = this.stack.pop();
     this.emit('action', {
-        'move': this.code[this.pointer++] * 16
+        'move': steps * 16
     });
 };
 
 Vm.prototype['tank-turn'] = function()
 {
+    var direction = this.stack.pop();
     this.emit('action', {
-        'turn': this.code[this.pointer++]
+        'turn': direction
     });
 };
