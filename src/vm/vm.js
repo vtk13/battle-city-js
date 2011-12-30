@@ -29,7 +29,6 @@ Vm.prototype.reset = function()
         'ax': null
     };
     this.stack = [];
-    this.data = [];
     this.pointer = 0;
 };
 
@@ -99,6 +98,13 @@ Vm.prototype['move-reg-mem'] = function()
     var registerName = this.code[this.pointer++];
     var address = this.code[this.pointer++];
     this.registers[registerName] = this.code[address];
+};
+
+Vm.prototype['move-reg-val'] = function()
+{
+    var registerName = this.code[this.pointer++];
+    var value = this.code[this.pointer++];
+    this.registers[registerName] = value;
 };
 
 Vm.prototype['move-mem-reg'] = function()

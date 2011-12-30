@@ -31,7 +31,7 @@ PascalCompiler.prototype.isSpace = /\s/;
 PascalCompiler.prototype.isNum = /[0-9]/;
 PascalCompiler.prototype.isChar = /[a-z]/i;
 PascalCompiler.prototype.isSymbol = /\w/i;
-PascalCompiler.prototype.isKeyword = /program|var|begin|end/i;
+PascalCompiler.prototype.isKeyword = /program|var|begin|end|if/i;
 
 PascalCompiler.prototype.parse = function()
 {
@@ -124,13 +124,49 @@ PascalCompiler.prototype.parseStatement = function()
 {
     var code = [];
     var look = this.lookIdentifier();
-    if (look.length > 0 && !this.isKeyword.test(look)) {
-        var name = this.parseIdentifier();
-        if (this.look() == ':') {
-            code = this.parseAssignment(name);
-        } else if (this.look() == '(' || this.look() == ';' || this.test(this.isChar)) {
-            code = this.parseFunctionCall(name);
+    if (look.length > 0) {
+        if (this.isKeyword.test(look)) {
+            if (look == 'if') {
+                code = this.parseIf();
+            }
+        } else {
+            var name = this.parseIdentifier();
+            if (this.look() == ':') {
+                code = this.parseAssignment(name);
+            } else if (this.look() == '(' || this.look() == ';' || this.test(this.isChar)) {
+                code = this.parseFunctionCall(name);
+            }
         }
+    }
+    return code;
+};
+
+PascalCompiler.prototype.parseIf = function(name)
+{
+    var code = [];
+    this.token('if');
+    var ex = this.parseExpression();
+    this.token('then');
+    var ifStatement = this.parseStatement();
+    var elseStatement = [];
+    if (this.lookIdentifier() == 'else') {
+        this.token('else');
+        elseStatement = this.parseStatement();
+    }
+    code.push('move-reg-val');
+    code.push('ax');
+    code.push(ex.value);
+    if (elseStatement.length == 0) {
+        code.push('jz');
+        code.push(ifStatement.length);
+        code = code.concat(ifStatement);
+    } else {
+        code.push('jz');
+        code.push(ifStatement.length + 2 /* jmp over elseStatement */);
+        code = code.concat(ifStatement);
+        code.push('jmp');
+        code.push(elseStatement.length);
+        code = code.concat(elseStatement);
     }
     return code;
 };
