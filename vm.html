@@ -62,12 +62,15 @@ write 1 end</textarea>
             <li><b>[write] [number-of-arguments] [argument1] [argument2] ...</b> - emit 'write' event</li>
             <li><b>[writeln] [number-of-arguments] [argument1] [argument2] ...</b> - emit 'write' event</li>
             <li><b>[jmp] [offset]</b> - jump for [offset] instructions</li>
-            <li><b>[push-val] [value]</b> - push value in stack</li>
-            <li><b>[pop-reg] [register-name]</b> - pop value from stack and put it to ax register</li>
-            <li><b>[add]</b> - pop two arguments from stack and put they sum to ax register</li>
-            <li><b>[sub]</b> - pop two arguments from stack and put they remainder to ax register</li>
-            <li><b>[move-reg-mem] [register-name] [address]</b> - move value from address to register</li>
-            <li><b>[move-mem-reg] [address] [register-name]</b> - move value from register to address</li>
+            <li><b>[push-val] [value]</b> - push value in the stack</li>
+            <li><b>[push-reg] [register-name]</b> - push register value in the stack</li>
+            <li><b>[push-mem] [address]</b> - push variable value in the stack</li>
+            <li><b>[pop-reg] [register-name]</b> - pop a value from the stack and put it to ax register</li>
+            <li><b>[add]</b> - pop two arguments from the stack and put they sum to ax register</li>
+            <li><b>[sub]</b> - pop two arguments from the stack and put they remainder to ax register</li>
+            <li><b>[move-reg-mem] [register-name] [address]</b> - move a value from address to register</li>
+            <li><b>[move-reg-val] [register-name] [value]</b> - move a value from address to register</li>
+            <li><b>[move-mem-reg] [address] [register-name]</b> - move a value from register to address</li>
             <li><b>[move-mem-val] [address] [value]</b></li>
             <li><b>[move-mem-mem] [address] [address]</b></li>
             <li><b>[js] [offset]</b> - jump for offset if ax is zero</li>
