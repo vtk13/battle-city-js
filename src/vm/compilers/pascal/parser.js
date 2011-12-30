@@ -109,23 +109,28 @@ PascalCompiler.prototype.parseBlock5 = function()
 
 PascalCompiler.prototype.parseStatementList = function()
 {
-    var chunk, code = [];
+    var code = [];
     while (true) {
-        chunk = [];
-        var look = this.lookIdentifier();
-        if (look.length > 0 && !this.isKeyword.test(look)) {
-            var name = this.parseIdentifier();
-            if (this.look() == ':') {
-                chunk = this.parseAssignment(name);
-            } else if (this.look() == '(' || this.look() == ';' || this.test(this.isChar)) {
-                chunk = this.parseFunctionCall(name);
-            }
-        }
-        code = code.concat(chunk);
+        code = code.concat(this.parseStatement());
         if (this.lookIdentifier() == 'end') {
             break;
         }
         this.token(';');
+    }
+    return code;
+};
+
+PascalCompiler.prototype.parseStatement = function()
+{
+    var code = [];
+    var look = this.lookIdentifier();
+    if (look.length > 0 && !this.isKeyword.test(look)) {
+        var name = this.parseIdentifier();
+        if (this.look() == ':') {
+            code = this.parseAssignment(name);
+        } else if (this.look() == '(' || this.look() == ';' || this.test(this.isChar)) {
+            code = this.parseFunctionCall(name);
+        }
     }
     return code;
 };
