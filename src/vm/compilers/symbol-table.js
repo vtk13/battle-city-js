@@ -1,12 +1,8 @@
 
-function SymbolTable(parent)
+function SymbolTable()
 {
-    this.parent = parent;
-    this.identifiers = {};
-
+    this.identifiers = [];
 };
-
-SymbolTable.id = 1;
 
 SymbolTable.prototype._index = function(name, sig)
 {
@@ -15,23 +11,30 @@ SymbolTable.prototype._index = function(name, sig)
 
 SymbolTable.prototype.addVar = function(name, type)
 {
-    var index = this._index(name);
-    if (this.identifiers[index] === undefined) {
-        this.identifiers[index] = {name: name, type: type};
-        return SymbolTable.id++;
+    if (this.look(name) == null) {
+        var v = {name: name, type: type};
+        v.offset = this.identifiers.push(v) - 1;
     } else {
         throw new Error('Identifier "' + name + '" already defined');
     }
 };
 
-SymbolTable.prototype.addFunc = function(name, sig, inline)
+/**
+ *
+ * @param name
+ * @return index of found var or -1
+ */
+SymbolTable.prototype.look = function(name)
 {
-    var index = this._index(name, sig);
-    this.identifiers[index] = {name: name, type: 'func', sig: sig, inline: inline};
+    for (var i = 0, l = this.identifiers.length ; i < l ; i++) {
+        if (this.identifiers[i].name == name) {
+            return this.identifiers[i];
+        }
+    }
+    return null;
 };
 
-SymbolTable.prototype.look = function(name, sig)
+SymbolTable.prototype.length = function()
 {
-    var index = this._index(name, sig);
-    return this.identifiers[index];
+    return this.identifiers.length;
 };

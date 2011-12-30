@@ -11,7 +11,7 @@ function BcClient(href)
         'reconnect' : false // todo learn reconnection abilities
     });
 
-    this.code = null;
+    this.vm = null;
     this.codeInterval = null;
 
     this.users = new TList();
@@ -153,10 +153,10 @@ BcClient.prototype.onExecute = function(data)
 BcClient.prototype.onTaskDone = function()
 {
     var self = this;
-    if (this.code) {
+    if (this.vm) {
         clearInterval(this.codeInterval);
         this.codeInterval = setInterval(function(){
-            self.code.step();
+            self.vm.step();
         }, 1);
     }
 };
@@ -192,10 +192,10 @@ BcClient.prototype.join = function(name, gameType)
 
 BcClient.prototype.unjoin = function()
 {
-    if (this.code) {
+    if (this.vm) {
         clearInterval(this.codeInterval);
-        this.code.removeAllListeners();
-        this.code = null;
+        this.vm.removeAllListeners();
+        this.vm = null;
     }
 
     this.socket.emit('unjoin');
@@ -215,10 +215,10 @@ BcClient.prototype.stopGame = function()
         this.socket.emit('stop-game');
     }
 
-    if (this.code) {
+    if (this.vm) {
         clearInterval(this.codeInterval);
-        this.code.removeAllListeners();
-        this.code = null;
+        this.vm.removeAllListeners();
+        this.vm = null;
     }
 };
 
@@ -229,14 +229,16 @@ BcClient.prototype.executeCode = function(code)
             code: code
         });
 
-        if (this.code) {
+        if (this.vm) {
             clearInterval(this.codeInterval);
-            this.code.removeAllListeners();
+            this.vm.removeAllListeners();
         }
         try {
-            this.code = new Vm(code);
+            var res = new PascalCompiler(code).parse();
+//            console.log(res.code);
+            this.vm = new Vm(res.code);
             var self = this;
-            this.code.on('action', function(action){
+            this.vm.on('action', function(action){
                 clearInterval(self.codeInterval);
                 if (action.move) {
                     self.move(action.move);
@@ -245,12 +247,15 @@ BcClient.prototype.executeCode = function(code)
                     self.turn(action.turn);
                 }
             });
-            this.code.on('terminate', function(action){
+            this.vm.on('write', function(data){
+                self.emit('write', data);
+            });
+            this.vm.on('terminate', function(action){
                 clearInterval(self.codeInterval);
                 console.log('terminate');
             });
             this.codeInterval = setInterval(function(){
-                self.code.step();
+                self.vm.step();
             }, 1);
         } catch (ex) {
             this.emit('compile-error', ex);

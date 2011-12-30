@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>VM visualizer</title>
+    <script type="text/javascript" src="/lib/jquery.js"></script>
+    <script type="text/javascript" src="/lib/node/events.js"></script>
+    <script type="text/javascript" src="/src/common/event.js"></script>
+    <script type="text/javascript" src="/src/vm/vm.js"></script>
+    <script type="text/javascript">
+    var vm = new Vm();
+    function onTextareaChange()
+    {
+        vm.reset();
+        vm.code = this.value.split(/\n|\s/);
+        showVmState();
+    };
+
+    function showVmState()
+    {
+        $('.state .pointer').text(vm.pointer);
+        $('.state .registers .ax').text(typeof vm.registers.ax + ': ' + vm.registers.ax);
+        $('.state .stack').empty();
+        for (var i in vm.stack) {
+            $('.state .stack').prepend('<div>' + typeof vm.stack[i] + ': ' + vm.stack[i] + '</div>');
+        }
+        $('.state .mem').empty();
+        for (var i in vm.code) {
+            $('.state .mem').append('<div>' + i + '=' + typeof vm.code[i] + ': ' + vm.code[i] + '</div>');
+        }
+    };
+
+    function onStep()
+    {
+        vm.step();
+        showVmState();
+    };
+    vm.on('write', function(param){
+        $('textarea.console').val($('textarea.console').val() + param);
+    });
+    vm.on('terminate', function(){
+        console.log('terminate');
+        vm.reset();
+    });
+    </script>
+</head>
+<body>
+    <textarea style="float: left;" rows="10" cols="80" onchange="onTextareaChange.call(this);"></textarea>
+    <textarea style="float: left;" rows="10" cols="80" class="console"></textarea>
+    <div style="float: right;">
+        <ul>
+            <li><b>[write] [number-of-arguments] [argument1] [argument2] ...</b> - emit 'write' event</li>
+            <li><b>[writeln] [number-of-arguments] [argument1] [argument2] ...</b> - emit 'write' event</li>
+            <li><b>[jmp] [offset]</b> - jump for [offset] instructions</li>
+            <li><b>[push-val] [value]</b> - push value in stack</li>
+            <li><b>[pop-reg] [register-name]</b> - pop value from stack and put it to ax register</li>
+            <li><b>[add]</b> - pop two arguments from stack and put they sum to ax register</li>
+            <li><b>[sub]</b> - pop two arguments from stack and put they remainder to ax register</li>
+            <li><b>[move-reg-mem] [register-name] [address]</b> - move value from address to register</li>
+            <li><b>[move-mem-reg] [address] [register-name]</b> - move value from register to address</li>
+            <li><b>[move-mem-val] [address] [value]</b></li>
+            <li><b>[move-mem-mem] [address] [address]</b></li>
+            <li><b>[js] [offset]</b> - jump for offset if ax is zero</li>
+        </ul>
+    </div>
+    <button onclick="onStep();" style="clear: left;">Step</button>
+    <div class="state">
+        <div style="float: right;">
+            Mem:
+            <div class="mem"></div>
+        </div>
+        <div>
+            pointer: <span class="pointer"></span>
+        </div>
+        <div class="registers">
+            ax <span class="ax"></span>
+        </div>
+        <div>
+            Stack:
+            <div class="stack"></div>
+        </div>
+    </div>
+</body>
+</html>

@@ -7,6 +7,24 @@ PascalCompiler = function PascalCompiler(code)
     this.line = 1;
     this.char = 1;
     this.posStack = []; // stack to save cursor positions to properly show error place
+    this.buildInFunc = {
+        'write': {
+            'signature': 'var', // var args
+            'inline': 'write'
+        },
+        'writeln': {
+            'signature': 'var', // var args
+            'inline': 'writeln'
+        },
+        'move': {
+            'signature': ['integer'],
+            'inline': 'tank-move'
+        },
+        'turn': {
+            'signature': ['string'],
+            'inline': 'tank-turn'
+        }
+    };
 };
 
 PascalCompiler.prototype.isSpace = /\s/;
@@ -22,30 +40,34 @@ PascalCompiler.prototype.parse = function()
 
 PascalCompiler.prototype.parseProgram = function()
 {
-    var symbolTable = new SymbolTable();
-    symbolTable.addFunc('move', ['integer'], 'tank-move');
-    symbolTable.addFunc('turn', ['string'], 'tank-turn');
-    var code = [];
+    this.symbolTable = new SymbolTable();
+    this.varOffset = 2;
+    var code = ['jmp', 0];
     this.eatIdentifier('Program');
     var name = this.parseIdentifier();
     this.token(';');
-    this.parseBlock(code, symbolTable);
+    this.parseBlock(code);
     this.token('.');
+    // allocate space for global vars
+    for (var i in this.symbolTable.identifiers) {
+        this.code.splise(2, 0, this.symbolTable.identifiers[i]);
+    }
+    // jump over vars space
+    code[1] = this.symbolTable.length();
     return {
-        code: code,
-        symbolTable: symbolTable
+        code: code
     };
 };
 
-PascalCompiler.prototype.parseBlock = function(code, symbolTable)
+PascalCompiler.prototype.parseBlock = function(code)
 {
     if (this.lookIdentifier() == 'var') {
-        this.parseVariableDeclaration(symbolTable);
+        this.parseVariableDeclaration();
     }
-    this.parseBlock5(code, symbolTable);
+    this.parseBlock5(code);
 };
 
-PascalCompiler.prototype.parseVariableDeclaration = function(symbolTable)
+PascalCompiler.prototype.parseVariableDeclaration = function()
 {
     var vars, type, v;
     this.eatIdentifier('var');
@@ -62,7 +84,7 @@ PascalCompiler.prototype.parseVariableDeclaration = function(symbolTable)
 
         try {
             while (v = vars.pop()) {
-                symbolTable.addVar(v, type);
+                this.symbolTable.addVar(v, type);
             }
         } catch (ex) {
             throw new Error(ex.message + ' at ' + this.formatPos());
@@ -76,14 +98,14 @@ PascalCompiler.prototype.parseVariableDeclaration = function(symbolTable)
     }
 };
 
-PascalCompiler.prototype.parseBlock5 = function(code, symbolTable)
+PascalCompiler.prototype.parseBlock5 = function(code)
 {
     this.eatIdentifier('begin');
-    this.parseStatementList(code, symbolTable);
+    this.parseStatementList(code);
     this.eatIdentifier('end');
 };
 
-PascalCompiler.prototype.parseStatementList = function(code, symbolTable)
+PascalCompiler.prototype.parseStatementList = function(code)
 {
     while (true) {
         var look = this.lookIdentifier();
@@ -91,14 +113,14 @@ PascalCompiler.prototype.parseStatementList = function(code, symbolTable)
             var name = this.parseIdentifier();
             if (this.look() == ':') {
                 this.token(':=');
-                var ex = this.parseExpression(symbolTable);
+                var ex = this.parseExpression();
                 var v;
-                if (v = symbolTable.look(name)) {
+                if ((v = this.symbolTable.look(name))) {
                     if (v.type == ex.type) {
                         if (ex.value) {
-                            code.push('move-var-ex', v.name, ex.value);
+                            code.push('move-mem-val', v.offset + this.varOffset, ex.value);
                         } else {
-                            code.push('move-var-var', v.name, ex.name);
+                            code.push('move-mem-mem', v.offset + this.varOffset, ex.offset + this.varOffset);
                         }
                     } else {
                         throw new Error('Mistmatch types "' + v.type + '" and "'
@@ -108,22 +130,41 @@ PascalCompiler.prototype.parseStatementList = function(code, symbolTable)
                     throw new Error('Undefined variable "' + name + '" at ' + this.formatPos());
                 }
                 console.log(param);
-            } else if (this.look() == '(') {
-                this.token('(');
-                var param = this.parseExpression(symbolTable);
-                this.token(')');
-                var func = symbolTable.look(look, [param.type]);
-                console.log(func);
-                if (func) {
-                    if (func.inline) {
-                        code.push(func.inline);
-                        code.push(param.value);
-                    } else {
-                        // todo call user defuned function
+            } else if (this.look() == '(' || this.look() == ';' || this.test(this.isChar)) {
+                if ((func = this.buildInFunc[name])) {
+                    code.push(func.inline);
+                    if (func.signature) {
+                        this.token('(');
+                        var param = [];
+                        do {
+                            param.push(this.parseExpression());
+                        } while (this.look() == ',' && this.token(','));
+                        this.token(')');
+                        if (func.signature == 'var') {
+                            code.push(param.length);
+                            for (var i = 0 ; i < param.length ; i++) {
+                                code.push(param[i].value);
+                            }
+                        } else {
+                            if (func.signature.length == param.length) {
+                                for (var i = 0 ; i < param.length ; i++) {
+                                    if (param[i].type == func.signature[i]) {
+                                        code.push(param[i].value);
+                                    } else {
+                                        throw new Error('Mismatch argument type in function "'
+                                                + name + '" call, argument ' + i
+                                                + ', at ' + this.formatPos());
+                                    }
+                                }
+                            } else {
+                                throw new Error('Mismatch parameters count for function "'
+                                        + name + '" at ' + this.formatPos());
+                            }
+                        }
                     }
                 } else {
                     throw new Error('Undefined function or procedure "' + name
-                            + '(' + param.type + ')' + '" at ' + this.formatPos());
+                            + '" at ' + this.formatPos());
                 }
             }
         }
@@ -134,12 +175,12 @@ PascalCompiler.prototype.parseStatementList = function(code, symbolTable)
     }
 };
 
-PascalCompiler.prototype.parseExpression = function(symbolTable)
+PascalCompiler.prototype.parseExpression = function()
 {
     if (this.test(this.isChar)) {
         var name = this.parseIdentifier();
         var v;
-        if (v = symbolTable.look(name)) {
+        if (v = this.symbolTable.look(name)) {
             return v;
         } else {
             throw new Error('Undefined variable "' + name + '" at ' + this.formatPos());
