@@ -1,7 +1,7 @@
 
-PascalCompiler = function PascalCompiler(code)
+PascalCompiler = function PascalCompiler(codeStr)
 {
-    this.code = code;
+    this.codeStr = codeStr;
     this.cur = 0;
 
     this.line = 1;
@@ -46,12 +46,13 @@ PascalCompiler.prototype.parseProgram = function()
     this.eatIdentifier('program');
     var name = this.parseIdentifier();
     this.token(';');
-    this.parseBlock(code);
+    var chunk = this.parseBlock();
     this.token('.');
     // allocate space for global vars
-    for (var i in this.symbolTable.identifiers) {
-        this.code.splise(2, 0, this.symbolTable.identifiers[i]);
+    for (var i = 0, l = this.symbolTable.length() ; i < l ; i++) {
+        code.push(this.symbolTable.identifiers[i]);
     }
+    code = code.concat(chunk);
     // jump over vars space
     code[1] = this.symbolTable.length();
     return {
@@ -59,12 +60,12 @@ PascalCompiler.prototype.parseProgram = function()
     };
 };
 
-PascalCompiler.prototype.parseBlock = function(code)
+PascalCompiler.prototype.parseBlock = function()
 {
     if (this.lookIdentifier() == 'var') {
         this.parseVariableDeclaration();
     }
-    this.parseBlock5(code);
+    return this.parseBlock5();
 };
 
 PascalCompiler.prototype.parseVariableDeclaration = function()
@@ -98,34 +99,40 @@ PascalCompiler.prototype.parseVariableDeclaration = function()
     }
 };
 
-PascalCompiler.prototype.parseBlock5 = function(code)
+PascalCompiler.prototype.parseBlock5 = function()
 {
     this.eatIdentifier('begin');
-    this.parseStatementList(code);
+    var chunk = this.parseStatementList();
     this.eatIdentifier('end');
+    return chunk;
 };
 
-PascalCompiler.prototype.parseStatementList = function(code)
+PascalCompiler.prototype.parseStatementList = function()
 {
+    var chunk, code = [];
     while (true) {
+        chunk = [];
         var look = this.lookIdentifier();
         if (look.length > 0 && !this.isKeyword.test(look)) {
             var name = this.parseIdentifier();
             if (this.look() == ':') {
-                this.parseAssignment(name);
+                chunk = this.parseAssignment(name);
             } else if (this.look() == '(' || this.look() == ';' || this.test(this.isChar)) {
-                this.parseFunctionCall(name);
+                chunk = this.parseFunctionCall(name);
             }
         }
+        code = code.concat(chunk);
         if (this.lookIdentifier() == 'end') {
             break;
         }
         this.token(';');
     }
+    return code;
 };
 
 PascalCompiler.prototype.parseAssigment = function(name)
 {
+    var code = [];
     this.token(':=');
     var ex = this.parseExpression();
     var v;
@@ -143,10 +150,12 @@ PascalCompiler.prototype.parseAssigment = function(name)
     } else {
         throw new Error('Undefined variable "' + name + '" at ' + this.formatPos());
     }
+    return code;
 };
 
 PascalCompiler.prototype.parseFunctionCall = function(name)
 {
+    var code = [];
     if ((func = this.buildInFunc[name])) {
         code.push(func.inline);
         if (func.signature) {
@@ -182,6 +191,7 @@ PascalCompiler.prototype.parseFunctionCall = function(name)
         throw new Error('Undefined function or procedure "' + name
                 + '" at ' + this.formatPos());
     }
+    return code;
 };
 
 PascalCompiler.prototype.parseExpression = function()
@@ -275,7 +285,7 @@ PascalCompiler.prototype.parseIdentifier = function()
 
 PascalCompiler.prototype.look = function()
 {
-    return this.code.charAt(this.cur);
+    return this.codeStr.charAt(this.cur);
 };
 
 PascalCompiler.prototype.lookIdentifier = function()
@@ -314,7 +324,7 @@ PascalCompiler.prototype.test = function(check)
  */
 PascalCompiler.prototype.eat = function(str)
 {
-    var look = this.code.substr(this.cur, str.length);
+    var look = this.codeStr.substr(this.cur, str.length);
     if (look == str) {
         this.cur += str.length;
         this.char += str.length;
