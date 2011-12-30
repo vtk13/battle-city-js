@@ -9,10 +9,10 @@
     <script type="text/javascript" src="/src/vm/vm.js"></script>
     <script type="text/javascript">
     var vm = new Vm();
-    function onTextareaChange()
+    function onTextareaChange(value)
     {
         vm.reset();
-        vm.code = this.value.split(/\n|\s/);
+        vm.code = value.split(/\n|\s/);
         showVmState();
     };
 
@@ -42,10 +42,20 @@
         console.log('terminate');
         vm.reset();
     });
+    $(function(){
+        onTextareaChange($('textarea').get(0).value);
+    });
     </script>
 </head>
 <body>
-    <textarea style="float: left;" rows="10" cols="80" onchange="onTextareaChange.call(this);"></textarea>
+    <textarea style="float: left;" rows="10" cols="80" onchange="onTextareaChange(this.value);">jmp 1
+2
+move-reg-mem ax 2
+jz 5
+write 1 not-zero
+jmp 3
+write 1 zero
+write 1 end</textarea>
     <textarea style="float: left;" rows="10" cols="80" class="console"></textarea>
     <div style="float: right;">
         <ul>
