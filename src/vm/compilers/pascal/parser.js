@@ -43,7 +43,7 @@ PascalCompiler.prototype.parseProgram = function()
     this.symbolTable = new SymbolTable();
     this.varOffset = 2;
     var code = ['jmp', 0];
-    this.eatIdentifier('Program');
+    this.eatIdentifier('program');
     var name = this.parseIdentifier();
     this.token(';');
     this.parseBlock(code);
@@ -129,7 +129,6 @@ PascalCompiler.prototype.parseStatementList = function(code)
                 } else {
                     throw new Error('Undefined variable "' + name + '" at ' + this.formatPos());
                 }
-                console.log(param);
             } else if (this.look() == '(' || this.look() == ';' || this.test(this.isChar)) {
                 if ((func = this.buildInFunc[name])) {
                     code.push(func.inline);
@@ -258,7 +257,7 @@ PascalCompiler.prototype.parseIdentifier = function()
             this.eat(next);
         }
         this.eatWs();
-        return res;
+        return res.toLowerCase();
     } else {
         throw new Error('Unexpected "' + this.look() + '". Identifier expected at ' + this.formatPos());
     }
