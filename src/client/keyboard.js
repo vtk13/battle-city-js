@@ -11,6 +11,9 @@ TankController.prototype.controlEvent = function(e)
     if ($('.CodeMirror textarea').get(0) == window.document.activeElement) {
         return;
     }
+    if ($('#game').hasClass('create-bot')) {
+        return;
+    }
 //    console.log(e.keyCode);
 //    console.log(e.type);
     if (e.keyCode == 38 /*up*/) {
