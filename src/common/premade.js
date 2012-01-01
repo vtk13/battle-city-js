@@ -103,7 +103,7 @@ Premade.prototype.startGame = function()
 {
     this.locked = true;
     var level = require('../battle-city/maps/' + this.type + '/level' + this.level);
-    this.game = new Game(level.map, this);
+    this.game = new Game(level.getMap(), this);
     this.clans[0].startGame(this.game, level);
     this.clans[1].startGame(this.game, level);
     this.users.traversal(function(user){

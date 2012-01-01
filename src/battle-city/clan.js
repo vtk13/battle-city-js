@@ -177,11 +177,12 @@ BotsClan.prototype.startGame = function(game, level)
     this.botStack = new TList();
 
     // todo move from this function
-    for (var i = level.enemies.length - 1; i >= 0; i-- ) {
+    var enemies = level.getEnemies();
+    for (var i = enemies.length - 1; i >= 0; i-- ) {
         var bonus = [3,10,17].indexOf(i) >= 0;
         var bot;
 //        var bonus = true;
-        switch (level.enemies[i]) {
+        switch (enemies[i]) {
             case 1:
                 bot = new TankBot(0, 0, bonus);
                 break;
