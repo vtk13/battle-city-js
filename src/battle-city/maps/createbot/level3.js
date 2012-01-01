@@ -45,9 +45,9 @@ var a: string;
 begin
   move(11);
   if x>checkpointx then
-    turn('left')
+    turn('west')
   else
-    turn('right');
+    turn('east');
   move(5);
 end.
 */

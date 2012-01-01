@@ -256,7 +256,7 @@ Tank.prototype.turn = function(direction)
         // 1, 2 - first try turn with backward adjust, second try turn with forward adjust
         var newX1, newY1, newX2, newY2, newSpeedX, newSpeedY;
         switch (direction) {
-            case 'up':
+            case 'north':
                 newSpeedX = 0;
                 newSpeedY = -this.speed;
                 if (this.x % 16 > 8 + vx) {
@@ -268,7 +268,7 @@ Tank.prototype.turn = function(direction)
                 }
                 newY1 = newY2 = this.y;
                 break;
-            case 'right':
+            case 'east':
                 newSpeedX = this.speed;
                 newSpeedY = 0;
                 newX1 = newX2 = this.x;
@@ -280,7 +280,7 @@ Tank.prototype.turn = function(direction)
                     newY2 = this.y + 16 - this.y % 16;
                 }
                 break;
-            case 'down':
+            case 'south':
                 newSpeedX = 0;
                 newSpeedY = this.speed;
                 if (this.x % 16 > 8 + vx) {
@@ -292,7 +292,7 @@ Tank.prototype.turn = function(direction)
                 }
                 newY1 = newY2 = this.y;
                 break;
-            case 'left':
+            case 'west':
                 newSpeedX = -this.speed;
                 newSpeedY = 0;
                 newX1 = newX2 = this.x;

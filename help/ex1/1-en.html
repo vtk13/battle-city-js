@@ -18,13 +18,13 @@ and this argument are number of step to move forward.</p>
 <p>This instruction make tank to turn to gived direction. 'direction' arugument
 of 'turn' procedure should be a string. Strings in the Pascal language should be
 enclosed with single quoted. This is need by a compiler to split strings and
-keywords or procedure's names. So to turn tank to the right (eastward), you
+keywords or procedure's names. So to turn tank to the east, you
 should write this:</p>
 
-<pre class="code">turn('right');</pre>
+<pre class="code">turn('east');</pre>
 
-<p>other appropriate values are 'left' - turn to the left (westward), 'up' -
-turn upward (northward) and 'down' - turn downward (southward).</p>
+<p>other appropriate values are 'west' - turn westward, 'north' -
+turn northward and 'south' - turn southward.</p>
 
 <p>In this exercise tank should move 11 steps forward, then turn to the right
 and move another 10 step forward.</p>
@@ -35,7 +35,7 @@ and move another 10 step forward.</p>
 Program Level1;
 begin
   move(11);
-  turn('right');
+  turn('east');
   move(10);
 end.
 </pre>

@@ -18,7 +18,7 @@ TankController.prototype.controlEvent = function(e)
 //    console.log(e.type);
     if (e.keyCode == 38 /*up*/) {
         if (e.type == 'keydown') {
-            this.tank.turn('up');
+            this.tank.turn('north');
             this.tank.startMove();
         } else if (e.type == 'keyup') {
             this.tank.stopMove();
@@ -26,7 +26,7 @@ TankController.prototype.controlEvent = function(e)
     }
     if (e.keyCode == 39 /*right*/) {
         if (e.type == 'keydown') {
-            this.tank.turn('right');
+            this.tank.turn('east');
             this.tank.startMove();
         } else if (e.type == 'keyup') {
             this.tank.stopMove();
@@ -34,7 +34,7 @@ TankController.prototype.controlEvent = function(e)
     }
     if (e.keyCode == 40 /*down*/) {
         if (e.type == 'keydown') {
-            this.tank.turn('down');
+            this.tank.turn('south');
             this.tank.startMove();
         } else if (e.type == 'keyup') {
             this.tank.stopMove();
@@ -42,7 +42,7 @@ TankController.prototype.controlEvent = function(e)
     }
     if (e.keyCode == 37 /*left*/) {
         if (e.type == 'keydown') {
-            this.tank.turn('left');
+            this.tank.turn('west');
             this.tank.startMove();
         } else if (e.type == 'keyup') {
             this.tank.stopMove();
