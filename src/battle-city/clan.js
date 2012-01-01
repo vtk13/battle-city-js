@@ -7,16 +7,16 @@ Clan = function Clan(n, defaultArmoredTimer)
     this.timer = 0;
     this.enemiesClan = null;
     this.users = [];
-    this.goals = [];
+    this.goals = new TList();
     this.base = new Base();
     this.base.clan = this;
     this.tankPositions = Clan.tankPositions['clan' + n];
 };
 
 Clan.tankPositions = {
-    'clan1': [{x:4, y:12}, {x:8, y:12}],
-    'clan2': [{x:4, y:0}, {x:8, y:0}],
-    'bots' : [{x: 16, y:16}, {x: 13*32 / 2, y:16}, {x: 13*32 - 16, y: 16}]
+    'clan1': [{x:  4, y: 12}, {x: 8, y: 12}],
+    'clan2': [{x:  4, y:  0}, {x: 8, y:  0}],
+    'bots' : [{x: 16, y: 16}, {x: 13*32 / 2, y: 16}, {x: 13*32 - 16, y: 16}]
 };
 
 Clan.prototype.attachUser = function(user)
@@ -209,7 +209,11 @@ BotsClan.prototype.pauseTanks = function()
     this.timer = 10 * 1000/30; // 30ms step
 };
 
-
+/**
+ * FIXME should be a user's clan, not enemies
+ * @param n
+ * @return
+ */
 LearnerClan = function LearnerClan(n)
 {
     Clan.apply(this, arguments);
@@ -227,9 +231,11 @@ LearnerClan.prototype.startGame = function(game, level)
     this.base.y = (this.n == 1) ? (this.game.field.height - 16) : 16;
 
     if (level.getGoals) {
-        this.goals = level.getGoals(this);
-        for (var i = 0 ; i < this.goals.length ; i++) {
-            this.goals[i].reset();
+        this.goals.clear();
+        var goals = level.getGoals(this);
+        for (var i = 0 ; i < goals.length ; i++) {
+            goals[i].reset();
+            this.goals.add(goals[i]);
         }
     }
 };
@@ -237,13 +243,15 @@ LearnerClan.prototype.startGame = function(game, level)
 LearnerClan.prototype.step = function()
 {
     var self = this;
-    if (this.goals.length > 0) {
+    if (this.goals.count() > 0) {
         var goals = 0;
-        for (var i = 0 ; i < this.goals.length ; i++) {
-            this.goals[i].check();
-            if (this.goals[i].status) goals++;
+        for (var i in this.goals.items) {
+            this.goals.items[i].check();
+            if (this.goals.items[i].status) {
+                goals++;
+            }
         }
-        if (goals == this.goals.length) {
+        if (goals == this.goals.count()) {
             self.premade.gameOver(self.enemiesClan);
         }
     }

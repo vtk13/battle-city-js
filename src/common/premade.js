@@ -36,7 +36,7 @@ Premade.types = {
         'levels': 1
     },
     'createbot': {
-        'levels': 2
+        'levels': 3
     }
 };
 
@@ -88,6 +88,7 @@ Premade.prototype.unjoin = function(user)
     user.unwatchCollection('premade.messages');
     user.unwatchCollection('f');
     user.unwatchCollection('game.botStack');
+    user.unwatchCollection('goals');
     user.clan.detachUser(user);
     this.users.remove(user);
     this.userCount--;
@@ -110,6 +111,9 @@ Premade.prototype.startGame = function()
         user.watchCollection(this.game.field, 'f');
         if (user.clan.enemiesClan.botStack) {
             user.watchCollection(user.clan.enemiesClan.botStack, 'game.botStack');
+        }
+        if (user.clan.enemiesClan.goals) {
+            user.watchCollection(user.clan.enemiesClan.goals, 'goals');
         }
         if (user.premade.type == 'teamvsteam') {
             user.lives = 4;

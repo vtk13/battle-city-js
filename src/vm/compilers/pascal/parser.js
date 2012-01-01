@@ -37,6 +37,16 @@ PascalCompiler = function PascalCompiler(codeStr)
             'signature': [],
             'inline': 'tank-y',
             'type': 'integer'
+        },
+        'checkpointx': {
+            'signature': [],
+            'inline': 'checkpoint-x',
+            'type': 'integer'
+        },
+        'checkpointy': {
+            'signature': [],
+            'inline': 'checkpoint-y',
+            'type': 'integer'
         }
     };
 };

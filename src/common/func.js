@@ -30,7 +30,8 @@ serializeTypeMatches = {
     'ServerUser'        : 20,
     'Premade'           : 21,
     'Message'           : 22,
-    'Checkpoint'        : 23
+    'Checkpoint'        : 23,
+    'GoalCheckPoint'    : 24
 };
 
 unserializeTypeMatches = {
@@ -56,5 +57,6 @@ unserializeTypeMatches = {
     20: 'User',
     21: 'Premade',
     22: 'Message',
-    23: 'Checkpoint'
+    23: 'Checkpoint',
+    24: 'GoalCheckPoint'
 };

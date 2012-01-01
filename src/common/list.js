@@ -1,6 +1,6 @@
 
 /**
- * !Don't call Array methods which modify items, because they didn't emit events!
+ * Don't call Array methods which modify items, because they don't emit events.
  */
 TList = function TList()
 {
@@ -24,10 +24,12 @@ TList.prototype.add = function(item)
 
     this.emit('add', item);
 
-    var list = this;
-    item.on && item.on('change', function(){
-        list.emit('change', this);
-    });
+    var self = this;
+    if (item.on) {
+        item.on('change', function(){
+            self.emit('change', this);
+        });
+    }
 };
 
 TList.prototype.remove = function(item)
@@ -56,6 +58,20 @@ TList.prototype.pop = function()
     this.emit('remove', item);
     delete this.items[i];
     return item;
+};
+
+TList.prototype.getFirst = function(filter)
+{
+    for (var i in this.items) {
+        if (filter) {
+            if (filter(this.items[i])) {
+                return this.items[i];
+            }
+        } else {
+            return this.items[i];
+        }
+    }
+    return null;
 };
 
 TList.prototype.count = function()

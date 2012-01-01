@@ -24,6 +24,8 @@ function BcClient(href)
     this.premades.on('change', this.onPremadeChange.bind(this));
     this.premades.on('remove', this.onPremadeChange.bind(this));
 
+    this.goals = new TList();
+
     this.messages = new TList();
     this.premadeUsers = new TList();
     this.premadeMessages = new TList();
@@ -78,6 +80,9 @@ BcClient.prototype.onSync = function(data)
     if (data['f']) {
         this.field.updateWith(data['f']);
     }
+    if (data['goals']) {
+        this.goals.updateWith(data['goals']);
+    }
 };
 
 BcClient.prototype.onClearCollection = function(data)
@@ -94,6 +99,9 @@ BcClient.prototype.onClearCollection = function(data)
         break;
     case 'f':
         this.field.clear();
+        break;
+    case 'goals':
+        this.goals.clear();
         break;
     }
 };
@@ -161,7 +169,7 @@ BcClient.prototype.onTaskDone = function()
     }
 };
 
-// ===== actions ================================================================
+//===== actions ================================================================
 
 BcClient.prototype.connect = function()
 {
@@ -236,7 +244,7 @@ BcClient.prototype.executeCode = function(code)
         try {
             var res = new PascalCompiler(code).parse();
             console.log(res.code);
-            this.vm = new Vm(res.code);
+            this.vm = new Vm(res.code, this);
             var self = this;
             this.vm.on('action', function(action){
                 clearInterval(self.codeInterval);
@@ -306,8 +314,7 @@ BcClient.prototype.fire = function()
     });
 };
 
-// ===== events
-// =================================================================
+//===== events =================================================================
 
 // todo named similar to handlers onLogged, onJoined, etc
 BcClient.prototype.onConnect = function(handler)

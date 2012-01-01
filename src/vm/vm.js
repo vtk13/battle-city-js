@@ -9,10 +9,14 @@
 Регистры (любое значение):
   ax
 
-Система команд:
-  <tank-move> (distance)
-  <tank-turn> (direction)
-  <tank-fire>
+Встроенные функции:
+  move (distance)
+  turn (direction)
+  fire
+  x - get tank x
+  y - get tank y
+  CheckPointX -
+  CheckPointY -
 */
 
 Vm = function Vm(code, client)
@@ -204,4 +208,30 @@ Vm.prototype['tank-y'] = function()
     var tankId = this.client.user.tankId;
     var y = Math.floor(field.get(tankId).y / 16);
     this.stack.push(y);
+};
+
+Vm.prototype['checkpoint-x'] = function()
+{
+    var checkpoint = this.client.goals.getFirst(function(item){
+        return (item instanceof GoalCheckPoint) && (item.status == 0);
+    });
+    if (checkpoint) {
+        this.stack.push(checkpoint.checkpoint.x / 16);
+    } else {
+        this.stack.push(0);
+        throw new Error('No checkpoint found');
+    }
+};
+
+Vm.prototype['checkpoint-y'] = function()
+{
+    var checkpoint = this.client.goals.getFirst(function(item){
+        return (item instanceof GoalCheckPoint) && (item.status == 0);
+    });
+    if (checkpoint) {
+        this.stack.push(checkpoint.checkpoint.y / 16);
+    } else {
+        this.stack.push(0);
+        throw new Error('No checkpoint found');
+    }
 };
