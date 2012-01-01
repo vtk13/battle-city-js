@@ -27,6 +27,16 @@ PascalCompiler = function PascalCompiler(codeStr)
         'fire': {
             'signature': [],
             'inline': 'tank-fire'
+        },
+        'x': {
+            'signature': [],
+            'inline': 'tank-x',
+            'type': 'integer'
+        },
+        'y': {
+            'signature': [],
+            'inline': 'tank-y',
+            'type': 'integer'
         }
     };
 };
@@ -197,40 +207,44 @@ PascalCompiler.prototype.parseAssigment = function(name)
     return code;
 };
 
+/**
+ * Call function or procedure.
+ * Result of the functions will be on top of the stack.
+ * @param name
+ * @return
+ */
 PascalCompiler.prototype.parseFunctionCall = function(name)
 {
-    var code = [], ex;
+    var code = [], ex, func;
     if ((func = this.buildInFunc[name])) {
-        if (func.signature) {
-            var param = [];
-            if (this.look() == '(') {
-                this.token('(');
-                do {
-                    if (this.look() == ')') {
-                        break;
-                    }
-                    ex = this.parseExpression();
-                    param.push(ex);
-                    code = code.concat(ex.code);
-                } while (this.look() == ',' && this.token(','));
-                this.token(')');
-            }
-            if (func.signature == 'var') {
-                code.push('push-val');
-                code.push(param.length);
-            } else {
-                if (func.signature.length == param.length) {
-                    for (var i = 0 ; i < param.length ; i++) {
-                        if (param[i].type != func.signature[i]) {
-                            throw new Error('Mismatch argument type in function "'
-                                    + name + '" call, argument ' + i
-                                    + ', at ' + this.formatPos());
-                        }
-                    }
-                } else {
-                    throw new Error('Mismatch parameters count for function "'
-                            + name + '" at ' + this.formatPos());
+        var param = [];
+        if (this.look() == '(') {
+            this.token('(');
+            do {
+                if (this.look() == ')') {
+                    break;
                 }
+                ex = this.parseExpression();
+                param.push(ex);
+                code = code.concat(ex.code);
+            } while (this.look() == ',' && this.token(','));
+            this.token(')');
+        }
+        if (func.signature == 'var') {
+            code.push('push-val');
+            code.push(param.length);
+        } else {
+            if (func.signature.length == param.length) {
+                for (var i = 0 ; i < param.length ; i++) {
+                    if (param[i].type != func.signature[i]) {
+                        throw new Error('Mismatch argument type in function "'
+                                + name + '" call, argument ' + i
+                                + ', at ' + this.formatPos());
+                    }
+                }
+            } else {
+                throw new Error('Mismatch parameters count for function "'
+                        + name + '" at ' + this.formatPos());
             }
         }
         code.push(func.inline);
@@ -255,6 +269,9 @@ PascalCompiler.prototype.parseExpression = function()
             code.push('push-mem');
             code.push(v.offset + this.varOffset);
             type = v.type;
+        } else if (this.buildInFunc[name]) {
+            var chunk = this.parseFunctionCall(name);
+            code = code.concat(chunk);
         } else {
             throw new Error('Undefined variable "' + name + '" at ' + this.formatPos());
         }

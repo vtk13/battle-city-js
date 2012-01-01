@@ -15,9 +15,10 @@
   <tank-fire>
 */
 
-Vm = function Vm(code)
+Vm = function Vm(code, client)
 {
     this.code = code;
+    this.client = client;
     this.reset();
 };
 
@@ -47,12 +48,23 @@ Vm.prototype.step = function()
     }
 };
 
+Vm.prototype.getArgs = function(n)
+{
+    if (n === undefined) {
+        n = parseInt(this.stack.pop());
+    }
+    var params = [];
+    for (var i = 0 ; i < n ; i++) {
+        params.unshift(this.stack.pop());
+    }
+    return params;
+};
+
 Vm.prototype['write'] = function()
 {
-    var args = parseInt(this.stack.pop()), param;
-    for (var i = 0 ; i < args ; i++) {
-        param = this.stack.pop();
-        this.emit('write', param);
+    var params = this.getArgs();
+    for (var i = 0 ; i < params.length ; i++) {
+        this.emit('write', params[i]);
     }
 };
 
@@ -173,8 +185,23 @@ Vm.prototype['tank-turn'] = function()
 
 Vm.prototype['tank-fire'] = function()
 {
-    var direction = this.stack.pop();
     this.emit('action', {
         'fire': 1
     });
+};
+
+Vm.prototype['tank-x'] = function()
+{
+    var field = this.client.field;
+    var tankId = this.client.user.tankId;
+    var x = Math.floor(field.get(tankId).x / 16);
+    this.stack.push(x);
+};
+
+Vm.prototype['tank-y'] = function()
+{
+    var field = this.client.field;
+    var tankId = this.client.user.tankId;
+    var y = Math.floor(field.get(tankId).y / 16);
+    this.stack.push(y);
 };
