@@ -92,6 +92,12 @@ Vm.prototype['pop-reg'] = function()
     this.registers[registerName] = this.stack.pop();
 };
 
+Vm.prototype['pop-mem'] = function()
+{
+    var offset = parseInt(this.code[this.pointer++]);
+    this.code[offset] = this.stack.pop();
+};
+
 Vm.prototype['add'] = function()
 {
     var arg2 = parseInt(this.stack.pop()); // second argument
