@@ -31,4 +31,7 @@ module.exports.map = [
     [0,0,0,0,0,0,0,0,0,0,0,1,0,0,1,0,0,0,0,0,0,0,0,0,0,0]
 ];
 
-module.exports.checkpoint = {x: 19 * 16, y: 14 * 16};
+module.exports.getGoals = function(clan)
+{
+    return [new GoalCheckPoint(clan, 19*16, 14*16)];
+};

@@ -23,7 +23,6 @@ require('./common/func');
 require('./common/map_tiled');
 require('./battle-city/field');
 require('./battle-city/bot-emitter');
-require('./battle-city/keyboard');
 require('./battle-city/objects/abstract');
 require('./battle-city/objects/animation');
 require('./battle-city/objects/bullet');
@@ -37,6 +36,7 @@ require('./battle-city/objects/trees');
 require('./battle-city/objects/water');
 require('./battle-city/objects/ice');
 require('./battle-city/objects/checkpoint');
+require('./battle-city/goals');
 require('./battle-city/clan');
 
 registry.users = new TList();

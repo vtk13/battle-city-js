@@ -22,8 +22,8 @@ Checkpoint.prototype.serialize = function()
     return [
         serializeTypeMatches[this.constructor.name], // 0
         this.id, // 1
-        this.x,
-        this.y
+        this.x, // 2
+        this.y // 3
     ];
     // z is constant
 };

@@ -7,6 +7,7 @@ Clan = function Clan(n, defaultArmoredTimer)
     this.timer = 0;
     this.enemiesClan = null;
     this.users = [];
+    this.goals = [];
     this.base = new Base();
     this.base.clan = this;
     this.tankPositions = Clan.tankPositions['clan' + n];
@@ -227,25 +228,28 @@ LearnerClan.prototype.startGame = function(game, level)
     this.base.x = this.game.field.width /  2;
     this.base.y = (this.n == 1) ? (this.game.field.height - 16) : 16;
 
-    if (level.checkpoint) {
-        this.checkpoint = new Checkpoint(level.checkpoint.x, level.checkpoint.y);
+    if (level.getGoals) {
+        this.goals = level.getGoals(this);
+        for (var i = 0 ; i < this.goals.length ; i++) {
+            this.goals[i].reset();
+        }
     }
-    this.game.field.add(this.checkpoint);
-//    this.game.field.add(this.base);
 };
 
 LearnerClan.prototype.step = function()
 {
-    if (this.checkpoint && this.game) {
-        var res = this.game.field.intersect(this.checkpoint);
-        for (var i in res) {
-            if (res[i].clan == this.enemiesClan && res[i] instanceof Tank) {
-                var self = this;
-                // todo move all endgame timeouts to premade
-                setTimeout(function(){
-                    self.premade.gameOver(self.enemiesClan);
-                }, 1000);
-            }
+    var self = this;
+    if (this.goals.length > 0) {
+        var goals = 0;
+        for (var i = 0 ; i < this.goals.length ; i++) {
+            this.goals[i].check();
+            if (this.goals[i].status) goals++;
+        }
+        if (goals == this.goals.length) {
+            // todo move all endgame timeouts to premade
+            setTimeout(function(){
+                self.premade.gameOver(self.enemiesClan);
+            }, 1000);
         }
     }
     this.base.step();
