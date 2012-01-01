@@ -18,13 +18,6 @@ body {
     position: relative;
 }
 
-h1, h2, h3 {
-    margin-bottom: 10px;
-}
-p {
-    margin-bottom: 5px;
-}
-
 .ui-block {
     display: none;
 }
@@ -240,4 +233,14 @@ p {
 }
 legend {
     padding: 0 5px;
+}
+
+
+
+
+#help h1, #help h2, #help h3 {
+    margin-bottom: 10px;
+}
+#help p {
+    margin-bottom: 5px;
 }
