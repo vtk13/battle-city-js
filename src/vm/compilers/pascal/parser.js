@@ -151,8 +151,15 @@ PascalCompiler.prototype.parseStatement = function()
     var look = this.lookIdentifier();
     if (look.length > 0) {
         if (this.isKeyword.test(look)) {
-            if (look == 'if') {
+            switch (look) {
+            case 'if':
                 code = this.parseIf();
+                break;
+            case 'begin':
+                this.token('begin');
+                code = this.parseStatementList();
+                this.token('end');
+                break;
             }
         } else {
             var name = this.parseIdentifier();
