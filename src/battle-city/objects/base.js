@@ -6,10 +6,7 @@ Base = function Base(x, y)
     this.y = y;
     this.img[0] = 'img/base.png';
     this.shootDown = false;
-    this.shootDownTimer = Base.shootDownTimer;
 };
-
-Base.shootDownTimer = 2 * 1000/30; // 30ms step
 
 Base.prototype = new AbstractGameObject();
 Base.prototype.constructor = Base;
@@ -62,6 +59,7 @@ Base.prototype.unserialize = function(data)
 Base.prototype.hit = function()
 {
     this.shootDown = true;
+    this.clan.premade.gameOver(this.clan.enemiesClan, 2000);
     this.emit('change');
     return true;
 };
@@ -112,12 +110,6 @@ Base.prototype.disarm = function()
 
 Base.prototype.step = function()
 {
-    if (this.shootDown) {
-        this.shootDownTimer--;
-        if (this.shootDownTimer <= 0) {
-            this.clan.premade.gameOver(this.clan.enemiesClan);
-        }
-    }
     if (this.armoredTimer > 0) {
         if (--this.armoredTimer <= 0) {
             this.disarm();

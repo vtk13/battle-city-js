@@ -1,6 +1,7 @@
 
 Game = function Game(map, premade)
 {
+    this.running = true; // premade set this to false before game over
     this.premade = premade;
     this.stepableItems = [];
 

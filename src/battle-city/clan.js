@@ -107,7 +107,6 @@ Clan.prototype.startGame = function(game)
         user.emit('change'); // user.tankId
     }
     this.base.shootDown = false;
-    this.base.shootDownTimer = Base.shootDownTimer;
     this.base.x = this.game.field.width /  2;
     this.base.y = (this.n == 1) ? (this.game.field.height - 16) : 16;
     this.game.field.add(this.base);
@@ -202,7 +201,6 @@ BotsClan.prototype.startGame = function(game, level)
     }
 
     this.base.shootDown = false;
-    this.base.shootDownTimer = Base.shootDownTimer;
 };
 
 BotsClan.prototype.pauseTanks = function()
@@ -224,7 +222,6 @@ LearnerClan.prototype.startGame = function(game, level)
     this.game = game;
 
     this.base.shootDown = false;
-    this.base.shootDownTimer = Base.shootDownTimer;
     this.base.x = this.game.field.width /  2;
     this.base.y = (this.n == 1) ? (this.game.field.height - 16) : 16;
 
@@ -246,10 +243,7 @@ LearnerClan.prototype.step = function()
             if (this.goals[i].status) goals++;
         }
         if (goals == this.goals.length) {
-            // todo move all endgame timeouts to premade
-            setTimeout(function(){
-                self.premade.gameOver(self.enemiesClan);
-            }, 1000);
+            self.premade.gameOver(self.enemiesClan);
         }
     }
     this.base.step();

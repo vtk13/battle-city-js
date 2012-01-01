@@ -121,7 +121,18 @@ Premade.prototype.startGame = function()
     this.emit('change');
 };
 
-Premade.prototype.gameOver = function(winnerClan)
+Premade.prototype.gameOver = function(winnerClan, timeout)
+{
+    if (this.game && this.game.running) {
+        this.game.running = false;
+        var self = this;
+        setTimeout(function(){
+            self._gameOver(winnerClan);
+        }, timeout ? timeout : 1000);
+    }
+};
+
+Premade.prototype._gameOver = function(winnerClan)
 {
     if (this.game) {
         this.game.gameOver();
