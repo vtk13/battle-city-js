@@ -130,9 +130,13 @@ Premade.prototype.gameOver = function(winnerClan, timeout)
     if (this.game && this.game.running) {
         this.game.running = false;
         var self = this;
-        setTimeout(function(){
-            self._gameOver(winnerClan);
-        }, timeout ? timeout : 1000);
+        if (timeout) {
+            setTimeout(function(){
+                self._gameOver(winnerClan);
+            }, timeout ? timeout : 1000);
+        } else {
+            this._gameOver(winnerClan);
+        }
     }
 };
 
