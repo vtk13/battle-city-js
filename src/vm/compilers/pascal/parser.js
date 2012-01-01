@@ -202,17 +202,19 @@ PascalCompiler.prototype.parseFunctionCall = function(name)
     var code = [], ex;
     if ((func = this.buildInFunc[name])) {
         if (func.signature) {
-            this.token('(');
             var param = [];
-            do {
-                if (this.look() == ')') {
-                    break;
-                }
-                ex = this.parseExpression();
-                param.push(ex);
-                code = code.concat(ex.code);
-            } while (this.look() == ',' && this.token(','));
-            this.token(')');
+            if (this.look() == '(') {
+                this.token('(');
+                do {
+                    if (this.look() == ')') {
+                        break;
+                    }
+                    ex = this.parseExpression();
+                    param.push(ex);
+                    code = code.concat(ex.code);
+                } while (this.look() == ',' && this.token(','));
+                this.token(')');
+            }
             if (func.signature == 'var') {
                 code.push('push-val');
                 code.push(param.length);
