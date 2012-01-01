@@ -40,9 +40,14 @@ module.exports.getGoals = function(clan)
 };
 
 /*
-if goalontheleft then
-  turn('left')
-else
-  turn('right');
-move(5);
+Program Program1;
+var a: string;
+begin
+  move(11);
+  if x>checkpointx then
+    turn('left')
+  else
+    turn('right');
+  move(5);
+end.
 */

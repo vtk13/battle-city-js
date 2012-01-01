@@ -51,11 +51,12 @@ PascalCompiler = function PascalCompiler(codeStr)
     };
 };
 
-PascalCompiler.prototype.isSpace = /\s/;
-PascalCompiler.prototype.isNum = /[0-9]/;
-PascalCompiler.prototype.isChar = /[a-z]/i;
-PascalCompiler.prototype.isSymbol = /\w/i;
-PascalCompiler.prototype.isKeyword = /program|var|begin|end|if/i;
+PascalCompiler.prototype.isSpace = /^\s$/;
+PascalCompiler.prototype.isNum = /^[0-9]$/;
+PascalCompiler.prototype.isChar = /^[a-z]$/i;
+PascalCompiler.prototype.isSymbol = /^\w$/i;
+PascalCompiler.prototype.isKeyword = /^(program|var|begin|end|if)$/i;
+PascalCompiler.prototype.isRelationOp = /^(<|<=|=|<>|>=|>)$/;
 
 PascalCompiler.prototype.parse = function()
 {
@@ -271,6 +272,60 @@ PascalCompiler.prototype.parseFunctionCall = function(name)
  */
 PascalCompiler.prototype.parseExpression = function()
 {
+    var res = this.parsePrimaryExpression();
+    if (this.isRelationOp.test(this.look())) { // <  <=  =  <>  >=  >
+        if (res.type != 'integer') {
+            throw new Error('Mismatch types in relation operation at ' + this.formatPos());
+        }
+        var op = this.look();
+        if (this.isRelationOp.test(op + this.look(1))) {
+            op += this.look(1);
+        }
+        this.token(op);
+        var right = this.parsePrimaryExpression();
+        if (right.type != 'integer') {
+            throw new Error('Mismatch types in relation operation at ' + this.formatPos());
+        }
+        res.code = res.code.concat(right.code);
+        res.code.push('sub');
+        res.code.push('pop-reg'); res.code.push('ax');
+        switch (op) {
+        case '<':
+            res.code.push('jae'); // a - b < 0 so jump to "push-val 0" if above or equal
+            break;
+        case '<=':
+            res.code.push('ja'); // a - b <= 0 so jump to "push-val 0" if above
+            break;
+        case '=':
+            res.code.push('jnz'); // a - b == 0 so jump to "push-val 0" if non zero
+            break;
+        case '<>':
+            res.code.push('jz'); // a - b != 0 so jump to "push-val 0" if zero
+            break;
+        case '>':
+            res.code.push('jbe'); // a - b > 0 so jump to "push-val 0" if below or equal
+            break;
+        case '>=':
+            res.code.push('jb'); // a - b >= 0 so jump to "push-val 0" if below
+            break;
+        }
+        res.code.push('4');
+        res.code.push('push-val');
+        res.code.push(1);
+        res.code.push('jmp');
+        res.code.push('2');
+        res.code.push('push-val');
+        res.code.push(0);
+    }
+    return res;
+};
+
+/**
+ * parse an expression and put result in on top of the stack
+ * @return
+ */
+PascalCompiler.prototype.parsePrimaryExpression = function()
+{
     var code = [], type, value;
     if (this.test(this.isChar)) {
         var name = this.parseIdentifier();
@@ -282,6 +337,7 @@ PascalCompiler.prototype.parseExpression = function()
         } else if (this.buildInFunc[name]) {
             var chunk = this.parseFunctionCall(name);
             code = code.concat(chunk);
+            type = this.buildInFunc[name].type;
         } else {
             throw new Error('Undefined variable "' + name + '" at ' + this.formatPos());
         }
@@ -368,9 +424,9 @@ PascalCompiler.prototype.parseIdentifier = function()
     }
 };
 
-PascalCompiler.prototype.look = function()
+PascalCompiler.prototype.look = function(offset)
 {
-    return this.codeStr.charAt(this.cur);
+    return this.codeStr.charAt(this.cur + (offset ? offset : 0));
 };
 
 PascalCompiler.prototype.lookIdentifier = function()

@@ -118,14 +118,14 @@ Vm.prototype['add'] = function()
 {
     var arg2 = parseInt(this.stack.pop()); // second argument
     var arg1 = parseInt(this.stack.pop()); // first argument
-    this.registers['ax'] = arg1 + arg2;
+    this.stack.push(arg1 + arg2);
 };
 
 Vm.prototype['sub'] = function()
 {
     var arg2 = parseInt(this.stack.pop()); // second argument
     var arg1 = parseInt(this.stack.pop()); // first argument
-    this.registers['ax'] = arg1 - arg2;
+    this.stack.push(arg1 - arg2);
 };
 
 Vm.prototype['move-reg-mem'] = function()
@@ -167,6 +167,46 @@ Vm.prototype['jz'] = function()
 {
     var offset = parseInt(this.code[this.pointer++]);
     if (this.registers['ax'] == 0) {
+        this.pointer += offset;
+    }
+};
+
+Vm.prototype['jnz'] = function()
+{
+    var offset = parseInt(this.code[this.pointer++]);
+    if (this.registers['ax'] != 0) {
+        this.pointer += offset;
+    }
+};
+
+Vm.prototype['ja'] = function()
+{
+    var offset = parseInt(this.code[this.pointer++]);
+    if (this.registers['ax'] > 0) {
+        this.pointer += offset;
+    }
+};
+
+Vm.prototype['jae'] = function()
+{
+    var offset = parseInt(this.code[this.pointer++]);
+    if (this.registers['ax'] >= 0) {
+        this.pointer += offset;
+    }
+};
+
+Vm.prototype['jb'] = function()
+{
+    var offset = parseInt(this.code[this.pointer++]);
+    if (this.registers['ax'] < 0) {
+        this.pointer += offset;
+    }
+};
+
+Vm.prototype['jbe'] = function()
+{
+    var offset = parseInt(this.code[this.pointer++]);
+    if (this.registers['ax'] <= 0) {
         this.pointer += offset;
     }
 };

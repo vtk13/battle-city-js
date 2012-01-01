@@ -252,7 +252,7 @@ LearnerClan.prototype.step = function()
             }
         }
         if (goals == this.goals.count()) {
-            self.premade.gameOver(self.enemiesClan);
+            self.premade.gameOver(self.enemiesClan, 1000);
         }
     }
     this.base.step();
