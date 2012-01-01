@@ -246,6 +246,9 @@ BcClient.prototype.executeCode = function(code)
                 if (action.turn) {
                     self.turn(action.turn);
                 }
+                if (action.fire) {
+                    self.fire();
+                }
             });
             this.vm.on('write', function(data){
                 self.emit('write', data);

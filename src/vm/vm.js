@@ -10,9 +10,9 @@
   ax
 
 Система команд:
-  <tank-move> <distance>
-  <tank-turn> <direction>
-  <jz> <offset>
+  <tank-move> (distance)
+  <tank-turn> (direction)
+  <tank-fire>
 */
 
 Vm = function Vm(code)
@@ -162,5 +162,13 @@ Vm.prototype['tank-turn'] = function()
     var direction = this.stack.pop();
     this.emit('action', {
         'turn': direction
+    });
+};
+
+Vm.prototype['tank-fire'] = function()
+{
+    var direction = this.stack.pop();
+    this.emit('action', {
+        'fire': 1
     });
 };

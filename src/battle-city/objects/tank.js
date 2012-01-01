@@ -90,6 +90,7 @@ Tank.prototype.fire = function()
         this.bullets.push(bullet);
         this.field.add(bullet);
     }
+    this.emit('task-done');
 };
 
 Tank.prototype.step = function(paused)

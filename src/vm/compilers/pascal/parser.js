@@ -23,6 +23,10 @@ PascalCompiler = function PascalCompiler(codeStr)
         'turn': {
             'signature': ['string'],
             'inline': 'tank-turn'
+        },
+        'fire': {
+            'signature': [],
+            'inline': 'tank-fire'
         }
     };
 };
@@ -268,7 +272,7 @@ PascalCompiler.prototype.parseExpression = function()
     return {
         type: type,
         code: code
-    }
+    };
 };
 
 PascalCompiler.prototype.parseNumber = function()
