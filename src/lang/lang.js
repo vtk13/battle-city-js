@@ -16,7 +16,12 @@ function applyLang(lang, context)
     }
 
     elements.each(function(){
-        $(this).html(window.availableLangs[lang][$(this).attr('key')]);
+        var key = $(this).attr('key');
+        if (window.availableLangs[lang][key]) {
+            $(this).html(window.availableLangs[lang][key]);
+        } else {
+            console.log('Unknown lang key "' + key + '"');
+        }
     });
     $('.lang-select li.current').removeClass('current');
     $('.lang-select li[lang=' + lang + ']').addClass('current');

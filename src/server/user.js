@@ -20,7 +20,9 @@ Eventable(ServerUser.prototype);
 
 ServerUser.prototype.setCurrentCourse = function(course)
 {
+    this.unwatchCollection('exercises');
     this.currentCourse = course;
+    this.watchCollection(course.execises, 'exercises');
     this.emit('change');
 };
 

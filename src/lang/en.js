@@ -29,5 +29,15 @@ window.availableLangs['en'] = {
       , 'course-pascal-basics': 'Pascal basics'
       , 'course-algoritms': 'Algoritms'
       , 'header-available-courses': 'Available Courses'
+      , 'pascal-algoritm1': 'Algoritm 1'
+      , 'pascal-algoritm1-desc': 'In this exercise you will write a program which will lead the tank to the checkpoint.'
+      , 'pascal-algoritm2': 'Algoritm 2'
+      , 'pascal-algoritm2-desc': 'In this exercise you will write a program which will lead the tank to the checkpoint.'
+      , 'pascal-if-statement': 'IF operator'
+      , 'pascal-if-statement-desc': 'In this exercise you will write a program which will lead the tank to the checkpoint.'
+      , 'pascal-for-statement': 'FOR operator'
+      , 'pascal-for-statement-desc': 'In this exercise you will write a program which will lead the tank to the checkpoint.'
+      , 'algoritms-wayfinder': 'Wayfinder'
+      , 'algoritms-wayfinder-desc': 'Wayfinder desc'
 
 };

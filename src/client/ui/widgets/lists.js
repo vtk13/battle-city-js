@@ -51,12 +51,12 @@ UiUserList.prototype.itemDomElement = function(user)
 
 function UiCoursesList(list, container, itemClass, client)
 {
-  UiList.apply(this, arguments);
-  this.client = client;
-  client.socket.on('course-changed', function(id){
-      $('.' + itemClass, container).removeClass('current');
-      $('.' + itemClass + id, container).addClass('current');
-  });
+    UiList.apply(this, arguments);
+    this.client = client;
+    client.socket.on('course-changed', function(id){
+        $('.' + itemClass, container).removeClass('current');
+        $('.' + itemClass + id, container).addClass('current');
+    });
 };
 
 UiCoursesList.prototype = new UiList();
@@ -64,14 +64,37 @@ UiCoursesList.prototype.constructor = UiCoursesList;
 
 UiCoursesList.prototype.itemDomElement = function(course)
 {
-    var res = $('<div class="lang ' + this.itemClass + ' ' +
-            (this.client.user.currentCourseId === course.id ? 'current ' : '') +
-            this.itemClass + course.id + '" key="' + course.name + '"></div>');
+    var cls = 'lang ' + this.itemClass + ' ' +
+        (this.client.user.currentCourseId === course.id ? 'current ' : '') +
+        this.itemClass + course.id;
+    var res = $('<div class="' + cls + '" key="' + course.name + '"></div>');
     applyLang(null, res);
     var self = this;
     res.click(function(){
         self.client.setCourse(course.id);
     });
+    return res;
+};
+
+//====== UiExercisesList ============================================================
+
+function UiExercisesList(list, container, itemClass)
+{
+    UiList.apply(this, arguments);
+};
+
+UiExercisesList.prototype = new UiList();
+UiExercisesList.prototype.constructor = UiExercisesList;
+
+UiExercisesList.prototype.itemDomElement = function(exercise)
+{
+    var cls = this.itemClass + ' ' + this.itemClass + exercise.id;
+    var res = $('<div class="' + cls + '"><h3 class="lang" key="' + exercise.name + '"></h3>'+
+            '<p class="lang" key="' + exercise.name + '-desc"></p>' +
+            '<div class="exercise-controls"><div class="select" level="' +
+                exercise.level + '">&rarr;</div></div>'+
+            '</div>');
+    applyLang(null, res);
     return res;
 };
 
