@@ -57,7 +57,8 @@ h1, h2, h3, h4, h5, h6 {
 #exercises .exercise-list .exercise {
     border-bottom: solid 1px #F5D277;
 }
-#exercises .exercise-list .exercise:hover {
+
+#exercises .courses .course:hover, #exercises .exercise-list .exercise:hover {
     background: #1C302C;
 }
 

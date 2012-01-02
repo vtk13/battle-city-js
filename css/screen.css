@@ -194,8 +194,17 @@ body {
     padding-right: 20px;
 }
 
-#exercises .exercise-list {
+#exercises .courses {
+    float: left;
+    width: 300px;
+}
+#exercises .courses .course {
+    padding: 7px;
+    cursor: pointer;
+}
 
+#exercises .exercise-list {
+    margin-left: 300px;
 }
 #exercises .exercise-controls>div {
     cursor: pointer;

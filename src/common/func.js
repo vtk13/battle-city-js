@@ -31,7 +31,8 @@ serializeTypeMatches = {
     'Premade'           : 21,
     'Message'           : 22,
     'Checkpoint'        : 23,
-    'GoalCheckPoint'    : 24
+    'GoalCheckPoint'    : 24,
+    'Course'            : 25
 };
 
 unserializeTypeMatches = {
@@ -58,5 +59,6 @@ unserializeTypeMatches = {
     21: 'Premade',
     22: 'Message',
     23: 'Checkpoint',
-    24: 'GoalCheckPoint'
+    24: 'GoalCheckPoint',
+    25: 'Course'
 };

@@ -38,10 +38,13 @@ require('./battle-city/objects/ice');
 require('./battle-city/objects/checkpoint');
 require('./battle-city/goals');
 require('./battle-city/clan');
+require('./edu/course');
+require('./edu/courselist');
 
 registry.users = new TList();
 registry.premades = new TPremadeList();
 registry.messages = new TMessageList();
+registry.courses = new CoursesList();
 
 process.on('uncaughtException', function(ex) {
     if (ex.stack) {
@@ -133,6 +136,7 @@ io.listen(server, config).sockets.on('connection', function(socket) {
                 user.watchCollection(registry.users, 'users');
                 user.watchCollection(registry.premades, 'premades');
                 user.watchCollection(registry.messages, 'messages');
+                user.watchCollection(registry.courses, 'courses');
                 console.log(new Date().toLocaleTimeString() + ': user ' + nick + ' connected');
             } else {
                 socket.emit('nickNotAllowed');

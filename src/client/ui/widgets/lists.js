@@ -40,11 +40,27 @@ function UiUserList(list, container, itemClass)
 UiUserList.prototype = new UiList();
 UiUserList.prototype.constructor = UiUserList;
 
-UiUserList.prototype.itemDomElement = function(user)
+UiUserList.prototype.itemDomElement = function(course)
 {
     return $('<div class="' + this.itemClass + ' ' +
-        (window.bcClient.user.id === user.id ? 'current ' : '') +
-        this.itemClass + user.id + '"></div>').text(user.nick);
+        this.itemClass + course.id + '"></div>').text(course.name);
+};
+
+//====== UiCousesList ============================================================
+
+function UiCousesList(list, container, itemClass)
+{
+  UiList.apply(this, arguments);
+};
+
+UiCousesList.prototype = new UiList();
+UiCousesList.prototype.constructor = UiCousesList;
+
+UiCousesList.prototype.itemDomElement = function(user)
+{
+  return $('<div class="' + this.itemClass + ' ' +
+      (window.bcClient.user.id === user.id ? 'current ' : '') +
+      this.itemClass + user.id + '"></div>').text(user.nick);
 };
 
 //====== UiPremadeUserList =====================================================

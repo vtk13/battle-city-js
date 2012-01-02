@@ -25,6 +25,7 @@ function BcClient(href)
     this.premades.on('remove', this.onPremadeChange.bind(this));
 
     this.goals = new TList();
+    this.courses = new TList();
 
     this.messages = new TList();
     this.premadeUsers = new TList();
@@ -83,6 +84,10 @@ BcClient.prototype.onSync = function(data)
     if (data['goals']) {
         this.goals.updateWith(data['goals']);
     }
+    if (data['courses']) {
+        console.log(data['courses']);
+        this.courses.updateWith(data['courses']);
+    }
 };
 
 BcClient.prototype.onClearCollection = function(data)
@@ -102,6 +107,9 @@ BcClient.prototype.onClearCollection = function(data)
         break;
     case 'goals':
         this.goals.clear();
+        break;
+    case 'courses':
+        this.courses.clear();
         break;
     }
 };
