@@ -1,6 +1,7 @@
 
-Course = function Course(name)
+Course = function Course(id, name)
 {
+    this.id = id;
     this.name = name;
 };
 

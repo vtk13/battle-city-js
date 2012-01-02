@@ -85,7 +85,6 @@ BcClient.prototype.onSync = function(data)
         this.goals.updateWith(data['goals']);
     }
     if (data['courses']) {
-        console.log(data['courses']);
         this.courses.updateWith(data['courses']);
     }
 };

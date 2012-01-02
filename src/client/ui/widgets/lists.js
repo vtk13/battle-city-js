@@ -40,10 +40,11 @@ function UiUserList(list, container, itemClass)
 UiUserList.prototype = new UiList();
 UiUserList.prototype.constructor = UiUserList;
 
-UiUserList.prototype.itemDomElement = function(course)
+UiUserList.prototype.itemDomElement = function(user)
 {
-    return $('<div class="' + this.itemClass + ' ' +
-        this.itemClass + course.id + '"></div>').text(course.name);
+  return $('<div class="' + this.itemClass + ' ' +
+      (window.bcClient.user.id === user.id ? 'current ' : '') +
+      this.itemClass + user.id + '"></div>').text(user.nick);
 };
 
 //====== UiCousesList ============================================================
@@ -56,11 +57,12 @@ function UiCousesList(list, container, itemClass)
 UiCousesList.prototype = new UiList();
 UiCousesList.prototype.constructor = UiCousesList;
 
-UiCousesList.prototype.itemDomElement = function(user)
+UiCousesList.prototype.itemDomElement = function(course)
 {
-  return $('<div class="' + this.itemClass + ' ' +
-      (window.bcClient.user.id === user.id ? 'current ' : '') +
-      this.itemClass + user.id + '"></div>').text(user.nick);
+    var res = $('<div class="lang ' + this.itemClass + ' ' +
+            this.itemClass + course.id + '" key="' + course.name + '"></div>');
+    applyLang(null, res);
+    return res;
 };
 
 //====== UiPremadeUserList =====================================================

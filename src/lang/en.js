@@ -26,5 +26,7 @@ window.availableLangs['en'] = {
       , 'execute-code': 'Execute code'
       , 'restart': 'Restart'
       , 'lack-of-websocket-support': 'Sorry, but your browser doesn\'t support websockets. Recommended browsers are <a href="http://www.google.com/chrome/">Google Chrome</a> version 14 or above, and <a href="http://www.mozilla.org/">Firefox</a> version 7 or above.'
+      , 'course-pascal-basics': 'Pascal basics'
+      , 'course-algoritms': 'Algoritms'
 
 };

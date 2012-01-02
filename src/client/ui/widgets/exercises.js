@@ -1,7 +1,7 @@
 
 function WidgetExercises(context, client)
 {
-    this.courses = new UiUserList(client.courses, $('.courses', context), 'course');
+    this.courses = new UiCousesList(client.courses, $('.courses', context), 'course');
 
     $('.exercise .select', context).live('click', function(){
         var name = 'createbot-' + client.user.id;

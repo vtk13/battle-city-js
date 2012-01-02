@@ -1,9 +1,21 @@
 
 window.availableLangs = {};
+window.lang = {current: null};
 
-function applyLang(lang)
+function applyLang(lang, context)
 {
-    $('.lang').each(function(){
+    if (!lang) {
+        lang = window.lang.current;
+    } else {
+        window.lang.current = lang;
+    }
+
+    var elements = $('.lang', context);
+    if (context) {
+        elements = elements.add(context.filter('.lang'));
+    }
+
+    elements.each(function(){
         $(this).html(window.availableLangs[lang][$(this).attr('key')]);
     });
     $('.lang-select li.current').removeClass('current');
