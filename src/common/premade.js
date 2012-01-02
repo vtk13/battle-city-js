@@ -36,7 +36,7 @@ Premade.types = {
         'levels': 1
     },
     'createbot': {
-        'levels': 3
+        'levels': 4
     }
 };
 
