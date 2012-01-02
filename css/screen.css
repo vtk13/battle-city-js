@@ -5,7 +5,6 @@
 
 html, body {
     height: 100%;
-    min-height: 650px;
 }
 #public, #premade, #gameChat, #game, #create, #bot-editor, #exercises, #help, #body {
     position: relative;
