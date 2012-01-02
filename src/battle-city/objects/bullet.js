@@ -25,15 +25,15 @@ Eventable(Bullet.prototype);
 
 Bullet.prototype.setDirectionImage = function()
 {
- var dir = 'north';
+ var dir = 'up';
  if (this.speedY  > 0) {
-     dir = 'south';
+     dir = 'down';
  } else if (this.speedY  < 0) {
-     dir = 'north';
+     dir = 'up';
  } else if (this.speedX  > 0) {
-     dir = 'east';
+     dir = 'right';
  } else if (this.speedX  < 0) {
-     dir = 'west';
+     dir = 'left';
  }
  this.img[0] = 'img/bullet-' + dir + '.png';
 };

@@ -25,12 +25,12 @@ TankBot.prototype.step = function(paused)
         if (this.stuck || Math.random() < 0.007) {
             // move percents
             var mp = {
-                up: this.y / 500,
-                right: (416 - this.x) / 416,
-                down: (500 - this.y) / 500,
-                left: this.x / 416
+                'north': this.y / 500,
+                'east': (416 - this.x) / 416,
+                'south': (500 - this.y) / 500,
+                'west': this.x / 416
             };
-            var percent = Math.random() * (mp.up + mp.right + mp.down + mp.left);
+            var percent = Math.random() * (mp['north'] + mp['east'] + mp['south'] + mp['west']);
             for (var i in mp) {
                 percent -= mp[i];
                 if (percent < 0) {

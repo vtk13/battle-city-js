@@ -305,7 +305,7 @@ Tank.prototype.turn = function(direction)
                 }
                 break;
             default:
-                throw "Unknown direction";
+                throw new Error("Unknown direction");
         }
         var intersects = this.field.intersect(this, newX1, newY1);
         for (var i in intersects) {
