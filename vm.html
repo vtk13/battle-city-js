@@ -20,14 +20,18 @@
     {
         $('.state .pointer').text(vm.pointer);
         $('.state .registers .ax').text(typeof vm.registers.ax + ': ' + vm.registers.ax);
+        $('.state .registers .cx').text(typeof vm.registers.cx + ': ' + vm.registers.cx);
+
         $('.state .stack').empty();
         for (var i in vm.stack) {
             $('.state .stack').prepend('<div>' + typeof vm.stack[i] + ': ' + vm.stack[i] + '</div>');
         }
+
         $('.state .mem').empty();
         for (var i in vm.code) {
             $('.state .mem').append('<div>' + i + '=' + typeof vm.code[i] + ': ' + vm.code[i] + '</div>');
         }
+        $('.state .mem>div:nth-child(' + (vm.pointer + 1) + ')').addClass('current');
     };
 
     function onStep()
@@ -46,21 +50,19 @@
         onTextareaChange($('textarea').get(0).value);
     });
     </script>
+    <style type="text/css">
+    .mem .current {
+        background: #aaa;
+    }
+    </style>
 </head>
 <body>
-    <textarea style="float: left;" rows="10" cols="80" onchange="onTextareaChange(this.value);">jmp 1
-2
-move-reg-mem ax 2
-jz 5
-write 1 not-zero
-jmp 3
-write 1 zero
-write 1 end</textarea>
+    <textarea style="float: left;" rows="10" cols="80" onchange="onTextareaChange(this.value);"></textarea>
     <textarea style="float: left;" rows="10" cols="80" class="console"></textarea>
     <div style="float: right;">
         <ul>
-            <li><b>[write] [number-of-arguments] [argument1] [argument2] ...</b> - emit 'write' event</li>
-            <li><b>[writeln] [number-of-arguments] [argument1] [argument2] ...</b> - emit 'write' event</li>
+            <li><b>[write] ([number-of-arguments] [argument1] [argument2] ...)</b> - emit 'write' event</li>
+            <li><b>[writeln] ([number-of-arguments] [argument1] [argument2] ...)</b> - emit 'write' event</li>
             <li><b>[jmp] [offset]</b> - jump for [offset] instructions</li>
             <li><b>[push-val] [value]</b> - push value in the stack</li>
             <li><b>[push-reg] [register-name]</b> - push register value in the stack</li>
@@ -74,6 +76,7 @@ write 1 end</textarea>
             <li><b>[move-mem-val] [address] [value]</b></li>
             <li><b>[move-mem-mem] [address] [address]</b></li>
             <li><b>[js] [offset]</b> - jump for offset if ax is zero</li>
+            <li><b>[loop] [offset]</b> - dec cx and jump for offset if cx is not zero</li>
         </ul>
     </div>
     <button onclick="onStep();" style="clear: left;">Step</button>
@@ -86,12 +89,30 @@ write 1 end</textarea>
             pointer: <span class="pointer"></span>
         </div>
         <div class="registers">
-            ax <span class="ax"></span>
+            <div>ax <span class="ax"></span></div>
+            <div>cx <span class="cx"></span></div>
         </div>
         <div>
             Stack:
             <div class="stack"></div>
         </div>
     </div>
+<!--
+[loop code]:
+jmp 1
+8
+move-reg-val cx 4
+push-mem 2
+push-val 1
+sub
+pop-mem 2
+push-mem 2
+push-val 1
+write
+loop -14
+push-val !
+push-val 1
+writeln
+-->
 </body>
 </html>

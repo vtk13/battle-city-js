@@ -31,7 +31,8 @@ Eventable(Vm.prototype);
 Vm.prototype.reset = function()
 {
     this.registers = {
-        'ax': null
+        'ax': 0,
+        'cx': 0
     };
     this.stack = [];
     this.pointer = 0;
@@ -207,6 +208,15 @@ Vm.prototype['jbe'] = function()
 {
     var offset = parseInt(this.code[this.pointer++]);
     if (this.registers['ax'] <= 0) {
+        this.pointer += offset;
+    }
+};
+
+Vm.prototype['loop'] = function()
+{
+    var offset = parseInt(this.code[this.pointer++]);
+    this.registers['cx']--;
+    if (this.registers['cx'] > 0) {
         this.pointer += offset;
     }
 };
