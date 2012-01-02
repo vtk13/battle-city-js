@@ -47,17 +47,17 @@ UiUserList.prototype.itemDomElement = function(user)
       this.itemClass + user.id + '"></div>').text(user.nick);
 };
 
-//====== UiCousesList ============================================================
+//====== UiCoursesList ============================================================
 
-function UiCousesList(list, container, itemClass)
+function UiCoursesList(list, container, itemClass)
 {
   UiList.apply(this, arguments);
 };
 
-UiCousesList.prototype = new UiList();
-UiCousesList.prototype.constructor = UiCousesList;
+UiCoursesList.prototype = new UiList();
+UiCoursesList.prototype.constructor = UiCoursesList;
 
-UiCousesList.prototype.itemDomElement = function(course)
+UiCoursesList.prototype.itemDomElement = function(course)
 {
     var res = $('<div class="lang ' + this.itemClass + ' ' +
             this.itemClass + course.id + '" key="' + course.name + '"></div>');
