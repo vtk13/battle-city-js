@@ -221,6 +221,18 @@ Vm.prototype['loop'] = function()
     }
 };
 
+Vm.prototype['dec-mem'] = function()
+{
+    var offset = parseInt(this.code[this.pointer++]);
+    this.code[offset]--;
+};
+
+Vm.prototype['inc-mem'] = function()
+{
+    var offset = parseInt(this.code[this.pointer++]);
+    this.code[offset]++;
+};
+
 Vm.prototype['tank-move'] = function()
 {
     var steps = this.stack.pop();

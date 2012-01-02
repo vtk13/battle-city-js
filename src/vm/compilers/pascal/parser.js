@@ -55,7 +55,7 @@ PascalCompiler.prototype.isSpace = /^\s$/;
 PascalCompiler.prototype.isNum = /^[0-9]$/;
 PascalCompiler.prototype.isChar = /^[a-z]$/i;
 PascalCompiler.prototype.isSymbol = /^\w$/i;
-PascalCompiler.prototype.isKeyword = /^(program|var|begin|end|if)$/i;
+PascalCompiler.prototype.isKeyword = /^(program|var|begin|end|if|for)$/i;
 PascalCompiler.prototype.isRelationOp = /^(<|<=|=|<>|>=|>)$/;
 
 PascalCompiler.prototype.parse = function()
@@ -160,6 +160,9 @@ PascalCompiler.prototype.parseStatement = function()
                 code = this.parseStatementList();
                 this.token('end');
                 break;
+            case 'for':
+                code = this.parseFor();
+                break;
             }
         } else {
             var name = this.parseIdentifier();
@@ -170,6 +173,57 @@ PascalCompiler.prototype.parseStatement = function()
             }
         }
     }
+    return code;
+};
+
+PascalCompiler.prototype.parseFor = function()
+{
+    // for name := a to b do statement
+    this.token('for');
+    var name = this.parseIdentifier();
+    var code = this.parseAssigment(name);
+    var v = this.symbolTable.look(name);
+    if (v.type != 'integer') {
+        throw new Error('Loop variable must be an integer at ' + this.formatPos());
+    }
+    // if parseAssigment done without expression, then 'v' must exists
+    var dir = this.parseIdentifier();
+    if (dir != 'to' && dir != 'downto') {
+        throw new Error('"to" or "downto" expected at ' + this.formatPos());
+    }
+    var b = this.parseExpression();
+    if (b.type != 'integer') {
+        throw new Error('Loop expression must be an integer at ' + this.formatPos());
+    }
+    this.token('do');
+    var statement = this.parseStatement();
+    code = code.concat(b.code);
+
+    // loop condition check (7 commands)
+    code.push('push-mem');
+    code.push(v.offset + this.varOffset);
+    code.push('sub'); // top of the stack is b-a
+    code.push('pop-reg');
+    code.push('ax');
+    if (dir == 'to') {
+        // break if b-a < 0 (means "for a:=1 to 1 do" should repeat 1 time)
+        code.push('jb');
+        code.push(statement.length + 4 /*jmp to start of the loop*/);
+    } else { // downto
+        // break if b-a > 0
+        code.push('ja');
+        code.push(statement.length + 4 /*jmp to start of the loop*/);
+    }
+
+    code = code.concat(statement);
+
+    // jmp to start of the loop
+    code.push(dir == 'to' ? 'inc-mem' : 'dec-mem');
+    code.push(v.offset + this.varOffset);
+    code.push('jmp');
+    code.push(-(statement.length + 4 /*this jmp*/ + 7 /* loop condition check */
+            + b.code.length));
+
     return code;
 };
 
