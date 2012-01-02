@@ -248,6 +248,38 @@ Tank.prototype.animateStep = function(step)
 Tank.prototype.turn = function(direction)
 {
     var canTurn = true;
+    if (direction == 'right') {
+        switch (true) {
+        case this.speedX > 0:
+            direction = 'south';
+            break;
+        case this.speedX < 0:
+            direction = 'north';
+            break;
+        case this.speedY > 0:
+            direction = 'west';
+            break;
+        case this.speedY < 0:
+            direction = 'east';
+            break;
+        }
+    }
+    if (direction == 'left') {
+        switch (true) {
+        case this.speedX > 0:
+            direction = 'north';
+            break;
+        case this.speedX < 0:
+            direction = 'south';
+            break;
+        case this.speedY > 0:
+            direction = 'east';
+            break;
+        case this.speedY < 0:
+            direction = 'west';
+            break;
+        }
+    }
     if (this.direction != direction) {
         // emulate move back tank for 1 pixel
         // doto this may be a bug, if tank just change direction to opposite
@@ -305,7 +337,8 @@ Tank.prototype.turn = function(direction)
                 }
                 break;
             default:
-                throw new Error("Unknown direction");
+                this.emit('task-done', 'Unknown direction "' + direction + '"');
+                throw new Error('Unknown direction "' + direction + '"');
         }
         var intersects = this.field.intersect(this, newX1, newY1);
         for (var i in intersects) {

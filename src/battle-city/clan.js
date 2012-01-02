@@ -30,8 +30,8 @@ Clan.prototype.attachUser = function(user)
         }
     }
     user.tank = new Tank();
-    user.tank.on('task-done', function(){
-        user.clientMessage('task-done');
+    user.tank.on('task-done', function(message){
+        user.clientMessage('task-done', message);
     });
     user.tank.user = user;
     user.tank.clan = user.clan = this;

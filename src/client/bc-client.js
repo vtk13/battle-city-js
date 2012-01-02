@@ -158,10 +158,13 @@ BcClient.prototype.onExecute = function(data)
 //    data.script
 };
 
-BcClient.prototype.onTaskDone = function()
+BcClient.prototype.onTaskDone = function(message)
 {
     var self = this;
     if (this.vm) {
+        if (message) {
+            this.emit('write', message + '\n');
+        }
         clearInterval(this.codeInterval);
         this.codeInterval = setInterval(function(){
             self.vm.step();

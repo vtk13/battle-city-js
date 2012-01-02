@@ -192,7 +192,11 @@ io.listen(server, config).sockets.on('connection', function(socket) {
     });
     socket.on('control', function(event) {
         if (user) {
-            user.control(event);
+            try {
+                user.control(event);
+            } catch (ex) {
+                console.log(ex.stack);
+            }
         }
     });
     socket.on('say', function(event) {
