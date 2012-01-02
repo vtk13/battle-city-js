@@ -20,3 +20,17 @@ Course.prototype.unserialize = function(data)
     this.id = data[1];
     this.name = data[2];
 };
+
+CoursePascalBasics = function CoursePascalBasics()
+{
+
+};
+
+CoursePascalBasics.prototype = new Course(1, 'course-pascal-basics');
+
+CourseAlgoritms = function CourseAlgoritms()
+{
+
+};
+
+CourseAlgoritms.prototype = new Course(2, 'course-algoritms');

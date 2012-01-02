@@ -1,13 +1,14 @@
 
 isArray = Array.isArray;
 
-ServerUser = function ServerUser()
+ServerUser = function ServerUser(course)
 {
     User.call(this, arguments);
     this.collections = {};
     this.updateCollector = {};
     this.messages = 0;
     this.countMessageFrom = Date.now();
+    this.setCurrentCourse(course);
 };
 
 ServerUser.maxMessages = 10; // per minute
@@ -17,6 +18,11 @@ ServerUser.prototype = new User();
 ServerUser.prototype.constructor = ServerUser;
 Eventable(ServerUser.prototype);
 
+ServerUser.prototype.setCurrentCourse = function(course)
+{
+    this.currentCourse = course;
+    this.emit('change');
+};
 
 ServerUser.prototype.serialize = function()
 {
@@ -30,6 +36,7 @@ ServerUser.prototype.serialize = function()
       , this.premade ? this.premade.id : 0 // 6
       , this.positionId // 7
       , this.tank ? this.tank.id : 0 // 8
+      , this.currentCourse ? this.currentCourse.id : 0 // 9
     ];
 };
 

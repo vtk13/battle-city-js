@@ -40,6 +40,8 @@ require('./battle-city/goals');
 require('./battle-city/clan');
 require('./edu/course');
 require('./edu/courselist');
+require('./edu/exercise');
+require('./edu/exerciselist');
 
 registry.users = new TList();
 registry.premades = new TPremadeList();
@@ -124,7 +126,7 @@ io.listen(server, config).sockets.on('connection', function(socket) {
                 }
             });
             if (nickAllowed) {
-                user = new ServerUser();
+                user = new ServerUser(registry.courses.get(1));
                 user.lastSync = 0;
                 user.socket = socket;
                 user.nick = nick;
@@ -142,6 +144,14 @@ io.listen(server, config).sockets.on('connection', function(socket) {
                 socket.emit('nickNotAllowed');
             }
         }
+    });
+    socket.on('set-course', function(event){
+        var courseId = event.id;
+        var course = registry.courses.get(courseId);
+        if (user && course) {
+            user.setCurrentCourse(course);
+        }
+        socket.emit('course-changed', course.id);
     });
     socket.on('join', function(event){
         try {

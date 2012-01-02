@@ -23,6 +23,7 @@ User.prototype.serialize = function()
     res[6] = this.premadeId;
     res[7] = this.positionId;
     res[8] = this.tankId;
+    res[9] = this.currentCourseId;
     return res;
 };
 
@@ -35,5 +36,6 @@ User.prototype.unserialize = function(data)
     this.clan   = data[5];
     this.premadeId  = data[6];
     this.positionId = data[7];
-    this.tankId = data[8];
+    this.tankId     = data[8];
+    this.currentCourseId    = data[9];
 };

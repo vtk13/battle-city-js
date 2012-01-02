@@ -193,6 +193,13 @@ BcClient.prototype.login = function(nick)
     });
 };
 
+BcClient.prototype.setCourse = function(id)
+{
+    this.socket.emit('set-course', {
+        id: id
+    });
+};
+
 BcClient.prototype.say = function(text)
 {
     this.socket.emit('say', {

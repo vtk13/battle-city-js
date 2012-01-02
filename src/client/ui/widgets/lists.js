@@ -49,9 +49,14 @@ UiUserList.prototype.itemDomElement = function(user)
 
 //====== UiCoursesList ============================================================
 
-function UiCoursesList(list, container, itemClass)
+function UiCoursesList(list, container, itemClass, client)
 {
   UiList.apply(this, arguments);
+  this.client = client;
+  client.socket.on('course-changed', function(id){
+      $('.' + itemClass, container).removeClass('current');
+      $('.' + itemClass + id, container).addClass('current');
+  });
 };
 
 UiCoursesList.prototype = new UiList();
@@ -60,8 +65,13 @@ UiCoursesList.prototype.constructor = UiCoursesList;
 UiCoursesList.prototype.itemDomElement = function(course)
 {
     var res = $('<div class="lang ' + this.itemClass + ' ' +
+            (this.client.user.currentCourseId === course.id ? 'current ' : '') +
             this.itemClass + course.id + '" key="' + course.name + '"></div>');
     applyLang(null, res);
+    var self = this;
+    res.click(function(){
+        self.client.setCourse(course.id);
+    });
     return res;
 };
 

@@ -2,8 +2,8 @@
 CoursesList = function CoursesList()
 {
     TList.apply(this, arguments);
-    this.add(new Course(1, 'course-pascal-basics'));
-    this.add(new Course(2, 'course-algoritms'));
+    this.add(new CoursePascalBasics());
+    this.add(new CourseAlgoritms());
 };
 
 CoursesList.prototype = new TList();

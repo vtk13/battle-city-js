@@ -194,11 +194,11 @@ body {
     padding-right: 20px;
 }
 
-#exercises .courses {
+#exercises .courses-list {
     float: left;
     width: 300px;
 }
-#exercises .courses .course {
+#exercises .courses-list .course {
     padding: 7px;
     cursor: pointer;
 }
@@ -243,7 +243,10 @@ legend {
     padding: 0 5px;
 }
 
-
+#exercises .courses-list h3 {
+    line-height: 25px;
+    padding: 0 7px;
+}
 
 
 #help h1, #help h2, #help h3 {
