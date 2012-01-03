@@ -37,12 +37,12 @@ and move another 10 step forward.</p>\
 <p>Here is a final program source code:</p>\
 \
 <pre class="code">\
-Program Level1;\
-begin\
-  move(11);\
-  turn(\'east\');\
-  move(10);\
-end.\
+Program Level1;\n\
+begin\n\
+  move(11);\n\
+  turn(\'east\');\n\
+  move(10);\n\
+end.\n\
 </pre>\
 \
 <p>After you finish writing program, click "Execute code" button to run a program.</p>'

@@ -38,12 +38,12 @@ direction должна быть строка. Cтроки в Pascal заключ
 <p>Вот готовый вариант решения задания:</p>\
 \
 <pre class="code">\
-Program Level1;\
-begin\
-  move(11);\
-  turn(\'east\');\
-  move(10);\
-end.\
+Program Level1;\n\
+begin\n\
+  move(11);\n\
+  turn(\'east\');\n\
+  move(10);\n\
+end.\n\
 </pre>\
 \
 <p>После того как вы напишете программу, нажмите кнопку "Выполнить код".</p>'
