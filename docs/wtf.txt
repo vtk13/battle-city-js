@@ -1,5 +1,5 @@
 Trace: 
-    at EventEmitter.<anonymous> (/home/vtk/workspace/battlecity/src/server.js:57:17)
+    at EventEmitter.<anonymous> (src/server.js:57:17)
     at EventEmitter.emit (events.js:81:20)
 
 ...

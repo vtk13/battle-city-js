@@ -1,11 +1,11 @@
 TypeError: Cannot read property 'game' of undefined
-    at Game.unjoin (/var/www/tanks.vtk.tom.ru/htdocs/src/core/game.js:57:13)
-    at Game.join (/var/www/tanks.vtk.tom.ru/htdocs/src/core/game.js:44:19)
-    at /var/www/tanks.vtk.tom.ru/htdocs/src/core/premade.js:61:14
+    at Game.unjoin (src/core/game.js:57:13)
+    at Game.join (src/core/game.js:44:19)
+    at src/core/premade.js:61:14
     at Array.forEach (native)
-    at TList.forEach (/var/www/tanks.vtk.tom.ru/htdocs/src/core/list.js:59:16)
-    at Premade.startGame (/var/www/tanks.vtk.tom.ru/htdocs/src/core/premade.js:60:16)
-    at Socket.<anonymous> (/var/www/tanks.vtk.tom.ru/htdocs/src/server.js:126:34)
+    at TList.forEach (src/core/list.js:59:16)
+    at Premade.startGame (src/core/premade.js:60:16)
+    at Socket.<anonymous> (src/server.js:126:34)
     at Socket.$emit (events.js:64:17)
     at SocketNamespace.handlePacket (/usr/lib/node_modules/socket.io/lib/namespace.js:348:20)
     at Manager.onClientMessage (/usr/lib/node_modules/socket.io/lib/manager.js:436:38)
