@@ -5,7 +5,7 @@ function WidgetExercises(context, client)
     this.exercises = new UiExercisesList(client.exercises, $('.exercise-list', context), 'exercise');
 
     $('.exercise .select', context).live('click', function(){
-        var name = 'createbot-' + client.user.id;
+        var name = 'createbot-' + client.currentUser.id;
         client.join(name, 'createbot');
         client.startGame(parseInt($(this).attr('level')));
         return false;

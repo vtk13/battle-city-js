@@ -24,7 +24,7 @@ function FieldView(context, client)
 
     client.socket.on('gameover', function(event) {
         clearInterval(self.animateIntervalId);
-        if (event.winnerClan == client.user.clan) {
+        if (event.winnerClan == client.currentUser.clan) {
             self.message('Победа!');
         } else {
             self.message('Вы проиграли');

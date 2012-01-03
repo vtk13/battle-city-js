@@ -14,8 +14,8 @@ function BcClient(href)
     this.codeInterval = null;
 
     this.users = new TList();
-    this.user = new User(); // do not replace
-    this.users.bindSlave(this.user);
+    this.currentUser = new User(); // do not replace
+    this.users.bindSlave(this.currentUser);
 
     this.premades = new TList();
     this.currentPremade = new Premade(); // do not replace
@@ -118,7 +118,7 @@ BcClient.prototype.onDisconnect = function()
 
 BcClient.prototype.onLogged = function(data)
 {
-    this.user.unserialize(data.user);
+    this.currentUser.unserialize(data.user);
 };
 
 BcClient.prototype.onJoined = function(data)

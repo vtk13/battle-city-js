@@ -43,7 +43,7 @@ UiUserList.prototype.constructor = UiUserList;
 UiUserList.prototype.itemDomElement = function(user)
 {
   return $('<div class="' + this.itemClass + ' ' +
-      (window.bcClient.user.id === user.id ? 'current ' : '') +
+      (window.bcClient.currentUser.id === user.id ? 'current ' : '') +
       this.itemClass + user.id + '"></div>').text(user.nick);
 };
 
@@ -65,7 +65,7 @@ UiCoursesList.prototype.constructor = UiCoursesList;
 UiCoursesList.prototype.itemDomElement = function(course)
 {
     var cls = 'lang ' + this.itemClass + ' ' +
-        (this.client.user.currentCourseId === course.id ? 'current ' : '') +
+        (this.client.currentUser.currentCourseId === course.id ? 'current ' : '') +
         this.itemClass + course.id;
     var res = $('<div class="' + cls + '" key="' + course.name + '"></div>');
     applyLang(null, res);
@@ -116,7 +116,7 @@ UiPremadeUserList.prototype.itemDomElement = function(user)
         text = user.nick + (user.clan == 1 ? ' (внизу)' : ' (вверху)');
     }
     return $('<div class="' + this.itemClass + ' ' +
-        (window.bcClient.user.id == user.id ? 'current ' : '') +
+        (window.bcClient.currentUser.id == user.id ? 'current ' : '') +
         this.itemClass + user.id + '"></div>').text(text);
 };
 

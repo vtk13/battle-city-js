@@ -259,7 +259,7 @@ Vm.prototype['tank-fire'] = function()
 Vm.prototype['tank-x'] = function()
 {
     var field = this.client.field;
-    var tankId = this.client.user.tankId;
+    var tankId = this.client.currentUser.tankId;
     var x = Math.floor(field.get(tankId).x / 16);
     this.stack.push(x);
 };
@@ -267,7 +267,7 @@ Vm.prototype['tank-x'] = function()
 Vm.prototype['tank-y'] = function()
 {
     var field = this.client.field;
-    var tankId = this.client.user.tankId;
+    var tankId = this.client.currentUser.tankId;
     var y = Math.floor(field.get(tankId).y / 16);
     this.stack.push(y);
 };
