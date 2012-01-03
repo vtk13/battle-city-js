@@ -5,7 +5,6 @@ function isClient()
 
 function BcClient(href)
 {
-    this.user = new User(); // do not replace
     this.socket = io.connect(href, {
         'auto connect' : false,
         'reconnect' : false // todo learn reconnection abilities
@@ -15,14 +14,12 @@ function BcClient(href)
     this.codeInterval = null;
 
     this.users = new TList();
-    this.users.on('add'   , this.onUserChange.bind(this));
-    this.users.on('change', this.onUserChange.bind(this));
+    this.user = new User(); // do not replace
+    this.users.bindSlave(this.user);
 
     this.premades = new TList();
     this.currentPremade = new Premade(); // do not replace
-    this.premades.on('add'   , this.onPremadeChange.bind(this));
-    this.premades.on('change', this.onPremadeChange.bind(this));
-    this.premades.on('remove', this.onPremadeChange.bind(this));
+    this.premades.bindSlave(this.currentPremade);
 
     this.goals = new TList();
     this.courses = new TList();
@@ -49,13 +46,6 @@ function BcClient(href)
 };
 
 Eventable(BcClient.prototype);
-
-BcClient.prototype.onUserChange = function(user)
-{
-    if (user.id == this.user.id) {
-        this.user.unserialize(user.serialize());
-    }
-};
 
 BcClient.prototype.onSync = function(data)
 {
@@ -152,14 +142,6 @@ BcClient.prototype.onStarted = function()
 BcClient.prototype.onGameOver = function()
 {
     this.gameRun = false;
-};
-
-BcClient.prototype.onPremadeChange = function(premade)
-{
-    if (this.currentPremade.id == premade.id) {
-        this.currentPremade.unserialize(premade.serialize());
-        this.currentPremade.emit('change');
-    }
 };
 
 /**

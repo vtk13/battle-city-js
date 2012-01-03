@@ -16,7 +16,6 @@ ServerUser._eventTypeMap = {'add': 'a', 'change': 'c', 'remove': 'r'};
 
 ServerUser.prototype = new User();
 ServerUser.prototype.constructor = ServerUser;
-Eventable(ServerUser.prototype);
 
 ServerUser.prototype.setCurrentCourse = function(course)
 {

@@ -7,6 +7,8 @@ User = function User()
 
 };
 
+Eventable(User.prototype);
+
 /**
  * @todo hack for BcClient.onUserChange()
  * @param data

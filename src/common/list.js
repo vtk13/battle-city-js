@@ -118,3 +118,24 @@ TList.prototype.updateWith = function(events){
         }
     }
 };
+
+/**
+ * Bind object to list.
+ * All changes in a list's object with same id will reflect in the slaveObject.
+ * @param slaveObject
+ * @return
+ */
+TList.prototype.bindSlave = function(slaveObject)
+{
+    var self = this;
+    var handler = function(each) {
+        if (slaveObject.id === each.id) { // id may be 0 or undefined, so ===
+            slaveObject.unserialize(each.serialize());
+            slaveObject.emit('change');
+        }
+    };
+    this.on('add'   , handler);
+    this.on('change', handler);
+    this.on('remove', handler);
+
+};
