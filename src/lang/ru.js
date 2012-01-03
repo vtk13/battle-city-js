@@ -1,4 +1,8 @@
-window.availableLangs['ru'] = {
+if (!window.availableLangs['default']) {
+    window.availableLangs['default'] = {};
+}
+
+window.availableLangs['default']['ru'] = {
         'enter-nick': 'Введите ник:'
       , 'legend-play': 'Игра'
       , 'legend-learn': 'Учебник программирования'

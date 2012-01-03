@@ -1,13 +1,17 @@
 
 function WidgetHelp(context, client)
 {
-    client.socket.on('started', function(){
-        $.get('/help/ex1/1-ru.html', function(data){
-            $('.content', context).html(data);
+    client.socket.on('started', function(event){
+        var langfile = '/src/edu/' + event.courseName + '/ex' + event.exerciseId;
+        $('.lang', context).attr('langfile', langfile);
+        $('.content', context).attr('onlang', 'WidgetHelp.onLang');
+        applyLang(null, context);
+    });
+};
 
-            $('.content .code', context).each(function(){
-                CodeMirror.runMode($(this).addClass('cm-s-night').text(), "pascal", this);
-            });
-        });
+WidgetHelp.onLang = function(each)
+{
+    $('.code', each).each(function(){
+        CodeMirror.runMode($(this).addClass('cm-s-night').text(), "pascal", this);
     });
 };

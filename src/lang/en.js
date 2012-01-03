@@ -1,4 +1,8 @@
-window.availableLangs['en'] = {
+if (!window.availableLangs['default']) {
+    window.availableLangs['default'] = {};
+}
+
+window.availableLangs['default']['en'] = {
         'enter-nick': 'Enter nick:'
       , 'legend-play': 'Game'
       , 'legend-learn': 'Code tutorials'

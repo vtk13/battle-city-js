@@ -119,7 +119,12 @@ Premade.prototype.startGame = function()
             user.lives = 4;
             user.emit('change');
         }
-        user.clientMessage('started');
+        user.clientMessage('started', {
+            // todo this is for client to get lang file
+            'courseId': user.currentCourse.id,
+            'courseName': user.currentCourse.name,
+            'exerciseId': this.level // todo level and exerciseId are the same
+        });
     }, this);
     this.game.start();
     this.emit('change');
