@@ -1,7 +1,3 @@
-function isClient()
-{
-    return true;
-};
 
 function BcClient(href)
 {

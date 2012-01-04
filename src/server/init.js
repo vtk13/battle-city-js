@@ -1,7 +1,3 @@
-isClient = function isClient()
-{
-    return false;
-};
 
 var http     = require("http"),
     url      = require("url"),

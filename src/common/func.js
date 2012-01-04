@@ -7,6 +7,11 @@ vector = function vector(x)
     }
 };
 
+isClient = function isClient()
+{
+    return !(typeof window == 'undefined' && typeof global == 'object');
+};
+
 serializeTypeMatches = {
     'Bullet'            : 1,
     'Tank'              : 2,
