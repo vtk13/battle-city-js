@@ -6,25 +6,23 @@ function BcClient(socket)
     this.vm = null;
     this.codeInterval = null;
 
-    this.users = new TList();
+    this.users = new TList().bindSource(socket, 'users');
     this.currentUser = new User(); // do not replace
     this.users.bindSlave(this.currentUser);
 
-    this.premades = new TList();
+    this.premades = new TList().bindSource(socket, 'premades');
     this.currentPremade = new Premade(); // do not replace
     this.premades.bindSlave(this.currentPremade);
 
-    this.goals = new TList();
-    this.courses = new TList();
-    this.exercises = new TList();
+    this.goals = new TList().bindSource(socket, 'goals');
+    this.courses = new TList().bindSource(socket, 'courses');
+    this.exercises = new TList().bindSource(socket, 'exercises');
 
-    this.messages = new TList();
-    this.premadeUsers = new TList();
-    this.premadeMessages = new TList();
+    this.messages = new TList().bindSource(socket, 'messages');
+    this.premadeUsers = new TList().bindSource(socket, 'premade.users');
+    this.premadeMessages = new TList().bindSource(socket, 'premade.messages');
     // todo move to premade object?
-    this.tankStack = new TList();
-    this.socket.on('sync', this.onSync.bind(this));
-    this.socket.on('clearCollection', this.onClearCollection.bind(this));
+    this.tankStack = new TList().bindSource(socket, 'game.botStack');
     this.socket.on('logged', this.onLogged.bind(this));
     this.socket.on('joined', this.onJoined.bind(this));
     this.socket.on('unjoined', this.onUnjoined.bind(this));
@@ -35,73 +33,11 @@ function BcClient(socket)
     this.socket.on('disconnect', this.onDisconnect.bind(this));
 
     this.field = new Field(13 * 32, 13 * 32);
+    TList.prototype.bindSource.call(this.field, socket, 'f');
     this.gameRun = false; // todo another way?
 };
 
 Eventable(BcClient.prototype);
-
-BcClient.prototype.onSync = function(data)
-{
-    if (data['users']) {
-        this.users.updateWith(data['users']);
-    }
-    if (data['premades']) {
-        this.premades.updateWith(data['premades']);
-    }
-    if (data['messages']) {
-        this.messages.updateWith(data['messages']);
-    }
-
-    if (data['premade.users']) {
-        this.premadeUsers.updateWith(data['premade.users']);
-    }
-    if (data['premade.messages']) {
-        this.premadeMessages.updateWith(data['premade.messages']);
-    }
-
-    if (data['game.botStack']) {
-        this.tankStack.updateWith(data['game.botStack']);
-    }
-    if (data['f']) {
-        this.field.updateWith(data['f']);
-    }
-    if (data['goals']) {
-        this.goals.updateWith(data['goals']);
-    }
-    if (data['courses']) {
-        this.courses.updateWith(data['courses']);
-    }
-    if (data['exercises']) {
-        this.exercises.updateWith(data['exercises']);
-    }
-};
-
-BcClient.prototype.onClearCollection = function(data)
-{
-    switch (data) {
-    case 'premade.users':
-        this.premadeUsers.clear();
-        break;
-    case 'premade.messages':
-        this.premadeMessages.clear();
-        break;
-    case 'game.botStack':
-        this.tankStack.clear();
-        break;
-    case 'f':
-        this.field.clear();
-        break;
-    case 'goals':
-        this.goals.clear();
-        break;
-    case 'courses':
-        this.courses.clear();
-        break;
-    case 'exercises':
-        this.exercises.clear();
-        break;
-    }
-};
 
 BcClient.prototype.onDisconnect = function()
 {

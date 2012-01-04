@@ -139,3 +139,19 @@ TList.prototype.bindSlave = function(slaveObject)
     this.on('remove', handler);
 
 };
+
+TList.prototype.bindSource = function(source, key)
+{
+    var self = this;
+    source.on('sync', function(data){
+        if (data[key]) {
+            self.updateWith(data[key]);
+        }
+    });
+    source.on('clearCollection', function(data) {
+        if (data == key) {
+            self.clear();
+        }
+    });
+    return this;
+};
