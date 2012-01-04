@@ -25,7 +25,6 @@ function BcClient(socket)
     this.socket.on('unjoined', this.onUnjoined.bind(this));
     this.socket.on('started', this.onStarted.bind(this));
     this.socket.on('gameover', this.onGameOver.bind(this));
-    this.socket.on('execute', this.onExecute.bind(this));
 
     this.field = new Field(13 * 32, 13 * 32);
     TList.prototype.bindSource.call(this.field, socket, 'f');
@@ -61,16 +60,6 @@ BcClient.prototype.onStarted = function()
 BcClient.prototype.onGameOver = function()
 {
     this.gameRun = false;
-};
-
-/**
- * @todo implement
- * @param data
- * @return
- */
-BcClient.prototype.onExecute = function(data)
-{
-//    data.script
 };
 
 //===== actions ================================================================
