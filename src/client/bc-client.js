@@ -1,10 +1,7 @@
 
 function BcClient(socket)
 {
-    this.socket = socket;
-
-    this.vm = null;
-    this.codeInterval = null;
+    this.socket = socket; // todo rename to serverInterface?
 
     this.users = new TList().bindSource(socket, 'users');
     this.currentUser = new User(); // do not replace
@@ -29,21 +26,15 @@ function BcClient(socket)
     this.socket.on('started', this.onStarted.bind(this));
     this.socket.on('gameover', this.onGameOver.bind(this));
     this.socket.on('execute', this.onExecute.bind(this));
-    this.socket.on('task-done', this.onTaskDone.bind(this));
-    this.socket.on('disconnect', this.onDisconnect.bind(this));
 
     this.field = new Field(13 * 32, 13 * 32);
     TList.prototype.bindSource.call(this.field, socket, 'f');
     this.gameRun = false; // todo another way?
+
+    this.vmRunner = new VmRunner(this);
 };
 
 Eventable(BcClient.prototype);
-
-BcClient.prototype.onDisconnect = function()
-{
-    clearInterval(this.botCodeInterval);
-    clearInterval(this.codeInterval);
-};
 
 BcClient.prototype.onLogged = function(data)
 {
@@ -60,7 +51,6 @@ BcClient.prototype.onUnjoined = function()
 {
     // do not replace this.currentPremade
     this.currentPremade.unserialize([]);
-    clearInterval(this.botCodeInterval);
 };
 
 BcClient.prototype.onStarted = function()
@@ -81,20 +71,6 @@ BcClient.prototype.onGameOver = function()
 BcClient.prototype.onExecute = function(data)
 {
 //    data.script
-};
-
-BcClient.prototype.onTaskDone = function(message)
-{
-    var self = this;
-    if (this.vm) {
-        if (message) {
-            this.emit('write', message + '\n');
-        }
-        clearInterval(this.codeInterval);
-        this.codeInterval = setInterval(function(){
-            self.vm.step();
-        }, 1);
-    }
 };
 
 //===== actions ================================================================
@@ -135,12 +111,6 @@ BcClient.prototype.join = function(name, gameType)
 
 BcClient.prototype.unjoin = function()
 {
-    if (this.vm) {
-        clearInterval(this.codeInterval);
-        this.vm.removeAllListeners();
-        this.vm = null;
-    }
-
     this.socket.emit('unjoin');
 };
 
@@ -157,12 +127,6 @@ BcClient.prototype.stopGame = function()
     if (this.currentPremade.type == 'createbot') {
         this.socket.emit('stop-game');
     }
-
-    if (this.vm) {
-        clearInterval(this.codeInterval);
-        this.vm.removeAllListeners();
-        this.vm = null;
-    }
 };
 
 BcClient.prototype.executeCode = function(code)
@@ -171,41 +135,7 @@ BcClient.prototype.executeCode = function(code)
         this.socket.emit('execute', {
             code: code
         });
-
-        if (this.vm) {
-            clearInterval(this.codeInterval);
-            this.vm.removeAllListeners();
-        }
-        try {
-            var res = new PascalCompiler(code).parse();
-            console.log(res.code);
-            this.vm = new Vm(res.code, this);
-            var self = this;
-            this.vm.on('action', function(action){
-                clearInterval(self.codeInterval);
-                if (action.move) {
-                    self.move(action.move);
-                }
-                if (action.turn) {
-                    self.turn(action.turn);
-                }
-                if (action.fire) {
-                    self.fire();
-                }
-            });
-            this.vm.on('write', function(data){
-                self.emit('write', data);
-            });
-            this.vm.on('terminate', function(action){
-                clearInterval(self.codeInterval);
-                console.log('terminate');
-            });
-            this.codeInterval = setInterval(function(){
-                self.vm.step();
-            }, 1);
-        } catch (ex) {
-            this.emit('compile-error', ex);
-        }
+        this.vmRunner.executeCode(code);
     }
 };
 

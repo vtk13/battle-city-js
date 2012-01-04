@@ -19,9 +19,9 @@
   CheckPointY -
 */
 
-Vm = function Vm(code, client)
+Vm = function Vm(client)
 {
-    this.code = code;
+    this.code = [];
     this.client = client;
     this.reset();
 };
