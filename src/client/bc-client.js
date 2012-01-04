@@ -1,10 +1,7 @@
 
-function BcClient(href)
+function BcClient(socket)
 {
-    this.socket = io.connect(href, {
-        'auto connect' : false,
-        'reconnect' : false // todo learn reconnection abilities
-    });
+    this.socket = socket;
 
     this.vm = null;
     this.codeInterval = null;

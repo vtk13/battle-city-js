@@ -47,7 +47,7 @@ UiUserList.prototype.itemDomElement = function(user)
       this.itemClass + user.id + '"></div>').text(user.nick);
 };
 
-//====== UiCoursesList ============================================================
+//====== UiCoursesList =========================================================
 
 function UiCoursesList(list, container, itemClass, client)
 {
@@ -76,7 +76,7 @@ UiCoursesList.prototype.itemDomElement = function(course)
     return res;
 };
 
-//====== UiExercisesList ============================================================
+//====== UiExercisesList =======================================================
 
 function UiExercisesList(list, container, itemClass)
 {
@@ -120,7 +120,7 @@ UiPremadeUserList.prototype.itemDomElement = function(user)
         this.itemClass + user.id + '"></div>').text(text);
 };
 
-//====== UiPremadeList =====================================================
+//====== UiPremadeList =========================================================
 
 function UiPremadeList(list, container, itemClass)
 {
@@ -149,7 +149,7 @@ UiPremadeList.prototype.itemDomElement = function(premade)
     return res;
 };
 
-//====== UiMessageList =====================================================
+//====== UiMessageList =========================================================
 
 function UiMessageList(list, container, itemClass)
 {

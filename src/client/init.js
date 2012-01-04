@@ -14,7 +14,11 @@ $(function() {
         var wsDomain = 'ws.' + location.hostname + (location.port ? ':' + location.port : '');
         var src = 'http://' + wsDomain + '/socket.io/socket.io.js';
         $.getScript(src, function(){
-            bcClient = new BcClient(wsDomain);
+            var socket = io.connect(wsDomain, {
+                'auto connect' : false,
+                'reconnect' : false // todo learn reconnection abilities
+            });
+            bcClient = new BcClient(socket);
             uiManager = new UiManager(bcClient);
             bcClient.connect();
         });
