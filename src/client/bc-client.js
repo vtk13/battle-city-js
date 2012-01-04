@@ -23,7 +23,6 @@ function BcClient(socket)
 
     this.field = new Field(13 * 32, 13 * 32);
     TList.prototype.bindSource.call(this.field, socket, 'f');
-    this.gameRun = false; // todo another way?
 
     this.vmRunner = new VmRunner(this);
 
@@ -39,13 +38,6 @@ function BcClient(socket)
         // do not replace this.currentPremade
         self.currentPremade.unserialize([]);
     });
-    this.socket.on('started', function() {
-        self.gameRun = true;
-    });
-    this.socket.on('gameover', function() {
-        self.gameRun = false;
-    });
-
 };
 
 Eventable(BcClient.prototype);
@@ -108,7 +100,7 @@ BcClient.prototype.stopGame = function()
 
 BcClient.prototype.executeCode = function(code)
 {
-    if (this.gameRun) {
+    if (this.currentPremade.gameRun) {
         this.socket.emit('execute', {
             code: code
         });

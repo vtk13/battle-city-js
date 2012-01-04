@@ -183,7 +183,8 @@ Premade.prototype.serialize = function()
         this.level, // 3
         this.type, // 4
         this.locked, // 5
-        this.userCount // 6
+        this.userCount, // 6
+        this.gameRun || this.game && this.game.running // 7 todo avoid this kind of code
     ];
 };
 
@@ -195,4 +196,5 @@ Premade.prototype.unserialize = function(data)
     this.type       = data[4];
     this.locked     = data[5];
     this.userCount  = data[6];
+    this.gameRun    = data[7];
 };
