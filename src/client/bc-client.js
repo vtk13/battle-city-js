@@ -20,47 +20,35 @@ function BcClient(socket)
     this.premadeMessages = new TList().bindSource(socket, 'premade.messages');
     // todo move to premade object?
     this.tankStack = new TList().bindSource(socket, 'game.botStack');
-    this.socket.on('logged', this.onLogged.bind(this));
-    this.socket.on('joined', this.onJoined.bind(this));
-    this.socket.on('unjoined', this.onUnjoined.bind(this));
-    this.socket.on('started', this.onStarted.bind(this));
-    this.socket.on('gameover', this.onGameOver.bind(this));
 
     this.field = new Field(13 * 32, 13 * 32);
     TList.prototype.bindSource.call(this.field, socket, 'f');
     this.gameRun = false; // todo another way?
 
     this.vmRunner = new VmRunner(this);
+
+    var self = this;
+    this.socket.on('logged', function(data) {
+        self.currentUser.unserialize(data.user);
+    });
+    this.socket.on('joined', function(data) {
+        // do not replace this.currentPremade
+        self.currentPremade.unserialize(data.premade);
+    });
+    this.socket.on('unjoined', function() {
+        // do not replace this.currentPremade
+        self.currentPremade.unserialize([]);
+    });
+    this.socket.on('started', function() {
+        self.gameRun = true;
+    });
+    this.socket.on('gameover', function() {
+        self.gameRun = false;
+    });
+
 };
 
 Eventable(BcClient.prototype);
-
-BcClient.prototype.onLogged = function(data)
-{
-    this.currentUser.unserialize(data.user);
-};
-
-BcClient.prototype.onJoined = function(data)
-{
-    // do not replace this.currentPremade
-    this.currentPremade.unserialize(data.premade);
-};
-
-BcClient.prototype.onUnjoined = function()
-{
-    // do not replace this.currentPremade
-    this.currentPremade.unserialize([]);
-};
-
-BcClient.prototype.onStarted = function()
-{
-    this.gameRun = true;
-};
-
-BcClient.prototype.onGameOver = function()
-{
-    this.gameRun = false;
-};
 
 //===== actions ================================================================
 
@@ -170,7 +158,6 @@ BcClient.prototype.fire = function()
 
 //===== events =================================================================
 
-// todo named similar to handlers onLogged, onJoined, etc
 BcClient.prototype.onConnect = function(handler)
 {
     this.socket.on('connect', handler);
