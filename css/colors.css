@@ -24,29 +24,22 @@ h1, h2, h3, h4, h5, h6 {
 .lang-select li:hover, .lang-select li.current {
     background: #4D694E;
 }
+
+.user-list:hover, .premades:hover, .chat:hover {
+    background: #0C1719;
+}
+.user:hover, .premade:hover {
+    background: #1C302C;
+}
+
 #field {
     border: solid 1px #000;
-}
-.user-list {
-/*    background: #222;*/
-}
-.user:hover {
-    background: #1C302C;
-}
-.premades, .game-controls {
-/*    background: #222;*/
-}
-.premade:hover {
-    background: #1C302C;
-}
-.chat {
-/*    background: #1C302C; */
 }
 .game-modes li.current {
     background: #1C302C;
 }
 .game-modes li img {
-    background: #041012;
+    background: #020608;
 }
 .cm-s-night, .cm-s-night .CodeMirror-gutter {
     background: #041012;

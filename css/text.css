@@ -1,11 +1,17 @@
 
 html, body {
     text-align: justify;
-    font: normal 14px 'Lucida Grande', Verdana, sans-serif;
+    font: normal 14px/18px 'Lucida Grande', Verdana, sans-serif;
 }
 
 h1 {
-    font-size: 19px;
+    font-size: 22px;
+}
+h2 {
+    font-size: 20px;
+}
+legend {
+    font-weight: bold;
 }
 
 #mainmenu {
@@ -31,10 +37,6 @@ h1 {
 }
 
 .exercise-controls>div {
-    text-align: center;
-}
-
-#public h1, #create h1, #premade h1 {
     text-align: center;
 }
 

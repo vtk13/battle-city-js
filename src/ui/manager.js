@@ -90,18 +90,6 @@ UiManager.prototype._slideTo = function(toShow, callback)
     $('.ui-block').hide();
     toShow.show();
     callback && callback();
-
-//    var body = $('body');
-//    body.css('overflow', 'hidden');
-//    toShow.show();
-//    var up = toShow.offset().top < 10; // slide up or down
-//    if (up) {
-//        body.scrollTop(body.height());
-//    }
-//
-//    body.animate({scrollTop: up ? 0 : body.height()}, function(){
-//        $('.ui-block').not(toShow).hide();
-//        body.css('overflow', 'auto');
-//        callback && callback();
-//    });
+    // chrome doesn't fire resize event after a scrollbar has appeared
+    $(window).resize();
 };

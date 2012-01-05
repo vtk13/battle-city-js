@@ -1,16 +1,18 @@
 #mainmenu {
-    height: 30px;
+    height: 35px;
 }
 
 .lang-select {
     float: right;
     list-style: none;
-    padding: 0;
 }
 .lang-select li {
     float: left;
-    padding: 0 4px;
     cursor: pointer;
+}
+
+#public .user-list, #public .premades {
+    height: 100%;
 }
 
 #bot-editor #editor {

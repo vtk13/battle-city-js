@@ -12,7 +12,6 @@ html, body {
 }
 
 body {
-    margin: 0 auto;
     min-width: 980px;
     position: relative;
 }
@@ -21,43 +20,31 @@ body {
     display: none;
 }
 
-#login>.login {
-    padding: 30px;
+fieldset {
+    border: none;
+}
+.lang-select li {
+    padding: 0 6px;
 }
 
 #login form {
     float: left;
     width: 300px;
-    padding: 30px 60px 30px;
 }
 
-#login form fieldset {
-    padding: 10px;
-}
-
-#login ul.faq {
-    margin-bottom: 20px;
-    padding-left: 40px;
-}
 #login form span {
     float: left;
     width: 120px;
 }
-#login form div {
-    padding: 0 0 5px;
-}
-#login form div.submit {
-    padding-left: 120px;
+#login .faq {
+    padding-left: 18px;
 }
 
-#public, #premade, #game, #bot-editor, #help {
+#public, #premade, #game, #bot-editor, #help, #create {
     float: left;
-    width: 50%;
 }
-#create {
-    float: left;
-    width: 48%;
-    padding: 0 0 0 2%;
+#premade, #game, #bot-editor, #help {
+    width: 50%;
 }
 
 #field {
@@ -118,14 +105,13 @@ body {
 
 .user-list {
     float: left;
-    width: 20%;
     overflow: auto;
 }
 .user:hover {
     cursor: pointer;
 }
 
-.premades, .game-controls {
+.game-controls {
     float: left;
     width: 20%;
     margin-left: 60%;
@@ -140,24 +126,16 @@ body {
     cursor: pointer;
 }
 
-.chat {
-    float: left;
-    width: 60%;
-    margin-left: -80%;
-}
 .chat .chat-log {
     overflow: auto;
 }
 .message-form {
     position: absolute;
     bottom: 0;
-    left: 20%;
-    width: 60%;
-    height: 30px;
-    line-height: 30px;
+    left: 0;
 }
 .message-form input[type="text"] {
-    width: 250px;
+    width: 200px;
 }
 #bot-stack {
     float: right;
@@ -167,18 +145,17 @@ body {
     float: right;
 }
 
-#create-form {
-    margin: 10px 0 30px;
-}
 .game-modes {
     list-style: none;
     overflow: hidden;
 }
 .game-modes li {
-    float: left;
-    width: 255px;
-    padding: 20px 5px 40px;
     cursor: pointer;
+    margin-bottom: -32000px;
+    padding-bottom: 32000px;
+}
+.game-modes li>div {
+    padding: 18px;
 }
 
 .like-wrapper {
@@ -199,7 +176,6 @@ body {
     width: 300px;
 }
 #exercises .courses-list .course {
-    padding: 7px;
     cursor: pointer;
 }
 
@@ -211,7 +187,6 @@ body {
 }
 #exercises .exercise-list .exercise {
     height: 100px;
-    padding: 10px;
     position: relative;
 }
 #exercises .exercise-list .exercise .exercise-controls {
@@ -224,8 +199,6 @@ body {
     float: right;
     min-width: 20px;
     height: 20px;
-    padding: 0 3px;
-    margin-right: 4px;
 }
 
 #help {
@@ -239,13 +212,9 @@ body {
     padding: 5px 5px 5px 10px;
     border-radius: 5px;
 }
-legend {
-    padding: 0 5px;
-}
 
 #exercises .courses-list h3 {
     line-height: 25px;
-    padding: 0 7px;
 }
 
 

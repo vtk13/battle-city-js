@@ -10,6 +10,7 @@
     <link href="lib/code-mirror/night.css" rel="stylesheet">
 
     <link rel="stylesheet" type="text/css" href="/css/layout.css">
+    <link rel="stylesheet" type="text/css" href="/css/grid.css">
     <link rel="stylesheet" type="text/css" href="/css/screen.css">
     <link rel="stylesheet" type="text/css" href="/css/text.css">
     <link rel="stylesheet" type="text/css" href="/css/colors.css">
@@ -91,23 +92,25 @@
     </div>
     <div id="login" class="ui-block">
         <div class="login">
-            <h4>Прочитайте пожалуйста:</h4>
-            <ul class="faq">
-                <li>Не верьте всему что пишут в чате, потому-что любой троль может зайти под моим ником.</li>
-                <li>Управление: Стрелки - ездить, пробел - стрелять.</li>
-                <li>Это просто демка, а не законченный продукт. Поэтому дизайн убогий, баги жирные.</li>
-                <li>Максимум может быть только 10 игр одновременно - это
-                    связанно со скорость моего интернет подключения.</li>
-                <li>Конструктивную критику, баги и предложения направлять на vtk666@gmail.com</li>
-            </ul>
-            <form id="game-login" action="#">
+            <div class="cell-12 leftmost">
+                <h2>Прочитайте пожалуйста:</h2>
+                <ul class="faq">
+                    <li>Не верьте всему что пишут в чате, потому-что любой троль может зайти под моим ником.</li>
+                    <li>Управление: Стрелки - ездить, пробел - стрелять.</li>
+                    <li>Это просто демка, а не законченный продукт. Поэтому дизайн убогий, баги жирные.</li>
+                    <li>Максимум может быть только 10 игр одновременно - это
+                        связанно со скорость моего интернет подключения.</li>
+                    <li>Конструктивную критику, баги и предложения направлять на vtk666@gmail.com</li>
+                </ul>
+            </div>
+            <form id="game-login" class="cell-6 leftmost" action="#">
                 <fieldset>
                     <legend class="lang" key="legend-play"></legend>
                     <div><span class="lang" key="enter-nick"></span><input type="text" name="nick"></div>
                     <div class="submit"><button type="submit" class="lang" key="submit-play"></button></div>
                 </fieldset>
             </form>
-            <form id="tutor-login" action="#">
+            <form id="tutor-login" class="cell-6" action="#">
                 <fieldset>
                     <legend class="lang" key="legend-learn"></legend>
                     <div><span class="lang" key="enter-nick"></span><input type="text" name="nick"></div>
@@ -135,39 +138,42 @@
     </div>
     
     <div id="public" class="ui-block">
-        <h1 class="lang" key="header-public-chat"></h1>
-        <div class="user-list"><h3 class="lang" key="header-players"></h3></div>
-        <div class="premades">
-            <div class="lang" key="join-existen-game"></div>
-        </div>
-        <div class="chat">
+        <h1 class="lang cell-6 leftmost" key="header-public-chat"></h1>
+        <div class="user-list cell-1 leftmost"><h3 class="lang" key="header-players"></h3></div>
+        <div class="chat cell-3">
             <div class="chat-log">
                 <div class="messages"></div>
             </div>
         </div>
         <form class="message-form">
+            <div class="cell-1 leftmost"></div>
+            <div class="cell-3">
             <input type="text" name="message">
             <button type="submit" class="lang" key="submit"></button>
+            </div>
         </form>
+        <div class="premades cell-2">
+            <div class="lang" key="join-existen-game"></div>
+        </div>
     </div>
     
     <div id="create" class="ui-block">
-        <h1 class="lang" key="header-create-game"></h1>
+        <h1 class="lang cell-6" key="header-create-game"></h1>
         <form id="create-form">
-        <h3 class="lang" key="choose-game-type"></h3>
+        <h2 class="lang top-align" key="choose-game-type"></h2>
         <ul class="game-modes">
-            <li id="classic" class="current">
+            <li id="classic" class="current cell-3"><div>
                 <img src="/img/client/classic.png" width="208" height="208" alt="classic"/>
-                <h4 class="lang" key="game-type-classic"></h4>
-                <p class="lang" key="game-type-classic-desc"></p>
+                <h3 class="lang" key="game-type-classic"></h3>
+                <p class="lang" key="game-type-classic-desc"></p></div>
             </li>
-            <li id="teamvsteam">
+            <li id="teamvsteam" class="cell-3"><div>
                 <img src="/img/client/teamvsteam.png" width="208" height="208" alt="teamvsteam"/>
-                <h4 class="lang" key="game-type-teamvsteam"></h4>
-                <p class="lang" key="game-type-teamvsteam-desc"></p>
+                <h3 class="lang" key="game-type-teamvsteam"></h3>
+                <p class="lang" key="game-type-teamvsteam-desc"></p></div>
             </li>
         </ul>
-        <div>
+        <div class="top-margin">
             <span class="lang" key="enter-new-game-name"></span>
             <input type="hidden" name="type" value="classic">
             <input type="text" name="name">
