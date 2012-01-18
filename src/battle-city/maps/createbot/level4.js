@@ -42,7 +42,7 @@ module.exports.getGoals = function(clan)
 };
 
 /*
-Program Program1;
+Program Program4;
 var a: integer;
 begin
   for a:=1 to 3 do begin

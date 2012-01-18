@@ -40,8 +40,7 @@ module.exports.getGoals = function(clan)
 };
 
 /*
-Program Program1;
-var a: string;
+Program Program3;
 begin
   move(11);
   if x>checkpointx then
