@@ -14,7 +14,10 @@
     <link rel="stylesheet" type="text/css" href="/css/screen.css">
     <link rel="stylesheet" type="text/css" href="/css/text.css">
     <link rel="stylesheet" type="text/css" href="/css/colors.css">
+    <link rel="stylesheet" type="text/css" href="/css/input.css">
+    <link rel="stylesheet" type="text/css" href="/css/jquery-ui.css">
     <script type="text/javascript" src="/lib/jquery.js"></script>
+    <script type="text/javascript" src="/lib/jquery-ui.js"></script>
     <script type="text/javascript" src="/lib/node/events.js"></script>
     <script type="text/javascript" src="/css/screen.js"></script>
 
@@ -146,7 +149,7 @@
             </div>
         </div>
         <form class="message-form">
-            <div class="cell-1 leftmost"></div>
+            <div class="cell-1 leftmost">&nbsp;</div>
             <div class="cell-3">
             <input type="text" name="message">
             <button type="submit" class="lang" key="submit"></button>
@@ -159,15 +162,15 @@
     
     <div id="create" class="ui-block">
         <h1 class="lang cell-6" key="header-create-game"></h1>
-        <form id="create-form">
+        <form id="create-form" class="cell-6 clear">
         <h2 class="lang top-align" key="choose-game-type"></h2>
         <ul class="game-modes">
-            <li id="classic" class="current cell-3"><div>
+            <li id="classic" class="current cell-3w"><div>
                 <img src="/img/client/classic.png" width="208" height="208" alt="classic"/>
                 <h3 class="lang" key="game-type-classic"></h3>
                 <p class="lang" key="game-type-classic-desc"></p></div>
             </li>
-            <li id="teamvsteam" class="cell-3"><div>
+            <li id="teamvsteam" class="cell-3w"><div>
                 <img src="/img/client/teamvsteam.png" width="208" height="208" alt="teamvsteam"/>
                 <h3 class="lang" key="game-type-teamvsteam"></h3>
                 <p class="lang" key="game-type-teamvsteam-desc"></p></div>
@@ -202,20 +205,30 @@
     </div>
     
     <div id="exercises" class="ui-block">
-        <div class="courses-list">
-            <h3 class="lang" key="header-available-courses"></h3>
+        <div class="courses-list cell-3 leftmost">
+            <h2 class="lang" key="header-available-courses"></h2>
             <div class="courses"></div>
         </div>
-        <div class="exercise-list">
+        <div class="exercise-list cell-9">
+            <h2 class="lang" key="header-available-exercises"></h2>
         </div>
     </div>
     
-    <div id="bot-editor" class="ui-block">
-        <div id="editor"></div>
-        <div id="console"></div>
+    <div id="bot-editor" class="ui-block cell-6 leftmost">
+        <ul>
+            <li><a href="#tabs-help"><span class="lang" key="tabs-help"></span></a></li>
+            <li><a href="#tabs-editor"><span class="lang" key="tabs-editor"></span></a></li>
+        </ul>
+        <div id="tabs-help">
+            <div class="content lang" key="exercise-help-content" langfile="null"></div>
+        </div>
+        <div id="tabs-editor">
+            <div id="editor"></div>
+            <div id="console"></div>
+        </div>
     </div>
     
-    <div id="game" class="ui-block">
+    <div id="game" class="ui-block cell-6">
         <div id="bot-stack"></div>
         <canvas id="field" width="416" height="416"></canvas>
         <div class="player0-stats"></div>
@@ -230,10 +243,6 @@
         </div>
         
         <div class="fb-like" data-href="http://vtk.tom.ru/" data-send="false" data-layout="button_count" data-width="100" data-show-faces="true" data-colorscheme="dark"></div>
-    </div>
-    
-    <div id="help" class="ui-block">
-        <div class="content lang" key="exercise-help-content" langfile="null"></div>
     </div>
 </div>
 </body>

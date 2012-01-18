@@ -33,6 +33,7 @@ window.availableLangs['default']['en'] = {
       , 'course-pascal-basics': 'Pascal basics'
       , 'course-algoritms': 'Algoritms'
       , 'header-available-courses': 'Available Courses'
+      , 'header-available-exercises': 'Упражнения'
       , 'pascal-algoritm1': 'Algoritm 1'
       , 'pascal-algoritm1-desc': 'In this exercise you will write a program which will lead the tank to the checkpoint.'
       , 'pascal-algoritm2': 'Algoritm 2'
@@ -43,5 +44,7 @@ window.availableLangs['default']['en'] = {
       , 'pascal-for-statement-desc': 'In this exercise you will write a program which will lead the tank to the checkpoint.'
       , 'algoritms-wayfinder': 'Wayfinder'
       , 'algoritms-wayfinder-desc': 'Wayfinder desc'
+      , 'tabs-help': 'Help'
+      , 'tabs-editor': 'Code editor'
 
 };

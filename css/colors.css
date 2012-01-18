@@ -47,9 +47,6 @@ h1, h2, h3, h4, h5, h6 {
 .code.cm-s-night {
     background: #1C302C;
 }
-#exercises .exercise-list .exercise {
-    border-bottom: solid 1px #F5D277;
-}
 
 #exercises .courses-list .course:hover, #exercises .exercise-list .exercise:hover,
 #exercises .courses-list .course.current {

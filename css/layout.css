@@ -15,6 +15,11 @@
     height: 100%;
 }
 
+#bot-editor #tabs-editor {
+    height: 80%;
+    width: 100%;
+    overflow: hidden;
+}
 #bot-editor #editor {
     height: 80%;
     width: 100%;
@@ -24,11 +29,11 @@
 }
 #editor .CodeMirror-scroll {
     height: 100%;
-    overflow: scroll;
+    overflow: auto;
 }
 #bot-editor #console {
     height: 20%;
     width: 100%;
-    overflow: scroll;
     white-space: pre;
+    overflow: scroll;
 }

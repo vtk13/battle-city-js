@@ -18,15 +18,25 @@ cell-margin: 18px;
 
 .cell-1, .cell-2, .cell-3, .cell-4, .cell-5, .cell-6,
 .cell-7, .cell-8, .cell-9, .cell-10, .cell-11, .cell-12 {
-    margin-right: 18px;
-    margin-bottom: 18px;
+    padding-left: 9px;
+    padding-right: 9px;
+    float: left;
+}
+.cell-1w, .cell-2w, .cell-3w, .cell-4w, .cell-5w, .cell-6w,
+.cell-7w, .cell-8w, .cell-9w, .cell-10w, .cell-11w, .cell-12w {
     float: left;
 }
 .leftmost {
-    margin-left: 18px;
+    margin-left: 9px;
     clear: left;
 }
-.topmost, .top-margin {
+.clear {
+    clear: left;
+}
+.topmost {
+    margin-top: 9px;
+}
+.top-margin {
     margin-top: 18px;
 }
 h2.top-align {
@@ -51,7 +61,21 @@ h1, h2 {
 #create .game-modes li h3 {
     line-height: 36px;
 }
+#create .game-modes li img {
+    margin-bottom: 5px;
+}
+#classic {
+    margin-right: 18px;
+}
 .message-form {
     height: 36px;
     line-height: 36px;
+}
+
+#exercises .course {
+    padding: 18px 0;
+}
+
+.line {
+    background: white;
 }

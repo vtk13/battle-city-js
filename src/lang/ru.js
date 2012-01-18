@@ -33,6 +33,7 @@ window.availableLangs['default']['ru'] = {
       , 'course-pascal-basics': 'Основы Pascal'
       , 'course-algoritms': 'Алгоритмы'
       , 'header-available-courses': 'Доступные курсы'
+      , 'header-available-exercises': 'Упражнения'
       , 'pascal-algoritm1': 'Алгоритм 1'
       , 'pascal-algoritm1-desc': 'В этом упражнении вам необходимо написать программу управления танком, которая приведет его в точку назначения.'
       , 'pascal-algoritm2': 'Алгоритм 2'
@@ -43,5 +44,7 @@ window.availableLangs['default']['ru'] = {
       , 'pascal-for-statement-desc': 'В этом упражнении вам необходимо написать программу управления танком, которая приведет его в точку назначения.'
       , 'algoritms-wayfinder': 'Поиск пути'
       , 'algoritms-wayfinder-desc': 'Поиск пути описание описание описание описание описание описание описание.'
+      , 'tabs-help': 'Помощь'
+      , 'tabs-editor': 'Редактор кода'
 
 };

@@ -6,7 +6,7 @@
 html, body {
     height: 100%;
 }
-#public, #premade, #gameChat, #game, #create, #bot-editor, #exercises, #help, #body {
+#public, #premade, #gameChat, #game, #create, #bot-editor, #exercises, #body {
     position: relative;
     height: 100%;
 }
@@ -40,10 +40,10 @@ fieldset {
     padding-left: 18px;
 }
 
-#public, #premade, #game, #bot-editor, #help, #create {
+#public, #premade, #game, #bot-editor, #create {
     float: left;
 }
-#premade, #game, #bot-editor, #help {
+#premade, #game, #bot-editor {
     width: 50%;
 }
 
@@ -55,7 +55,7 @@ fieldset {
     height: 430px;
 }
 #game.create-bot #field {
-    margin-left: 10px;
+    margin-left: 0;
 }
 #game .player0-stats {
     position: absolute;
@@ -93,6 +93,7 @@ fieldset {
 }
 #game .exercise-game-controls button {
     width: 100px;
+    margin-bottom: 8px;
 }
 
 #game.create-bot .exercise-game-controls {
@@ -151,6 +152,8 @@ fieldset {
 }
 .game-modes li {
     cursor: pointer;
+    width: 50%;
+    float: left;
     margin-bottom: -32000px;
     padding-bottom: 32000px;
 }
@@ -179,48 +182,39 @@ fieldset {
     cursor: pointer;
 }
 
-#exercises .exercise-list {
-    margin-left: 300px;
-}
 #exercises .exercise-controls>div {
     cursor: pointer;
 }
 #exercises .exercise-list .exercise {
-    height: 100px;
+    height: 72px;
+    padding: 18px 0;
     position: relative;
 }
 #exercises .exercise-list .exercise .exercise-controls {
     position: absolute;
-    bottom: 10px;
-    right: 10px;
+    bottom: 17px;
+    right: 19px;
+    line-height: 36px;
 }
 
 .exercise-controls>div {
     float: right;
-    min-width: 20px;
-    height: 20px;
+    min-width: 36px;
+    height: 36px;
 }
 
-#help {
-    overflow: auto;
+#tabs-help {
+    overflow: scroll;
 }
-#help .content {
-    margin: 10px;
-}
-#help .code {
+#tabs-help .code {
     margin: 5px 5px 5px 10px;
     padding: 5px 5px 5px 10px;
     border-radius: 5px;
 }
 
-#exercises .courses-list h3 {
-    line-height: 25px;
-}
-
-
-#help h1, #help h2, #help h3 {
+#tabs-help h1, #tabs-help h2, #tabs-help h3 {
     margin-bottom: 10px;
 }
-#help p {
+#tabs-help p {
     margin-bottom: 5px;
 }

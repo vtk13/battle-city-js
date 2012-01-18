@@ -10,7 +10,7 @@ function UiManager(client)
     this.game       = new WidgetGame($('#game'), client);
     this.createBot  = new WidgetCreateBot($('#bot-editor'), client);
     this.exercises  = new WidgetExercises($('#exercises'), client);
-    this.help       = new WidgetHelp($('#help'), client);
+    this.help       = new WidgetHelp($('#tabs-help'), client);
 
     this.notifier       = new WidgetNotifier(client);
     this.console        = new WidgetConsole($('#console'), client);
@@ -75,14 +75,7 @@ UiManager.prototype.setStateCreateBot = function()
 {
     this.createBot.reset();
     $('#game').addClass('create-bot');
-    this._slideTo($('#bot-editor').add('#game').add('#help'), function() {
-        if (window.codeMirror) {
-            // hack to force codeMirror to show code
-            window.codeMirror.setValue(window.codeMirror.getValue());
-            window.codeMirror.focus();
-            window.codeMirror.setCursor({line: 2, ch: 2});
-        }
-    });
+    this._slideTo($('#bot-editor').add('#game'));
 };
 
 UiManager.prototype._slideTo = function(toShow, callback)
@@ -90,6 +83,8 @@ UiManager.prototype._slideTo = function(toShow, callback)
     $('.ui-block').hide();
     toShow.show();
     callback && callback();
-    // chrome doesn't fire resize event after a scrollbar has appeared
-    $(window).resize();
+    setTimeout(function(){
+        // chrome doesn't fire resize event after a scrollbar has appeared
+        $(window).resize();
+    }, 100);
 };
