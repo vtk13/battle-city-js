@@ -200,7 +200,7 @@ fieldset {
 }
 
 #tabs-help {
-    overflow: scroll;
+    overflow: auto;
 }
 #tabs-help .code {
     margin: 5px 5px 5px 10px;
