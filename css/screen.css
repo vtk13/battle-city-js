@@ -122,6 +122,7 @@ fieldset {
 }
 .premades button, .game-controls button {
     width: 90px;
+    margin-top: 8px;
 }
 .premade:hover {
     cursor: pointer;

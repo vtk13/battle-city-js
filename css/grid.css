@@ -57,6 +57,12 @@ h1, h2 {
 #game-login fieldset>legend, #tutor-login fieldset>legend {
     line-height: 36px;
 }
+#game-login .submit, #tutor-login .submit {
+    margin-top: 18px;
+}
+#game-login .submit button, #tutor-login .submit button {
+    width: 90px;
+}
 
 #create .game-modes li h3 {
     line-height: 36px;
