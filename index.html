@@ -79,6 +79,17 @@
         <li lang="en">en</li>
         <li lang="ru">ru</li>
     </ul>
+    <div class="like-wrapper">
+        <div id="fb-root"></div>
+        <script>(function(d, s, id) {
+          var js, fjs = d.getElementsByTagName(s)[0];
+          if (d.getElementById(id)) {return;}
+          js = d.createElement(s); js.id = id;
+          js.src = "//connect.facebook.net/en_US/all.js#xfbml=1";
+          fjs.parentNode.insertBefore(js, fjs);
+        }(document, 'script', 'facebook-jssdk'));</script>
+        <div class="fb-like" data-href="http://vtk.tom.ru/" data-send="false" data-layout="button_count" data-width="100" data-show-faces="true" data-colorscheme="dark"></div>
+    </div>
 </div>
 <div id="body">
     <div id="connecting" class="ui-block" style="display: block;">
@@ -120,26 +131,15 @@
                     <div class="submit"><button type="submit" class="lang" key="submit-learn"></button></div>
                 </fieldset>
             </form>
-            <div class="like-wrapper">
-                <div id="fb-root"></div>
-                <script>(function(d, s, id) {
-                  var js, fjs = d.getElementsByTagName(s)[0];
-                  if (d.getElementById(id)) {return;}
-                  js = d.createElement(s); js.id = id;
-                  js.src = "//connect.facebook.net/en_US/all.js#xfbml=1";
-                  fjs.parentNode.insertBefore(js, fjs);
-                }(document, 'script', 'facebook-jssdk'));</script>
-                <div class="fb-like" data-href="http://vtk.tom.ru/" data-send="false" data-layout="button_count" data-width="100" data-show-faces="true" data-colorscheme="dark"></div>
-            </div>
         </div>
-        
+
         <div id="credits">
             <a class="span" href="http://www.spriters-resource.com/nes/batcity/sheet/11756">Sprites by Zephiel87</a>
             <a class="span" href="http://code.google.com/p/battle-city-js/">Source code by vtk</a>
             Powered by <a href="http://nodejs.org/">node.js</a> and <a href="http://socket.io/">socket.io</a>
         </div>
     </div>
-    
+
     <div id="public" class="ui-block">
         <h1 class="lang cell-6 leftmost" key="header-public-chat"></h1>
         <div class="user-list cell-1 leftmost"><h3 class="lang" key="header-players"></h3></div>
@@ -159,7 +159,7 @@
             <div class="lang" key="join-existen-game"></div>
         </div>
     </div>
-    
+
     <div id="create" class="ui-block">
         <h1 class="lang cell-6" key="header-create-game"></h1>
         <form id="create-form" class="cell-6 clear">
@@ -184,7 +184,7 @@
         </div>
         </form>
     </div>
-    
+
     <div id="premade" class="ui-block">
         <h1 class="lang cell-6 leftmost" key="header-premade-chat"></h1>
         <div class="user-list cell-1 leftmost"><h3 class="lang" key="header-players"></h3></div>
@@ -207,7 +207,7 @@
             <button class="exit-game lang" key="exit"></button>
         </div>
     </div>
-    
+
     <div id="exercises" class="ui-block">
         <div class="courses-list cell-3 leftmost">
             <h2 class="lang" key="header-available-courses"></h2>
@@ -217,7 +217,7 @@
             <h2 class="lang" key="header-available-exercises"></h2>
         </div>
     </div>
-    
+
     <div id="bot-editor" class="ui-block cell-6 leftmost">
         <ul>
             <li><a href="#tabs-help"><span class="lang" key="tabs-help"></span></a></li>
@@ -231,7 +231,7 @@
             <div id="console"></div>
         </div>
     </div>
-    
+
     <div id="game" class="ui-block cell-6">
         <div id="bot-stack"></div>
         <canvas id="field" width="416" height="416"></canvas>
@@ -239,15 +239,26 @@
         <div class="player1-stats"></div>
         <div class="player2-stats"></div>
         <div class="player3-stats"></div>
-        
+
         <div class="exercise-game-controls">
             <button class="execute-code lang" key="execute-code"></button>
             <button class="restart-game lang" key="restart"></button>
             <button class="exit-exercise lang" key="exit"></button>
         </div>
-        
-        <div class="fb-like" data-href="http://vtk.tom.ru/" data-send="false" data-layout="button_count" data-width="100" data-show-faces="true" data-colorscheme="dark"></div>
     </div>
 </div>
+<script type="text/javascript">
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-28507208-1']);
+  _gaq.push(['_setDomainName', 'vtk.tom.ru']);
+  _gaq.push(['_setAllowLinker', true]);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+</script>
 </body>
 </html>
