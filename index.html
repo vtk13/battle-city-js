@@ -186,23 +186,26 @@
     </div>
     
     <div id="premade" class="ui-block">
-        <h1 class="lang" key="header-premade-chat"></h1>
-        <div class="user-list"><h3 class="lang" key="header-players"></h3></div>
-        <div class="game-controls">
-            <div class="level"><span class="lang" key="prompt-level"></span><br>
-                <select name="level"></select></div>
-            <button class="start-game lang" key="start"></button>
-            <button class="exit-game lang" key="exit"></button>
-        </div>
-        <div class="chat">
+        <h1 class="lang cell-6 leftmost" key="header-premade-chat"></h1>
+        <div class="user-list cell-1 leftmost"><h3 class="lang" key="header-players"></h3></div>
+        <div class="chat cell-3">
             <div class="chat-log">
                 <div class="messages"></div>
             </div>
         </div>
         <form class="message-form">
+            <div class="cell-1 leftmost">&nbsp;</div>
+            <div class="cell-3">
             <input type="text" name="message">
             <button type="submit" class="lang" key="submit"></button>
+            </div>
         </form>
+        <div class="game-controls cell-2">
+            <div class="level"><span class="lang" key="prompt-level"></span><br>
+                <select name="level"></select></div>
+            <button class="start-game lang" key="start"></button><br>
+            <button class="exit-game lang" key="exit"></button>
+        </div>
     </div>
     
     <div id="exercises" class="ui-block">

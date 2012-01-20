@@ -112,11 +112,6 @@ fieldset {
     cursor: pointer;
 }
 
-.game-controls {
-    float: left;
-    width: 20%;
-    margin-left: 60%;
-}
 .game-controls select {
     width: 60px;
 }
