@@ -109,6 +109,9 @@ fieldset {
 .game-controls select {
     width: 60px;
 }
+.premades {
+    text-align: left;
+}
 .premades button, .game-controls button {
     width: 90px;
     margin-top: 8px;

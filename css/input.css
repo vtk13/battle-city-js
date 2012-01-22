@@ -3,3 +3,7 @@ input, button {
     border: none;
     height: 18px;
 }
+
+button {
+    padding: 0 9px;}
+}
