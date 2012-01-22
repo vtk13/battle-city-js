@@ -4,6 +4,7 @@ var http     = require("http"),
     path     = require("path"),
     fs       = require("fs");
 
+// todo globals
 registry = {};
 
 require('../common/event');
@@ -38,6 +39,7 @@ require('../edu/course');
 require('../edu/courselist');
 require('../edu/exercise');
 require('../edu/exerciselist');
+require('../common/server');
 
 registry.users = new TList();
 registry.premades = new TPremadeList();
@@ -111,140 +113,5 @@ var config = {
 };
 
 io.listen(server, config).sockets.on('connection', function(socket) {
-    var user = null;
-    socket.on('login', function(event){
-        if (user == null && event.nick) {
-            var nick = event.nick && event.nick.substr(0,20);
-            var nickAllowed = true;
-            registry.users.traversal(function(user){
-                if (nick == user.nick) {
-                    nickAllowed = false;
-                }
-            });
-            if (nickAllowed) {
-                user = new ServerUser(registry.courses.get(1));
-                user.lastSync = 0;
-                user.socket = socket;
-                user.nick = nick;
-                registry.users.add(user);
-                user.updateIntervalId = setInterval(user.sendUpdatesToClient.bind(user), 50);
-                socket.emit('logged', {
-                    user: user.serialize()
-                });
-                user.watchCollection(registry.users, 'users');
-                user.watchCollection(registry.premades, 'premades');
-                user.watchCollection(registry.messages, 'messages');
-                user.watchCollection(registry.courses, 'courses');
-                console.log(new Date().toLocaleTimeString() + ': user ' + nick + ' connected');
-            } else {
-                socket.emit('nickNotAllowed');
-            }
-        }
-    });
-    socket.on('set-course', function(event){
-        var courseId = event.id;
-        var course = registry.courses.get(courseId);
-        if (user && course) {
-            user.setCurrentCourse(course);
-        }
-        socket.emit('course-changed', course.id);
-    });
-    socket.on('join', function(event){
-        try {
-            registry.premades.join(event, user);
-            socket.emit('joined', {
-                // user not likely synced this premade yet
-                premade: user.premade.serialize()
-            });
-
-            console.log(new Date().toLocaleTimeString() + ': user ' + user.nick
-                    + ' join premade ' + user.premade.name + ' (' + event.gameType + ')');
-        } catch (ex) {
-            console.log(ex.message, ex.stack);
-            socket.emit('user-message', {
-                message: ex.message
-            });
-        }
-    });
-    socket.on('unjoin', function(){
-        if (user.premade) {
-            console.log(new Date().toLocaleTimeString() + ': user ' + user.nick + ' unjoin premade ' + user.premade.name);
-            user.premade.unjoin(user);
-            socket.emit('unjoined');
-        }
-    });
-    socket.on('execute', function(event){
-        var userFolder = path.join(process.cwd(), 'bots/'+user.id);
-        try {
-            fs.mkdirSync(userFolder, 0777);
-        } catch (ex) {/*ignore EEXIST*/}
-        var tries = fs.readdirSync(userFolder);
-        var botSourceFile = path.join(userFolder, 'try' + tries.length + '.pas');
-        fs.writeFileSync(botSourceFile, event.code);
-        socket.emit('execute', {
-            script: botSourceFile.substr(process.cwd().length)
-        });
-    });
-    socket.on('start', function(event){
-        if (user.premade && !user.premade.game) {
-            if (event.level && user.premade.level != event.level) {
-                user.premade.level = event.level;
-                user.premade.emit('change');
-            }
-            user.premade.startGame();
-            console.log(new Date().toLocaleTimeString() + ': user ' + user.nick + ' starts game ' + user.premade.name + ', level ' + user.premade.level);
-        }
-    });
-    socket.on('stop-game', function(){
-        if (user.premade) {
-            user.premade.gameOver();
-        }
-    });
-    socket.on('control', function(event) {
-        if (user) {
-            try {
-                user.control(event);
-            } catch (ex) {
-                console.log(ex.stack);
-            }
-        }
-    });
-    socket.on('say', function(event) {
-        var message = event.text;
-        if (typeof message == 'string') {
-            message = message.substr(0, 200);
-        }
-        if (user.say(message)) {
-            console.log(new Date().toLocaleTimeString() + ': user ' + user.nick + ' say ' + message);
-        } else {
-            user.clientMessage('doNotFlood');
-        }
-    });
-    socket.on('disconnect', function(event) {
-        try {
-            var connections = -1;
-            for (var i in socket.manager.connected) {
-                connections++;
-            }
-        } catch(e) {}
-        if (user) {
-            console.log(new Date().toLocaleTimeString() + ': user ' + user.nick + ' disconnected (' + connections , ' total)');
-            clearInterval(user.updateIntervalId);
-            user.unwatchAll();
-            user.socket = null;
-            if (user.premade) {
-                user.premade.unjoin(user);
-            }
-            registry.users.remove(user);
-        } else {
-            console.log(new Date().toLocaleTimeString() + ': anonymous disconnected (' + connections , ' total)');
-        }
-    });
-    try {
-        var connections = 0;
-        for (var i in socket.manager.connected) {
-            connections++;
-        }
-    } catch(e) {}
-    console.log(new Date().toLocaleTimeString() + ': Connection accepted (' + connections , ' total)');
+    new BcServerInterface(socket);
 });
