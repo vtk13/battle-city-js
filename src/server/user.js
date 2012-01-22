@@ -139,16 +139,6 @@ ServerUser.prototype.clientMessage = function(type, data)
     }
 };
 
-ServerUser.prototype.sendToClient = function(data)
-{
-    if (this.socket) {
-        this.socket.json.send(data);
-    } else {
-        console.log('Trying to send data to disconnected client.'); // todo bug?
-//        console.trace();
-    }
-};
-
 ServerUser.prototype.onCollectionUpdate = function(syncKey, item, type /*, fields*/)
 {
     var data = item.serialize();
