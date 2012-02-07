@@ -7,6 +7,32 @@
  *  turn(direction)
  *  startMove()
  *  stopMove()
+ *
+ * В этом классе перемешанны:
+ *  - сама сущность
+ *  - отрисовка (setDirectionImage(), imgBase, clanN, trackStep, blink)
+ *  - пуле устанавливаются координаты напрямую, а для этого надо знать,
+ *          что можно задавать x и y напрямую, только до добавления объекта
+ *          в map_tiled (можно переделать map_tiled чтобы он слушал gameBus,
+ *          а объекты просто кидали событие move).
+ *  - distanceLeft и this.emit('task-done') - знание о том что vm на клиенте
+ *          ждет этого события, чтобы продолжить выполнять код (можно выделить
+ *          в tankController).
+ *  - не понятно куда пристроить обработку бонусов, толи this.onBonus толи в
+ *          bonus.onIntersect. А может вообще в отдельный класс?
+ *  - сериализация
+ *
+ * Этот класс знает о:
+ *  - о своих пулях (bullets)
+ *  - об игровом поле (field)
+ *  - бонусах (onBonus)
+ *  - о льде (Ice)
+ *  - о кланах (clan)
+ *  - о виртуальной машине на клиенте (this.emit('task-done'))
+ *  - о спрайтах для отрисовки
+ *  - serializeTypeMatches
+ *  - о пользователях (bullet.tank.user.addReward(this.reward))
+ *
  */
 
 Tank = function Tank(x, y)
