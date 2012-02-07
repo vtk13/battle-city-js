@@ -1,6 +1,0 @@
-syntax: regexp
-^\.settings$
-^\.project$
-^v8\.log$
-^v8\.out$
-^bots/*$
