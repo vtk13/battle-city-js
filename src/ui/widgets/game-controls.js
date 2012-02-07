@@ -11,9 +11,9 @@ function UiGameControls(context, client)
     this.resetState();
     var self = this;
 
-    client.socket.on('gameover', this.setStateGameOver.bind(this));
-    client.socket.on('started', this.setStateGameRunning.bind(this));
-    client.socket.on('joined', this.resetState.bind(this));
+    window.clientServerMessageBus.on('gameover', this.setStateGameOver.bind(this));
+    window.clientServerMessageBus.on('started', this.setStateGameRunning.bind(this));
+    window.clientServerMessageBus.on('joined', this.resetState.bind(this));
 
     $('.exit-game', context).click(function(){
         client.unjoin();

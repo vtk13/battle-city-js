@@ -6,16 +6,16 @@ function VmRunner(client)
     this.codeInterval = null;
 
     var self = this;
-    client.socket.on('disconnect', function(){
+    window.clientServerMessageBus.on('disconnect', function(){
         clearInterval(self.codeInterval);
     });
-    client.socket.on('unjoined', function(){
+    window.clientServerMessageBus.on('unjoined', function(){
         clearInterval(self.codeInterval);
     });
-    client.socket.on('gameover', function(){
+    window.clientServerMessageBus.on('gameover', function(){
         clearInterval(self.codeInterval);
     });
-    client.socket.on('task-done', function(message){
+    window.clientServerMessageBus.on('task-done', function(message){
         if (message) {
             self.emit('write', message + '\n');
         }

@@ -20,21 +20,21 @@ function UiManager(client)
     client.onConnect(this.setStateLogin.bind(this));
     client.onConnectFail(this.setStateConnectionFail.bind(this));
 
-    client.socket.on('joined', function(){
+    window.clientServerMessageBus.on('joined', function(){
         if (client.currentPremade.type == 'createbot') {
             self.setStateCreateBot();
         } else {
             self.setStatePremade();
         }
     });
-    client.socket.on('unjoined', function(){
+    window.clientServerMessageBus.on('unjoined', function(){
         if ($('#premade').css('display') == 'block') {
             self.setStatePublic();
         } else {
             self.setStateExercises();
         }
     });
-    client.socket.on('disconnect', this.setStateDiconnected.bind(this));
+    window.clientServerMessageBus.on('disconnect', this.setStateDiconnected.bind(this));
 };
 
 UiManager.prototype.setStateLogin = function()

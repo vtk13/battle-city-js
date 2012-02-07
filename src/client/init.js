@@ -1,10 +1,11 @@
 
 // there are all existing global vars below
+// todo all this vars should be used with window.
 var bcClient, uiManager;
 var codeMirror = null; // todo better place?
+var clientServerMessageBus = new ClentServerMessageBus();
 
 $(function() {
-
     new WidgetLangSelector();
 
     if (typeof WebSocket == 'undefined' && typeof MozWebSocket == 'undefined') {
@@ -18,9 +19,10 @@ $(function() {
                 'auto connect' : false,
                 'reconnect' : false // todo learn reconnection abilities
             });
+            new SimpleServerInterface(window.clientServerMessageBus, socket);
             bcClient = new BcClient(socket);
             uiManager = new UiManager(bcClient);
-            bcClient.connect();
+            socket.socket.connect();
         });
     }
 

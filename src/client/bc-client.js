@@ -1,40 +1,38 @@
 
 function BcClient(socket)
 {
-    this.socket = socket; // todo rename to serverInterface?
-
-    this.users = new TList().bindSource(socket, 'users');
+    this.users = new TList().bindSource(window.clientServerMessageBus, 'users');
     this.currentUser = new User(); // do not replace
     this.users.bindSlave(this.currentUser);
 
-    this.premades = new TList().bindSource(socket, 'premades');
+    this.premades = new TList().bindSource(window.clientServerMessageBus, 'premades');
     this.currentPremade = new Premade(); // do not replace
     this.premades.bindSlave(this.currentPremade);
 
-    this.goals = new TList().bindSource(socket, 'goals');
-    this.courses = new TList().bindSource(socket, 'courses');
-    this.exercises = new TList().bindSource(socket, 'exercises');
+    this.goals = new TList().bindSource(window.clientServerMessageBus, 'goals');
+    this.courses = new TList().bindSource(window.clientServerMessageBus, 'courses');
+    this.exercises = new TList().bindSource(window.clientServerMessageBus, 'exercises');
 
-    this.messages = new TList().bindSource(socket, 'messages');
-    this.premadeUsers = new TList().bindSource(socket, 'premade.users');
-    this.premadeMessages = new TList().bindSource(socket, 'premade.messages');
+    this.messages = new TList().bindSource(window.clientServerMessageBus, 'messages');
+    this.premadeUsers = new TList().bindSource(window.clientServerMessageBus, 'premade.users');
+    this.premadeMessages = new TList().bindSource(window.clientServerMessageBus, 'premade.messages');
     // todo move to premade object?
-    this.tankStack = new TList().bindSource(socket, 'game.botStack');
+    this.tankStack = new TList().bindSource(window.clientServerMessageBus, 'game.botStack');
 
     this.field = new Field(13 * 32, 13 * 32);
-    TList.prototype.bindSource.call(this.field, socket, 'f');
+    TList.prototype.bindSource.call(this.field, window.clientServerMessageBus, 'f');
 
     this.vmRunner = new VmRunner(this);
 
     var self = this;
-    this.socket.on('logged', function(data) {
+    window.clientServerMessageBus.on('logged', function(data) {
         self.currentUser.unserialize(data.user);
     });
-    this.socket.on('joined', function(data) {
+    window.clientServerMessageBus.on('joined', function(data) {
         // do not replace this.currentPremade
         self.currentPremade.unserialize(data.premade);
     });
-    this.socket.on('unjoined', function() {
+    window.clientServerMessageBus.on('unjoined', function() {
         // do not replace this.currentPremade
         self.currentPremade.unserialize([]);
     });
@@ -44,35 +42,30 @@ Eventable(BcClient.prototype);
 
 //===== actions ================================================================
 
-BcClient.prototype.connect = function()
-{
-    this.socket.socket.connect();
-};
-
 BcClient.prototype.login = function(nick)
 {
-    this.socket.emit('login', {
+    window.clientServerMessageBus.emit('login', {
         nick : nick
     });
 };
 
 BcClient.prototype.setCourse = function(id)
 {
-    this.socket.emit('set-course', {
+    window.clientServerMessageBus.emit('set-course', {
         id: id
     });
 };
 
 BcClient.prototype.say = function(text)
 {
-    this.socket.emit('say', {
+    window.clientServerMessageBus.emit('say', {
         text : text
     });
 };
 
 BcClient.prototype.join = function(name, gameType)
 {
-    this.socket.emit('join', {
+    window.clientServerMessageBus.emit('join', {
         name : name,
         gameType : gameType
     });
@@ -80,13 +73,13 @@ BcClient.prototype.join = function(name, gameType)
 
 BcClient.prototype.unjoin = function()
 {
-    this.socket.emit('unjoin');
+    window.clientServerMessageBus.emit('unjoin');
 };
 
 BcClient.prototype.startGame = function(level)
 {
     var self = this;
-    this.socket.emit('start', {
+    window.clientServerMessageBus.emit('start', {
         level: level
     });
 };
@@ -94,14 +87,14 @@ BcClient.prototype.startGame = function(level)
 BcClient.prototype.stopGame = function()
 {
     if (this.currentPremade.type == 'createbot') {
-        this.socket.emit('stop-game');
+        window.clientServerMessageBus.emit('stop-game');
     }
 };
 
 BcClient.prototype.executeCode = function(code)
 {
     if (this.currentPremade.gameRun) {
-        this.socket.emit('execute', {
+        window.clientServerMessageBus.emit('execute', {
             code: code
         });
         this.vmRunner.executeCode(code);
@@ -110,7 +103,7 @@ BcClient.prototype.executeCode = function(code)
 
 BcClient.prototype.control = function(commands)
 {
-    this.socket.emit('control', commands);
+    window.clientServerMessageBus.emit('control', commands);
 };
 
 BcClient.prototype.turn = function(direction)
@@ -152,10 +145,10 @@ BcClient.prototype.fire = function()
 
 BcClient.prototype.onConnect = function(handler)
 {
-    this.socket.on('connect', handler);
+    window.clientServerMessageBus.on('connect', handler);
 };
 
 BcClient.prototype.onConnectFail = function(handler)
 {
-    this.socket.on('connect_failed', handler).on('error', handler);
+    window.clientServerMessageBus.on('connect_failed', handler).on('error', handler);
 };

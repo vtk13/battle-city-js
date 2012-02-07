@@ -74,7 +74,7 @@ function WidgetLoginForm(context, client)
         return false;
     });
 
-    client.socket.on('logged', function(){
+    window.clientServerMessageBus.on('logged', function(){
         window.uiManager[toPage]();
     });
 };

@@ -1,13 +1,13 @@
 
 function WidgetNotifier(client)
 {
-    client.socket.on('user-message', function(data) {
+    window.clientServerMessageBus.on('user-message', function(data) {
         alert(data.message);
     });
-    client.socket.on('nickNotAllowed', function(){
+    window.clientServerMessageBus.on('nickNotAllowed', function(){
         alert('Ник занят. Выберите другой.');
     });
-    client.socket.on('doNotFlood', function() {
+    window.clientServerMessageBus.on('doNotFlood', function() {
         alert('Слишком много сообщений за минуту.');
     });
 };

@@ -1,7 +1,7 @@
 
 function WidgetHelp(context, client)
 {
-    client.socket.on('started', function(event){
+    window.clientServerMessageBus.on('started', function(event){
         var langfile = '/src/edu/' + event.courseName + '/ex' + event.exerciseId;
         $('.lang', context).attr('langfile', langfile);
         $('.content', context).attr('onlang', 'WidgetHelp.onLang');

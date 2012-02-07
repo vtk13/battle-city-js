@@ -53,7 +53,7 @@ function UiCoursesList(list, container, itemClass, client)
 {
     UiList.apply(this, arguments);
     this.client = client;
-    client.socket.on('course-changed', function(id){
+    window.clientServerMessageBus.on('course-changed', function(id){
         $('.' + itemClass, container).removeClass('current');
         $('.' + itemClass + id, container).addClass('current');
     });
