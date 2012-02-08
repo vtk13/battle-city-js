@@ -130,6 +130,12 @@ Premade.prototype.startGame = function()
     this.emit('change');
 };
 
+Premade.prototype.lock = function()
+{
+    this.locked = true;
+    this.emit('change');
+};
+
 Premade.prototype.gameOver = function(winnerClan, timeout)
 {
     if (this.game && this.game.running) {

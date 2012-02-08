@@ -119,9 +119,15 @@ BcServerInterface.prototype.onStart = function(event){
             this.user.premade.level = event.level;
             this.user.premade.emit('change');
         }
-        this.user.premade.startGame();
-        console.log(new Date().toLocaleTimeString() + ': user ' + this.user.nick
-                + ' starts game ' + this.user.premade.name + ', level ' + this.user.premade.level);
+        if (event.local) {
+            this.user.premade.lock();
+            console.log(new Date().toLocaleTimeString() + ': user ' + this.user.nick
+                    + ' starts LOCAL game ' + this.user.premade.name + ', level ' + this.user.premade.level);
+        } else {
+            this.user.premade.startGame();
+            console.log(new Date().toLocaleTimeString() + ': user ' + this.user.nick
+                    + ' starts game ' + this.user.premade.name + ', level ' + this.user.premade.level);
+        }
     }
 };
 

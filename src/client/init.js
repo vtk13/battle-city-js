@@ -19,7 +19,7 @@ $(function() {
                 'auto connect' : false,
                 'reconnect' : false // todo learn reconnection abilities
             });
-            new SimpleServerInterface(window.clientServerMessageBus, socket);
+            new ServerInterfaceLocal(window.clientServerMessageBus, socket);
             bcClient = new BcClient(socket);
             uiManager = new UiManager(bcClient);
             socket.socket.connect();
