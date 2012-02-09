@@ -1,8 +1,8 @@
-if (!window.availableLangs['default']) {
-    window.availableLangs['default'] = {};
+if (!window.availableLangs['/src/lang/']) {
+    window.availableLangs['/src/lang/'] = {};
 }
 
-window.availableLangs['default']['en'] = {
+window.availableLangs['/src/lang/']['en'] = {
         'enter-nick': 'Enter nick:'
       , 'legend-play': 'Game'
       , 'legend-learn': 'Code tutorials'

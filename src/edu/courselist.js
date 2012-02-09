@@ -1,10 +1,14 @@
+define(['src/common/list.js',
+        'src/edu/course.js'], function(TList, courses) {
+    function CoursesList()
+    {
+        TList.apply(this, arguments);
+        this.add(new courses.CoursePascalBasics());
+        this.add(new courses.CourseAlgoritms());
+    };
 
-CoursesList = function CoursesList()
-{
-    TList.apply(this, arguments);
-    this.add(new CoursePascalBasics());
-    this.add(new CourseAlgoritms());
-};
+    CoursesList.prototype = new TList();
+    CoursesList.prototype.constructor = CoursesList;
 
-CoursesList.prototype = new TList();
-CoursesList.prototype.constructor = CoursesList;
+    return CoursesList;
+});

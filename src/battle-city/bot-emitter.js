@@ -1,5 +1,5 @@
 
-BotEmitter = function BotEmitter(x, y)
+function BotEmitter(x, y)
 {
     this.x = x;
     this.y = y;

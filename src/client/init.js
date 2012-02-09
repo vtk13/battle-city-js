@@ -1,17 +1,23 @@
+define(['src/common/serialization.js',
+        'src/common/bus.js',
+        'src/ui/widgets/common.js',
+        'src/client/bc-client.js',
+        'src/ui/manager.js',
+        'src/battle-city/client/graphic-loader.js'], function(serialization,
+                bus, widgetsCommon, BcClient, UiManager, graphicLoader) {
+    // there are all existing global vars below
+    // todo all this vars should be used with window.
+    window.bcClient = null;
+    window.uiManager = null;
+    window.codeMirror = null; // todo better place?
+    window.clientServerMessageBus = new bus.ClientServerMessageBus();
 
-// there are all existing global vars below
-// todo all this vars should be used with window.
-var bcClient, uiManager;
-var codeMirror = null; // todo better place?
-var clientServerMessageBus = new ClentServerMessageBus();
-
-$(function() {
-    new WidgetLangSelector();
+    new widgetsCommon.WidgetLangSelector();
 
     if (typeof WebSocket == 'undefined' && typeof MozWebSocket == 'undefined') {
         $('.ui-block').hide().filter('#nowebsocket').show();
     } else {
-        // hack to substitute ws.
+        // substitute ws.
         var wsDomain = 'ws.' + location.hostname + (location.port ? ':' + location.port : '');
         var src = 'http://' + wsDomain + '/socket.io/socket.io.js';
         $.getScript(src, function(){
@@ -19,7 +25,7 @@ $(function() {
                 'auto connect' : false,
                 'reconnect' : false // todo learn reconnection abilities
             });
-            new ServerInterfaceLocal(window.clientServerMessageBus, socket);
+            new bus.ServerInterfaceLocal(window.clientServerMessageBus, socket);
             bcClient = new BcClient(socket);
             uiManager = new UiManager(bcClient);
             socket.socket.connect();

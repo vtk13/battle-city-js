@@ -1,4 +1,4 @@
-(function(){
+define(function(){
     window.images = {};
 
     var sprites = [
@@ -114,4 +114,4 @@
         window.images[sprites[i]] = new Image();
         window.images[sprites[i]].src = sprites[i];
     }
-})();
+});

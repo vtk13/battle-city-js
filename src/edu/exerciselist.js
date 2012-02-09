@@ -1,5 +1,5 @@
 
-ExerciseList = function ExerciseList()
+function ExerciseList()
 {
     TList.apply(this, arguments);
 };

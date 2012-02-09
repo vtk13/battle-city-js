@@ -1,143 +1,133 @@
-/**
- * drawable
- * coordinates
- */
+define(['src/battle-city/objects/abstract.js',
+        'src/common/event.js'], function(AbstractGameObject, Eventable) {
+    /**
+     * drawable
+     * coordinates
+     */
 
-Bonus = function Bonus(x, y)
-{
-    AbstractGameObject.call(this, 16, 16);
-    this.x = x;
-    this.y = y;
-    this.z = 2;
-};
+    function Bonus(x, y)
+    {
+        AbstractGameObject.call(this, 16, 16);
+        this.x = x;
+        this.y = y;
+        this.z = 2;
+    };
 
-Bonus.prototype = new AbstractGameObject();
-Bonus.prototype.constructor = Bonus;
+    Bonus.prototype = new AbstractGameObject();
+    Bonus.prototype.constructor = Bonus;
 
-Eventable(Bonus.prototype);
+    Eventable(Bonus.prototype);
 
-Bonus.prototype.serialize = function()
-{
-    return [
-        serializeTypeMatches[this.constructor.name],
-        this.id,
-        this.x,
-        this.y
-    ];
-    // z is constant
-};
+    Bonus.prototype.hit = function(bullet)
+    {
+        return false;
+    };
 
-Bonus.prototype.unserialize = function(data)
-{
-    this.id = data[1];
-    if (this.field) {
-        this.field.setXY(this, data[2], data[3]);
-    } else {
-        // first unserialize, before adding to field -> may set x and y directly
-        this.x = data[2];
-        this.y = data[3];
-    }
-};
+    function BonusStar(x, y)
+    {
+        Bonus.apply(this, arguments);
+        this.img[0] = 'img/star.png';
+    };
 
-Bonus.prototype.hit = function(bullet)
-{
-    return false;
-};
+    BonusStar.prototype = new Bonus();
+    BonusStar.prototype.constructor = BonusStar;
 
-BonusStar = function BonusStar(x, y)
-{
-    Bonus.apply(this, arguments);
-    this.img[0] = 'img/star.png';
-};
+    BonusStar.prototype.applyTo = function(tank)
+    {
+        if (tank.maxBullets == 1) {
+            tank.maxBullets = 2;
+        } else if (tank.bulletPower == 1) {
+            tank.bulletPower = 2;
+        }
+    };
 
-BonusStar.prototype = new Bonus();
-BonusStar.prototype.constructor = BonusStar;
+    function BonusGrenade(x, y)
+    {
+        Bonus.apply(this, arguments);
+        this.img[0] = 'img/grenade.png';
+    };
 
-BonusStar.prototype.applyTo = function(tank)
-{
-    if (tank.maxBullets == 1) {
-        tank.maxBullets = 2;
-    } else if (tank.bulletPower == 1) {
-        tank.bulletPower = 2;
-    }
-};
+    BonusGrenade.prototype = new Bonus();
+    BonusGrenade.prototype.constructor = BonusGrenade;
 
-BonusGrenade = function BonusGrenade(x, y)
-{
-    Bonus.apply(this, arguments);
-    this.img[0] = 'img/grenade.png';
-};
+    BonusGrenade.prototype.applyTo = function(tank)
+    {
+        // hit() cause splice tank.clan.enemiesClan.users, so collect tanks first
+        var tanks = [];
+        for (var i in tank.clan.enemiesClan.users) {
+            tanks.push(tank.clan.enemiesClan.users[i].tank);
+        }
+        for (var i in tanks) {
+            tanks[i].hit();
+        }
+    };
 
-BonusGrenade.prototype = new Bonus();
-BonusGrenade.prototype.constructor = BonusGrenade;
+    function BonusShovel(x, y)
+    {
+        Bonus.apply(this, arguments);
+        this.img[0] = 'img/shovel.png';
+    };
 
-BonusGrenade.prototype.applyTo = function(tank)
-{
-    // hit() cause splice tank.clan.enemiesClan.users, so collect tanks first
-    var tanks = [];
-    for (var i in tank.clan.enemiesClan.users) {
-        tanks.push(tank.clan.enemiesClan.users[i].tank);
-    }
-    for (var i in tanks) {
-        tanks[i].hit();
-    }
-};
+    BonusShovel.prototype = new Bonus();
+    BonusShovel.prototype.constructor = BonusShovel;
 
-BonusShovel = function BonusShovel(x, y)
-{
-    Bonus.apply(this, arguments);
-    this.img[0] = 'img/shovel.png';
-};
+    BonusShovel.prototype.applyTo = function(tank)
+    {
+        if (!tank.clan.isBots()) {
+            tank.clan.base.armor();
+        }
+    };
 
-BonusShovel.prototype = new Bonus();
-BonusShovel.prototype.constructor = BonusShovel;
+    function BonusHelmet(x, y)
+    {
+        Bonus.apply(this, arguments);
+        this.img[0] = 'img/helmet.png';
+    };
 
-BonusShovel.prototype.applyTo = function(tank)
-{
-    if (!tank.clan.isBots()) {
-        tank.clan.base.armor();
-    }
-};
+    BonusHelmet.prototype = new Bonus();
+    BonusHelmet.prototype.constructor = BonusHelmet;
 
-BonusHelmet = function BonusHelmet(x, y)
-{
-    Bonus.apply(this, arguments);
-    this.img[0] = 'img/helmet.png';
-};
+    BonusHelmet.prototype.applyTo = function(tank)
+    {
+        tank.armoredTimer = tank.clan.defaultArmoredTimer;
+    };
 
-BonusHelmet.prototype = new Bonus();
-BonusHelmet.prototype.constructor = BonusHelmet;
+    function BonusLive(x, y)
+    {
+        Bonus.apply(this, arguments);
+        this.img[0] = 'img/live.png';
+    };
 
-BonusHelmet.prototype.applyTo = function(tank)
-{
-    tank.armoredTimer = tank.clan.defaultArmoredTimer;
-};
+    BonusLive.prototype = new Bonus();
+    BonusLive.prototype.constructor = BonusLive;
 
-BonusLive = function BonusLive(x, y)
-{
-    Bonus.apply(this, arguments);
-    this.img[0] = 'img/live.png';
-};
+    BonusLive.prototype.applyTo = function(tank)
+    {
+        tank.user.lives++;
+        tank.user.emit('change');
+    };
 
-BonusLive.prototype = new Bonus();
-BonusLive.prototype.constructor = BonusLive;
+    function BonusTimer(x, y)
+    {
+        Bonus.apply(this, arguments);
+        this.img[0] = 'img/timer.png';
+    };
 
-BonusLive.prototype.applyTo = function(tank)
-{
-    tank.user.lives++;
-    tank.user.emit('change');
-};
+    BonusTimer.prototype = new Bonus();
+    BonusTimer.prototype.constructor = BonusTimer;
 
-BonusTimer = function BonusTimer(x, y)
-{
-    Bonus.apply(this, arguments);
-    this.img[0] = 'img/timer.png';
-};
+    BonusTimer.prototype.applyTo = function(tank)
+    {
+        tank.clan.enemiesClan.pauseTanks();
+    };
 
-BonusTimer.prototype = new Bonus();
-BonusTimer.prototype.constructor = BonusTimer;
-
-BonusTimer.prototype.applyTo = function(tank)
-{
-    tank.clan.enemiesClan.pauseTanks();
-};
+    return {
+        Bonus: Bonus,
+        BonusStar: BonusStar,
+        BonusGrenade: BonusGrenade,
+        BonusShovel: BonusShovel,
+        BonusHelmet: BonusHelmet,
+        BonusLive: BonusLive,
+        BonusTimer: BonusTimer
+    };
+});
