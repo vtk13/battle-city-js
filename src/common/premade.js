@@ -1,17 +1,38 @@
-define(['src/common/func.js',
+define(['require',
         'src/common/event.js',
         'src/common/list.js',
         'src/battle-city/clan.js',
-        'src/common/game.js'], function(func, Eventable, TList, clan, Game) {
+        'src/common/game.js'], function(require, Eventable, TList, clan, Game) {
     function Premade(name, type)
     {
         this.name = name;
-        this.type = type || 'classic';
         this.level = 1;
         this.userCount = 0;
         this.locked = false; // lock for new users
-        if (!func.isClient()) {
-            this.users = new TList(); // todo move to clan?
+
+        this.users = new TList(); // todo move to clan?
+        this.messages = new TList();
+        this.setType(type || 'classic');
+    };
+
+    Eventable(Premade.prototype);
+
+    Premade.types = {
+        'classic': {
+            'levels': 35
+        },
+        'teamvsteam': {
+            'levels': 1
+        },
+        'createbot': {
+            'levels': 4
+        }
+    };
+
+    Premade.prototype.setType = function(type)
+    {
+        if (type != this.type) {
+            this.type = type;
             switch (this.type) {
                 case 'classic':
                     this.clans = [new clan.Clan(1, 10*30/*~30step per seconds*/), new clan.BotsClan(2, 10*30/*~30step per seconds*/)];
@@ -26,21 +47,6 @@ define(['src/common/func.js',
             this.clans[0].premade = this.clans[1].premade = this;
             this.clans[0].enemiesClan = this.clans[1];
             this.clans[1].enemiesClan = this.clans[0];
-            this.messages = new TList();
-        }
-    };
-
-    Eventable(Premade.prototype);
-
-    Premade.types = {
-        'classic': {
-            'levels': 35
-        },
-        'teamvsteam': {
-            'levels': 1
-        },
-        'createbot': {
-            'levels': 4
         }
     };
 
@@ -107,31 +113,34 @@ define(['src/common/func.js',
     Premade.prototype.startGame = function()
     {
         this.locked = true;
-        var level = require('../battle-city/maps/' + this.type + '/level' + this.level);
-        this.game = new Game(level.getMap(), this);
-        this.clans[0].startGame(this.game, level);
-        this.clans[1].startGame(this.game, level);
-        this.users.traversal(function(user){
-            user.watchCollection(this.game.field, 'f');
-            if (user.clan.enemiesClan.botStack) {
-                user.watchCollection(user.clan.enemiesClan.botStack, 'game.botStack');
-            }
-            if (user.clan.enemiesClan.goals) {
-                user.watchCollection(user.clan.enemiesClan.goals, 'goals');
-            }
-            if (user.premade.type == 'teamvsteam') {
-                user.lives = 4;
-                user.emit('change');
-            }
-            user.clientMessage('started', {
-                // todo this is for client to get lang file
-                'courseId': user.currentCourse.id,
-                'courseName': user.currentCourse.name,
-                'exerciseId': this.level // todo level and exerciseId are the same
-            });
-        }, this);
-        this.game.start();
         this.emit('change');
+        var self = this;
+        require(['src/battle-city/maps/' + this.type + '/level' + this.level + '.js'], function(level) {
+            self.game = new Game(level.getMap(), self);
+            self.clans[0].startGame(self.game, level);
+            self.clans[1].startGame(self.game, level);
+            self.users.traversal(function(user) {
+                user.watchCollection(this.game.field, 'f');
+                if (user.clan.enemiesClan.botStack) {
+                    user.watchCollection(user.clan.enemiesClan.botStack, 'game.botStack');
+                }
+                if (user.clan.enemiesClan.goals) {
+                    user.watchCollection(user.clan.enemiesClan.goals, 'goals');
+                }
+                if (user.premade.type == 'teamvsteam') {
+                    user.lives = 4;
+                    user.emit('change');
+                }
+                user.clientMessage('started', {
+                    // todo this is for client to get lang file
+                    'courseId': user.currentCourse.id,
+                    'courseName': user.currentCourse.name,
+                    'exerciseId': this.level // todo level and exerciseId are the same
+                });
+            }, self);
+            self.game.start();
+            self.emit('change');
+        });
     };
 
     Premade.prototype.lock = function()

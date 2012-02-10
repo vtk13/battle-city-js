@@ -1,13 +1,14 @@
-define(['src/battle-city/field.js',
+define(['src/common/func.js',
+        'src/battle-city/field.js',
         'src/battle-city/objects/tank.js',
-        'src/battle-city/objects/base.js'], function(Field, Tank, Base) {
+        'src/battle-city/objects/base.js'], function(func, Field, Tank, Base) {
     function Game(map, premade)
     {
         this.running = true; // premade set this to false before game over
         this.premade = premade;
         this.stepableItems = [];
 
-        this.field = new Field(13*32, 13*32);
+        this.field = func.isClient() ? window.bcClient.field : new Field(13*32, 13*32);
         this.field.game = this;
         this.field.on('add', this.onAddObject.bind(this));
         this.field.on('remove', this.onRemoveObject.bind(this));
