@@ -1,32 +1,32 @@
 define(['src/common/event.js',
-        'src/common/list.js',
+        'src/common/collection.js',
         'src/common/user.js',
         'src/common/premade.js',
         'src/battle-city/field.js',
-        'src/vm/vm-runner.js'], function(Eventable, TList, User, Premade, Field,
+        'src/vm/vm-runner.js'], function(Eventable, Collection, User, Premade, Field,
                 VmRunner) {
     function BcClient(socket)
     {
-        this.users = new TList().bindSource(window.clientServerMessageBus, 'users');
-        this.currentUser = new User(); // do not replace
+        this.users = new Collection().bindSource(window.clientServerMessageBus, 'users');
+        this.currentUser = new User(); // do not replace @todo allow replace
         this.users.bindSlave(this.currentUser);
 
-        this.premades = new TList().bindSource(window.clientServerMessageBus, 'premades');
-        this.currentPremade = new Premade(); // do not replace
+        this.premades = new Collection().bindSource(window.clientServerMessageBus, 'premades');
+        this.currentPremade = new Premade(); // do not replace @todo allow replace
         this.premades.bindSlave(this.currentPremade);
 
-        this.goals = new TList().bindSource(window.clientServerMessageBus, 'goals');
-        this.courses = new TList().bindSource(window.clientServerMessageBus, 'courses');
-        this.exercises = new TList().bindSource(window.clientServerMessageBus, 'exercises');
+        this.goals = new Collection().bindSource(window.clientServerMessageBus, 'goals');
+        this.courses = new Collection().bindSource(window.clientServerMessageBus, 'courses');
+        this.exercises = new Collection().bindSource(window.clientServerMessageBus, 'exercises');
 
-        this.messages = new TList().bindSource(window.clientServerMessageBus, 'messages');
-        this.premadeUsers = new TList().bindSource(window.clientServerMessageBus, 'premade.users');
-        this.premadeMessages = new TList().bindSource(window.clientServerMessageBus, 'premade.messages');
+        this.messages = new Collection().bindSource(window.clientServerMessageBus, 'messages');
+        this.premadeUsers = new Collection().bindSource(window.clientServerMessageBus, 'premade.users');
+        this.premadeMessages = new Collection().bindSource(window.clientServerMessageBus, 'premade.messages');
         // todo move to premade object?
-        this.tankStack = new TList().bindSource(window.clientServerMessageBus, 'game.botStack');
+        this.tankStack = new Collection().bindSource(window.clientServerMessageBus, 'game.botStack');
 
         this.field = new Field(13 * 32, 13 * 32);
-        TList.prototype.bindSource.call(this.field, window.clientServerMessageBus, 'f');
+        Collection.prototype.bindSource.call(this.field, window.clientServerMessageBus, 'f');
 
         this.vmRunner = new VmRunner(this);
 

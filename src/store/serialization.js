@@ -16,10 +16,13 @@ define(['src/battle-city/objects/bullet.js',
         'src/battle-city/goals.js',
         'src/edu/course.js',
         'src/edu/exercise.js',
-        'src/common/list.js',
-        'src/battle-city/field.js'], function(Bullet, Tank, bot, wall, bonus, Water,
+        'src/common/collection.js',
+        'src/battle-city/field.js',
+        'src/common/registry.js',
+        'src/store/odb_proxy.js'], function(Bullet, Tank, bot, wall, bonus, Water,
                 Trees, Ice, Delimiter, Base, Checkpoint, ServerUser, User,
-                Premade, Message, goal, course, Exercise, TList, Field) {
+                Premade, Message, goal, course, Exercise, Collection, Field,
+                registry, OdbProxy) {
     var serializeTypeMatches = {
         'Bullet'            : 1,
         'Tank'              : 2,
@@ -100,7 +103,7 @@ define(['src/battle-city/objects/bullet.js',
     Base.prototype.serialize = function()
     {
         return [
-            serializeTypeMatches['Base'],
+            serializeTypeMatches[this.constructor.name],
             this.id,
             this.x,
             this.y,
@@ -148,7 +151,7 @@ define(['src/battle-city/objects/bullet.js',
     Bullet.prototype.serialize = function()
     {
         return [
-            serializeTypeMatches['Bullet'], // 0
+            serializeTypeMatches[this.constructor.name], // 0
             this.id, // 1
             this.x, // 2
             this.y, // 3
@@ -202,7 +205,7 @@ define(['src/battle-city/objects/bullet.js',
     Delimiter.prototype.serialize = function()
     {
         return [
-            serializeTypeMatches['Delimiter'], // 0
+            serializeTypeMatches[this.constructor.name], // 0
             this.id, // 1
             this.x,
             this.y,
@@ -228,7 +231,7 @@ define(['src/battle-city/objects/bullet.js',
     Ice.prototype.serialize = function()
     {
         return [
-            serializeTypeMatches['Ice'], // 0
+            serializeTypeMatches[this.constructor.name], // 0
             this.id, // 1
             this.x,
             this.y
@@ -285,7 +288,7 @@ define(['src/battle-city/objects/bullet.js',
     Trees.prototype.serialize = function()
     {
         return [
-            serializeTypeMatches['Trees'], // 0
+            serializeTypeMatches[this.constructor.name], // 0
             this.id, // 1
             this.x,
             this.y
@@ -331,7 +334,7 @@ define(['src/battle-city/objects/bullet.js',
     Water.prototype.serialize = function()
     {
         return [
-                serializeTypeMatches['Water'], // 0
+                serializeTypeMatches[this.constructor.name], // 0
                 this.id, // 1
                 this.x,
                 this.y
@@ -460,7 +463,7 @@ define(['src/battle-city/objects/bullet.js',
         res[3] = this.lives;
         res[4] = this.points;
         res[5] = this.clan;
-        res[6] = this.premadeId;
+        res[6] = this.premade ? this.premade.id : 0;
         res[7] = this.positionId;
         res[8] = this.tankId;
         res[9] = this.currentCourseId;
@@ -469,12 +472,19 @@ define(['src/battle-city/objects/bullet.js',
 
     User.prototype.unserialize = function(data)
     {
+        var self = this;
         this.id     = data[1];
         this.nick   = data[2];
         this.lives  = data[3];
         this.points = data[4];
         this.clan   = data[5];
-        this.premadeId  = data[6];
+        if (data[6]) {
+            registry.odb.fetch(data[6], function(premade) {
+                self.premade = premade;
+            });
+        } else {
+            this.premade = null;
+        }
         this.positionId = data[7];
         this.tankId     = data[8];
         this.currentCourseId    = data[9];
@@ -515,7 +525,34 @@ define(['src/battle-city/objects/bullet.js',
         return object;
     };
 
-    TList.prototype.updateWith = function(events){
+    OdbProxy.prototype.updateWith = function(events) {
+        for (var i in events) {
+            var eventType = events[i][0/*type*/];
+            var eventData = events[i][1/*data*/];
+            var id = parseInt(eventData[1/*id*/]);
+            switch (eventType) {
+            case 'r'/*remove*/:
+                if (obj = registry.odb.fetch(id)) {
+                    unserialize(obj, eventData);// for bullets finalX and finalY
+                    registry.odb.free(obj);
+                }
+                break;
+                case 'a'/*add*/:
+                case 'c'/*change*/:
+                    var obj = registry.odb.fetch(id);
+                    if (obj) {
+                        unserialize(obj, eventData);
+//                        registry.odb.emit('change', obj);
+                    } else {
+                        obj = unserialize(undefined, eventData);
+                        registry.odb.add(obj);
+                    }
+                    break;
+            }
+        }
+    };
+
+    Collection.prototype.updateWith = function(events){
         for (var i in events) {
             var eventType = events[i][0/*type*/];
             var eventData = events[i][1/*data*/];
@@ -540,8 +577,27 @@ define(['src/battle-city/objects/bullet.js',
                     break;
             }
         }
-    };    /**
-     * todo almost copy of TList.prototype.updateWith
+    };
+
+    Collection.prototype.bindSource = function(source, key)
+    {
+        var self = this;
+        source.on('sync', function(data) {
+            if (data[key]) {
+                // todo updateWith defined in serialization.js
+                self.updateWith(data[key]);
+            }
+        });
+        source.on('clearCollection', function(data) {
+            if (data == key) {
+                self.clear();
+            }
+        });
+        return this;
+    };
+
+    /**
+     * todo almost copy of Collection.prototype.updateWith
      */
     Field.prototype.updateWith = function(events)
     {

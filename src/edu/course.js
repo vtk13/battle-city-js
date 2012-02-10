@@ -1,16 +1,16 @@
 define(['require',
-        'src/common/list.js',
-        'src/edu/exercise.js'], function(require, TList, Exercise) {
+        'src/common/collection.js',
+        'src/edu/exercise.js'], function(require, Collection, Exercise) {
     function Course(id, name)
     {
         this.id = id;
         this.name = name;
-    //    this.execises = new TList();
+    //    this.execises = new Collection();
     };
 
     function CoursePascalBasics()
     {
-        this.execises = new (require('src/common/list.js'))(); // TList
+        this.execises = new (require('src/common/collection.js'))(); // Collection
         this.execises.add(new Exercise('pascal-algoritm1', 1));
         this.execises.add(new Exercise('pascal-algoritm2', 2));
         this.execises.add(new Exercise('pascal-if-statement', 3));
@@ -21,7 +21,7 @@ define(['require',
 
     function CourseAlgoritms()
     {
-        this.execises = new (require('src/common/list.js'))(); // TList
+        this.execises = new (require('src/common/collection.js'))(); // Collection
         this.execises.add(new Exercise('algoritms-wayfinder', 1));
     };
 

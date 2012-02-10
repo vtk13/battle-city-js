@@ -2,20 +2,21 @@ define(['src/common/event.js'], function(Eventable) {
     /**
      * Don't call Array's methods which modify items, because they don't emit events.
      */
-    function TList()
+    function Collection()
     {
         this.items = [];
     };
 
-    Eventable(TList.prototype);
+    Eventable(Collection.prototype);
 
-    TList.prototype.get = function(id)
+    Collection.prototype.get = function(id, callback)
     {
-        return this.items[id];
+        callback(this.items[id]);
     };
 
-    TList.prototype.add = function(item)
+    Collection.prototype.add = function(item)
     {
+        // todo remove id check (all object should be created through store/odb
         if (item.id !== undefined) {
             this.items[item.id] = item;
         } else {
@@ -32,13 +33,13 @@ define(['src/common/event.js'], function(Eventable) {
         }
     };
 
-    TList.prototype.remove = function(item)
+    Collection.prototype.remove = function(item)
     {
         this.emit('remove', item);
         delete this.items[item.id];
     };
 
-    TList.prototype.clear = function()
+    Collection.prototype.clear = function()
     {
         for (var i in this.items) {
             this.emit('remove', this.items[i]);
@@ -46,7 +47,7 @@ define(['src/common/event.js'], function(Eventable) {
         }
     };
 
-    TList.prototype.pop = function()
+    Collection.prototype.pop = function()
     {
         // do not pop()! beause of "a.pop()" != "delete a[a.length-1]"
         var i = -1;
@@ -60,7 +61,7 @@ define(['src/common/event.js'], function(Eventable) {
         return item;
     };
 
-    TList.prototype.getFirst = function(filter)
+    Collection.prototype.getFirst = function(filter)
     {
         for (var i in this.items) {
             if (filter) {
@@ -74,7 +75,7 @@ define(['src/common/event.js'], function(Eventable) {
         return null;
     };
 
-    TList.prototype.count = function()
+    Collection.prototype.count = function()
     {
         var n = 0;
         for (var i in this.items) {
@@ -83,7 +84,7 @@ define(['src/common/event.js'], function(Eventable) {
         return n;
     };
 
-    TList.prototype.traversal = function(callback, thisObj)
+    Collection.prototype.traversal = function(callback, thisObj)
     {
         for (var i in this.items) {
             callback.call(thisObj, this.items[i]);
@@ -96,7 +97,7 @@ define(['src/common/event.js'], function(Eventable) {
      * @param slaveObject
      * @return
      */
-    TList.prototype.bindSlave = function(slaveObject)
+    Collection.prototype.bindSlave = function(slaveObject)
     {
         var self = this;
         var handler = function(each) {
@@ -108,25 +109,7 @@ define(['src/common/event.js'], function(Eventable) {
         this.on('add'   , handler);
         this.on('change', handler);
         this.on('remove', handler);
-
     };
 
-    TList.prototype.bindSource = function(source, key)
-    {
-        var self = this;
-        source.on('sync', function(data){
-            if (data[key]) {
-                // todo updateWith defined in serialization.js
-                self.updateWith(data[key]);
-            }
-        });
-        source.on('clearCollection', function(data) {
-            if (data == key) {
-                self.clear();
-            }
-        });
-        return this;
-    };
-
-    return TList;
+    return Collection;
 });

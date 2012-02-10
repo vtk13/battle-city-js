@@ -1,16 +1,17 @@
-define(['src/common/serialization.js',
-        'src/common/bus.js',
+define(['css/screen.js',
+        'src/store/serialization.js',
         'src/ui/widgets/common.js',
         'src/client/bc-client.js',
         'src/ui/manager.js',
-        'src/battle-city/client/graphic-loader.js'], function(serialization,
-                bus, widgetsCommon, BcClient, UiManager, graphicLoader) {
+        'src/battle-city/client/graphic-loader.js',
+        'src/common/registry.js',
+        'src/store/odb_proxy.js'], function(screen, serialization, widgetsCommon,
+                BcClient, UiManager, graphicLoader, registry, OdbProxy) {
     // there are all existing global vars below
     // todo all this vars should be used with window.
     window.bcClient = null;
     window.uiManager = null;
     window.codeMirror = null; // todo better place?
-    window.clientServerMessageBus = new bus.ClientServerMessageBus();
 
     new widgetsCommon.WidgetLangSelector();
 
@@ -21,14 +22,14 @@ define(['src/common/serialization.js',
         var wsDomain = 'ws.' + location.hostname + (location.port ? ':' + location.port : '');
         var src = 'http://' + wsDomain + '/socket.io/socket.io.js';
         $.getScript(src, function(){
-            var socket = io.connect(wsDomain, {
+            window.clientServerMessageBus = io.connect(wsDomain, {
                 'auto connect' : false,
                 'reconnect' : false // todo learn reconnection abilities
             });
-            new bus.ServerInterfaceLocal(window.clientServerMessageBus, socket);
-            bcClient = new BcClient(socket);
+            registry.odb = new OdbProxy(window.clientServerMessageBus);
+            bcClient = new BcClient(window.clientServerMessageBus);
             uiManager = new UiManager(bcClient);
-            socket.socket.connect();
+            window.clientServerMessageBus.socket.connect();
         });
     }
 

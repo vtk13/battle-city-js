@@ -1,8 +1,8 @@
 define(['require',
         'src/common/event.js',
-        'src/common/list.js',
+        'src/common/collection.js',
         'src/battle-city/clan.js',
-        'src/common/game.js'], function(require, Eventable, TList, clan, Game) {
+        'src/common/game.js'], function(require, Eventable, Collection, clan, Game) {
     function Premade(name, type)
     {
         this.name = name;
@@ -10,8 +10,8 @@ define(['require',
         this.userCount = 0;
         this.locked = false; // lock for new users
 
-        this.users = new TList(); // todo move to clan?
-        this.messages = new TList();
+        this.users = new Collection(); // todo move to clan?
+        this.messages = new Collection();
         this.setType(type || 'classic');
     };
 
@@ -105,7 +105,7 @@ define(['require',
         user.premade = null;
         this.emit('change');
         if (this.userCount == 0) {
-            registry.premades.remove(this);
+            oldGlobalRegistry.premades.remove(this);
             this.removed = true; // dirty hack
         }
     };

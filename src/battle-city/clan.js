@@ -1,8 +1,8 @@
-define(['src/common/list.js',
+define(['src/common/collection.js',
         'src/battle-city/objects/tank.js',
         'src/battle-city/objects/tankbot.js',
         'src/battle-city/objects/base.js',
-        'src/battle-city/field.js'], function(TList, Tank, tankbot, Base, Field) {
+        'src/battle-city/field.js'], function(Collection, Tank, tankbot, Base, Field) {
     function Clan(n, defaultArmoredTimer)
     {
         this.capacity = 2; // max users
@@ -11,7 +11,7 @@ define(['src/common/list.js',
         this.timer = 0;
         this.enemiesClan = null;
         this.users = [];
-        this.goals = new TList();
+        this.goals = new Collection();
         this.base = new Base();
         this.base.clan = this;
         this.tankPositions = Clan.tankPositions['clan' + n];
@@ -178,7 +178,7 @@ define(['src/common/list.js',
         });
         this.currentBotPosition = 0;
 
-        this.botStack = new TList();
+        this.botStack = new Collection();
 
         // todo move from this function
         var enemies = level.getEnemies();

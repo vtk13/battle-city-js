@@ -1,5 +1,6 @@
 define(['path', 'fs',
-        'src/server/user.js'], function(path, fs, ServerUser) {
+        'src/server/user.js',
+        'src/common/registry.js'], function(path, fs, ServerUser, registry) {
     /**
      * This object is an interface for "server-side" variables. All access to them
      * should be done here.
@@ -35,25 +36,28 @@ define(['path', 'fs',
         if (this.user == null && event.nick) {
             var nick = event.nick && event.nick.substr(0,20);
             var nickAllowed = true;
-            registry.users.traversal(function(user){
+            oldGlobalRegistry.users.traversal(function(user){
                 if (nick == user.nick) {
                     nickAllowed = false;
                 }
             });
             if (nickAllowed) {
-                this.user = new ServerUser(registry.courses.get(1));
+                var user = this.user = registry.odb.create(ServerUser);
+                oldGlobalRegistry.courses.get(1, function(course) {
+                    user.setCurrentCourse(course);
+                });
                 this.user.lastSync = 0;
                 this.user.socket = this.socket;
                 this.user.nick = nick;
-                registry.users.add(this.user);
+                oldGlobalRegistry.users.add(this.user);
                 this.user.updateIntervalId = setInterval(this.user.sendUpdatesToClient.bind(this.user), 50);
                 this.socket.emit('logged', {
                     user: this.user.serialize()
                 });
-                this.user.watchCollection(registry.users, 'users');
-                this.user.watchCollection(registry.premades, 'premades');
-                this.user.watchCollection(registry.messages, 'messages');
-                this.user.watchCollection(registry.courses, 'courses');
+                this.user.watchCollection(oldGlobalRegistry.users, 'users');
+                this.user.watchCollection(oldGlobalRegistry.premades, 'premades');
+                this.user.watchCollection(oldGlobalRegistry.messages, 'messages');
+                this.user.watchCollection(oldGlobalRegistry.courses, 'courses');
                 console.log(new Date().toLocaleTimeString() + ': user ' + nick + ' connected');
             } else {
                 this.socket.emit('nickNotAllowed');
@@ -61,19 +65,22 @@ define(['path', 'fs',
         }
     };
 
-    BcServerInterface.prototype.onSetCourse = function(event){
-        var courseId = event.id;
-        var course = registry.courses.get(courseId);
-        if (this.user && course) {
-            this.user.setCurrentCourse(course);
-        }
-        // todo why user.setCurrentCourse() is not enough?
-        this.socket.emit('course-changed', course.id);
+    BcServerInterface.prototype.onSetCourse = function(event)
+    {
+        var courseId = event.id, self = this;
+        oldGlobalRegistry.courses.get(courseId, function(course) {
+            if (self.user && course) {
+                self.user.setCurrentCourse(course);
+            }
+            // todo why user.setCurrentCourse() is not enough?
+            self.socket.emit('course-changed', course.id);
+        });
     };
 
-    BcServerInterface.prototype.onJoin = function(event){
+    BcServerInterface.prototype.onJoin = function(event)
+    {
         try {
-            registry.premades.join(event, this.user);
+            oldGlobalRegistry.premades.join(event, this.user);
             this.socket.emit('joined', {
                 // user not likely synced this premade yet
                 premade: this.user.premade.serialize()
@@ -89,7 +96,8 @@ define(['path', 'fs',
         }
     };
 
-    BcServerInterface.prototype.onUnjoin = function(){
+    BcServerInterface.prototype.onUnjoin = function()
+    {
         if (this.user.premade) {
             console.log(new Date().toLocaleTimeString() + ': user ' + this.user.nick
                     + ' unjoin premade ' + this.user.premade.name);
@@ -98,7 +106,8 @@ define(['path', 'fs',
         }
     };
 
-    BcServerInterface.prototype.onExecute = function(event){
+    BcServerInterface.prototype.onExecute = function(event)
+    {
         var userFolder = path.join(process.cwd(), 'bots/' + this.user.id);
         try {
             fs.mkdirSync(userFolder, 0777);
@@ -111,7 +120,8 @@ define(['path', 'fs',
         });
     };
 
-    BcServerInterface.prototype.onStart = function(event){
+    BcServerInterface.prototype.onStart = function(event)
+    {
         if (this.user.premade && !this.user.premade.game) {
             if (event.level && this.user.premade.level != event.level) {
                 this.user.premade.level = event.level;
@@ -129,13 +139,15 @@ define(['path', 'fs',
         }
     };
 
-    BcServerInterface.prototype.onStopGame = function(){
+    BcServerInterface.prototype.onStopGame = function()
+    {
         if (this.user.premade) {
             this.user.premade.gameOver();
         }
     };
 
-    BcServerInterface.prototype.onControl = function(event) {
+    BcServerInterface.prototype.onControl = function(event)
+    {
         if (this.user) {
             try {
                 this.user.control(event);
@@ -145,7 +157,8 @@ define(['path', 'fs',
         }
     };
 
-    BcServerInterface.prototype.onSay = function(event) {
+    BcServerInterface.prototype.onSay = function(event)
+    {
         var message = event.text;
         if (typeof message == 'string') {
             message = message.substr(0, 200);
@@ -157,7 +170,8 @@ define(['path', 'fs',
         }
     };
 
-    BcServerInterface.prototype.onDisconnect = function(event) {
+    BcServerInterface.prototype.onDisconnect = function(event)
+    {
         try {
             var connections = -1;
             for (var i in this.socket.manager.connected) {
@@ -173,7 +187,7 @@ define(['path', 'fs',
             if (this.user.premade) {
                 this.user.premade.unjoin(this.user);
             }
-            registry.users.remove(this.user);
+            oldGlobalRegistry.users.remove(this.user);
         } else {
             console.log(new Date().toLocaleTimeString() + ': anonymous disconnected ('
                     + connections , ' total)');

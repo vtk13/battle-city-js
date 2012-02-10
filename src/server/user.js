@@ -2,14 +2,12 @@ define(['src/common/user.js',
         'src/common/message.js'], function(User, Message) {
     isArray = Array.isArray;
 
-    function ServerUser(course)
+    function ServerUser()
     {
-        User.call(this, arguments);
         this.collections = {};
         this.updateCollector = {};
         this.messages = 0;
         this.countMessageFrom = Date.now();
-        this.setCurrentCourse(course);
     };
 
     ServerUser.maxMessages = 10; // per minute
@@ -85,7 +83,7 @@ define(['src/common/user.js',
             if (this.premade) {
                 this.premade.say(message);
             } else {
-                registry.messages.say(message);
+                oldGlobalRegistry.messages.say(message);
             }
             this.messages++;
             return true;

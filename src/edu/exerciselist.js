@@ -1,8 +1,8 @@
 
 function ExerciseList()
 {
-    TList.apply(this, arguments);
+    Collection.apply(this, arguments);
 };
 
-ExerciseList.prototype = new TList();
+ExerciseList.prototype = new Collection();
 ExerciseList.prototype.constructor = ExerciseList;

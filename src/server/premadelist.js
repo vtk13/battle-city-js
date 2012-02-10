@@ -1,11 +1,12 @@
-define(['src/common/list.js',
-        'src/common/premade.js'], function(TList, Premade) {
+define(['src/common/collection.js',
+        'src/common/premade.js',
+        'src/store/odb.js'], function(Collection, Premade, odb) {
     function TPremadeList()
     {
-        TList.apply(this, arguments);
+        Collection.apply(this, arguments);
     };
 
-    TPremadeList.prototype = new TList();
+    TPremadeList.prototype = new Collection();
     TPremadeList.prototype.constructor = TPremadeList;
 
     TPremadeList.prototype.join = function(event, user)
@@ -23,7 +24,7 @@ define(['src/common/list.js',
                 if (this.count() >= 100) { // games limit
                     throw {message: "Не получается создать игру. Достигнут максимум одновременных игр на сервере."};
                 } else {
-                    premade = new Premade(gameName, event.gameType);
+                    premade = odb.create(Premade, [gameName, event.gameType]);
                     this.add(premade);
                 }
             }

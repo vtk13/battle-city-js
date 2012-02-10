@@ -1,10 +1,10 @@
-define(['src/common/list.js'], function(TList) {
+define(['src/common/collection.js'], function(Collection) {
     function TMessageList()
     {
-        TList.apply(this, arguments);
+        Collection.apply(this, arguments);
     };
 
-    TMessageList.prototype = new TList();
+    TMessageList.prototype = new Collection();
     TMessageList.prototype.constructor = TMessageList;
 
     TMessageList.prototype.say = function(message)
