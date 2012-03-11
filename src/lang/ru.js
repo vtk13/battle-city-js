@@ -32,6 +32,7 @@ window.availableLangs['/src/lang/']['ru'] = {
       , 'lack-of-websocket-support': 'Извините, но ваш браузер не поддерживает websocket. Рекомендуемые браузеры - <a href="http://www.google.com/chrome/">Google Chrome</a> версии 14 и выше, и <a href="http://www.mozilla.org/">Firefox</a> версии 7 и выше.'
       , 'course-pascal-basics': 'Основы Pascal'
       , 'course-algoritms': 'Алгоритмы'
+      , 'course-arena': 'Арена'
       , 'header-available-courses': 'Доступные курсы'
       , 'header-available-exercises': 'Упражнения'
       , 'pascal-algoritm1': 'Алгоритм 1'
@@ -44,6 +45,8 @@ window.availableLangs['/src/lang/']['ru'] = {
       , 'pascal-for-statement-desc': 'В этом упражнении вам необходимо написать программу управления танком, которая приведет его в точку назначения.'
       , 'algoritms-wayfinder': 'Поиск пути'
       , 'algoritms-wayfinder-desc': 'Поиск пути описание описание описание описание описание описание описание.'
+      , 'arena-arena-1': 'Свободный бой'
+      , 'arena-arena-1-desc': 'На этой карте вы можете потренироваться против ботов'
       , 'tabs-help': 'Помощь'
       , 'tabs-editor': 'Редактор кода'
 

@@ -3,7 +3,7 @@ if (!window.availableLangs['/src/lang/']) {
 }
 
 window.availableLangs['/src/lang/']['en'] = {
-        'enter-nick': 'Enter nick:'
+        'enter-nick': 'Nickname:'
       , 'legend-play': 'Game'
       , 'legend-learn': 'Code tutorials'
       , 'submit-play': 'Login'
@@ -27,13 +27,14 @@ window.availableLangs['/src/lang/']['en'] = {
       , 'start': 'Start!'
       , 'exit': 'Exit'
       , 'prompt-level': 'Level:'
-      , 'execute-code': 'Execute code'
+      , 'execute-code': 'Run'
       , 'restart': 'Restart'
       , 'lack-of-websocket-support': 'Sorry, but your browser doesn\'t support websockets. Recommended browsers are <a href="http://www.google.com/chrome/">Google Chrome</a> version 14 or above, and <a href="http://www.mozilla.org/">Firefox</a> version 7 or above.'
       , 'course-pascal-basics': 'Pascal basics'
       , 'course-algoritms': 'Algoritms'
+      , 'course-arena': 'Arena'
       , 'header-available-courses': 'Available Courses'
-      , 'header-available-exercises': 'Упражнения'
+      , 'header-available-exercises': 'Exercises'
       , 'pascal-algoritm1': 'Algoritm 1'
       , 'pascal-algoritm1-desc': 'In this exercise you will write a program which will lead the tank to the checkpoint.'
       , 'pascal-algoritm2': 'Algoritm 2'
@@ -44,6 +45,8 @@ window.availableLangs['/src/lang/']['en'] = {
       , 'pascal-for-statement-desc': 'In this exercise you will write a program which will lead the tank to the checkpoint.'
       , 'algoritms-wayfinder': 'Wayfinder'
       , 'algoritms-wayfinder-desc': 'Wayfinder desc'
+      , 'arena-arena-1': 'Arena'
+      , 'arena-arena-1-desc': 'Try your program against bots.'
       , 'tabs-help': 'Help'
       , 'tabs-editor': 'Code editor'
 

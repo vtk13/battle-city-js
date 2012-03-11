@@ -27,9 +27,18 @@ define(['require',
 
     CourseAlgoritms.prototype = new Course(2, 'course-algoritms');
 
+    function CourseArena()
+    {
+        this.execises = new (require('src/common/collection.js'))(); // Collection
+        this.execises.add(new Exercise('arena-arena-1', 5));
+    };
+
+    CourseArena.prototype = new Course(3, 'course-arena');
+
     return {
         Course: Course,
         CoursePascalBasics: CoursePascalBasics,
-        CourseAlgoritms: CourseAlgoritms
+        CourseAlgoritms: CourseAlgoritms,
+        CourseArena: CourseArena
     };
 });

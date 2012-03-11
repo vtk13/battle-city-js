@@ -4,7 +4,8 @@ define(['src/common/collection.js',
     {
         Collection.apply(this, arguments);
         this.add(new courses.CoursePascalBasics());
-        this.add(new courses.CourseAlgoritms());
+//        this.add(new courses.CourseAlgoritms());
+        this.add(new courses.CourseArena());
     };
 
     CoursesList.prototype = new Collection();
