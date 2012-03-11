@@ -1,13 +1,13 @@
 define(['src/common/collection.js'], function(Collection) {
-    function TMessageList()
+    function MessageList()
     {
         Collection.apply(this, arguments);
     };
 
-    TMessageList.prototype = new Collection();
-    TMessageList.prototype.constructor = TMessageList;
+    MessageList.prototype = new Collection();
+    MessageList.prototype.constructor = MessageList;
 
-    TMessageList.prototype.say = function(message)
+    MessageList.prototype.say = function(message)
     {
         this.add(message);
         for (var i in this.items) {
@@ -17,5 +17,5 @@ define(['src/common/collection.js'], function(Collection) {
         }
     };
 
-    return TMessageList;
+    return MessageList;
 });

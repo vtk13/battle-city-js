@@ -9,15 +9,15 @@ requirejs(['http', 'url', 'path', 'fs',
            'src/store/serialization.js',
            'src/store/odb.js',
            'src/common/registry.js'], function(http, url, path, fs, Collection,
-                   TPremadeList, TMessageList, CoursesList, BcServerInterface,
+                   PremadeList, MessageList, CoursesList, BcServerInterface,
                    serialization, odb, resitry) {
     resitry.odb = odb;
     // todo globals
     oldGlobalRegistry = {};
 
     oldGlobalRegistry.users = new Collection();
-    oldGlobalRegistry.premades = new TPremadeList();
-    oldGlobalRegistry.messages = new TMessageList();
+    oldGlobalRegistry.premades = new PremadeList();
+    oldGlobalRegistry.messages = new MessageList();
     oldGlobalRegistry.courses = new CoursesList();
 
     process.on('uncaughtException', function(ex) {

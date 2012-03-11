@@ -1,15 +1,15 @@
 define(['src/common/collection.js',
         'src/common/premade.js',
         'src/store/odb.js'], function(Collection, Premade, odb) {
-    function TPremadeList()
+    function PremadeList()
     {
         Collection.apply(this, arguments);
     };
 
-    TPremadeList.prototype = new Collection();
-    TPremadeList.prototype.constructor = TPremadeList;
+    PremadeList.prototype = new Collection();
+    PremadeList.prototype.constructor = PremadeList;
 
-    TPremadeList.prototype.join = function(event, user)
+    PremadeList.prototype.join = function(event, user)
     {
         var gameName = event.name && event.name.substr(0,20);
         if (!user.premade) {
@@ -34,5 +34,5 @@ define(['src/common/collection.js',
         }
     };
 
-    return TPremadeList;
+    return PremadeList;
 });
