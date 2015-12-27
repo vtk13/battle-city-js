@@ -9,3 +9,5 @@ HAProxy config:
 
 Run:
     node src/server/init [serve-static]
+    start-stop-daemon -Sb -u tactic -d /var/www/bc --exec /usr/bin/nodejs -- src/server/init.js
+    start-stop-daemon -K --exec /usr/bin/nodejs
