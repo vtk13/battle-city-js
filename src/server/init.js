@@ -34,6 +34,7 @@ requirejs(['http', 'url', 'path', 'fs',
      */
     var server = require('http').createServer(function(request, response) {
         if (process.argv.indexOf('serve-static') == -1) {
+            console.warn('Http request, but serving static files is disabled');
             // static served with haproxy + nginx
             response.writeHead(301, {'Location':'http://'+request.headers.host.replace(/:\d+$/, '')});
             response.end();
@@ -65,7 +66,6 @@ requirejs(['http', 'url', 'path', 'fs',
                 response.end();
             });
         }
-
     });
     server.listen(8124);
 

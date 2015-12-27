@@ -105,11 +105,11 @@ define(function() {
      */
     MapTiled.prototype.intersects = function(item, ix, iy, hw, hh)
     {
-        var res = [],
-            ix = ix || item.x,
-            iy = iy || item.y,
-            hw = hw || item.boundX,
-            hh = hh || item.boundY;
+        var res = [];
+        ix = ix || item.x;
+        iy = iy || item.y;
+        hw = hw || item.boundX;
+        hh = hh || item.boundY;
         var fromX = Math.floor((ix-hw) / this.tileSize);
         if (fromX < 0) fromX = 0; else if (fromX > this.maxX) fromX = this.maxX;
         var toX   = Math.ceil ((ix+hw) / this.tileSize);

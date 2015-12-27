@@ -7,42 +7,44 @@ define(['src/common/event.js',
                 VmRunner) {
     function BcClient(socket)
     {
-        this.users = new Collection().bindSource(window.clientServerMessageBus, 'users');
+        this.socket = socket;
+
+        this.users = new Collection().bindSource(socket, 'users');
         this.currentUser = new User(); // do not replace @todo allow replace
         this.users.bindSlave(this.currentUser);
 
-        this.premades = new Collection().bindSource(window.clientServerMessageBus, 'premades');
+        this.premades = new Collection().bindSource(socket, 'premades');
         this.currentPremade = new Premade(); // do not replace @todo allow replace
         this.premades.bindSlave(this.currentPremade);
 
-        this.goals = new Collection().bindSource(window.clientServerMessageBus, 'goals');
-        this.courses = new Collection().bindSource(window.clientServerMessageBus, 'courses');
-        this.exercises = new Collection().bindSource(window.clientServerMessageBus, 'exercises');
+        this.goals = new Collection().bindSource(socket, 'goals');
+        this.courses = new Collection().bindSource(socket, 'courses');
+        this.exercises = new Collection().bindSource(socket, 'exercises');
 
-        this.messages = new Collection().bindSource(window.clientServerMessageBus, 'messages');
-        this.premadeUsers = new Collection().bindSource(window.clientServerMessageBus, 'premade.users');
-        this.premadeMessages = new Collection().bindSource(window.clientServerMessageBus, 'premade.messages');
+        this.messages = new Collection().bindSource(socket, 'messages');
+        this.premadeUsers = new Collection().bindSource(socket, 'premade.users');
+        this.premadeMessages = new Collection().bindSource(socket, 'premade.messages');
         // todo move to premade object?
-        this.tankStack = new Collection().bindSource(window.clientServerMessageBus, 'game.botStack');
+        this.tankStack = new Collection().bindSource(socket, 'game.botStack');
 
         this.field = new Field(13 * 32, 13 * 32);
-        Collection.prototype.bindSource.call(this.field, window.clientServerMessageBus, 'f');
+        Collection.prototype.bindSource.call(this.field, socket, 'f');
 
         this.vmRunner = new VmRunner(this);
 
         var self = this;
-        window.clientServerMessageBus.on('logged', function(data) {
+        socket.on('logged', function(data) {
             self.currentUser.unserialize(data.user);
         });
-        window.clientServerMessageBus.on('joined', function(data) {
+        socket.on('joined', function(data) {
             // do not replace this.currentPremade
             self.currentPremade.unserialize(data.premade);
         });
-        window.clientServerMessageBus.on('unjoined', function() {
+        socket.on('unjoined', function() {
             // do not replace this.currentPremade
             self.currentPremade.unserialize([]);
         });
-    };
+    }
 
     Eventable(BcClient.prototype);
 
@@ -50,28 +52,28 @@ define(['src/common/event.js',
 
     BcClient.prototype.login = function(nick)
     {
-        window.clientServerMessageBus.emit('login', {
+        this.socket.emit('login', {
             nick : nick
         });
     };
 
     BcClient.prototype.setCourse = function(id)
     {
-        window.clientServerMessageBus.emit('set-course', {
+        this.socket.emit('set-course', {
             id: id
         });
     };
 
     BcClient.prototype.say = function(text)
     {
-        window.clientServerMessageBus.emit('say', {
+        this.socket.emit('say', {
             text : text
         });
     };
 
     BcClient.prototype.join = function(name, gameType)
     {
-        window.clientServerMessageBus.emit('join', {
+        this.socket.emit('join', {
             name : name,
             gameType : gameType
         });
@@ -79,13 +81,12 @@ define(['src/common/event.js',
 
     BcClient.prototype.unjoin = function()
     {
-        window.clientServerMessageBus.emit('unjoin');
+        this.socket.emit('unjoin');
     };
 
     BcClient.prototype.startGame = function(level)
     {
-        var self = this;
-        window.clientServerMessageBus.emit('start', {
+        this.socket.emit('start', {
             level: level
         });
     };
@@ -93,14 +94,14 @@ define(['src/common/event.js',
     BcClient.prototype.stopGame = function()
     {
         if (this.currentPremade.type == 'createbot') {
-            window.clientServerMessageBus.emit('stop-game');
+            this.socket.emit('stop-game');
         }
     };
 
     BcClient.prototype.executeCode = function(code)
     {
         if (this.currentPremade.gameRun) {
-            window.clientServerMessageBus.emit('execute', {
+            this.socket.emit('execute', {
                 code: code
             });
             this.vmRunner.executeCode(code);
@@ -109,7 +110,7 @@ define(['src/common/event.js',
 
     BcClient.prototype.control = function(commands)
     {
-        window.clientServerMessageBus.emit('control', commands);
+        this.socket.emit('control', commands);
     };
 
     BcClient.prototype.turn = function(direction)
@@ -151,12 +152,12 @@ define(['src/common/event.js',
 
     BcClient.prototype.onConnect = function(handler)
     {
-        window.clientServerMessageBus.on('connect', handler);
+        this.socket.on('connect', handler);
     };
 
     BcClient.prototype.onConnectFail = function(handler)
     {
-        window.clientServerMessageBus.on('connect_failed', handler).on('error', handler);
+        this.socket.on('connect_failed', handler).on('error', handler);
     };
 
     return BcClient;

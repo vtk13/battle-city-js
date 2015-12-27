@@ -45,7 +45,7 @@ define(['src/ui/widgets/common.js',
             }
         });
         window.clientServerMessageBus.on('disconnect', this.setStateDiconnected.bind(this));
-    };
+    }
 
     UiManager.prototype.setStateLogin = function()
     {

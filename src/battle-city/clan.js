@@ -135,6 +135,7 @@ define(['src/common/collection.js',
     {
         return true;
     };
+
     BotsClan.prototype.step = function()
     {
         if (this.users.length == 0 && this.botStack.count() == 0) {
