@@ -4,7 +4,7 @@ define(['src/ui/widgets/lists.js'], function(widgetsLists) {
         this.courses = new widgetsLists.UiCoursesList(client.courses, $('.courses', context), 'course', client);
         this.exercises = new widgetsLists.UiExercisesList(client.exercises, $('.exercise-list', context), 'exercise');
 
-        $('.exercise .select', context).live('click', function(){
+        $(context).on('click', '.exercise .select', function(){
             var name = 'createbot-' + client.currentUser.id;
             client.join(name, 'createbot');
             client.startGame(parseInt($(this).attr('level')));

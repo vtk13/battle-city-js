@@ -1,8 +1,6 @@
-Install nodejs and npm then:
-    echo -e "\nNODE_PATH=\"/usr/lib/node_modules\"" >> /etc/env.d/99local
-    cd /usr/lib
-    npm install socket.io
-    npm install requirejs
+Install nodejs then:
+    npm install
+    node_modules/bower/bin/bower install
 
 HAProxy config:
     http://stackoverflow.com/questions/4360221/haproxy-websocket-disconnection/4737648#4737648

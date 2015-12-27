@@ -8,11 +8,11 @@ define(['src/ui/widgets/lists.js',
 
         this.publicChat = new widgetsChat.WidgetPublicChat(context, client);
 
-        $('.premade', context).live('click', function(){
+        $(context).on('click', '.premade', function(){
             client.join($('.name', this).text());
             return false;
         });
-    };
+    }
 
     return WidgetPublic;
 });

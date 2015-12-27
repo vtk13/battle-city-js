@@ -1,4 +1,4 @@
-define(function() {
+define(['jquery'], function($) {
     function resize()
     {
         $('#body').height($(window).height() - $('#mainmenu').height() - 1);
@@ -17,7 +17,7 @@ define(function() {
         if (window.location.hash == '#grid') {
             showGrid(cellMargin, columns);
         }
-    };
+    }
 
     $(window).resize(function(){
         setTimeout(resize, 200);
@@ -71,5 +71,5 @@ define(function() {
             div.css('opacity', 0.2);
             $('body').append(div);
         }
-    };
+    }
 });

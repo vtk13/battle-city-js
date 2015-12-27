@@ -43,34 +43,26 @@ requirejs(['http', 'url', 'path', 'fs',
                 uri = '/index.html';
             }
             var filename = path.join(process.cwd(), uri);
-            path.exists(filename, function(exists) {
-                if(!exists) {
-                    response.writeHead(404, {"Content-Type": "text/plain"});
-                    response.write("404 Not Found\n");
+
+            fs.readFile(filename, "binary", function(err, file) {
+                if(err) {
+                    response.writeHead(500, {"Content-Type": "text/plain"});
+                    response.write(err + "\n");
                     response.end();
                     return;
                 }
 
-                fs.readFile(filename, "binary", function(err, file) {
-                    if(err) {
-                        response.writeHead(500, {"Content-Type": "text/plain"});
-                        response.write(err + "\n");
-                        response.end();
-                        return;
-                    }
-
-                    var exts = {
-                            '.html': 'text/html',
-                            '.js': 'application/x-javascript',
-                            '.png': 'image/png',
-                            '.css': 'text/css'
-                    };
-                    response.writeHead(200, {
-                        'Content-Type': exts[path.extname(filename)]
-                    });
-                    response.write(file, "binary");
-                    response.end();
+                var exts = {
+                        '.html': 'text/html',
+                        '.js': 'application/x-javascript',
+                        '.png': 'image/png',
+                        '.css': 'text/css'
+                };
+                response.writeHead(200, {
+                    'Content-Type': exts[path.extname(filename)]
                 });
+                response.write(file, "binary");
+                response.end();
             });
         }
 

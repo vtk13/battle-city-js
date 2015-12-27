@@ -16,7 +16,7 @@ define(['src/ui/widgets/lists.js'], function(widgetsLists) {
     WidgetPublicChat.prototype.init = function()
     {
         var self = this;
-        $('.user', this.context).live('click', function(){
+        $(this.context).on('click', '.user', function(){
             // "this" is a div.user
             var nick = $(this).text();
             var input = $('.message-form :text', self.context);
