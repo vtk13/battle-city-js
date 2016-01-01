@@ -7,7 +7,7 @@ requirejs([
     io, assert, BcClient,
     registry, OdbProxy
 ) {
-    describe('BC', function () {
+    describe('IN ORDER TO play single player mode AS a player I NEED TO', function () {
         var bcClient = null;
         before(function(done) {
             var socket = io('http://localhost:8124', {
@@ -21,17 +21,22 @@ requirejs([
             socket.connect();
         });
 
-        it('sample session', function(done) {
-            this.timeout(6000);
-            bcClient.login('test');
-            bcClient.socket.on('logged', function() {
-                bcClient.join('test', 'classic');
-                bcClient.socket.on('joined', function() {
-                    setTimeout(function() {
-                        bcClient.say('Hello, vtk!');
-                        done();
-                    }, 5000);
-                });
+        it('login', function(done) {
+            bcClient.login('test', function() {
+                done();
+            });
+        });
+
+        it('create premade', function(done) {
+            bcClient.join('test', 'classic', function() {
+                done();
+            });
+        });
+
+        // TODO order of tests?
+        it('start game', function(done) {
+            bcClient.startGame(1, function() {
+                done();
             });
         });
     });

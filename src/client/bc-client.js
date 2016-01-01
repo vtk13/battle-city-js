@@ -50,11 +50,12 @@ function(Eventable, Collection, User,
 
     //===== actions ================================================================
 
-    BcClient.prototype.login = function(nick)
+    BcClient.prototype.login = function(nick, done)
     {
         this.socket.emit('login', {
             nick : nick
         });
+        done && this.socket.once('logged', done);
     };
 
     BcClient.prototype.setCourse = function(id)
@@ -71,12 +72,13 @@ function(Eventable, Collection, User,
         });
     };
 
-    BcClient.prototype.join = function(name, gameType)
+    BcClient.prototype.join = function(name, gameType, done)
     {
         this.socket.emit('join', {
             name : name,
             gameType : gameType
         });
+        done && this.socket.once('joined', done);
     };
 
     BcClient.prototype.unjoin = function()
@@ -84,11 +86,12 @@ function(Eventable, Collection, User,
         this.socket.emit('unjoin');
     };
 
-    BcClient.prototype.startGame = function(level)
+    BcClient.prototype.startGame = function(level, done)
     {
         this.socket.emit('start', {
             level: level
         });
+        done && this.socket.once('started', done);
     };
 
     BcClient.prototype.stopGame = function()

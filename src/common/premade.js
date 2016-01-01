@@ -133,9 +133,9 @@ define(['require',
                 }
                 user.clientMessage('started', {
                     // todo this is for client to get lang file
-                    'courseId': user.currentCourse.id,
-                    'courseName': user.currentCourse.name,
-                    'exerciseId': this.level // todo level and exerciseId are the same
+                    courseId: user.currentCourse.id,
+                    courseName: user.currentCourse.name,
+                    exerciseId: this.level // todo level and exerciseId are the same
                 });
             }, self);
             self.game.start();
