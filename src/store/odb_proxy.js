@@ -15,7 +15,7 @@ define(function() {
                 self.updateWith(data.premades);
             }
         });
-    };
+    }
 
     OdbProxy.prototype.create = function(constructor, args)
     {

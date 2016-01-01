@@ -1,10 +1,10 @@
-define(['src/common/event.js',
-        'src/common/collection.js',
-        'src/common/user.js',
-        'src/common/premade.js',
-        'src/battle-city/field.js',
-        'src/vm/vm-runner.js'], function(Eventable, Collection, User, Premade, Field,
-                VmRunner) {
+define(['src/common/event.js', 'src/common/collection.js', 'src/common/user.js',
+        'src/common/premade.js', 'src/battle-city/field.js', 'src/vm/vm-runner.js',
+        'src/store/serialization.js'],
+function(Eventable, Collection, User,
+         Premade, Field, VmRunner,
+         serialization
+) {
     function BcClient(socket)
     {
         this.socket = socket;
@@ -30,7 +30,7 @@ define(['src/common/event.js',
         this.field = new Field(13 * 32, 13 * 32);
         Collection.prototype.bindSource.call(this.field, socket, 'f');
 
-        this.vmRunner = new VmRunner(this);
+        this.vmRunner = new VmRunner(this, socket);
 
         var self = this;
         socket.on('logged', function(data) {

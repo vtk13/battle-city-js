@@ -1,23 +1,23 @@
 define(['src/common/event.js',
         'src/vm/vm.js',
         'src/vm/compilers/pascal/parser.js'], function(Eventable, Vm, PascalCompiler) {
-    function VmRunner(client)
+    function VmRunner(client, socket)
     {
         this.client = client;
         this.vm = new Vm(client);
         this.codeInterval = null;
 
         var self = this;
-        window.clientServerMessageBus.on('disconnect', function(){
+        socket.on('disconnect', function(){
             clearInterval(self.codeInterval);
         });
-        window.clientServerMessageBus.on('unjoined', function(){
+        socket.on('unjoined', function(){
             clearInterval(self.codeInterval);
         });
-        window.clientServerMessageBus.on('gameover', function(){
+        socket.on('gameover', function(){
             clearInterval(self.codeInterval);
         });
-        window.clientServerMessageBus.on('task-done', function(message){
+        socket.on('task-done', function(message){
             if (message) {
                 self.emit('write', message + '\n');
             }
