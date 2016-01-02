@@ -24,7 +24,6 @@ require(['jquery', 'jquery-ui', 'socket.io', 'css/screen.js',
     // todo all this vars should be used with window.
     window.bcClient = null;
     window.uiManager = null;
-    window.codeMirror = null; // todo better place?
 
     new widgetsCommon.WidgetLangSelector();
 

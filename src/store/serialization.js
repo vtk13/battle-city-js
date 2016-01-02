@@ -1,28 +1,42 @@
-define(['src/battle-city/objects/bullet.js',
-        'src/battle-city/objects/tank.js',
-        'src/battle-city/objects/tankbot.js',
-        'src/battle-city/objects/wall.js',
-        'src/battle-city/objects/bonus.js',
-        'src/battle-city/objects/water.js',
-        'src/battle-city/objects/trees.js',
-        'src/battle-city/objects/ice.js',
-        'src/battle-city/objects/delimiter.js',
-        'src/battle-city/objects/base.js',
-        'src/battle-city/objects/checkpoint.js',
-        'src/server/user.js',
-        'src/common/user.js',
-        'src/common/premade.js',
-        'src/common/message.js',
-        'src/battle-city/goals.js',
-        'src/edu/course.js',
-        'src/edu/exercise.js',
-        'src/common/collection.js',
-        'src/battle-city/field.js',
-        'src/common/registry.js',
-        'src/store/odb_proxy.js'], function(Bullet, Tank, bot, wall, bonus, Water,
-                Trees, Ice, Delimiter, Base, Checkpoint, ServerUser, User,
-                Premade, Message, goal, course, Exercise, Collection, Field,
-                registry, OdbProxy) {
+define([
+    'src/battle-city/objects/bullet.js',
+    'src/battle-city/objects/tank.js',
+    'src/battle-city/objects/tankbot.js',
+    'src/battle-city/objects/wall.js',
+    'src/battle-city/objects/bonus.js',
+    'src/battle-city/objects/water.js',
+    'src/battle-city/objects/trees.js',
+    'src/battle-city/objects/ice.js',
+    'src/battle-city/objects/delimiter.js',
+    'src/battle-city/objects/base.js',
+    'src/server/user.js',
+    'src/common/user.js',
+    'src/common/premade.js',
+    'src/common/message.js',
+    'src/common/collection.js',
+    'src/battle-city/field.js',
+    'src/common/registry.js',
+    'src/store/odb_proxy.js'
+], function(
+    Bullet,
+    Tank,
+    bot,
+    wall,
+    bonus,
+    Water,
+    Trees,
+    Ice,
+    Delimiter,
+    Base,
+    ServerUser,
+    User,
+    Premade,
+    Message,
+    Collection,
+    Field,
+    registry,
+    OdbProxy
+) {
     var serializeTypeMatches = {
         'Bullet'            : 1,
         'Tank'              : 2,
@@ -45,11 +59,7 @@ define(['src/battle-city/objects/bullet.js',
         'Base'              : 19,
         'ServerUser'        : 20,
         'Premade'           : 21,
-        'Message'           : 22,
-        'Checkpoint'        : 23,
-        'GoalCheckPoint'    : 24,
-        'Course'            : 25,
-        'Exercise'          : 26
+        'Message'           : 22
     };
 
     var unserializeTypeMatches = {
@@ -74,11 +84,7 @@ define(['src/battle-city/objects/bullet.js',
         19: Base,
         20: User,
         21: Premade,
-        22: Message,
-        23: Checkpoint,
-        24: goal.GoalCheckPoint,
-        25: course.Course,
-        26: Exercise
+        22: Message
     };
 
     /* sample
@@ -177,29 +183,6 @@ define(['src/battle-city/objects/bullet.js',
         this.finalX = data[6];
         this.finalY = data[7];
         this.setDirectionImage();
-    };
-
-    Checkpoint.prototype.serialize = function()
-    {
-        return [
-            serializeTypeMatches[this.constructor.name], // 0
-            this.id, // 1
-            this.x, // 2
-            this.y // 3
-        ];
-        // z is constant
-    };
-
-    Checkpoint.prototype.unserialize = function(data)
-    {
-        this.id = data[1];
-        if (this.field) {
-            this.field.setXY(this, data[2], data[3]);
-        } else {
-            // first unserialize, before adding to field -> may set x and y directly
-            this.x = data[2];
-            this.y = data[3];
-        }
     };
 
     Delimiter.prototype.serialize = function()
@@ -354,24 +337,6 @@ define(['src/battle-city/objects/bullet.js',
         }
     };
 
-    goal.GoalCheckPoint.prototype.serialize = function()
-    {
-        return [
-            serializeTypeMatches[this.constructor.name], // 0
-            this.id, // 1
-            this.status, // 2
-            this.checkpoint.x, // 3
-            this.checkpoint.y // 4
-        ];
-    };
-
-    goal.GoalCheckPoint.prototype.unserialize = function(data)
-    {
-        this.id = data[1];
-        this.status = data[2];
-        this.checkpoint = new Checkpoint(data[3], data[4]);
-    };
-
     Message.prototype.serialize = function()
     {
         return [
@@ -418,22 +383,6 @@ define(['src/battle-city/objects/bullet.js',
         this.gameRun    = data[7];
     };
 
-    course.Course.prototype.serialize = function()
-    {
-        return [
-            serializeTypeMatches[this.constructor.name], // 0
-            this.id, // 1
-            this.name // 2
-        ];
-        // z is constant
-    };
-
-    course.Course.prototype.unserialize = function(data)
-    {
-        this.id = data[1];
-        this.name = data[2];
-    };
-
     ServerUser.prototype.serialize = function()
     {
         return [
@@ -446,7 +395,6 @@ define(['src/battle-city/objects/bullet.js',
           , this.premade ? this.premade.id : 0 // 6
           , this.positionId // 7
           , this.tank ? this.tank.id : 0 // 8
-          , this.currentCourse ? this.currentCourse.id : 0 // 9
         ];
     };
 
@@ -466,7 +414,6 @@ define(['src/battle-city/objects/bullet.js',
         res[6] = this.premade ? this.premade.id : 0;
         res[7] = this.positionId;
         res[8] = this.tankId;
-        res[9] = this.currentCourseId;
         return res;
     };
 
@@ -487,31 +434,13 @@ define(['src/battle-city/objects/bullet.js',
         }
         this.positionId = data[7];
         this.tankId     = data[8];
-        this.currentCourseId    = data[9];
     };
 
-    Exercise.prototype.serialize = function()
-    {
-        return [
-            serializeTypeMatches[this.constructor.name], // 0
-            this.id, // 1
-            this.name, // 2
-            this.level // 3
-        ];
-        // z is constant
-    };
-
-    Exercise.prototype.unserialize = function(data)
-    {
-        this.id = data[1];
-        this.name = data[2];
-        this.level = data[3];
-    };
 
     function serialize(object)
     {
         return object.serialize();
-    };
+    }
 
     function unserialize(object, data)
     {
@@ -523,7 +452,7 @@ define(['src/battle-city/objects/bullet.js',
             object.unserialize(data);
         }
         return object;
-    };
+    }
 
     OdbProxy.prototype.updateWith = function(events) {
         for (var i in events) {

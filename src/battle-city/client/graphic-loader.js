@@ -108,7 +108,6 @@ define(function(){
       , 'img/armored1.png'
       , 'img/armored2.png'
       , 'img/ice.png'
-      , 'img/checkpoint.png'
     ];
     for (var i in sprites) {
         window.images[sprites[i]] = new Image();

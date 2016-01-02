@@ -36,10 +36,6 @@ legend {
     text-decoration: line-through;
 }
 
-.exercise-controls>div {
-    text-align: center;
-}
-
 #game .player0-stats {
     text-align: right;
 }

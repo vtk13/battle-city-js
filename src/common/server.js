@@ -12,12 +12,9 @@ define(['path', 'fs',
         this.user = null;
         this.socket = socket;
         socket.on('login',      this.onLogin.bind(this));
-        socket.on('set-course', this.onSetCourse.bind(this));
         socket.on('join',       this.onJoin.bind(this));
         socket.on('unjoin',     this.onUnjoin.bind(this));
-        socket.on('execute',    this.onExecute.bind(this));
         socket.on('start',      this.onStart.bind(this));
-        socket.on('stop-game',  this.onStopGame.bind(this));
         socket.on('control',    this.onControl.bind(this));
         socket.on('say',        this.onSay.bind(this));
         socket.on('disconnect', this.onDisconnect.bind(this));
@@ -42,10 +39,7 @@ define(['path', 'fs',
                 }
             });
             if (nickAllowed) {
-                var user = this.user = registry.odb.create(ServerUser);
-                oldGlobalRegistry.courses.get(1, function(course) {
-                    user.setCurrentCourse(course);
-                });
+                this.user = registry.odb.create(ServerUser);
                 this.user.lastSync = 0;
                 this.user.socket = this.socket;
                 this.user.nick = nick;
@@ -57,24 +51,11 @@ define(['path', 'fs',
                 this.user.watchCollection(oldGlobalRegistry.users, 'users');
                 this.user.watchCollection(oldGlobalRegistry.premades, 'premades');
                 this.user.watchCollection(oldGlobalRegistry.messages, 'messages');
-                this.user.watchCollection(oldGlobalRegistry.courses, 'courses');
                 console.log(new Date().toLocaleTimeString() + ': user ' + nick + ' connected');
             } else {
                 this.socket.emit('nickNotAllowed');
             }
         }
-    };
-
-    BcServerInterface.prototype.onSetCourse = function(event)
-    {
-        var courseId = event.id, self = this;
-        oldGlobalRegistry.courses.get(courseId, function(course) {
-            if (self.user && course) {
-                self.user.setCurrentCourse(course);
-            }
-            // todo why user.setCurrentCourse() is not enough?
-            self.socket.emit('course-changed', course.id);
-        });
     };
 
     BcServerInterface.prototype.onJoin = function(event)
@@ -106,20 +87,6 @@ define(['path', 'fs',
         }
     };
 
-    BcServerInterface.prototype.onExecute = function(event)
-    {
-        var userFolder = path.join(process.cwd(), 'bots/' + this.user.id);
-        try {
-            fs.mkdirSync(userFolder, 0777);
-        } catch (ex) {/*ignore EEXIST*/}
-        var tries = fs.readdirSync(userFolder);
-        var botSourceFile = path.join(userFolder, 'try' + tries.length + '.pas');
-        fs.writeFileSync(botSourceFile, event.code);
-        this.socket.emit('execute', {
-            script: botSourceFile.substr(process.cwd().length)
-        });
-    };
-
     BcServerInterface.prototype.onStart = function(event)
     {
         if (this.user.premade && !this.user.premade.game) {
@@ -136,13 +103,6 @@ define(['path', 'fs',
                 console.log(new Date().toLocaleTimeString() + ': user ' + this.user.nick
                         + ' starts game ' + this.user.premade.name + ', level ' + this.user.premade.level);
             }
-        }
-    };
-
-    BcServerInterface.prototype.onStopGame = function()
-    {
-        if (this.user.premade) {
-            this.user.premade.gameOver();
         }
     };
 

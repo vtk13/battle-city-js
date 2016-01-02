@@ -41,18 +41,3 @@ h1, h2, h3, h4, h5, h6 {
 .game-modes li img {
     background: #020608;
 }
-.cm-s-night, .cm-s-night .CodeMirror-gutter {
-    background: #041012;
-}
-.code.cm-s-night {
-    background: #1C302C;
-}
-
-#exercises .courses-list .course:hover, #exercises .exercise-list .exercise:hover,
-#exercises .courses-list .course.current {
-    background: #1C302C;
-}
-
-.exercise-controls>div {
-    background: #4D694E;
-}

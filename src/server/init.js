@@ -1,16 +1,24 @@
 var requirejs = require("requirejs");
 
-requirejs(['http', 'url', 'path', 'fs',
-           'src/common/collection.js',
-           'src/server/premadelist.js',
-           'src/server/messagelist.js',
-           'src/edu/courselist.js',
-           'src/common/server.js',
-           'src/store/serialization.js',
-           'src/store/odb.js',
-           'src/common/registry.js'], function(http, url, path, fs, Collection,
-                   PremadeList, MessageList, CoursesList, BcServerInterface,
-                   serialization, odb, resitry) {
+requirejs([
+    'http', 'url', 'path', 'fs',
+   'src/common/collection.js',
+   'src/server/premadelist.js',
+   'src/server/messagelist.js',
+   'src/common/server.js',
+   'src/store/serialization.js',
+   'src/store/odb.js',
+   'src/common/registry.js'
+], function(
+    http, url, path, fs,
+    Collection,
+    PremadeList,
+    MessageList,
+    BcServerInterface,
+    serialization,
+    odb,
+    resitry
+) {
     resitry.odb = odb;
     // todo globals
     oldGlobalRegistry = {};
@@ -18,7 +26,6 @@ requirejs(['http', 'url', 'path', 'fs',
     oldGlobalRegistry.users = new Collection();
     oldGlobalRegistry.premades = new PremadeList();
     oldGlobalRegistry.messages = new MessageList();
-    oldGlobalRegistry.courses = new CoursesList();
 
     process.on('uncaughtException', function(ex) {
         if (ex.stack) {

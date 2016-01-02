@@ -8,21 +8,13 @@ define(['src/common/user.js',
         this.updateCollector = {};
         this.messages = 0;
         this.countMessageFrom = Date.now();
-    };
+    }
 
     ServerUser.maxMessages = 10; // per minute
     ServerUser._eventTypeMap = {'add': 'a', 'change': 'c', 'remove': 'r'};
 
     ServerUser.prototype = new User();
     ServerUser.prototype.constructor = ServerUser;
-
-    ServerUser.prototype.setCurrentCourse = function(course)
-    {
-        this.unwatchCollection('exercises');
-        this.currentCourse = course;
-        this.watchCollection(course.execises, 'exercises');
-        this.emit('change');
-    };
 
     ServerUser.prototype.sendUpdatesToClient = function()
     {

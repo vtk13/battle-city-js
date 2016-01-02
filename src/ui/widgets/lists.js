@@ -8,7 +8,7 @@ define(['src/lang/lang.js'], function(lang) {
             list.on('change', this.onChange.bind(this));
             list.on('remove', this.onRemove.bind(this));
         }
-    };
+    }
 
     UiList.prototype.itemDomElement = function(item)
     {
@@ -35,7 +35,7 @@ define(['src/lang/lang.js'], function(lang) {
     function UiUserList(list, container, itemClass)
     {
         UiList.apply(this, arguments);
-    };
+    }
 
     UiUserList.prototype = new UiList();
     UiUserList.prototype.constructor = UiUserList;
@@ -47,64 +47,13 @@ define(['src/lang/lang.js'], function(lang) {
           this.itemClass + user.id + '"></div>').text(user.nick);
     };
 
-    //====== UiCoursesList =========================================================
-
-    function UiCoursesList(list, container, itemClass, client)
-    {
-        UiList.apply(this, arguments);
-        this.client = client;
-        window.clientServerMessageBus.on('course-changed', function(id){
-            $('.' + itemClass, container).removeClass('current');
-            $('.' + itemClass + id, container).addClass('current');
-        });
-    };
-
-    UiCoursesList.prototype = new UiList();
-    UiCoursesList.prototype.constructor = UiCoursesList;
-
-    UiCoursesList.prototype.itemDomElement = function(course)
-    {
-        var cls = 'lang ' + this.itemClass + ' ' +
-            (this.client.currentUser.currentCourseId === course.id ? 'current ' : '') +
-            this.itemClass + course.id;
-        var res = $('<div class="' + cls + '" key="' + course.name + '"></div>');
-        lang.applyLang(null, res);
-        var self = this;
-        res.click(function(){
-            self.client.setCourse(course.id);
-        });
-        return res;
-    };
-
-    //====== UiExercisesList =======================================================
-
-    function UiExercisesList(list, container, itemClass)
-    {
-        UiList.apply(this, arguments);
-    };
-
-    UiExercisesList.prototype = new UiList();
-    UiExercisesList.prototype.constructor = UiExercisesList;
-
-    UiExercisesList.prototype.itemDomElement = function(exercise)
-    {
-        var cls = this.itemClass + ' ' + this.itemClass + exercise.id;
-        var res = $('<div class="' + cls + '"><h3 class="lang" key="' + exercise.name + '"></h3>'+
-                '<p class="lang" key="' + exercise.name + '-desc"></p>' +
-                '<div class="exercise-controls"><div class="select" level="' +
-                    exercise.level + '">&rarr;</div></div>'+
-                '</div>');
-        lang.applyLang(null, res);
-        return res;
-    };
-
     //====== UiPremadeUserList =====================================================
 
-    function UiPremadeUserList(list, container, itemClass, currentPremade)
+    function UiPremadeUserList(list, container, itemClass, client)
     {
         UiUserList.apply(this, arguments);
-        this.currentPremade = currentPremade;
-    };
+        this.client = client;
+    }
 
     UiPremadeUserList.prototype = new UiUserList();
     UiPremadeUserList.prototype.constructor = UiPremadeUserList;
@@ -112,7 +61,7 @@ define(['src/lang/lang.js'], function(lang) {
     UiPremadeUserList.prototype.itemDomElement = function(user)
     {
         var text = user.nick;
-        if (this.currentPremade.type == 'teamvsteam') {
+        if (this.client.currentPremade.type == 'teamvsteam') {
             text = user.nick + (user.clan == 1 ? ' (внизу)' : ' (вверху)');
         }
         return $('<div class="' + this.itemClass + ' ' +
@@ -125,7 +74,7 @@ define(['src/lang/lang.js'], function(lang) {
     function UiPremadeList(list, container, itemClass)
     {
       UiList.apply(this, arguments);
-    };
+    }
 
     UiPremadeList.prototype = new UiList();
     UiPremadeList.prototype.constructor = UiPremadeList;
@@ -133,9 +82,7 @@ define(['src/lang/lang.js'], function(lang) {
 
     UiPremadeList.prototype.onAdd = function(premade)
     {
-        if (premade.type != 'createbot') {
-            this.container.append(this.itemDomElement(premade));
-        }
+        this.container.append(this.itemDomElement(premade));
     };
 
     UiPremadeList.prototype.itemDomElement = function(premade)
@@ -153,8 +100,8 @@ define(['src/lang/lang.js'], function(lang) {
 
     function UiMessageList(list, container, itemClass)
     {
-    UiList.apply(this, arguments);
-    };
+        UiList.apply(this, arguments);
+    }
 
     UiMessageList.prototype = new UiList();
     UiMessageList.prototype.constructor = UiMessageList;
@@ -186,7 +133,7 @@ define(['src/lang/lang.js'], function(lang) {
     function UiTankStack(list, container, itemClass)
     {
         UiList.apply(this, arguments);
-    };
+    }
 
     UiTankStack.prototype = new UiList();
     UiTankStack.prototype.constructor = UiTankStack;
@@ -200,8 +147,6 @@ define(['src/lang/lang.js'], function(lang) {
     return {
         UiList: UiList,
         UiUserList: UiUserList,
-        UiCoursesList: UiCoursesList,
-        UiExercisesList: UiExercisesList,
         UiPremadeUserList: UiPremadeUserList,
         UiPremadeList: UiPremadeList,
         UiMessageList: UiMessageList,

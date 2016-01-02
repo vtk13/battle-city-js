@@ -1,4 +1,8 @@
-define(['src/ui/widgets/lists.js'], function(widgetsLists) {
+define([
+    'src/ui/widgets/lists.js'
+], function(
+    widgetsLists
+) {
     function WidgetPublicChat(context, client)
     {
         this.context = context;
@@ -11,7 +15,7 @@ define(['src/ui/widgets/lists.js'], function(widgetsLists) {
                 $('.messages', context), 'message');
 
         this.init();
-    };
+    }
 
     WidgetPublicChat.prototype.init = function()
     {
@@ -40,13 +44,15 @@ define(['src/ui/widgets/lists.js'], function(widgetsLists) {
         this.premadeUsers = new widgetsLists.UiPremadeUserList(
                 client.premadeUsers,
                 $('.user-list', context), 'user',
-                client.currentPremade);
+                client
+        );
         this.premadeMessages = new widgetsLists.UiMessageList(
                 client.premadeMessages,
-                $('.messages', context), 'message');
+                $('.messages', context), 'message'
+        );
 
         this.init();
-    };
+    }
 
     WidgetPremadeChat.prototype.init = WidgetPublicChat.prototype.init;
 

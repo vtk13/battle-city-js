@@ -1,6 +1,12 @@
-define(['src/battle-city/objects/bullet.js',
-        'src/battle-city/objects/tank.js',
-        'src/battle-city/objects/animation.js'], function(Bullet, Tank, animation) {
+define([
+    'src/battle-city/objects/bullet.js',
+    'src/battle-city/objects/tank.js',
+    'src/battle-city/objects/animation.js'
+], function(
+    Bullet,
+    Tank,
+    animation
+) {
     function FieldView(context, client)
     {
         this.field = client.field;
@@ -11,14 +17,15 @@ define(['src/battle-city/objects/bullet.js',
         this.animateIntervalId = null;
         var self = this;
 
-        this.field.on('remove', function(object){
+        this.field.on('remove', function(object) {
+            var anim;
             if (object instanceof Bullet) {
-                var anim = new animation.BulletHitAnimation(self.step, object.finalX, object.finalY);
+                anim = new animation.BulletHitAnimation(self.step, object.finalX, object.finalY);
                 anim.id = object.id;
                 self.field.add(anim);
             }
             if (object instanceof Tank) { // todo hit myself without splash :(
-                var anim = new animation.TankHitAnimation(self.step, object.x, object.y);
+                anim = new animation.TankHitAnimation(self.step, object.x, object.y);
                 anim.id = object.id;
                 self.field.add(anim);
             }
@@ -45,7 +52,7 @@ define(['src/battle-city/objects/bullet.js',
                     setInterval(self.animateStep.bind(self), 50);
             }
         });
-    };
+    }
 
     FieldView.prototype._animateStepItem = function(item)
     {
@@ -75,25 +82,6 @@ define(['src/battle-city/objects/bullet.js',
     {
         this.c2d.fillStyle = '#041012';
         this.c2d.fillRect(0, 0, this.field.width, this.field.height);
-
-        if (this.context.hasClass('create-bot')) {
-            this.c2d.strokeStyle = '#000';
-            this.c2d.lineWidth = 1;
-            for (var i = 1 ; i < 26 ; i++) {
-                this.c2d.beginPath();
-                this.c2d.moveTo(0, 16 * i + 0.5);
-                this.c2d.lineTo(416, 16 * i + 0.5);
-                this.c2d.closePath();
-                this.c2d.stroke();
-            }
-            for (var i = 1 ; i < 26 ; i++) {
-                this.c2d.beginPath();
-                this.c2d.moveTo(16 * i + 0.5, 0);
-                this.c2d.lineTo(16 * i + 0.5, 416);
-                this.c2d.closePath();
-                this.c2d.stroke();
-            }
-        }
 
         for (this.z = 0 ; this.z <= 2 ; this.z++) { // this.z hack?
             this.field.objects.traversal(this.drawItem, this);

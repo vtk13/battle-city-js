@@ -54,13 +54,13 @@ h1, h2 {
     line-height: 35px;
 }
 
-#game-login fieldset>legend, #tutor-login fieldset>legend {
+#game-login fieldset>legend {
     line-height: 36px;
 }
-#game-login .submit, #tutor-login .submit {
+#game-login .submit {
     margin-top: 18px;
 }
-#game-login .submit button, #tutor-login .submit button {
+#game-login .submit button {
     width: 90px;
 }
 
@@ -76,12 +76,4 @@ h1, h2 {
 .message-form {
     height: 36px;
     line-height: 36px;
-}
-
-#exercises .course {
-    padding: 18px 0;
-}
-
-.line {
-    background: white;
 }

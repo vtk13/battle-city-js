@@ -1,9 +1,11 @@
-define(['src/common/event.js', 'src/common/collection.js', 'src/common/user.js',
-        'src/common/premade.js', 'src/battle-city/field.js', 'src/vm/vm-runner.js',
-        'src/store/serialization.js'],
-function(Eventable, Collection, User,
-         Premade, Field, VmRunner,
-         serialization
+define([
+    'src/common/event.js', 'src/common/collection.js', 'src/common/user.js',
+    'src/common/premade.js', 'src/battle-city/field.js',
+    'src/store/serialization.js'
+], function(
+    Eventable, Collection, User,
+    Premade, Field,
+    serialization
 ) {
     function BcClient(socket)
     {
@@ -17,10 +19,6 @@ function(Eventable, Collection, User,
         this.currentPremade = new Premade(); // do not replace @todo allow replace
         this.premades.bindSlave(this.currentPremade);
 
-        this.goals = new Collection().bindSource(socket, 'goals');
-        this.courses = new Collection().bindSource(socket, 'courses');
-        this.exercises = new Collection().bindSource(socket, 'exercises');
-
         this.messages = new Collection().bindSource(socket, 'messages');
         this.premadeUsers = new Collection().bindSource(socket, 'premade.users');
         this.premadeMessages = new Collection().bindSource(socket, 'premade.messages');
@@ -29,8 +27,6 @@ function(Eventable, Collection, User,
 
         this.field = new Field(13 * 32, 13 * 32);
         Collection.prototype.bindSource.call(this.field, socket, 'f');
-
-        this.vmRunner = new VmRunner(this, socket);
 
         var self = this;
         socket.on('logged', function(data) {
@@ -56,13 +52,6 @@ function(Eventable, Collection, User,
             nick : nick
         });
         done && this.socket.once('logged', done);
-    };
-
-    BcClient.prototype.setCourse = function(id)
-    {
-        this.socket.emit('set-course', {
-            id: id
-        });
     };
 
     BcClient.prototype.say = function(text)
@@ -92,23 +81,6 @@ function(Eventable, Collection, User,
             level: level
         });
         done && this.socket.once('started', done);
-    };
-
-    BcClient.prototype.stopGame = function()
-    {
-        if (this.currentPremade.type == 'createbot') {
-            this.socket.emit('stop-game');
-        }
-    };
-
-    BcClient.prototype.executeCode = function(code)
-    {
-        if (this.currentPremade.gameRun) {
-            this.socket.emit('execute', {
-                code: code
-            });
-            this.vmRunner.executeCode(code);
-        }
     };
 
     BcClient.prototype.control = function(commands)

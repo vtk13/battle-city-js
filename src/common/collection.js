@@ -1,11 +1,18 @@
-define(['src/common/event.js'], function(Eventable) {
+/**
+ *
+ */
+define([
+    'src/common/event.js'
+], function(
+    Eventable
+) {
     /**
      * Don't call Array's methods which modify items, because they don't emit events.
      */
     function Collection()
     {
         this.items = [];
-    };
+    }
 
     Eventable(Collection.prototype);
 
@@ -27,7 +34,7 @@ define(['src/common/event.js'], function(Eventable) {
 
         var self = this;
         if (item.on) {
-            item.on('change', function(){
+            item.on('change', function() {
                 self.emit('change', this);
             });
         }
@@ -93,7 +100,9 @@ define(['src/common/event.js'], function(Eventable) {
 
     /**
      * Bind object to list.
+     *
      * All changes in a list's object with same id will reflect in the slaveObject.
+     *
      * @param slaveObject
      * @return
      */

@@ -1,4 +1,8 @@
-define(['src/lang/lang.js', 'src/common/premade.js'], function(lang, Premade) {
+define([
+    'src/lang/lang.js', 'src/common/premade.js'
+], function(
+    lang, Premade
+) {
     //====== WidgetLevelSelector ===================================================
 
     function WidgetLevelSelector(context, client)
@@ -12,7 +16,7 @@ define(['src/lang/lang.js', 'src/common/premade.js'], function(lang, Premade) {
             }
             levelSelect.val(this.level);
         });
-    };
+    }
 
     //====== UserPoint =============================================================
 
@@ -21,7 +25,7 @@ define(['src/lang/lang.js', 'src/common/premade.js'], function(lang, Premade) {
         premadeUsers.on('add', this.onChange.bind(this));
         premadeUsers.on('change', this.onChange.bind(this));
         premadeUsers.on('remove', this.onRemove.bind(this));
-    };
+    }
 
     UserPoint.prototype.onChange = function(user)
     {
@@ -55,29 +59,20 @@ define(['src/lang/lang.js', 'src/common/premade.js'], function(lang, Premade) {
             $('.game-modes li').removeClass('current');
             $(this).addClass('current');
         });
-    };
+    }
 
     //====== WidgetLoginForm =======================================================
 
     function WidgetLoginForm(context, client)
     {
-        var toPage = 'setStatePublic';
-
         $('#game-login', context).submit(function(){
-            client.login($('input[name=nick]', this).val());
+            var nick = $('input[name=nick]', this).val();
+            client.login(nick, function() {
+                window.uiManager.setStatePublic();
+            });
             return false;
         });
-
-        $('#tutor-login', context).submit(function(){
-            toPage = 'setStateExercises';
-            client.login($('input[name=nick]', this).val());
-            return false;
-        });
-
-        window.clientServerMessageBus.on('logged', function(){
-            window.uiManager[toPage]();
-        });
-    };
+    }
 
     //====== WidgetLangSelector ====================================================
 
@@ -86,7 +81,7 @@ define(['src/lang/lang.js', 'src/common/premade.js'], function(lang, Premade) {
         $('.lang-select li').click(function(){
             lang.applyLang($(this).attr('lang'));
         });
-    };
+    }
 
     return {
         WidgetLevelSelector: WidgetLevelSelector,

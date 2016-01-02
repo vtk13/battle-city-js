@@ -3,12 +3,6 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <title>Battle city</title>
-    <script src="lib/code-mirror/codemirror.js"></script>
-    <script src="lib/code-mirror/runmode.js"></script>
-    <script src="lib/code-mirror/pascal.js"></script>
-    <link href="lib/code-mirror/codemirror.css" rel="stylesheet">
-    <link href="lib/code-mirror/night.css" rel="stylesheet">
-
     <link rel="stylesheet" type="text/css" href="/css/layout.css">
     <link rel="stylesheet" type="text/css" href="/css/grid.css">
     <link rel="stylesheet" type="text/css" href="/css/screen.css">
@@ -52,28 +46,16 @@
     <div id="login" class="ui-block">
         <div class="login">
             <div class="cell-12 leftmost">
-                <h2>Прочитайте пожалуйста:</h2>
+                <h2>FAQ:</h2>
                 <ul class="faq">
-                    <li>Не верьте всему что пишут в чате, потому-что любой троль может зайти под моим ником.</li>
                     <li>Управление: Стрелки - ездить, пробел - стрелять.</li>
-                    <li>Это просто демка, а не законченный продукт. Поэтому дизайн убогий, баги жирные.</li>
-                    <li>Максимум может быть только 10 игр одновременно - это
-                        связанно со скорость моего интернет подключения.</li>
-                    <li>Конструктивную критику, баги и предложения направлять на vtk666@gmail.com</li>
                 </ul>
             </div>
-            <form id="game-login" class="cell-6 leftmost" action="#">
+            <form id="game-login" class="cell-12 leftmost" action="#">
                 <fieldset>
                     <legend class="lang" key="legend-play"></legend>
                     <div><span class="lang" key="enter-nick"></span><input type="text" name="nick"></div>
                     <div class="submit"><button type="submit" class="lang" key="submit-play"></button></div>
-                </fieldset>
-            </form>
-            <form id="tutor-login" class="cell-6" action="#">
-                <fieldset>
-                    <legend class="lang" key="legend-learn"></legend>
-                    <div><span class="lang" key="enter-nick"></span><input type="text" name="nick"></div>
-                    <div class="submit"><button type="submit" class="lang" key="submit-learn"></button></div>
                 </fieldset>
             </form>
         </div>
@@ -153,30 +135,6 @@
         </div>
     </div>
 
-    <div id="exercises" class="ui-block">
-        <div class="courses-list cell-3 leftmost">
-            <h2 class="lang" key="header-available-courses"></h2>
-            <div class="courses"></div>
-        </div>
-        <div class="exercise-list cell-9">
-            <h2 class="lang" key="header-available-exercises"></h2>
-        </div>
-    </div>
-
-    <div id="bot-editor" class="ui-block cell-6 leftmost">
-        <ul>
-            <li><a href="#tabs-help"><span class="lang" key="tabs-help"></span></a></li>
-            <li><a href="#tabs-editor"><span class="lang" key="tabs-editor"></span></a></li>
-        </ul>
-        <div id="tabs-help">
-            <div class="content lang" key="exercise-help-content" langfile="null"></div>
-        </div>
-        <div id="tabs-editor">
-            <div id="editor"></div>
-            <div id="console"></div>
-        </div>
-    </div>
-
     <div id="game" class="ui-block cell-6">
         <div id="bot-stack"></div>
         <canvas id="field" width="416" height="416"></canvas>
@@ -184,12 +142,6 @@
         <div class="player1-stats"></div>
         <div class="player2-stats"></div>
         <div class="player3-stats"></div>
-
-        <div class="exercise-game-controls">
-            <button class="execute-code lang" key="execute-code"></button>
-            <button class="restart-game lang" key="restart"></button>
-            <button class="exit-exercise lang" key="exit"></button>
-        </div>
     </div>
 </div>
 <script type="text/javascript">

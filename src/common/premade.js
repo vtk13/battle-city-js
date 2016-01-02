@@ -23,9 +23,6 @@ define(['require',
         },
         'teamvsteam': {
             'levels': 1
-        },
-        'createbot': {
-            'levels': 4
         }
     };
 
@@ -36,9 +33,6 @@ define(['require',
             switch (this.type) {
                 case 'classic':
                     this.clans = [new clan.Clan(1, 10*30/*~30step per seconds*/), new clan.BotsClan(2, 10*30/*~30step per seconds*/)];
-                    break;
-                case 'createbot':
-                    this.clans = [new clan.Clan(1, 10*30/*~30step per seconds*/), new clan.LearnerClan(2, 10*30/*~30step per seconds*/)];
                     break;
                 case 'teamvsteam':
                     this.clans = [new clan.Clan(1, 2*30/*~30step per seconds*/), new clan.Clan(2, 2*30/*~30step per seconds*/)];
@@ -98,7 +92,6 @@ define(['require',
         user.unwatchCollection('premade.messages');
         user.unwatchCollection('f');
         user.unwatchCollection('game.botStack');
-        user.unwatchCollection('goals');
         user.clan.detachUser(user);
         this.users.remove(user);
         this.userCount--;
@@ -124,19 +117,11 @@ define(['require',
                 if (user.clan.enemiesClan.botStack) {
                     user.watchCollection(user.clan.enemiesClan.botStack, 'game.botStack');
                 }
-                if (user.clan.enemiesClan.goals) {
-                    user.watchCollection(user.clan.enemiesClan.goals, 'goals');
-                }
                 if (user.premade.type == 'teamvsteam') {
                     user.lives = 4;
                     user.emit('change');
                 }
-                user.clientMessage('started', {
-                    // todo this is for client to get lang file
-                    courseId: user.currentCourse.id,
-                    courseName: user.currentCourse.name,
-                    exerciseId: this.level // todo level and exerciseId are the same
-                });
+                user.clientMessage('started');
             }, self);
             self.game.start();
             self.emit('change');

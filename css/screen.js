@@ -4,7 +4,6 @@ define(['jquery'], function($) {
         $('#body').height($(window).height() - $('#mainmenu').height() - 1);
         $('.chat-log').height($('#body').height() - 70);
         $('.user-list').add('.premades').height($('#body').height() - 18 * 3);
-        $('#tabs-help').add('#tabs-editor').height($('#bot-editor').height() - $('#bot-editor .ui-tabs-nav').height() - 1);
 
         var cellMargin = 18; // line-height
         var columns = 12;
@@ -19,7 +18,7 @@ define(['jquery'], function($) {
         }
     }
 
-    $(window).resize(function(){
+    $(window).resize(function() {
         setTimeout(resize, 200);
     });
 
