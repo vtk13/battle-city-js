@@ -26,7 +26,7 @@ define(function(){
                 "begin\n" +
                 "  \n" +
                 "end.");
-        this.context.tabs('select', 0);
+        this.context.tabs('option', 'active', 0);
     };
 
     return WidgetCreateBot;
