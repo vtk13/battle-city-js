@@ -1,3 +1,18 @@
-See install.txt for install.
-
 Demo http://bc.vtkd.ru/
+
+Install
+
+Install nodejs then:
+    npm install
+    node_modules/bower/bin/bower install
+
+Run locally:
+    node src/server/init serve-static
+
+Run on server:
+    start-stop-daemon -Sb -u tactic -d /var/www/bc --exec /usr/bin/nodejs -- src/server/init.js
+    start-stop-daemon -K --exec /usr/bin/nodejs
+
+    HAProxy config:
+        http://stackoverflow.com/questions/4360221/haproxy-websocket-disconnection/4737648#4737648
+        http://support.rightscale.com/06-FAQs/FAQ_0133_-_Why_won't_old_HAProxy_processes_exit%3F

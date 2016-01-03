@@ -1,13 +1,24 @@
-define(['src/common/event.js',
-        'src/common/func.js',
-        'src/common/map_tiled.js',
-        'src/battle-city/objects/delimiter.js',
-        'src/battle-city/objects/wall.js',
-        'src/battle-city/objects/trees.js',
-        'src/battle-city/objects/water.js',
-        'src/battle-city/objects/ice.js',
-        'src/battle-city/objects/bonus.js'], function(Eventable, func,
-                MapTiled, Delimiter, wall, Trees, Water, Ice, bonus) {
+define([
+    'src/common/event.js',
+    'src/common/func.js',
+    'src/common/map_tiled.js',
+    'src/battle-city/objects/delimiter.js',
+    'src/battle-city/objects/wall.js',
+    'src/battle-city/objects/trees.js',
+    'src/battle-city/objects/water.js',
+    'src/battle-city/objects/ice.js',
+    'src/battle-city/objects/bonus.js'
+], function(
+    Eventable,
+    func,
+    MapTiled,
+    Delimiter,
+    wall,
+    Trees,
+    Water,
+    Ice,
+    bonus
+) {
     function Field(width, height)
     {
         this.width      = width;
@@ -15,7 +26,7 @@ define(['src/common/event.js',
         this.objects    = null;
         this.clear();
         this.setMaxListeners(100); // @todo
-    };
+    }
 
     Eventable(Field.prototype);
 
@@ -69,6 +80,10 @@ define(['src/common/event.js',
     /**
      *
      * @param object AbstractGameObject
+     * @param newX
+     * @param newY
+     * @param boundX
+     * @param boundY
      * @return
      */
     Field.prototype.intersect = function(object, newX, newY, boundX, boundY)
@@ -124,7 +139,7 @@ define(['src/common/event.js',
             if (!(intersects[i] instanceof bonus.Bonus)) {
                 res = false;
             }
-        };
+        }
         return res;
     };
 
