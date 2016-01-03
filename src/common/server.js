@@ -1,6 +1,12 @@
-define(['path', 'fs',
-        'src/server/user.js',
-        'src/common/registry.js'], function(path, fs, ServerUser, registry) {
+define([
+    'path', 'fs',
+    'src/server/user.js',
+    'src/common/registry.js'
+], function(
+    path, fs,
+    ServerUser,
+    registry
+) {
     /**
      * This object is an interface for "server-side" variables. All access to them
      * should be done here.
@@ -26,7 +32,7 @@ define(['path', 'fs',
             }
         } catch(e) {}
         console.log(new Date().toLocaleTimeString() + ': Connection accepted (' + connections , ' total)');
-    };
+    }
 
     BcServerInterface.prototype.onLogin = function(event)
     {

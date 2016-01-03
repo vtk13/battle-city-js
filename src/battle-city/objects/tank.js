@@ -1,10 +1,18 @@
-define(['src/common/func.js',
-        'src/battle-city/objects/abstract.js',
-        'src/common/event.js',
-        'src/battle-city/objects/bonus.js',
-        'src/battle-city/objects/ice.js',
-        'src/battle-city/objects/bullet.js'], function(func, AbstractGameObject,
-                Eventable, bonus, Ice, Bullet) {
+define([
+    'src/common/func.js',
+    'src/battle-city/objects/abstract.js',
+    'src/common/event.js',
+    'src/battle-city/objects/bonus.js',
+    'src/battle-city/objects/ice.js',
+    'src/battle-city/objects/bullet.js'
+], function(
+    func,
+    AbstractGameObject,
+    Eventable,
+    bonus,
+    Ice,
+    Bullet
+) {
     /**
      * drawable
      * coordinates
@@ -18,13 +26,6 @@ define(['src/common/func.js',
      * В этом классе перемешанны:
      *  - сама сущность
      *  - отрисовка (setDirectionImage(), imgBase, clanN, trackStep, blink)
-     *  - пуле устанавливаются координаты напрямую, а для этого надо знать,
-     *          что можно задавать x и y напрямую, только до добавления объекта
-     *          в map_tiled (можно переделать map_tiled чтобы он слушал gameBus,
-     *          а объекты просто кидали событие move).
-     *  - distanceLeft и this.emit('task-done') - знание о том что vm на клиенте
-     *          ждет этого события, чтобы продолжить выполнять код (можно выделить
-     *          в tankController).
      *  - не понятно куда пристроить обработку бонусов, толи this.onBonus толи в
      *          bonus.onIntersect. А может вообще в отдельный класс?
      *  - сериализация
@@ -35,7 +36,6 @@ define(['src/common/func.js',
      *  - бонусах (onBonus)
      *  - о льде (Ice)
      *  - о кланах (clan)
-     *  - о виртуальной машине на клиенте (this.emit('task-done'))
      *  - о спрайтах для отрисовки
      *  - serializeTypeMatches
      *  - о пользователях (bullet.tank.user.addReward(this.reward))
@@ -54,7 +54,6 @@ define(['src/common/func.js',
         this.z = 1;
 
         this.moveOn = 0; // flag used in Tank.step()
-        this.distanceLeft = null;
         this.setSpeedX(0);
         this.setSpeedY(-this.speed);
         this.direction = null;
@@ -62,7 +61,7 @@ define(['src/common/func.js',
         this.setDirectionImage();
         this.maxBullets = 1;
         this.bulletPower = 1;
-        this.bullets = new Array();
+        this.bullets = [];
         // can move to current direction?
         this.stuck = false;
         this.lives = 1;
@@ -72,15 +71,15 @@ define(['src/common/func.js',
         this.armoredTimer = Tank.defaultArmoredTimer; // 30ms step
         this.trackStep = 1; // 1 or 2
 
-        this.birthTimer = 1 * 1000/30; // 30ms step
+        this.birthTimer = 1000 / 30; // 30ms step
         this.fireTimer = 0;
 
         this.onIce = false;
         this.glidingTimer = 0;
         this.blink = false;
-    };
+    }
 
-    Tank.defaultArmoredTimer = 10 * 1000/30; // 30ms step
+    Tank.defaultArmoredTimer = 10 * 1000 / 30; // 30ms step
 
     Tank.prototype = new AbstractGameObject();
     Tank.prototype.constructor = Tank;
@@ -123,7 +122,6 @@ define(['src/common/func.js',
             this.bullets.push(bullet);
             this.field.add(bullet);
         }
-        this.emit('task-done');
     };
 
     Tank.prototype.step = function(paused)
@@ -145,11 +143,8 @@ define(['src/common/func.js',
 
         var onIce = false;
         if (this.moveOn || this.glidingTimer > 0) {
-            // todo field.move()?
-            var sx = this.distanceLeft && this.distanceLeft < this.speedX ? func.vector(this.speedX) * this.distanceLeft : this.speedX;
-            var sy = this.distanceLeft && this.distanceLeft < this.speedY ? func.vector(this.speedY) * this.distanceLeft : this.speedY;
             this.stuck = false;
-            var intersect = this.field.intersect(this, this.x + sx, this.y + sy);
+            var intersect = this.field.intersect(this, this.x + this.speedX, this.y + this.speedY);
             if (intersect.length > 0) {
                 for (var i in intersect) {
                     switch (true) {
@@ -159,6 +154,7 @@ define(['src/common/func.js',
                     case intersect[i] instanceof Ice:
                         onIce = true;
                         // no break! before default!
+                    //noinspection FallThroughInSwitchStatementJS
                     default:
                         // power === undefined is a hack for fast bullet detection
                         if (intersect[i].z == this.z && intersect[i].power === undefined) {
@@ -169,15 +165,7 @@ define(['src/common/func.js',
                 }
             }
             if (!this.stuck) {
-                this.field.setXY(this, this.x + sx, this.y + sy);
-                if (this.distanceLeft) {
-                    this.distanceLeft -= Math.abs(sx + sy); // sx == 0 || sy == 0
-                    if (this.distanceLeft == 0) {
-                        this.emit('task-done');
-                        this.distanceLeft = null;
-                        this.moveOn = false;
-                    }
-                }
+                this.field.setXY(this, this.x + this.speedX, this.y + this.speedY);
             }
             this.onIce = onIce;
             if (this.glidingTimer > 0) {
@@ -242,7 +230,7 @@ define(['src/common/func.js',
      *
      * @todo too long function
      * @param direction
-     * @return bool
+     * @return boolean
      */
     Tank.prototype.turn = function(direction)
     {
@@ -336,7 +324,6 @@ define(['src/common/func.js',
                     }
                     break;
                 default:
-                    this.emit('task-done', 'Unknown direction "' + direction + '"');
                     throw new Error('Unknown direction "' + direction + '"');
             }
             var intersects = this.field.intersect(this, newX1, newY1);
@@ -354,8 +341,8 @@ define(['src/common/func.js',
                 this.emit('change');
             } else {
                 canTurn = true;
-                var intersects = this.field.intersect(this, newX2, newY2);
-                for (var i in intersects) {
+                intersects = this.field.intersect(this, newX2, newY2);
+                for (i in intersects) {
                     if (intersects[i].z == this.z) {
                         canTurn = false;
                     }
@@ -367,28 +354,19 @@ define(['src/common/func.js',
                     this.setSpeedY(newSpeedY);
                     this.direction = direction;
                     this.emit('change');
-                };
+                }
             }
         }
-        this.emit('task-done');
         return canTurn;
-    };
-
-    Tank.prototype.move = function(distance)
-    {
-        this.distanceLeft = distance;
-        this.moveOn = true;
     };
 
     Tank.prototype.startMove = function()
     {
-        this.distanceLeft = null;
         this.moveOn = true;
     };
 
     Tank.prototype.stopMove = function()
     {
-        this.distanceLeft = null;
         this.moveOn = false;
         if (this.onIce) {
             this.glidingTimer = 1000/30; // 30ms step
@@ -438,14 +416,13 @@ define(['src/common/func.js',
     {
         this.maxBullets = 1;
         this.bulletPower = 1;
-        this.distanceLeft = null;
         this.direction = null;
         this.moveOn = 0;
         this.setSpeedX(0);
         this.setSpeedY(-this.speed);
         this.bullets = [];
         this.armoredTimer = this.clan ? this.clan.defaultArmoredTimer : Tank.defaultArmoredTimer;
-        this.birthTimer = 1 * 1000/30; // 30ms step
+        this.birthTimer = 1000 / 30; // 30ms step
         if (this.field) {
             this.field.setXY(this, this.initialPosition.x, this.initialPosition.y);
         }

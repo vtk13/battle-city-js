@@ -6,12 +6,12 @@ define(function() {
         } else {
             return 0;
         }
-    };
+    }
 
     function isClient()
     {
         return !(typeof window == 'undefined' && typeof global == 'object');
-    };
+    }
 
     return {
         vector: vector,

@@ -41,9 +41,6 @@ define([
             }
         }
         user.tank = new Tank();
-        user.tank.on('task-done', function(message){
-            user.clientMessage('task-done', message);
-        });
         user.tank.user = user;
         user.tank.clan = user.clan = this;
         user.emit('change');

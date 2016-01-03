@@ -95,13 +95,6 @@ define([
         });
     };
 
-    BcClient.prototype.move = function(distance)
-    {
-        this.control({
-            move: distance
-        });
-    };
-
     BcClient.prototype.startMove = function()
     {
         this.control({

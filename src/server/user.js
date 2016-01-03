@@ -61,9 +61,6 @@ define(['src/common/user.js',
             if (event.fire) {
                 this.tank.fire();
             }
-            if (event.move) {
-                this.tank.move(event.move);
-            }
         }
     };
 
