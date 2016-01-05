@@ -1,8 +1,13 @@
 define(function() {
-    var store = [];
-    var autoincrement = 1;
+    var odb = new Odb();
 
-    function create(constructor, args)
+    function Odb()
+    {
+        this.items = [];
+        this.nextId = 1;
+    }
+
+    Odb.prototype.create = function(constructor, args)
     {
         // stackoverflow:/questions/1606797/use-of-apply-with-new-operator-is-this-possible
         function F() {
@@ -11,38 +16,47 @@ define(function() {
         F.prototype = constructor.prototype;
 
         var object = new F();
-        object.id = autoincrement++;
-        store[object.id] = object;
-        return object;
+        return this.add(object);
     };
 
-    function add(object)
+    Odb.prototype.add = function(object)
     {
         if (object.id === undefined) {
-            object.id = autoincrement++;
+            object.id = this.nextId++;
         }
-        store[object.id] = object;
+
+        this.items[object.id] = object;
         return object;
     };
 
-    function fetch(id)
+    Odb.prototype.fetch = function(id)
     {
-        return store[id];
+        return this.items[id];
     };
 
-    function free(object)
+    Odb.prototype.free = function(object)
     {
-        if (store[object.id]) {
-            delete store[object.id];
+        if (this.items[object.id]) {
+            delete this.items[object.id];
+            delete object.id;
         } else {
             throw new Error("Object with id " + object.id + " doesn't exist");
         }
     };
 
-    return {
-        create: create,
-        add: add,
-        fetch: fetch,
-        free: free
+    Odb.prototype.referenceDescriptor = function()
+    {
+        var id, self = this;
+        return {
+            enumerable: true,
+            get: function() {
+                return self.fetch(id);
+            },
+            set: function(value) {
+                id = (typeof value == 'object') ? value.id : value;
+            }
+        };
     };
+
+    return odb;
 });

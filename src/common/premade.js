@@ -1,8 +1,16 @@
-define(['require',
-        'src/common/event.js',
-        'src/common/collection.js',
-        'src/battle-city/clan.js',
-        'src/common/game.js'], function(require, Eventable, Collection, clan, Game) {
+define([
+    'require',
+    'src/common/event.js',
+    'src/store/collection.js',
+    'src/battle-city/clan.js',
+    'src/common/game.js'
+], function(
+    require,
+    Eventable,
+    Collection,
+    clan,
+    Game
+) {
     function Premade(name, type)
     {
         this.name = name;
@@ -13,7 +21,7 @@ define(['require',
         this.users = new Collection(); // todo move to clan?
         this.messages = new Collection();
         this.setType(type || 'classic');
-    };
+    }
 
     Eventable(Premade.prototype);
 

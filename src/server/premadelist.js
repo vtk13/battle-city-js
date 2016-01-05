@@ -1,10 +1,16 @@
-define(['src/common/collection.js',
-        'src/common/premade.js',
-        'src/store/odb.js'], function(Collection, Premade, odb) {
+define([
+    'src/store/collection.js',
+    'src/common/premade.js',
+    'src/store/odb.js'
+], function(
+    Collection,
+    Premade,
+    odb
+) {
     function PremadeList()
     {
         Collection.apply(this, arguments);
-    };
+    }
 
     PremadeList.prototype = new Collection();
     PremadeList.prototype.constructor = PremadeList;

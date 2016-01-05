@@ -13,8 +13,16 @@ define(function() {
         return !(typeof window == 'undefined' && typeof global == 'object');
     }
 
+    // ES6 Number.isInteger
+    function isInteger(value) {
+        return typeof value === "number" &&
+            isFinite(value) &&
+            Math.floor(value) === value;
+    }
+
     return {
         vector: vector,
-        isClient: isClient
+        isClient: isClient,
+        isInteger: isInteger
     };
 });

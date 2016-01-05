@@ -2,7 +2,7 @@ var requirejs = require("requirejs");
 
 requirejs([
     'http', 'url', 'path', 'fs',
-   'src/common/collection.js',
+   'src/store/collection.js',
    'src/server/premadelist.js',
    'src/server/messagelist.js',
    'src/common/server.js',

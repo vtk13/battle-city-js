@@ -13,7 +13,7 @@ define([
     'src/common/user.js',
     'src/common/premade.js',
     'src/common/message.js',
-    'src/common/collection.js',
+    'src/store/collection.js',
     'src/battle-city/field.js',
     'src/common/registry.js',
     'src/store/odb_proxy.js'

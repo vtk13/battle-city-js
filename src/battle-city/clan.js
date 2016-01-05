@@ -1,5 +1,5 @@
 define([
-    'src/common/collection.js',
+    'src/store/collection.js',
     'src/battle-city/objects/tank.js',
     'src/battle-city/objects/tankbot.js',
     'src/battle-city/objects/base.js',
@@ -130,7 +130,7 @@ define([
         Clan.apply(this, arguments);
         this.capacity = 6;
         this.tankPositions = Clan.tankPositions['bots'];
-    };
+    }
 
     BotsClan.prototype = new Clan();
     BotsClan.prototype.constructor = BotsClan;

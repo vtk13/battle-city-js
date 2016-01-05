@@ -7,6 +7,7 @@ requirejs([
     io, assert, BcClient,
     registry, OdbProxy
 ) {
+    return;
     describe('IN ORDER TO play single player mode AS a player I NEED TO', function () {
         this.timeout(0);
         var bcClient = null;

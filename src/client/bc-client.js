@@ -1,10 +1,16 @@
 define([
-    'src/common/event.js', 'src/common/collection.js', 'src/common/user.js',
-    'src/common/premade.js', 'src/battle-city/field.js',
+    'src/common/event.js',
+    'src/store/collection.js',
+    'src/common/user.js',
+    'src/common/premade.js',
+    'src/battle-city/field.js',
     'src/store/serialization.js'
 ], function(
-    Eventable, Collection, User,
-    Premade, Field,
+    Eventable,
+    Collection,
+    User,
+    Premade,
+    Field,
     serialization
 ) {
     function BcClient(socket)

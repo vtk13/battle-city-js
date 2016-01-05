@@ -1,43 +1,39 @@
 /**
- *
+ * Collection is just subset of objects from global object storage (odb)
  */
 define([
-    'src/common/event.js'
+    'src/common/event.js',
+    'src/store/odb.js'
 ], function(
-    Eventable
+    Eventable,
+    odb
 ) {
-    /**
-     * Don't call Array's methods which modify items, because they don't emit events.
-     */
     function Collection()
     {
-        this.items = [];
+        // items is not array because we need an sparse array and array's methods is not applicable
+        this.items = {};
+        this.length = 0;
     }
 
     Eventable(Collection.prototype);
 
-    Collection.prototype.get = function(id, callback)
-    {
-        callback(this.items[id]);
-    };
-
     Collection.prototype.add = function(item)
     {
-        // todo remove id check (all object should be created through store/odb
-        if (item.id !== undefined) {
-            this.items[item.id] = item;
-        } else {
-            item.id = this.items.push(item) - 1;
+        odb.add(item);
+
+        if (this.items[item.id]) {
+            return; // item already in collection
         }
+
+        this.items[item.id] = item;
+        this.length++;
 
         this.emit('add', item);
 
         var self = this;
-        if (item.on) {
-            item.on('change', function() {
-                self.emit('change', this);
-            });
-        }
+        item.on && item.on('change', function() { // ```() => this.emit(item)```  ES6 arrow function
+            self.emit('change', this);
+        });
     };
 
     Collection.prototype.remove = function(item)
@@ -56,34 +52,23 @@ define([
 
     Collection.prototype.pop = function()
     {
-        // do not pop()! beause of "a.pop()" != "delete a[a.length-1]"
-        var i = -1;
-        for (i in this.items); // not mistake
-        if (i == -1) {
+        var lastProperty;
+        // optimized Object.getOwnPropertyNames(this.items).pop();
+        for (lastProperty in this.items);
+
+        if (lastProperty) {
+            var item = this.items[lastProperty];
+            this.emit('remove', item);
+            delete this.items[lastProperty];
+            return item;
+        } else {
             return null;
         }
-        var item = this.items[i];
-        this.emit('remove', item);
-        delete this.items[i];
-        return item;
-    };
-
-    Collection.prototype.getFirst = function(filter)
-    {
-        for (var i in this.items) {
-            if (filter) {
-                if (filter(this.items[i])) {
-                    return this.items[i];
-                }
-            } else {
-                return this.items[i];
-            }
-        }
-        return null;
     };
 
     Collection.prototype.count = function()
     {
+        // optimized Object.getOwnPropertyNames(this.items).length;
         var n = 0;
         for (var i in this.items) {
             n++;

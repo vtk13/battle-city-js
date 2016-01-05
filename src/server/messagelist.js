@@ -1,8 +1,12 @@
-define(['src/common/collection.js'], function(Collection) {
+define([
+    'src/store/collection.js'
+], function(
+    Collection
+) {
     function MessageList()
     {
         Collection.apply(this, arguments);
-    };
+    }
 
     MessageList.prototype = new Collection();
     MessageList.prototype.constructor = MessageList;
