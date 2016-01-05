@@ -1,5 +1,19 @@
 /**
  * Collection is just subset of objects from global object storage (odb)
+ *
+ * API:
+ *  add(item)
+ *  remove(item)
+ *  length
+ *
+ *  on('add', callback)
+ *  on('change', callback)
+ *  on('remove', callback)
+ *
+ *  clear()
+ *  pop()
+ *  count()
+ *  traversal(callback, thisObj)
  */
 define([
     'src/common/event.js',
@@ -17,12 +31,16 @@ define([
 
     Eventable(Collection.prototype);
 
+    /**
+     * @param item
+     * @returns boolean true - item added, false - item already in list
+     */
     Collection.prototype.add = function(item)
     {
         odb.add(item);
 
         if (this.items[item.id]) {
-            return; // item already in collection
+            return false; // item already in collection
         }
 
         this.items[item.id] = item;
@@ -34,12 +52,26 @@ define([
         item.on && item.on('change', function() { // ```() => this.emit(item)```  ES6 arrow function
             self.emit('change', this);
         });
+
+        return true;
+    };
+
+    Collection.prototype.get = function(id)
+    {
+        return this.items[id];
     };
 
     Collection.prototype.remove = function(item)
     {
-        this.emit('remove', item);
-        delete this.items[item.id];
+        if (this.items[item.id]) {
+            this.emit('remove', item);
+            this.length--;
+            delete this.items[item.id];
+
+            return true;
+        } else {
+            return false;
+        }
     };
 
     Collection.prototype.clear = function()
@@ -48,6 +80,7 @@ define([
             this.emit('remove', this.items[i]);
             delete this.items[i];
         }
+        this.length = 0;
     };
 
     Collection.prototype.pop = function()
@@ -59,6 +92,7 @@ define([
         if (lastProperty) {
             var item = this.items[lastProperty];
             this.emit('remove', item);
+            this.length--;
             delete this.items[lastProperty];
             return item;
         } else {
@@ -68,12 +102,7 @@ define([
 
     Collection.prototype.count = function()
     {
-        // optimized Object.getOwnPropertyNames(this.items).length;
-        var n = 0;
-        for (var i in this.items) {
-            n++;
-        }
-        return n;
+        return this.length;
     };
 
     Collection.prototype.traversal = function(callback, thisObj)
@@ -87,6 +116,8 @@ define([
      * Bind object to list.
      *
      * All changes in a list's object with same id will reflect in the slaveObject.
+     *
+     * @deprecated
      *
      * @param slaveObject
      * @return

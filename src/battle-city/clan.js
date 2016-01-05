@@ -142,12 +142,12 @@ define([
 
     BotsClan.prototype.step = function()
     {
-        if (this.users.length == 0 && this.botStack.count() == 0) {
+        if (this.users.length == 0 && this.botStack.length == 0) {
             this.base.hit();
         }
         this.base.step();
 
-        if (!this.isFull() && this.botStack.count() > 0 && Math.random() < 0.01) {
+        if (!this.isFull() && this.botStack.length > 0 && Math.random() < 0.01) {
             var botX = this.tankPositions[this.currentBotPosition].x;
             var botY = this.tankPositions[this.currentBotPosition].y;
             if (this.game && this.game.field.canPutTank(botX, botY)) {
@@ -206,7 +206,6 @@ define([
                     break;
             }
             bot.clan = this;
-            bot.id = Field.autoIncrement++; // todo hack, to bots in stack have id on client
             this.botStack.add(bot);
         }
 

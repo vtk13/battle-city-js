@@ -11,15 +11,31 @@ requirejs.config({
     }
 });
 
-require(['jquery', 'jquery-ui', 'socket.io', 'css/screen.js',
-        'src/store/serialization.js',
-        'src/ui/widgets/common.js',
-        'src/client/bc-client.js',
-        'src/ui/manager.js',
-        'src/battle-city/client/graphic-loader.js',
-        'src/common/registry.js',
-        'src/store/odb_proxy.js'], function($, ui, io, screen, serialization, widgetsCommon,
-                BcClient, UiManager, graphicLoader, registry, OdbProxy) {
+require([
+    'jquery',
+    'jquery-ui',
+    'socket.io',
+    'css/screen.js',
+    'src/store/serialization.js',
+    'src/ui/widgets/common.js',
+    'src/client/bc-client.js',
+    'src/ui/manager.js',
+    'src/battle-city/client/graphic-loader.js',
+    'src/common/registry.js',
+    'src/store/odb_proxy.js'
+], function(
+    $,
+    ui,
+    io,
+    screen,
+    serialization,
+    widgetsCommon,
+    BcClient,
+    UiManager,
+    graphicLoader,
+    registry,
+    OdbProxy
+) {
     // there are all existing global vars below
     // todo all this vars should be used with window.
     window.bcClient = null;

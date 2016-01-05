@@ -1,12 +1,14 @@
 define([
-    'assert',
+    'chai',
     'src/store/collection.js',
     'src/common/event.js'
 ], function(
-    assert,
+    chai,
     Collection,
     Eventable
 ) {
+    var assert = chai.assert;
+
     describe('Collection', function () {
         var collection;
 
@@ -20,6 +22,21 @@ define([
                 done();
             });
             collection.add({id: 1});
+        });
+
+        it('Add item should return false when item already in list', function() {
+            assert.ok(collection.add({id: 1}));
+            assert.notOk(collection.add({id: 1}));
+        });
+
+        it('Remove item should return false if item is not in list', function() {
+            var a = {id: 1};
+            collection.add(a);
+            assert.equal(collection.length, 1);
+            assert.ok(collection.remove(a));
+            assert.equal(collection.length, 0);
+            assert.notOk(collection.remove(a));
+            assert.equal(collection.length, 0);
         });
 
         it('Removing item should emit remove event', function(done) {
@@ -66,8 +83,17 @@ define([
 
             collection.add(item1);
             collection.add(item2);
+            assert.equal(collection.length, 2);
 
-            assert.equal(collection.count(), 2);
+            collection.pop();
+            assert.equal(collection.length, 1);
+
+            collection.pop();
+            assert.equal(collection.length, 0);
+
+            collection.pop();
+            assert.equal(collection.length, 0);
+
         });
     });
 });

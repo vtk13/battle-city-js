@@ -50,7 +50,7 @@ define(function() {
             }
             delete waits[id];
         }
-    }
+    };
 
     OdbProxy.prototype.fetch = function(id, callback)
     {

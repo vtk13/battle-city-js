@@ -55,9 +55,7 @@ define([
         // after remove to avoid recusion
         var intersect = this.field.intersect(this, x, y, 1, 1);
         for (var i in intersect) {
-            if (typeof intersect[i]['hit'] == 'function') {
-                intersect[i].hit(bullet);
-            }
+            intersect[i].hit && intersect[i].hit(bullet);
         }
         return true;
     };

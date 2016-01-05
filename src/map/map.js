@@ -1,15 +1,17 @@
-define(function() {
-    /**
-     * public interface:
-     * void add(item)
-     * bool remove(item)
-     * bool move(item, newX, newY)
-     * object[] intersects(item)
-     */
-    function AbstractMap()
+define([
+    'src/store/collection.js'
+], function(
+    Collection
+) {
+    function Map()
     {
-        this.all = [];
+        Collection.call(this);
     }
 
-    return AbstractMap;
+    Map.prototype = Object.create(Collection.prototype);
+    Map.prototype.contructor = Map;
+
+    // here may be naive implementation of map
+
+    return Map;
 });

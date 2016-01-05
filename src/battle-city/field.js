@@ -1,7 +1,7 @@
 define([
     'src/common/event.js',
     'src/common/func.js',
-    'src/common/map-tiled.js',
+    'src/map/map-tiled.js',
     'src/battle-city/objects/delimiter.js',
     'src/battle-city/objects/wall.js',
     'src/battle-city/objects/trees.js',
@@ -30,8 +30,6 @@ define([
 
     Eventable(Field.prototype);
 
-    Field.autoIncrement = 1; // todo eliminate?
-
     Field.prototype.clear = function()
     {
         this.objects = new MapTiled(this.width, this.height);
@@ -39,9 +37,6 @@ define([
 
     Field.prototype.add = function(object)
     {
-        if (object.id === undefined) {
-            object.id = Field.autoIncrement++;
-        }
         object.field = this;
         this.objects.add(object);
         if (!func.isClient()) {

@@ -29,6 +29,11 @@ define(function() {
         return object;
     };
 
+    Odb.prototype.get = function(id)
+    {
+        return this.items[id];
+    };
+
     Odb.prototype.fetch = function(id)
     {
         return this.items[id];

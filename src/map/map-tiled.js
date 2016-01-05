@@ -12,15 +12,14 @@ define([
      */
     function MapTiled(width, height)
     {
-        Map.apply(this, arguments);
-        this.all = []; // for fast traversal
-        this.items = [];
+        Map.call(this);
+        this.itemTiles = [];
         this.maxX = Math.ceil(width/this.tileSize) - 1;
         this.maxY = Math.ceil(height/this.tileSize) - 1;
         for (var x = 0 ; x <= this.maxX ; x++) {
-            this.items[x] = [];
+            this.itemTiles[x] = [];
             for (var y = 0 ; y <= this.maxY ; y++) {
-                this.items[x][y] = {};
+                this.itemTiles[x][y] = {};
             }
         }
     }
@@ -33,62 +32,64 @@ define([
 
     MapTiled.prototype.add = function(item)
     {
-        if (item.id === undefined) {
-            console.trace();
-            throw {message: 'item.id must be set', item: item};
-        }
-        if (this.all[item.id] === undefined) {
-            var fromX = Math.floor((item.x-item.hw) / this.tileSize);
-            if (fromX < 0) fromX = 0; else if (fromX > this.maxX) fromX = this.maxX;
-            var toX   = Math.ceil ((item.x+item.hw) / this.tileSize);
-            if (toX < 0) toX = 0; else if (toX > this.maxX) toX = this.maxX;
-            var fromY = Math.floor((item.y-item.hh) / this.tileSize);
-            if (fromY < 0) fromY = 0; else if (fromY > this.maxX) fromY = this.maxY;
-            var toY   = Math.ceil ((item.y+item.hh) / this.tileSize);
-            if (toY < 0) toY = 0; else if (toY > this.maxX) toY = this.maxY;
-            for (var x = fromX ; x <= toX ; x++) {
-                for (var y = fromY ; y <= toY ; y++) {
-                    this.items[x][y][item.id]= item;
-                }
-            }
-            this.all[item.id] = item;
-        }
-    };
-
-    MapTiled.prototype.get = function(id)
-    {
-        return this.all[id];
-    };
-
-    MapTiled.prototype.remove = function(item)
-    {
-        if (this.all[item.id]) {
-            delete this.all[item.id];
-            var fromX = Math.floor((item.x-item.hw) / this.tileSize);
-            if (fromX < 0) fromX = 0; else if (fromX > this.maxX) fromX = this.maxX;
-            var toX   = Math.ceil ((item.x+item.hw) / this.tileSize);
-            if (toX < 0) toX = 0; else if (toX > this.maxX) toX = this.maxX;
-            var fromY = Math.floor((item.y-item.hh) / this.tileSize);
-            if (fromY < 0) fromY = 0; else if (fromY > this.maxX) fromY = this.maxY;
-            var toY   = Math.ceil ((item.y+item.hh) / this.tileSize);
-            if (toY < 0) toY = 0; else if (toY > this.maxX) toY = this.maxY;
-            for (var x = fromX ; x <= toX ; x++) {
-                for (var y = fromY ; y <= toY ; y++) {
-                    delete this.items[x][y][item.id];
-                }
-            }
+        if (Map.prototype.add.call(this, item)) {
+            this._addToTiles(item);
             return true;
         } else {
             return false;
         }
     };
 
+    MapTiled.prototype.remove = function(item)
+    {
+        if (Map.prototype.remove.call(this, item)) {
+            this._removeFromTiles(item);
+            return true;
+        } else {
+            return false;
+        }
+    };
+
+    MapTiled.prototype._addToTiles = function(item)
+    {
+        var fromX = Math.floor((item.x-item.hw) / this.tileSize);
+        if (fromX < 0) fromX = 0; else if (fromX > this.maxX) fromX = this.maxX;
+        var toX   = Math.ceil ((item.x+item.hw) / this.tileSize);
+        if (toX < 0) toX = 0; else if (toX > this.maxX) toX = this.maxX;
+        var fromY = Math.floor((item.y-item.hh) / this.tileSize);
+        if (fromY < 0) fromY = 0; else if (fromY > this.maxX) fromY = this.maxY;
+        var toY   = Math.ceil ((item.y+item.hh) / this.tileSize);
+        if (toY < 0) toY = 0; else if (toY > this.maxX) toY = this.maxY;
+        for (var x = fromX ; x <= toX ; x++) {
+            for (var y = fromY ; y <= toY ; y++) {
+                this.itemTiles[x][y][item.id] = item;
+            }
+        }
+    };
+
+    MapTiled.prototype._removeFromTiles = function(item)
+    {
+        var fromX = Math.floor((item.x-item.hw) / this.tileSize);
+        if (fromX < 0) fromX = 0; else if (fromX > this.maxX) fromX = this.maxX;
+        var toX   = Math.ceil ((item.x+item.hw) / this.tileSize);
+        if (toX < 0) toX = 0; else if (toX > this.maxX) toX = this.maxX;
+        var fromY = Math.floor((item.y-item.hh) / this.tileSize);
+        if (fromY < 0) fromY = 0; else if (fromY > this.maxX) fromY = this.maxY;
+        var toY   = Math.ceil ((item.y+item.hh) / this.tileSize);
+        if (toY < 0) toY = 0; else if (toY > this.maxX) toY = this.maxY;
+        for (var x = fromX ; x <= toX ; x++) {
+            for (var y = fromY ; y <= toY ; y++) {
+                delete this.itemTiles[x][y][item.id];
+            }
+        }
+    };
+
     MapTiled.prototype.setXY = function(item, newX, newY)
     {
-        this.remove(item);
+        this._removeFromTiles(item);
         item.x = newX;
         item.y = newY;
-        this.add(item);
+        this._addToTiles(item);
     };
 
     MapTiled.prototype.move = function(item, newX, newY)
@@ -128,8 +129,8 @@ define([
         if (toY < 0) toY = 0; else if (toY > this.maxX) toY = this.maxY;
         for (var x = fromX ; x <= toX ; x++) {
             for (var y = fromY ; y <= toY ; y++) {
-                for (var i in this.items[x][y]) {
-                    var each = this.items[x][y][i];
+                for (var i in this.itemTiles[x][y]) {
+                    var each = this.itemTiles[x][y][i];
                     if (each.id == item.id || res[each.id]) continue;
                     if (Math.abs(each.x - ix) < (each.boundX + hw) &&
                         Math.abs(each.y - iy) < (each.boundY + hh)) {
@@ -139,13 +140,6 @@ define([
             }
         }
         return res;
-    };
-
-    MapTiled.prototype.traversal = function(callback, thisObj)
-    {
-        for (var i in this.all) {
-            callback.call(thisObj, this.all[i]);
-        }
     };
 
     return MapTiled;

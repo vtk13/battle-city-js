@@ -9,7 +9,7 @@ define([
 ) {
     function PremadeList()
     {
-        Collection.apply(this, arguments);
+        Collection.call(this);
     }
 
     PremadeList.prototype = Object.create(Collection.prototype);
@@ -27,7 +27,7 @@ define([
                 }
             }
             if (!premade) {
-                if (this.count() >= 100) { // games limit
+                if (this.length >= 100) { // games limit
                     throw {message: "Не получается создать игру. Достигнут максимум одновременных игр на сервере."};
                 } else {
                     premade = odb.create(Premade, [gameName, event.gameType]);

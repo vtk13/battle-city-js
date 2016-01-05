@@ -444,13 +444,9 @@ define([
 
     function unserialize(object, data)
     {
-        if (object) {
-            object.unserialize(data);
-        } else {
-            var type = unserializeTypeMatches[data[0/*type*/]];
-            object = new type();
-            object.unserialize(data);
-        }
+        var type = unserializeTypeMatches[data[0/*type*/]];
+        object = object || new type();
+        object.unserialize(data);
         return object;
     }
 
@@ -481,18 +477,18 @@ define([
         }
     };
 
-    Collection.prototype.updateWith = function(events){
+    Collection.prototype.updateWith = function(events) {
         for (var i in events) {
             var eventType = events[i][0/*type*/];
             var eventData = events[i][1/*data*/];
             var id = parseInt(eventData[1/*id*/]);
             switch (eventType) {
-            case 'r'/*remove*/:
-                if (obj = this.items[id]) {
-                    unserialize(obj, eventData);// for bullets finalX and finalY
-                    this.remove(obj);
-                }
-                break;
+                case 'r'/*remove*/:
+                    if (obj = this.items[id]) {
+                        unserialize(obj, eventData);// for bullets finalX and finalY
+                        this.remove(obj);
+                    }
+                    break;
                 case 'a'/*add*/:
                 case 'c'/*change*/:
                     var obj = this.items[id];
