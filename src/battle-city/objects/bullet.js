@@ -18,9 +18,9 @@ define(['src/common/func.js',
         this.finalY = 0; // for proper hit animation (todo ugly)
         this.power = 1;
         this.setDirectionImage();
-    };
+    }
 
-    Bullet.prototype = new AbstractGameObject();
+    Bullet.prototype = Object.create(AbstractGameObject.prototype);
     Bullet.prototype.constructor = Bullet;
 
     Eventable(Bullet.prototype);

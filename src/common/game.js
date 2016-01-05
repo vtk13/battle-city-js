@@ -1,7 +1,14 @@
-define(['src/common/func.js',
-        'src/battle-city/field.js',
-        'src/battle-city/objects/tank.js',
-        'src/battle-city/objects/base.js'], function(func, Field, Tank, Base) {
+define([
+    'src/common/func.js',
+    'src/battle-city/field.js',
+    'src/battle-city/objects/tank.js',
+    'src/battle-city/objects/base.js'
+], function(
+    func,
+    Field,
+    Tank,
+    Base
+) {
     function Game(map, premade)
     {
         this.running = true; // premade set this to false before game over
@@ -14,7 +21,7 @@ define(['src/common/func.js',
         this.field.on('remove', this.onRemoveObject.bind(this));
 
         this.field.terrain(map);
-    };
+    }
 
     Game.prototype.onAddObject = function(object) {
         if (object.step && !(object instanceof Tank) && !(object instanceof Base)) {
@@ -30,7 +37,6 @@ define(['src/common/func.js',
     {
         this.stepIntervalId = setInterval(this.step.bind(this), 30);
     };
-
 
     Game.prototype.gameOver = function()
     {

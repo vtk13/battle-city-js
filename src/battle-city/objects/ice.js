@@ -12,9 +12,9 @@ define(['src/battle-city/objects/abstract.js',
         this.y = y;
         this.z = 0;
         this.img[0] = 'img/ice.png';
-    };
+    }
 
-    Ice.prototype = new AbstractGameObject();
+    Ice.prototype = Object.create(AbstractGameObject.prototype);
     Ice.prototype.constructor = Ice;
 
     Eventable(Ice.prototype);

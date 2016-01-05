@@ -11,9 +11,9 @@ define(['src/battle-city/objects/abstract.js',
         this.x = x;
         this.y = y;
         this.z = 2;
-    };
+    }
 
-    Bonus.prototype = new AbstractGameObject();
+    Bonus.prototype = Object.create(AbstractGameObject.prototype);
     Bonus.prototype.constructor = Bonus;
 
     Eventable(Bonus.prototype);
@@ -27,9 +27,9 @@ define(['src/battle-city/objects/abstract.js',
     {
         Bonus.apply(this, arguments);
         this.img[0] = 'img/star.png';
-    };
+    }
 
-    BonusStar.prototype = new Bonus();
+    BonusStar.prototype = Object.create(Bonus.prototype);
     BonusStar.prototype.constructor = BonusStar;
 
     BonusStar.prototype.applyTo = function(tank)
@@ -45,9 +45,9 @@ define(['src/battle-city/objects/abstract.js',
     {
         Bonus.apply(this, arguments);
         this.img[0] = 'img/grenade.png';
-    };
+    }
 
-    BonusGrenade.prototype = new Bonus();
+    BonusGrenade.prototype = Object.create(Bonus.prototype);
     BonusGrenade.prototype.constructor = BonusGrenade;
 
     BonusGrenade.prototype.applyTo = function(tank)
@@ -66,9 +66,9 @@ define(['src/battle-city/objects/abstract.js',
     {
         Bonus.apply(this, arguments);
         this.img[0] = 'img/shovel.png';
-    };
+    }
 
-    BonusShovel.prototype = new Bonus();
+    BonusShovel.prototype = Object.create(Bonus.prototype);
     BonusShovel.prototype.constructor = BonusShovel;
 
     BonusShovel.prototype.applyTo = function(tank)
@@ -82,9 +82,9 @@ define(['src/battle-city/objects/abstract.js',
     {
         Bonus.apply(this, arguments);
         this.img[0] = 'img/helmet.png';
-    };
+    }
 
-    BonusHelmet.prototype = new Bonus();
+    BonusHelmet.prototype = Object.create(Bonus.prototype);
     BonusHelmet.prototype.constructor = BonusHelmet;
 
     BonusHelmet.prototype.applyTo = function(tank)
@@ -96,9 +96,9 @@ define(['src/battle-city/objects/abstract.js',
     {
         Bonus.apply(this, arguments);
         this.img[0] = 'img/live.png';
-    };
+    }
 
-    BonusLive.prototype = new Bonus();
+    BonusLive.prototype = Object.create(Bonus.prototype);
     BonusLive.prototype.constructor = BonusLive;
 
     BonusLive.prototype.applyTo = function(tank)
@@ -111,9 +111,9 @@ define(['src/battle-city/objects/abstract.js',
     {
         Bonus.apply(this, arguments);
         this.img[0] = 'img/timer.png';
-    };
+    }
 
-    BonusTimer.prototype = new Bonus();
+    BonusTimer.prototype = Object.create(Bonus.prototype);
     BonusTimer.prototype.constructor = BonusTimer;
 
     BonusTimer.prototype.applyTo = function(tank)

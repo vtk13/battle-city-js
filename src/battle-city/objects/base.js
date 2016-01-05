@@ -11,7 +11,7 @@ define(['src/common/event.js',
         this.shootDown = false;
     };
 
-    Base.prototype = new AbstractGameObject();
+    Base.prototype = Object.create(AbstractGameObject.prototype);
     Base.prototype.constructor = Base;
     Base.prototype.baseEdge = {
         1:  [ {x: 11, y: 23}

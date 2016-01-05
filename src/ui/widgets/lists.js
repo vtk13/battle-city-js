@@ -1,4 +1,8 @@
-define(['src/lang/lang.js'], function(lang) {
+define([
+    'src/lang/lang.js'
+], function(
+    lang
+) {
     function UiList(list, container, itemClass)
     {
         if (arguments.length) {
@@ -37,7 +41,7 @@ define(['src/lang/lang.js'], function(lang) {
         UiList.apply(this, arguments);
     }
 
-    UiUserList.prototype = new UiList();
+    UiUserList.prototype = Object.create(UiList.prototype);
     UiUserList.prototype.constructor = UiUserList;
 
     UiUserList.prototype.itemDomElement = function(user)
@@ -55,7 +59,7 @@ define(['src/lang/lang.js'], function(lang) {
         this.client = client;
     }
 
-    UiPremadeUserList.prototype = new UiUserList();
+    UiPremadeUserList.prototype = Object.create(UiUserList.prototype);
     UiPremadeUserList.prototype.constructor = UiPremadeUserList;
 
     UiPremadeUserList.prototype.itemDomElement = function(user)
@@ -76,7 +80,7 @@ define(['src/lang/lang.js'], function(lang) {
       UiList.apply(this, arguments);
     }
 
-    UiPremadeList.prototype = new UiList();
+    UiPremadeList.prototype = Object.create(UiList.prototype);
     UiPremadeList.prototype.constructor = UiPremadeList;
 
 
@@ -103,7 +107,7 @@ define(['src/lang/lang.js'], function(lang) {
         UiList.apply(this, arguments);
     }
 
-    UiMessageList.prototype = new UiList();
+    UiMessageList.prototype = Object.create(UiList.prototype);
     UiMessageList.prototype.constructor = UiMessageList;
 
     UiMessageList.prototype.itemDomElement = function(message)
@@ -135,7 +139,7 @@ define(['src/lang/lang.js'], function(lang) {
         UiList.apply(this, arguments);
     }
 
-    UiTankStack.prototype = new UiList();
+    UiTankStack.prototype = Object.create(UiList.prototype);
     UiTankStack.prototype.constructor = UiTankStack;
 
     UiTankStack.prototype.itemDomElement = function(item)

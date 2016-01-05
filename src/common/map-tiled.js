@@ -1,4 +1,8 @@
-define(function() {
+define([
+    'src/map/map.js'
+], function(
+    Map
+) {
     /**
      * public interface:
      * void add(item)
@@ -8,6 +12,7 @@ define(function() {
      */
     function MapTiled(width, height)
     {
+        Map.apply(this, arguments);
         this.all = []; // for fast traversal
         this.items = [];
         this.maxX = Math.ceil(width/this.tileSize) - 1;
@@ -18,7 +23,10 @@ define(function() {
                 this.items[x][y] = {};
             }
         }
-    };
+    }
+
+    MapTiled.prototype = Object.create(Map.prototype);
+    MapTiled.prototype.constructor = MapTiled;
 
     // todo convert to bytes for right shift ">>"
     MapTiled.prototype.tileSize = 16;
@@ -30,20 +38,20 @@ define(function() {
             throw {message: 'item.id must be set', item: item};
         }
         if (this.all[item.id] === undefined) {
-    	    var fromX = Math.floor((item.x-item.hw) / this.tileSize);
-    	    if (fromX < 0) fromX = 0; else if (fromX > this.maxX) fromX = this.maxX;
-    	    var toX   = Math.ceil ((item.x+item.hw) / this.tileSize);
-    	    if (toX < 0) toX = 0; else if (toX > this.maxX) toX = this.maxX;
-    	    var fromY = Math.floor((item.y-item.hh) / this.tileSize);
-    	    if (fromY < 0) fromY = 0; else if (fromY > this.maxX) fromY = this.maxY;
-    	    var toY   = Math.ceil ((item.y+item.hh) / this.tileSize);
-    	    if (toY < 0) toY = 0; else if (toY > this.maxX) toY = this.maxY;
-    	    for (var x = fromX ; x <= toX ; x++) {
-    	        for (var y = fromY ; y <= toY ; y++) {
-    	            this.items[x][y][item.id]= item;
-    	        }
-    	    }
-    	    this.all[item.id] = item;
+            var fromX = Math.floor((item.x-item.hw) / this.tileSize);
+            if (fromX < 0) fromX = 0; else if (fromX > this.maxX) fromX = this.maxX;
+            var toX   = Math.ceil ((item.x+item.hw) / this.tileSize);
+            if (toX < 0) toX = 0; else if (toX > this.maxX) toX = this.maxX;
+            var fromY = Math.floor((item.y-item.hh) / this.tileSize);
+            if (fromY < 0) fromY = 0; else if (fromY > this.maxX) fromY = this.maxY;
+            var toY   = Math.ceil ((item.y+item.hh) / this.tileSize);
+            if (toY < 0) toY = 0; else if (toY > this.maxX) toY = this.maxY;
+            for (var x = fromX ; x <= toX ; x++) {
+                for (var y = fromY ; y <= toY ; y++) {
+                    this.items[x][y][item.id]= item;
+                }
+            }
+            this.all[item.id] = item;
         }
     };
 

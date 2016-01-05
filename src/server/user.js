@@ -1,7 +1,10 @@
-define(['src/common/user.js',
-        'src/common/message.js'], function(User, Message) {
-    isArray = Array.isArray;
-
+define([
+    'src/common/user.js',
+    'src/common/message.js'
+], function(
+    User,
+    Message
+) {
     function ServerUser()
     {
         this.collections = {};
@@ -13,7 +16,7 @@ define(['src/common/user.js',
     ServerUser.maxMessages = 10; // per minute
     ServerUser._eventTypeMap = {'add': 'a', 'change': 'c', 'remove': 'r'};
 
-    ServerUser.prototype = new User();
+    ServerUser.prototype = Object.create(User.prototype);
     ServerUser.prototype.constructor = ServerUser;
 
     ServerUser.prototype.sendUpdatesToClient = function()

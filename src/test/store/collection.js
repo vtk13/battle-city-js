@@ -1,6 +1,4 @@
-var requirejs = require("requirejs");
-
-requirejs([
+define([
     'assert',
     'src/store/collection.js',
     'src/common/event.js'
@@ -72,6 +70,4 @@ requirejs([
             assert.equal(collection.count(), 2);
         });
     });
-
-    run();
 });

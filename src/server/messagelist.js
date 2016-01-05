@@ -8,7 +8,7 @@ define([
         Collection.apply(this, arguments);
     }
 
-    MessageList.prototype = new Collection();
+    MessageList.prototype = Object.create(Collection.prototype);
     MessageList.prototype.constructor = MessageList;
 
     MessageList.prototype.say = function(message)

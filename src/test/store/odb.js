@@ -1,4 +1,4 @@
-require("requirejs")([
+define([
     'chai',
     'src/store/odb.js'
 ], function(
@@ -39,6 +39,4 @@ require("requirejs")([
             assert.notOk(odb.fetch(a.id));
         });
     });
-
-    run();
 });

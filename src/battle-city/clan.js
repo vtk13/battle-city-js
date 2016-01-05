@@ -132,7 +132,7 @@ define([
         this.tankPositions = Clan.tankPositions['bots'];
     }
 
-    BotsClan.prototype = new Clan();
+    BotsClan.prototype = Object.create(Clan.prototype);
     BotsClan.prototype.constructor = BotsClan;
 
     BotsClan.prototype.isBots = function()

@@ -81,8 +81,9 @@ define([
 
     Tank.defaultArmoredTimer = 10 * 1000 / 30; // 30ms step
 
-    Tank.prototype = new AbstractGameObject();
+    Tank.prototype = Object.create(AbstractGameObject.prototype);
     Tank.prototype.constructor = Tank;
+
     Tank.prototype.imgBase = 'img/tank';
     Tank.prototype.reward = 100;
     Tank.prototype.speed = 2; // default speed

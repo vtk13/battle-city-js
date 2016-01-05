@@ -5,7 +5,7 @@ define(['src/battle-city/objects/abstract.js'], function(AbstractGameObject) {
         this.firstStep = step;
     };
 
-    OnFieldAnimation.prototype = new AbstractGameObject();
+    OnFieldAnimation.prototype = Object.create(AbstractGameObject.prototype);
     OnFieldAnimation.prototype.constructor = OnFieldAnimation;
 
     function BulletHitAnimation(step, x, y)
@@ -16,7 +16,7 @@ define(['src/battle-city/objects/abstract.js'], function(AbstractGameObject) {
         this.img[0] = 'img/hit1.png';
     };
 
-    BulletHitAnimation.prototype = new OnFieldAnimation();
+    BulletHitAnimation.prototype = Object.create(OnFieldAnimation.prototype);
     BulletHitAnimation.prototype.constructor = BulletHitAnimation;
 
     BulletHitAnimation.prototype.animateStep = function(step)
@@ -37,7 +37,7 @@ define(['src/battle-city/objects/abstract.js'], function(AbstractGameObject) {
         this.img[0] = 'img/hit1.png';
     };
 
-    TankHitAnimation.prototype = new OnFieldAnimation();
+    TankHitAnimation.prototype = Object.create(OnFieldAnimation.prototype);
     TankHitAnimation.prototype.constructor = TankHitAnimation;
 
     TankHitAnimation.prototype.animateStep = function(step)

@@ -1,5 +1,10 @@
-define(['src/battle-city/objects/abstract.js',
-        'src/common/event.js'], function(AbstractGameObject, Eventable) {
+define([
+    'src/battle-city/objects/abstract.js',
+    'src/common/event.js'
+], function(
+    AbstractGameObject,
+    Eventable
+) {
     /**
      * drawable
      * coordinates
@@ -12,9 +17,9 @@ define(['src/battle-city/objects/abstract.js',
         this.y = y;
         this.z = 1;
         this.img[0] = 'img/water1.png';
-    };
+    }
 
-    Water.prototype = new AbstractGameObject();
+    Water.prototype = Object.create(AbstractGameObject.prototype);
     Water.prototype.constructor = Water;
 
     Eventable(Water.prototype);

@@ -1,7 +1,7 @@
 define([
     'src/common/event.js',
     'src/common/func.js',
-    'src/common/map_tiled.js',
+    'src/common/map-tiled.js',
     'src/battle-city/objects/delimiter.js',
     'src/battle-city/objects/wall.js',
     'src/battle-city/objects/trees.js',

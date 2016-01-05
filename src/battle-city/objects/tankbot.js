@@ -10,10 +10,11 @@ define(['src/common/event.js',
         this.clan = null;
         this.armoredTimer = 0;
         this.fireTimer = 0; // do not fire too fast
-    };
+    }
 
-    TankBot.prototype = new Tank();
+    TankBot.prototype = Object.create(Tank.prototype);
     TankBot.prototype.constructor = TankBot;
+
     TankBot.prototype.reward = 100;
     TankBot.prototype.imgBase = 'img/normal-bot';
 
@@ -53,10 +54,11 @@ define(['src/common/event.js',
     function FastBulletTankBot(x, y, bonus)
     {
         TankBot.apply(this, arguments); // call parent constructor
-    };
+    }
 
-    FastBulletTankBot.prototype = new TankBot();
+    FastBulletTankBot.prototype = Object.create(TankBot.prototype);
     FastBulletTankBot.prototype.constructor = FastBulletTankBot;
+
     FastBulletTankBot.prototype.reward = 200;
     FastBulletTankBot.prototype.imgBase = 'img/fast-bullet-bot';
     FastBulletTankBot.prototype.bulletSpeed = 8; // default speed
@@ -64,10 +66,11 @@ define(['src/common/event.js',
     function FastTankBot(x, y, bonus)
     {
         TankBot.apply(this, arguments); // call parent constructor
-    };
+    }
 
-    FastTankBot.prototype = new TankBot();
+    FastTankBot.prototype = Object.create(TankBot.prototype);
     FastTankBot.prototype.constructor = FastTankBot;
+
     FastTankBot.prototype.reward = 300;
     FastTankBot.prototype.imgBase = 'img/fast-bot';
     FastTankBot.prototype.speed = 3; // default speed
@@ -76,10 +79,11 @@ define(['src/common/event.js',
     {
         TankBot.apply(this, arguments); // call parent constructor
         this.lives = 3;
-    };
+    }
 
-    HeavyTankBot.prototype = new TankBot();
+    HeavyTankBot.prototype = Object.create(TankBot.prototype);
     HeavyTankBot.prototype.constructor = HeavyTankBot;
+
     HeavyTankBot.prototype.reward = 400;
     HeavyTankBot.prototype.imgBase = 'img/heavy-bot';
 

@@ -11,7 +11,7 @@ define(['src/battle-city/objects/abstract.js',
         this.img[0] = 'img/black.png';
     };
 
-    Delimiter.prototype = new AbstractGameObject();
+    Delimiter.prototype = Object.create(AbstractGameObject.prototype);
     Delimiter.prototype.constructor = Delimiter;
 
     Eventable(Delimiter.prototype);

@@ -12,7 +12,7 @@ define([
         Collection.apply(this, arguments);
     }
 
-    PremadeList.prototype = new Collection();
+    PremadeList.prototype = Object.create(Collection.prototype);
     PremadeList.prototype.constructor = PremadeList;
 
     PremadeList.prototype.join = function(event, user)
