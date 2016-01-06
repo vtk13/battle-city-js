@@ -1,7 +1,11 @@
 define([
-    'src/lang/lang.js', 'src/common/premade.js'
+    'jquery',
+    'src/lang/lang.js',
+    'src/common/premade.js'
 ], function(
-    lang, Premade
+    $,
+    lang,
+    Premade
 ) {
     //====== WidgetLevelSelector ===================================================
 

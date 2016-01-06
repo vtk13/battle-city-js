@@ -1,6 +1,8 @@
 define([
+    'jquery',
     'src/ui/widgets/lists.js'
 ], function(
+    $,
     widgetsLists
 ) {
     function WidgetPublicChat(context, client)

@@ -1,7 +1,9 @@
 define([
+    'jquery',
     'src/ui/widgets/lists.js',
     'src/ui/widgets/chat.js'
 ], function(
+    $,
     widgetsLists,
     widgetsChat
 ) {

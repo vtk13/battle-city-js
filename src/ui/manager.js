@@ -1,10 +1,12 @@
 define([
+    'jquery',
     'src/ui/widgets/common.js',
     'src/ui/widgets/public.js',
     'src/ui/widgets/premade.js',
     'src/ui/widgets/game.js',
     'src/ui/widgets/notifier.js'
 ], function(
+    $,
     widgetsCommon,
     WidgetPublic,
     WidgetPremade,

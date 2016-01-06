@@ -1,8 +1,10 @@
 define([
+    'jquery',
     'src/battle-city/objects/bullet.js',
     'src/battle-city/objects/tank.js',
     'src/battle-city/objects/animation.js'
 ], function(
+    $,
     Bullet,
     Tank,
     animation

@@ -4,7 +4,7 @@ Install
 
 Install nodejs then:
     npm install
-    node_modules/bower/bin/bower install
+    node_modules/webpack/bin/webpack.js src/client/init.js bundle.js
 
 Run locally:
     node src/server/init serve-static

@@ -1,4 +1,8 @@
-define(function(){
+define([
+    'jquery'
+], function(
+    $
+) {
     window.availableLangs = {};
     window.lang = {current: null};
 

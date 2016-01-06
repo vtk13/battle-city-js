@@ -1,4 +1,4 @@
-define(function() {
+define(['jquery'], function($) {
     function TankController(tank)
     {
         this.tank = tank;

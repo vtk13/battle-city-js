@@ -1,8 +1,10 @@
 define([
+    'jquery',
     'src/ui/widgets/common.js',
     'src/ui/widgets/chat.js',
     'src/ui/widgets/game-controls.js'
 ], function(
+    $,
     widgetsCommon,
     widgetsChat,
     UiGameControls

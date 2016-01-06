@@ -1,6 +1,8 @@
 define([
+    'jquery',
     'src/lang/lang.js'
 ], function(
+    $,
     lang
 ) {
     function UiList(list, container, itemClass)

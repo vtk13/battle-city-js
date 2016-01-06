@@ -1,20 +1,7 @@
-requirejs.config({
-    paths: {
-          'jquery': '/bower_components/jquery/dist/jquery.min'
-        , 'jquery-ui': '/bower_components/jquery-ui/jquery-ui.min'
-        , 'socket.io': '/bower_components/socket.io-client/socket.io'
-    },
-    shim: {
-        'jquery-ui': {
-            deps: ['jquery']
-        }
-    }
-});
-
 require([
     'jquery',
     'jquery-ui',
-    'socket.io',
+    'socket.io-client',
     'css/screen.js',
     'src/store/serialization.js',
     'src/ui/widgets/common.js',
