@@ -21,6 +21,9 @@ define([
             var anim;
             if (object instanceof Bullet) {
                 anim = new animation.BulletHitAnimation(self.step, object.finalX, object.finalY);
+                // FIXME there are problems with animation objects:
+                // adding their on client generate duplicated id, so with next sync from server
+                // we have undefined behaviour
                 self.field.add(anim);
             }
             if (object instanceof Tank) { // todo hit myself without splash :(

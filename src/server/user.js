@@ -92,7 +92,7 @@ define([
                 this.tank.field.remove(this.tank);
             } else {
                 this.tank.lives = 1;
-                this.tank.resetPosition();
+                this.tank.die();
             }
             this.emit('change');
         }

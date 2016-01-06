@@ -105,8 +105,11 @@ define([
 
     Tank.prototype.fire = function()
     {
-        if (this.birthTimer <= 0 && this.bullets.length < this.maxBullets &&
-                !(this.bullets.length > 0 && this.fireTimer > 0)) {
+        if (
+            this.birthTimer <= 0 &&
+            this.bullets.length < this.maxBullets &&
+            !(this.bullets.length > 0 && this.fireTimer > 0)
+        ) {
             if (this.bullets.length > 0) { // to not second fire too fast
                 this.fireTimer = 0.5 * 1000/30; // 30ms step
             }
@@ -413,10 +416,15 @@ define([
         return true;
     };
 
-    Tank.prototype.resetPosition = function()
+    Tank.prototype.die = function()
     {
         this.maxBullets = 1;
         this.bulletPower = 1;
+        this.resetPosition();
+    };
+
+    Tank.prototype.resetPosition = function()
+    {
         this.direction = null;
         this.moveOn = 0;
         this.setSpeedX(0);

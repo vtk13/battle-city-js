@@ -27,8 +27,7 @@ define([
     {
         if (step - this.firstStep > 2) {
             this.field.remove(this);
-        } else
-        if (step - this.firstStep > 1) {
+        } else if (step - this.firstStep > 1) {
             this.img[0] = 'img/hit2.png';
         }
     };

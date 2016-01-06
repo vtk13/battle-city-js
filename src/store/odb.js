@@ -3,7 +3,7 @@ define(function() {
 
     function Odb()
     {
-        this.items = [];
+        this.items = {};
         this.nextId = 1;
     }
 
