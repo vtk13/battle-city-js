@@ -53,7 +53,7 @@ define([
         }
         this.field.remove(this);
         // after remove to avoid recusion
-        var intersect = this.field.intersect(this, x, y, 1, 1);
+        var intersect = this.field.intersects(this, x, y, 1, 1);
         for (var i in intersect) {
             intersect[i].hit && intersect[i].hit(bullet);
         }

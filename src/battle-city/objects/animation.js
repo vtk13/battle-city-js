@@ -1,9 +1,13 @@
-define(['src/battle-city/objects/abstract.js'], function(AbstractGameObject) {
+define([
+    'src/battle-city/objects/abstract.js'
+], function(
+    AbstractGameObject
+) {
     function OnFieldAnimation(step, hw, hh)
     {
         AbstractGameObject.call(this, hw, hh);
         this.firstStep = step;
-    };
+    }
 
     OnFieldAnimation.prototype = Object.create(AbstractGameObject.prototype);
     OnFieldAnimation.prototype.constructor = OnFieldAnimation;
@@ -14,7 +18,7 @@ define(['src/battle-city/objects/abstract.js'], function(AbstractGameObject) {
         this.x = x;
         this.y = y;
         this.img[0] = 'img/hit1.png';
-    };
+    }
 
     BulletHitAnimation.prototype = Object.create(OnFieldAnimation.prototype);
     BulletHitAnimation.prototype.constructor = BulletHitAnimation;
@@ -35,7 +39,7 @@ define(['src/battle-city/objects/abstract.js'], function(AbstractGameObject) {
         this.x = x;
         this.y = y;
         this.img[0] = 'img/hit1.png';
-    };
+    }
 
     TankHitAnimation.prototype = Object.create(OnFieldAnimation.prototype);
     TankHitAnimation.prototype.constructor = TankHitAnimation;

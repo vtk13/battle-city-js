@@ -533,14 +533,14 @@ define([
             var id = parseInt(eventData[1/*id*/]);
             switch (eventType) {
             case 'r'/*remove*/:
-                if (obj = this.objects.get(id)) {
+                if (obj = this.get(id)) {
                     unserialize(obj, eventData);// for bullets finalX and finalY
                     this.remove(obj);
                 }
                 break;
                 case 'a'/*add*/:
                 case 'c'/*change*/:
-                    var obj = this.objects.get(id);
+                    var obj = this.get(id);
                     if (obj) {
                         unserialize(obj, eventData);
                     } else {

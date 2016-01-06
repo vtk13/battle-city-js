@@ -145,7 +145,7 @@ define([
         var onIce = false;
         if (this.moveOn || this.glidingTimer > 0) {
             this.stuck = false;
-            var intersect = this.field.intersect(this, this.x + this.speedX, this.y + this.speedY);
+            var intersect = this.field.intersects(this, this.x + this.speedX, this.y + this.speedY);
             if (intersect.length > 0) {
                 for (var i in intersect) {
                     switch (true) {
@@ -327,7 +327,7 @@ define([
                 default:
                     throw new Error('Unknown direction "' + direction + '"');
             }
-            var intersects = this.field.intersect(this, newX1, newY1);
+            var intersects = this.field.intersects(this, newX1, newY1);
             for (var i in intersects) {
                 if (intersects[i].z == this.z) {
                     canTurn = false;
@@ -342,7 +342,7 @@ define([
                 this.emit('change');
             } else {
                 canTurn = true;
-                intersects = this.field.intersect(this, newX2, newY2);
+                intersects = this.field.intersects(this, newX2, newY2);
                 for (i in intersects) {
                     if (intersects[i].z == this.z) {
                         canTurn = false;

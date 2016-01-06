@@ -21,12 +21,10 @@ define([
             var anim;
             if (object instanceof Bullet) {
                 anim = new animation.BulletHitAnimation(self.step, object.finalX, object.finalY);
-                anim.id = object.id;
                 self.field.add(anim);
             }
             if (object instanceof Tank) { // todo hit myself without splash :(
                 anim = new animation.TankHitAnimation(self.step, object.x, object.y);
-                anim.id = object.id;
                 self.field.add(anim);
             }
         });
@@ -61,7 +59,7 @@ define([
 
     FieldView.prototype.animateStep = function()
     {
-        this.field.objects.traversal(FieldView.prototype._animateStepItem, this);
+        this.field.traversal(FieldView.prototype._animateStepItem, this);
         this.step++;
 
         this.draw();
@@ -84,7 +82,7 @@ define([
         this.c2d.fillRect(0, 0, this.field.width, this.field.height);
 
         for (this.z = 0 ; this.z <= 2 ; this.z++) { // this.z hack?
-            this.field.objects.traversal(this.drawItem, this);
+            this.field.traversal(this.drawItem, this);
         }
     };
 

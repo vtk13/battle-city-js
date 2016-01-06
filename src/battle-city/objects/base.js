@@ -47,7 +47,7 @@ define(['src/common/event.js',
         this.armoredTimer = 10 * 1000/30; // 30ms step
         var edge = this.baseEdge[this.clan.n];
         for (var i in edge) {
-            var walls = this.field.intersect(this, edge[i].x*16+8, edge[i].y*16+8, 8, 8);
+            var walls = this.field.intersects(this, edge[i].x*16+8, edge[i].y*16+8, 8, 8);
             var convert = true;
             for (var j in walls) {
                 if (!(walls[j] instanceof wall.Wall)) {
@@ -67,7 +67,7 @@ define(['src/common/event.js',
     {
         var edge = this.baseEdge[this.clan.n];
         for (var i in edge) {
-            var walls = this.field.intersect(this, edge[i].x*16+8, edge[i].y*16+8, 8, 8);
+            var walls = this.field.intersects(this, edge[i].x*16+8, edge[i].y*16+8, 8, 8);
             var convert = true;
             for (var j in walls) {
                 if (!(walls[j] instanceof wall.Wall)) {

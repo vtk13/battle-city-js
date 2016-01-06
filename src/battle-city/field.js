@@ -21,69 +21,35 @@ define([
 ) {
     function Field(width, height)
     {
-        this.width      = width;
-        this.height     = height;
-        this.objects    = null;
-        this.clear();
+        MapTiled.call(this, width, height);
+        this.width = width;
+        this.height = height;
         this.setMaxListeners(100); // @todo
     }
 
-    Eventable(Field.prototype);
+    Field.prototype = Object.create(MapTiled.prototype);
+    Field.prototype.constructor = Field;
 
-    Field.prototype.clear = function()
+    Field.prototype.add = function(item)
     {
-        this.objects = new MapTiled(this.width, this.height);
-    };
-
-    Field.prototype.add = function(object)
-    {
-        object.field = this;
-        this.objects.add(object);
-        if (!func.isClient()) {
-            this.emit('add', object);
-            var self = this;
-            object.on('change', function(){
-                self.emit('change', this);
-            });
-            object.onAddToField && object.onAddToField();
+        if (MapTiled.prototype.add.call(this, item)) {
+            item.field = this;
+            if (!func.isClient()) {
+                // todo
+                item.onAddToField && item.onAddToField();
+            }
+            return true;
+        } else {
+            return false;
         }
     };
 
-    Field.prototype.remove = function(object)
+    Field.prototype.remove = function(item)
     {
-        if (this.objects.remove(object)) {
-            this.emit('remove', object);
-            object.removeAllListeners && object.removeAllListeners();
+        if (MapTiled.prototype.remove.call(this, item)) {
+            // todo
+            item.removeAllListeners && item.removeAllListeners();
         }
-    };
-
-    Field.prototype.setXY = function(item, newX, newY)
-    {
-        return this.objects.setXY(item, newX, newY);
-    };
-
-    Field.prototype.move = function(item, newX, newY)
-    {
-        return this.objects.move(item, newX, newY);
-    };
-
-    Field.prototype.get = function(id)
-    {
-        return this.objects.get(id);
-    };
-
-    /**
-     *
-     * @param object AbstractGameObject
-     * @param newX
-     * @param newY
-     * @param boundX
-     * @param boundY
-     * @return
-     */
-    Field.prototype.intersect = function(object, newX, newY, boundX, boundY)
-    {
-        return this.objects.intersects(object, newX, newY, boundX, boundY);
     };
 
     Field.prototype.terrain = function(map)
@@ -121,15 +87,10 @@ define([
     //    this.add(new BonusTimer(10*16, 20*16));
     };
 
-    Field.prototype.traversal = function(callback, thisObj)
-    {
-        this.objects.traversal(callback, thisObj);
-    };
-
     Field.prototype.canPutTank = function(x, y)
     {
         var res = true;
-        var intersects = this.intersect({}, x, y, 16, 16);
+        var intersects = this.intersects({}, x, y, 16, 16);
         for (var i in intersects) {
             if (!(intersects[i] instanceof bonus.Bonus)) {
                 res = false;
