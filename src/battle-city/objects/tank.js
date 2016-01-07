@@ -145,9 +145,8 @@ define([
         if (this.moveOn || this.glidingTimer > 0) {
             this.stuck = false;
             var intersect = this.field.intersects(this, this.x + this.speedX, this.y + this.speedY);
-            if (intersect.length > 0) {
-                for (var i in intersect) {
-                    switch (true) {
+            for (var i in intersect) {
+                switch (true) {
                     case intersect[i] instanceof bonus.Bonus:
                         this.onBonus(intersect[i]);
                         break;
@@ -161,7 +160,6 @@ define([
                             this.stuck = true;
                             this.glidingTimer = 0;
                         }
-                    }
                 }
             }
             if (!this.stuck) {

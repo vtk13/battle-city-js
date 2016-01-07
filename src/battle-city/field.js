@@ -6,7 +6,9 @@ define([
     'src/battle-city/objects/trees.js',
     'src/battle-city/objects/water.js',
     'src/battle-city/objects/ice.js',
-    'src/battle-city/objects/bonus.js'
+    'src/battle-city/objects/bonus.js',
+    'src/battle-city/objects/tank.js',
+    'src/battle-city/objects/base.js'
 ], function(
     func,
     MapTiled,
@@ -15,13 +17,16 @@ define([
     Trees,
     Water,
     Ice,
-    bonus
+    bonus,
+    Tank,
+    Base
 ) {
     function Field(width, height)
     {
         MapTiled.call(this, width, height);
         this.width = width;
         this.height = height;
+        this.stepableItems = {};
     }
 
     Field.prototype = Object.create(MapTiled.prototype);
@@ -30,6 +35,9 @@ define([
     Field.prototype.add = function(item)
     {
         if (MapTiled.prototype.add.call(this, item)) {
+            if (item.step && !(item instanceof Tank) && !(item instanceof Base)) { // todo why neither Tank nor Base?
+                this.stepableItems[item.id] = item;
+            }
             item.field = this;
             if (!func.isClient()) {
                 // todo
@@ -44,8 +52,15 @@ define([
     Field.prototype.remove = function(item)
     {
         if (MapTiled.prototype.remove.call(this, item)) {
+            delete this.stepableItems[item.id];
             // todo
             item.removeAllListeners && item.removeAllListeners();
+        }
+    };
+
+    Field.prototype.step = function() {
+        for (var i in this.stepableItems) {
+            this.stepableItems[i].step(); // bullets only now
         }
     };
 
