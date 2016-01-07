@@ -1,14 +1,16 @@
-define(function() {
+define(['component-emitter'], function(Emitter) {
     function AbstractGameObject(hw, hh)
     {
      // for intersection (when speedX > hw)
         this.hw = this.boundX = hw;
       //for intersection (when speedY > hh)
         this.hh = this.boundY = hh;
-        this.speedX; // set only through setSpeedX()
-        this.speedY; // set only through setSpeedY()
+        this.speedX = 0; // set only through setSpeedX()
+        this.speedY = 0; // set only through setSpeedY()
         this.img = [];
-    };
+    }
+
+    Emitter(AbstractGameObject.prototype);
 
     AbstractGameObject.prototype.z = 1;
 

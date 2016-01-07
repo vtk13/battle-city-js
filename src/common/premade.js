@@ -1,12 +1,12 @@
 define([
     'require',
-    'src/common/event.js',
+    'component-emitter',
     'src/store/collection.js',
     'src/battle-city/clan.js',
     'src/common/game.js'
 ], function(
     require,
-    Eventable,
+    Emitter,
     Collection,
     clan,
     Game
@@ -23,7 +23,7 @@ define([
         this.setType(type || 'classic');
     }
 
-    Eventable(Premade.prototype);
+    Emitter(Premade.prototype);
 
     Premade.types = {
         'classic': {

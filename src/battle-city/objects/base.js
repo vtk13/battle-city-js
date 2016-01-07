@@ -1,7 +1,10 @@
-define(['src/common/event.js',
-        'src/battle-city/objects/abstract.js',
-        'src/battle-city/objects/wall.js'], function(Eventable,
-                AbstractGameObject, wall) {
+define([
+    'src/battle-city/objects/abstract.js',
+    'src/battle-city/objects/wall.js'
+], function(
+    AbstractGameObject,
+    wall
+) {
     function Base(x, y)
     {
         AbstractGameObject.call(this, 16, 16);
@@ -9,7 +12,7 @@ define(['src/common/event.js',
         this.y = y;
         this.img[0] = 'img/base.png';
         this.shootDown = false;
-    };
+    }
 
     Base.prototype = Object.create(AbstractGameObject.prototype);
     Base.prototype.constructor = Base;
@@ -31,8 +34,6 @@ define(['src/common/event.js',
             , {x: 14, y: 1}
             , {x: 14, y: 0}]
     };
-
-    Eventable(Base.prototype);
 
     Base.prototype.hit = function()
     {

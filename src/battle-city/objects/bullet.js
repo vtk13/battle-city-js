@@ -1,6 +1,10 @@
-define(['src/common/func.js',
-        'src/battle-city/objects/abstract.js',
-        'src/common/event.js'], function(func, AbstractGameObject, Eventable) {
+define([
+    'src/common/func.js',
+    'src/battle-city/objects/abstract.js'
+], function(
+    func,
+    AbstractGameObject
+) {
     /**
      * drawable
      * coordinates
@@ -22,8 +26,6 @@ define(['src/common/func.js',
 
     Bullet.prototype = Object.create(AbstractGameObject.prototype);
     Bullet.prototype.constructor = Bullet;
-
-    Eventable(Bullet.prototype);
 
     Bullet.prototype.setDirectionImage = function()
     {

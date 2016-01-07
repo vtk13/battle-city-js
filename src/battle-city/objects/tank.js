@@ -1,14 +1,12 @@
 define([
     'src/common/func.js',
     'src/battle-city/objects/abstract.js',
-    'src/common/event.js',
     'src/battle-city/objects/bonus.js',
     'src/battle-city/objects/ice.js',
     'src/battle-city/objects/bullet.js'
 ], function(
     func,
     AbstractGameObject,
-    Eventable,
     bonus,
     Ice,
     Bullet
@@ -88,8 +86,6 @@ define([
     Tank.prototype.reward = 100;
     Tank.prototype.speed = 2; // default speed
     Tank.prototype.bulletSpeed = 5; // default speed
-
-    Eventable(Tank.prototype);
 
     Tank.prototype.onAddToField = function()
     {

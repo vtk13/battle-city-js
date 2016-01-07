@@ -1,14 +1,13 @@
-define(['src/common/event.js'], function(Eventable) {
+define(['component-emitter'], function(Emitter) {
     /**
      * this is for both, client and server.
      */
-
     function User()
     {
 
-    };
+    }
 
-    Eventable(User.prototype);
+    Emitter(User.prototype);
 
     return User;
 });

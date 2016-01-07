@@ -1,5 +1,4 @@
 define([
-    'src/common/event.js',
     'src/common/func.js',
     'src/map/map-tiled.js',
     'src/battle-city/objects/delimiter.js',
@@ -9,7 +8,6 @@ define([
     'src/battle-city/objects/ice.js',
     'src/battle-city/objects/bonus.js'
 ], function(
-    Eventable,
     func,
     MapTiled,
     Delimiter,
@@ -24,7 +22,6 @@ define([
         MapTiled.call(this, width, height);
         this.width = width;
         this.height = height;
-        this.setMaxListeners(100); // @todo
     }
 
     Field.prototype = Object.create(MapTiled.prototype);

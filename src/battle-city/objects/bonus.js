@@ -1,5 +1,8 @@
-define(['src/battle-city/objects/abstract.js',
-        'src/common/event.js'], function(AbstractGameObject, Eventable) {
+define([
+    'src/battle-city/objects/abstract.js'
+], function(
+    AbstractGameObject
+) {
     /**
      * drawable
      * coordinates
@@ -15,8 +18,6 @@ define(['src/battle-city/objects/abstract.js',
 
     Bonus.prototype = Object.create(AbstractGameObject.prototype);
     Bonus.prototype.constructor = Bonus;
-
-    Eventable(Bonus.prototype);
 
     Bonus.prototype.hit = function(bullet)
     {

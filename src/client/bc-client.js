@@ -1,12 +1,12 @@
 define([
-    'src/common/event.js',
+    'component-emitter',
     'src/store/collection.js',
     'src/common/user.js',
     'src/common/premade.js',
     'src/battle-city/field.js',
     'src/store/serialization.js'
 ], function(
-    Eventable,
+    Emitter,
     Collection,
     User,
     Premade,
@@ -48,7 +48,7 @@ define([
         });
     }
 
-    Eventable(BcClient.prototype);
+    Emitter(BcClient.prototype);
 
     //===== actions ================================================================
 

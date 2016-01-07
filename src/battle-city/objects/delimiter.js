@@ -1,5 +1,4 @@
-define(['src/battle-city/objects/abstract.js',
-        'src/common/event.js'], function(AbstractGameObject, Eventable) {
+define(['src/battle-city/objects/abstract.js'], function(AbstractGameObject) {
     function Delimiter(x, y, hw, hh)
     {
         AbstractGameObject.call(this, hw, hh);
@@ -9,12 +8,10 @@ define(['src/battle-city/objects/abstract.js',
         this.hw = hw; // half width
         this.hh = hh; // half height
         this.img[0] = 'img/black.png';
-    };
+    }
 
     Delimiter.prototype = Object.create(AbstractGameObject.prototype);
     Delimiter.prototype.constructor = Delimiter;
-
-    Eventable(Delimiter.prototype);
 
     Delimiter.prototype.hit = function()
     {

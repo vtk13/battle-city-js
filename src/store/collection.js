@@ -16,10 +16,10 @@
  *  traversal(callback, thisObj)
  */
 define([
-    'src/common/event.js',
+    'component-emitter',
     'src/store/odb.js'
 ], function(
-    Eventable,
+    Emitter,
     odb
 ) {
     function Collection()
@@ -29,7 +29,7 @@ define([
         this.length = 0;
     }
 
-    Eventable(Collection.prototype);
+    Emitter(Collection.prototype);
 
     /**
      * @param item

@@ -1,6 +1,10 @@
-define(['src/common/event.js',
-        'src/battle-city/objects/abstract.js',
-        'src/battle-city/objects/tank.js'], function(Eventable, AbstractGameObject, Tank) {
+define([
+    'src/battle-city/objects/abstract.js',
+    'src/battle-city/objects/tank.js'
+], function(
+    AbstractGameObject,
+    Tank
+) {
     function TankBot(x, y, bonus)
     {
         Tank.apply(this, arguments); // call parent constructor

@@ -1,10 +1,4 @@
-define(['src/battle-city/objects/abstract.js',
-        'src/common/event.js'], function(AbstractGameObject, Eventable) {
-    /**
-     * drawable
-     * coordinates
-     */
-
+define(['src/battle-city/objects/abstract.js'], function(AbstractGameObject) {
     function Ice(x, y)
     {
         AbstractGameObject.call(this, 8, 8);
@@ -16,8 +10,6 @@ define(['src/battle-city/objects/abstract.js',
 
     Ice.prototype = Object.create(AbstractGameObject.prototype);
     Ice.prototype.constructor = Ice;
-
-    Eventable(Ice.prototype);
 
     Ice.prototype.hit = function(bullet)
     {

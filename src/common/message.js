@@ -1,11 +1,11 @@
-define(['src/common/event.js'], function(Eventable) {
+define(['component-emitter'], function(Emitter) {
     function Message(text)
     {
         this.time = Date.now();
         this.text = text;
-    };
+    }
 
-    Eventable(Message.prototype);
+    Emitter(Message.prototype);
 
     return Message;
 });

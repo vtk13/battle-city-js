@@ -1,11 +1,11 @@
 define([
     'chai',
     'src/store/collection.js',
-    'src/common/event.js'
+    'component-emitter'
 ], function(
     chai,
     Collection,
-    Eventable
+    Emitter
 ) {
     var assert = chai.assert;
 
@@ -50,7 +50,7 @@ define([
 
         it('Changing item in collection should emit change event', function(done) {
             var item = {id: 1};
-            Eventable(item);
+            Emitter(item);
             collection.once('change', function(item) {
                 assert.equal(item.id, 1);
                 done();

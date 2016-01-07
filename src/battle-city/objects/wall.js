@@ -1,15 +1,4 @@
-define([
-    'src/battle-city/objects/abstract.js',
-    'src/common/event.js'
-], function(
-    AbstractGameObject,
-    Eventable
-) {
-    /**
-     * drawable
-     * coordinates
-     */
-
+define(['src/battle-city/objects/abstract.js'], function(AbstractGameObject) {
     function Wall(x, y, hw, hh)
     {
         AbstractGameObject.call(this, hw ? hw : 4, hh ? hh : 4);
@@ -21,8 +10,6 @@ define([
 
     Wall.prototype = Object.create(AbstractGameObject.prototype);
     Wall.prototype.constructor = Wall;
-
-    Eventable(Wall.prototype);
 
     Wall.prototype.hit = function(bullet)
     {
