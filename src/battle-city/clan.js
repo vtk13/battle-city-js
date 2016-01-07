@@ -1,5 +1,5 @@
 define([
-    'src/store/collection.js',
+    'src/engine/store/collection.js',
     'src/battle-city/objects/tank.js',
     'src/battle-city/objects/tankbot.js',
     'src/battle-city/objects/base.js',

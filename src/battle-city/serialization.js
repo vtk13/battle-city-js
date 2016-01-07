@@ -13,10 +13,10 @@ define([
     'src/common/user.js',
     'src/common/premade.js',
     'src/common/message.js',
-    'src/store/collection.js',
+    'src/engine/store/collection.js',
     'src/battle-city/field.js',
     'src/common/registry.js',
-    'src/store/odb_proxy.js'
+    'src/engine/store/odb_proxy.js'
 ], function(
     Bullet,
     Tank,

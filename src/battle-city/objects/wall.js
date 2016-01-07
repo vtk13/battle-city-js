@@ -1,4 +1,4 @@
-define(['src/battle-city/objects/abstract.js'], function(AbstractGameObject) {
+define(['src/engine/objects/abstract.js'], function(AbstractGameObject) {
     function Wall(x, y, hw, hh)
     {
         AbstractGameObject.call(this, hw ? hw : 4, hh ? hh : 4);

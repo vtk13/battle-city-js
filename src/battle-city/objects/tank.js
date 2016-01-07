@@ -1,6 +1,6 @@
 define([
     'src/common/func.js',
-    'src/battle-city/objects/abstract.js',
+    'src/engine/objects/abstract.js',
     'src/battle-city/objects/bonus.js',
     'src/battle-city/objects/ice.js',
     'src/battle-city/objects/bullet.js'

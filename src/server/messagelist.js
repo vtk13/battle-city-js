@@ -1,11 +1,11 @@
 define([
-    'src/store/collection.js'
+    'src/engine/store/collection.js'
 ], function(
     Collection
 ) {
     function MessageList()
     {
-        Collection.apply(this, arguments);
+        Collection.call(this);
     }
 
     MessageList.prototype = Object.create(Collection.prototype);

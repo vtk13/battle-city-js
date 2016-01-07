@@ -1,5 +1,5 @@
 define([
-    'src/battle-city/objects/abstract.js'
+    'src/engine/objects/abstract.js'
 ], function(
     AbstractGameObject
 ) {

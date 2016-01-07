@@ -1,25 +1,25 @@
 var requirejs = require("requirejs");
 
 requirejs([
-    'http', 'url', 'path', 'fs',
-   'src/store/collection.js',
+    'http', 'url', 'path', 'fs', 'socket.io',
+   'src/engine/store/collection.js',
    'src/server/premadelist.js',
    'src/server/messagelist.js',
    'src/common/server.js',
-   'src/store/serialization.js',
-   'src/store/odb.js',
+   'src/battle-city/serialization.js',
+   'src/engine/store/odb.js',
    'src/common/registry.js'
 ], function(
-    http, url, path, fs,
+    http, url, path, fs, io,
     Collection,
     PremadeList,
     MessageList,
     BcServerInterface,
     serialization,
     odb,
-    resitry
+    registry
 ) {
-    resitry.odb = odb;
+    registry.odb = odb;
     // todo globals
     oldGlobalRegistry = {};
 
@@ -76,7 +76,6 @@ requirejs([
     });
     server.listen(8124);
 
-    var io = require('socket.io');
     var config = {
         'browser client minification': true,
         'browser client etag': true,

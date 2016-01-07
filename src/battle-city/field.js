@@ -1,6 +1,6 @@
 define([
     'src/common/func.js',
-    'src/map/map-tiled.js',
+    'src/engine/map/map-tiled.js',
     'src/battle-city/objects/delimiter.js',
     'src/battle-city/objects/wall.js',
     'src/battle-city/objects/trees.js',

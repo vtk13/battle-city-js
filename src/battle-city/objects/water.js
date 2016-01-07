@@ -1,4 +1,4 @@
-define(['src/battle-city/objects/abstract.js'], function(AbstractGameObject) {
+define(['src/engine/objects/abstract.js'], function(AbstractGameObject) {
     function Water(x, y)
     {
         AbstractGameObject.call(this, 8, 8);

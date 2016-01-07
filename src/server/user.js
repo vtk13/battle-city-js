@@ -7,6 +7,7 @@ define([
 ) {
     function ServerUser()
     {
+        User.call(this);
         this.collections = {};
         this.updateCollector = {};
         this.messages = 0;

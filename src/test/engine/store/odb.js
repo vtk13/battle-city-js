@@ -1,6 +1,6 @@
 define([
     'chai',
-    'src/store/odb.js'
+    'src/engine/store/odb.js'
 ], function(
     chai,
     odb

@@ -1,10 +1,10 @@
 define([
     'component-emitter',
-    'src/store/collection.js',
+    'src/engine/store/collection.js',
     'src/common/user.js',
     'src/common/premade.js',
     'src/battle-city/field.js',
-    'src/store/serialization.js'
+    'src/battle-city/serialization.js'
 ], function(
     Emitter,
     Collection,

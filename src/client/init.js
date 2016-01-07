@@ -3,13 +3,13 @@ require([
     'jquery-ui',
     'socket.io-client',
     'css/screen.js',
-    'src/store/serialization.js',
+    'src/battle-city/serialization.js',
     'src/ui/widgets/common.js',
     'src/client/bc-client.js',
     'src/ui/manager.js',
     'src/battle-city/client/graphic-loader.js',
     'src/common/registry.js',
-    'src/store/odb_proxy.js'
+    'src/engine/store/odb_proxy.js'
 ], function(
     $,
     ui,

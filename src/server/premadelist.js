@@ -1,7 +1,7 @@
 define([
-    'src/store/collection.js',
+    'src/engine/store/collection.js',
     'src/common/premade.js',
-    'src/store/odb.js'
+    'src/engine/store/odb.js'
 ], function(
     Collection,
     Premade,

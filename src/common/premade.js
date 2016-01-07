@@ -1,7 +1,7 @@
 define([
     'require',
     'component-emitter',
-    'src/store/collection.js',
+    'src/engine/store/collection.js',
     'src/battle-city/clan.js',
     'src/common/game.js'
 ], function(

@@ -1,6 +1,6 @@
 define([
     'chai',
-    'src/store/collection.js',
+    'src/engine/store/collection.js',
     'component-emitter'
 ], function(
     chai,

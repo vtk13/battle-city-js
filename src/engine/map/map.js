@@ -1,5 +1,5 @@
 define([
-    'src/store/collection.js'
+    'src/engine/store/collection.js'
 ], function(
     Collection
 ) {

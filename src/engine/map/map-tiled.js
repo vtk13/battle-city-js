@@ -1,5 +1,5 @@
 define([
-    'src/map/map.js'
+    'src/engine/map/map.js'
 ], function(
     Map
 ) {
@@ -95,7 +95,7 @@ define([
     MapTiled.prototype.move = function(item, newX, newY)
     {
         var items = this.intersects(item, newX, newY);
-        if (items.length == 0 || (item.onIntersect && item.onIntersect(items))) {
+        if (Object.keys(items).length == 0 || (item.onIntersect && item.onIntersect(items))) {
             this.setXY(item, newX, newY);
             return true;
         } else {
@@ -114,11 +114,11 @@ define([
      */
     MapTiled.prototype.intersects = function(item, ix, iy, hw, hh)
     {
-        var res = [];
+        var res = {}, ehw, ehh;
         ix = ix || item.x;
         iy = iy || item.y;
-        hw = hw || item.boundX;
-        hh = hh || item.boundY;
+        hw = hw || item.boundX || item.hw;
+        hh = hh || item.boundY || item.hh;
         var fromX = Math.floor((ix-hw) / this.tileSize);
         if (fromX < 0) fromX = 0; else if (fromX > this.maxX) fromX = this.maxX;
         var toX   = Math.ceil ((ix+hw) / this.tileSize);
@@ -132,8 +132,10 @@ define([
                 for (var i in this.itemTiles[x][y]) {
                     var each = this.itemTiles[x][y][i];
                     if (each.id == item.id || res[each.id]) continue;
-                    if (Math.abs(each.x - ix) < (each.boundX + hw) &&
-                        Math.abs(each.y - iy) < (each.boundY + hh)) {
+                    ehw = each.boundX || each.hw;
+                    ehh = each.boundY || each.hh;
+                    if (Math.abs(each.x - ix) < (ehw + hw) &&
+                        Math.abs(each.y - iy) < (ehh + hh)) {
                         res[each.id] = each;
                     }
                 }

@@ -1,9 +1,9 @@
 var requirejs = require("requirejs");
 
 requirejs([
-    'src/test/map/map.js',
-    'src/test/store/odb.js',
-    'src/test/store/collection.js'
+    'src/test/engine/map/map-tiled.js',
+    'src/test/engine/store/odb.js',
+    'src/test/engine/store/collection.js'
 ], function() {
     run();
 });

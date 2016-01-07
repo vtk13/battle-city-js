@@ -2,7 +2,7 @@ var requirejs = require("requirejs");
 
 requirejs([
     'socket.io-client', 'assert', 'src/client/bc-client.js',
-    'src/common/registry.js', 'src/store/odb_proxy.js'
+    'src/common/registry.js', 'src/engine/store/odb_proxy.js'
 ], function(
     io, assert, BcClient,
     registry, OdbProxy
