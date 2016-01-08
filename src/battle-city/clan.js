@@ -101,9 +101,9 @@ define([
         this.timer > 0 && this.timer--;
     };
 
-    Clan.prototype.startGame = function(game)
+    Clan.prototype.startGame = function(field)
     {
-        this.game = game;
+        this.field = field;
         for (var i in this.users) {
             var user = this.users[i];
             if (user.lives < 0) user.lives = 0; // todo hack
@@ -111,13 +111,13 @@ define([
             user.tank.initialPosition.x = user.tank.x = 32*this.tankPositions[i].x + user.tank.hw;
             user.tank.initialPosition.y = user.tank.y = 32*this.tankPositions[i].y + user.tank.hh;
             user.tank.resetPosition();
-            this.game.field.add(user.tank);
+            field.add(user.tank);
             user.emit('change'); // user.tankId
         }
         this.base.shootDown = false;
-        this.base.x = this.game.field.width /  2;
-        this.base.y = (this.n == 1) ? (this.game.field.height - 16) : 16;
-        this.game.field.add(this.base);
+        this.base.x = field.width /  2;
+        this.base.y = (this.n == 1) ? (field.height - 16) : 16;
+        field.add(this.base);
     };
 
     Clan.prototype.pauseTanks = function()
@@ -150,7 +150,7 @@ define([
         if (!this.isFull() && this.botStack.length > 0 && Math.random() < 0.01) {
             var botX = this.tankPositions[this.currentBotPosition].x;
             var botY = this.tankPositions[this.currentBotPosition].y;
-            if (this.game && this.game.field.canPutTank(botX, botY)) {
+            if (this.field && this.field.canPutTank(botX, botY)) {
                 var bot = this.botStack.pop();
                 delete bot['id'];
                 bot.removeAllListeners('change');
@@ -158,7 +158,7 @@ define([
                 bot.x = botX;
                 bot.y = botY;
                 this.users.push({tank: bot});
-                this.game.field.add(bot); // "remove handler defined in constructor" WFT?
+                this.field.add(bot); // "remove handler defined in constructor" WFT?
 
                 this.currentBotPosition = (this.currentBotPosition + 1) % 3;
             }
@@ -170,11 +170,11 @@ define([
         this.timer > 0 && this.timer--;
     };
 
-    BotsClan.prototype.startGame = function(game, level)
+    BotsClan.prototype.startGame = function(field, level)
     {
-        this.game = game;
+        this.field = field;
         var bots = this.users = [];
-        this.game.field.on('remove', function(object) {
+        this.field.on('remove', function(object) {
             for (var i in bots) {
                 if (bots[i].tank == object) {
                     bots.splice(i, 1);

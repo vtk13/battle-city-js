@@ -1,15 +1,17 @@
 define([
     'require',
     'component-emitter',
+    'src/common/func.js',
     'src/engine/store/collection.js',
     'src/battle-city/clan.js',
-    'src/common/game.js'
+    'src/battle-city/field.js'
 ], function(
     require,
     Emitter,
+    func,
     Collection,
     clan,
-    Game
+    Field
 ) {
     function Premade(name, type)
     {
@@ -18,9 +20,10 @@ define([
         this.userCount = 0;
         this.locked = false; // lock for new users
 
-        this.users = new Collection(); // todo move to clan?
+        this.users = new Collection();
         this.messages = new Collection();
         this.setType(type || 'classic');
+        this.stepIntervalId = null;
     }
 
     Emitter(Premade.prototype);
@@ -117,11 +120,14 @@ define([
         this.emit('change');
         var self = this;
         require(['src/battle-city/maps/' + this.type + '/level' + this.level + '.js'], function(level) {
-            self.game = new Game(level.getMap(), self);
-            self.clans[0].startGame(self.game, level);
-            self.clans[1].startGame(self.game, level);
+            self.running = true;
+            self.field = func.isClient() ? window.bcClient.field : new Field(13*32, 13*32);
+            self.field.terrain(level.getMap());
+
+            self.clans[0].startGame(self.field, level);
+            self.clans[1].startGame(self.field, level);
             self.users.traversal(function(user) {
-                user.watchCollection(this.game.field, 'f');
+                user.watchCollection(this.field, 'f');
                 if (user.clan.enemiesClan.botStack) {
                     user.watchCollection(user.clan.enemiesClan.botStack, 'game.botStack');
                 }
@@ -131,9 +137,16 @@ define([
                 }
                 user.clientMessage('started');
             }, self);
-            self.game.start();
+            self.stepIntervalId = setInterval(self.step.bind(self), 30);
             self.emit('change');
         });
+    };
+
+    Premade.prototype.step = function()
+    {
+        this.field.step();
+        this.clans[0].step();
+        this.clans[1].step();
     };
 
     Premade.prototype.lock = function()
@@ -144,13 +157,13 @@ define([
 
     Premade.prototype.gameOver = function(winnerClan, timeout)
     {
-        if (this.game && this.game.running) {
-            this.game.running = false;
+        if (this.running) {
+            this.running = false;
             var self = this;
             if (timeout) {
-                setTimeout(function(){
+                setTimeout(function() {
                     self._gameOver(winnerClan);
-                }, timeout ? timeout : 1000);
+                }, timeout);
             } else {
                 this._gameOver(winnerClan);
             }
@@ -159,8 +172,10 @@ define([
 
     Premade.prototype._gameOver = function(winnerClan)
     {
-        if (this.game) {
-            this.game.gameOver();
+        if (this.stepIntervalId) {
+            clearInterval(this.stepIntervalId);
+            this.stepIntervalId = null;
+            this.field.removeAllListeners();
             if (this.type == 'teamvsteam') {
                 this.locked = false;
             }
@@ -173,7 +188,7 @@ define([
             if (this.removed === undefined) { // todo dirty hack
                 this.emit('change');
             }
-            this.users.traversal(function(user){
+            this.users.traversal(function(user) {
                 user.unwatchCollection('f');
                 user.unwatchCollection('game.botStack');
                 user.clientMessage('gameover', {
@@ -182,7 +197,6 @@ define([
                 console.log(new Date().toLocaleTimeString() + ': user ' + user.nick +
                         ' has left game ' + user.premade.name);
             }, this);
-            this.clans[0].game = this.clans[1].game = this.game = null;
         }
     };
 

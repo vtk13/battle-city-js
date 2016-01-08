@@ -95,7 +95,8 @@ define([
 
     BcServerInterface.prototype.onStart = function(event)
     {
-        if (this.user.premade && !this.user.premade.game) {
+        // todo to premade?
+        if (this.user.premade && !this.user.premade.running) {
             if (event.level && this.user.premade.level != event.level) {
                 this.user.premade.level = event.level;
                 this.user.premade.emit('change');
