@@ -87,18 +87,6 @@ define([
     Tank.prototype.speed = 2; // default speed
     Tank.prototype.bulletSpeed = 5; // default speed
 
-    Tank.prototype.onAddToField = function()
-    {
-        var self = this;
-        this.field.on('remove', function(object) {
-            for (var i in self.bullets) {
-                if (self.bullets[i] == object) {
-                    self.bullets.splice(i, 1);
-                }
-            }
-        });
-    };
-
     Tank.prototype.fire = function()
     {
         if (
@@ -121,6 +109,14 @@ define([
 
             this.bullets.push(bullet);
             this.field.add(bullet);
+
+            var self = this;
+            bullet.once('hit', function() {
+                var index = self.bullets.indexOf(this);
+                if (index >= 0) {
+                    self.bullets.splice(index, 1);
+                }
+            });
         }
     };
 

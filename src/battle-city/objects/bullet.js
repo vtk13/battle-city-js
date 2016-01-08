@@ -52,25 +52,24 @@ define([
     Bullet.prototype.hit = function()
     {
         this.field.remove(this);
+        this.emit('hit');
         return true;
     };
 
     Bullet.prototype.onIntersect = function(items)
     {
-        var canMoveThrowItems = true;
+        var hit = false;
         for (var i in items) {
             if (items[i] == this.tank) continue;
             // todo neiberhood wall can be already removed
             if (items[i].hit && items[i].hit(this)) {
-                if (this.speedX) this.finalX = items[i].x - items[i].hw * func.vector(this.speedX); else this.finalX = this.x;
-                if (this.speedY) this.finalY = items[i].y - items[i].hh * func.vector(this.speedY); else this.finalY = this.y;
-                canMoveThrowItems = false;
+                this.finalX = this.speedX ? items[i].x - items[i].hw * func.vector(this.speedX) : this.x;
+                this.finalY = this.speedY ? items[i].y - items[i].hh * func.vector(this.speedY) : this.y;
+                hit = true;
             }
         }
-        if (!canMoveThrowItems) {
-            this.field.remove(this);
-        }
-        return canMoveThrowItems;
+        hit && this.hit();
+        return !hit;
     };
 
     return Bullet;

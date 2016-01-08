@@ -49,8 +49,15 @@ define([
         this.emit('add', item);
 
         var self = this;
-        item.on && item.on('change', function() { // ```() => this.emit(item)```  ES6 arrow function
+        var listener = function() {
             self.emit('change', this);
+        };
+        // item must be an emitter
+        item.on('change', listener);
+        this.on('remove', function(removedItem) {
+            if (item == removedItem) {
+                item.off('change', listener);
+            }
         });
 
         return true;

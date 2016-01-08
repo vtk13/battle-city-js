@@ -39,10 +39,6 @@ define([
                 this.stepableItems[item.id] = item;
             }
             item.field = this;
-            if (!func.isClient()) {
-                // todo
-                item.onAddToField && item.onAddToField();
-            }
             return true;
         } else {
             return false;
@@ -53,8 +49,6 @@ define([
     {
         if (MapTiled.prototype.remove.call(this, item)) {
             delete this.stepableItems[item.id];
-            // todo
-            item.removeAllListeners && item.removeAllListeners();
         }
     };
 
