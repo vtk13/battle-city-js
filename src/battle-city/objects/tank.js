@@ -148,8 +148,7 @@ define([
                         break;
                     case intersect[i] instanceof Ice:
                         onIce = true;
-                        // no break! before default!
-                    //noinspection FallThroughInSwitchStatementJS
+                        // noinspection FallThroughInSwitchStatementJS
                     default:
                         // power === undefined is a hack for fast bullet detection
                         if (intersect[i].z == this.z && intersect[i].power === undefined) {

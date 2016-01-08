@@ -2,14 +2,12 @@ define([
     'src/engine/store/collection.js',
     'src/battle-city/objects/tank.js',
     'src/battle-city/objects/tankbot.js',
-    'src/battle-city/objects/base.js',
-    'src/battle-city/field.js'
+    'src/battle-city/objects/base.js'
 ], function(
     Collection,
     Tank,
     tankbot,
-    Base,
-    Field
+    Base
 ) {
     function Clan(n, defaultArmoredTimer)
     {
@@ -97,7 +95,6 @@ define([
         if (activeUsers == 0) {
             this.base.hit();
         }
-        this.base.step();
         this.timer > 0 && this.timer--;
     };
 
@@ -145,7 +142,6 @@ define([
         if (this.users.length == 0 && this.botStack.length == 0) {
             this.base.hit();
         }
-        this.base.step();
 
         if (!this.isFull() && this.botStack.length > 0 && Math.random() < 0.01) {
             var botX = this.tankPositions[this.currentBotPosition].x;

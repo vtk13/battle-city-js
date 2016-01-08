@@ -35,7 +35,7 @@ define([
     Field.prototype.add = function(item)
     {
         if (MapTiled.prototype.add.call(this, item)) {
-            if (item.step && !(item instanceof Tank) && !(item instanceof Base)) { // todo why neither Tank nor Base?
+            if (item.step && !(item instanceof Tank)) {
                 this.stepableItems[item.id] = item;
             }
             item.field = this;
