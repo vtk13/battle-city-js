@@ -1,20 +1,20 @@
-define(['src/engine/objects/abstract.js'], function(AbstractGameObject) {
-    function Trees(x, y)
-    {
-        AbstractGameObject.call(this, 8, 8);
-        this.x = x;
-        this.y = y;
-        this.z = 2;
-        this.img[0] = 'img/trees.png';
-    }
+var AbstractGameObject = require('src/engine/objects/abstract.js');
 
-    Trees.prototype = Object.create(AbstractGameObject.prototype);
-    Trees.prototype.constructor = Trees;
+function Trees(x, y)
+{
+    AbstractGameObject.call(this, 8, 8);
+    this.x = x;
+    this.y = y;
+    this.z = 2;
+    this.img[0] = 'img/trees.png';
+}
 
-    Trees.prototype.hit = function(bullet)
-    {
-        return false;
-    };
+Trees.prototype = Object.create(AbstractGameObject.prototype);
+Trees.prototype.constructor = Trees;
 
-    return Trees;
-});
+Trees.prototype.hit = function(bullet)
+{
+    return false;
+};
+
+module.exports = Trees;

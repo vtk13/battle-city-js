@@ -1,20 +1,13 @@
-define([
-    'jquery',
-    'src/ui/widgets/common.js',
-    'src/ui/widgets/chat.js',
-    'src/ui/widgets/game-controls.js'
-], function(
-    $,
-    widgetsCommon,
-    widgetsChat,
-    UiGameControls
-) {
-    function WidgetPremade(context, client)
-    {
-        this.levelSelector = new widgetsCommon.WidgetLevelSelector($('.level', context), client);
-        this.chat = new widgetsChat.WidgetPremadeChat(context, client);
-        this.gameControls = new UiGameControls(context, client);
-    }
+var $ = require('jquery');
+var widgetsCommon = require('src/ui/widgets/common.js');
+var widgetsChat = require('src/ui/widgets/chat.js');
+var UiGameControls = require('src/ui/widgets/game-controls.js');
 
-    return WidgetPremade;
-});
+function WidgetPremade(context, client)
+{
+    this.levelSelector = new widgetsCommon.WidgetLevelSelector($('.level', context), client);
+    this.chat = new widgetsChat.WidgetPremadeChat(context, client);
+    this.gameControls = new UiGameControls(context, client);
+}
+
+module.exports = WidgetPremade;

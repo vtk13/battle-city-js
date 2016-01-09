@@ -1,22 +1,16 @@
-define([
-    'jquery',
-    'src/ui/widgets/lists.js',
-    'src/ui/widgets/chat.js'
-], function(
-    $,
-    widgetsLists,
-    widgetsChat
-) {
-    function WidgetPublic(context, client)
-    {
-        this.premades = new widgetsLists.UiPremadeList(client.premades, $('.premades', context), 'premade');
-        this.publicChat = new widgetsChat.WidgetPublicChat(context, client);
+var $ = require('jquery');
+var widgetsLists = require('src/ui/widgets/lists.js');
+var widgetsChat = require('src/ui/widgets/chat.js');
 
-        $(context).on('click', '.premade', function() {
-            client.join($('.name', this).text());
-            return false;
-        });
-    }
+function WidgetPublic(context, client)
+{
+    this.premades = new widgetsLists.UiPremadeList(client.premades, $('.premades', context), 'premade');
+    this.publicChat = new widgetsChat.WidgetPublicChat(context, client);
 
-    return WidgetPublic;
-});
+    $(context).on('click', '.premade', function() {
+        client.join($('.name', this).text());
+        return false;
+    });
+}
+
+module.exports = WidgetPublic;

@@ -1,17 +1,13 @@
-define([
-    'src/engine/store/collection.js'
-], function(
-    Collection
-) {
-    function Map()
-    {
-        Collection.call(this);
-    }
+var Collection = require('src/engine/store/collection.js');
 
-    Map.prototype = Object.create(Collection.prototype);
-    Map.prototype.contructor = Map;
+function Map()
+{
+    Collection.call(this);
+}
 
-    // here may be naive implementation of map
+Map.prototype = Object.create(Collection.prototype);
+Map.prototype.contructor = Map;
 
-    return Map;
-});
+// here may be naive implementation of map
+
+module.exports = Map;

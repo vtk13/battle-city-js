@@ -1,11 +1,11 @@
-define(['component-emitter'], function(Emitter) {
-    function Message(text)
-    {
-        this.time = Date.now();
-        this.text = text;
-    }
+var Emitter = require('component-emitter');
 
-    Emitter(Message.prototype);
+function Message(text)
+{
+    this.time = Date.now();
+    this.text = text;
+}
 
-    return Message;
-});
+Emitter(Message.prototype);
+
+module.exports = Message;

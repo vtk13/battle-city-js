@@ -1,5 +1,3 @@
-define(function() {
-    return {
-        odb: null
-    };
-});
+module.exports = {
+    odb: null
+};

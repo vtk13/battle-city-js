@@ -27,5 +27,4 @@ window.availableLangs['/src/lang/']['ru'] = {
       , 'prompt-level': 'Уровень:'
       , 'restart': 'Начать заново'
       , 'lack-of-websocket-support': 'Извините, но ваш браузер не поддерживает websocket. Рекомендуемые браузеры - <a href="http://www.google.com/chrome/">Google Chrome</a> версии 14 и выше, и <a href="http://www.mozilla.org/">Firefox</a> версии 7 и выше.'
-
 };

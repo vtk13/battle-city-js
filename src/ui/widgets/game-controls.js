@@ -1,39 +1,39 @@
-define(['jquery'], function($) {
-    /**
-     *
-     * @param context
-     * @param client
-     * @return
-     */
-    function UiGameControls(context, client)
-    {
-        this.context = context;
-        this.resetState();
-        var self = this;
+var $ = require('jquery');
 
-        window.clientServerMessageBus.on('gameover', this.setStateGameOver.bind(this));
-        window.clientServerMessageBus.on('started', this.setStateGameRunning.bind(this));
-        window.clientServerMessageBus.on('joined', this.resetState.bind(this));
+/**
+ *
+ * @param context
+ * @param client
+ * @return
+ */
+function UiGameControls(context, client)
+{
+    this.context = context;
+    this.resetState();
+    var self = this;
 
-        $('.exit-game', context).click(function(){
-            client.unjoin();
-        });
+    window.clientServerMessageBus.on('gameover', this.setStateGameOver.bind(this));
+    window.clientServerMessageBus.on('started', this.setStateGameRunning.bind(this));
+    window.clientServerMessageBus.on('joined', this.resetState.bind(this));
 
-        $('.start-game', context).click(function(){
-            client.startGame($('select[name=level]', context).val());
-        });
-    }
+    $('.exit-game', context).click(function(){
+        client.unjoin();
+    });
 
-    UiGameControls.prototype.resetState =
-    UiGameControls.prototype.setStateGameOver = function()
-    {
-        $('.start-game', this.context).removeAttr('disabled');
-    };
+    $('.start-game', context).click(function(){
+        client.startGame($('select[name=level]', context).val());
+    });
+}
 
-    UiGameControls.prototype.setStateGameRunning = function()
-    {
-        $('.start-game', this.context).attr('disabled', 'disabled');
-    };
+UiGameControls.prototype.resetState =
+UiGameControls.prototype.setStateGameOver = function()
+{
+    $('.start-game', this.context).removeAttr('disabled');
+};
 
-    return UiGameControls;
-});
+UiGameControls.prototype.setStateGameRunning = function()
+{
+    $('.start-game', this.context).attr('disabled', 'disabled');
+};
+
+module.exports = UiGameControls;

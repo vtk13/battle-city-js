@@ -1,13 +1,13 @@
-define(['component-emitter'], function(Emitter) {
-    /**
-     * this is for both, client and server.
-     */
-    function User()
-    {
+var Emitter = require('component-emitter');
 
-    }
+module.exports = User;
 
-    Emitter(User.prototype);
+/**
+ * this is for both, client and server.
+ */
+function User()
+{
 
-    return User;
-});
+}
+
+Emitter(User.prototype);

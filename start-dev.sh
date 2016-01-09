@@ -1,5 +1,5 @@
 #!/bin/sh
 echo Build
-node_modules/webpack/bin/webpack.js src/client/init.js bundle.js
+NODE_PATH=.:node_modules node_modules/webpack/bin/webpack.js src/client/init.js bundle.js
 echo Start
-node src/server/init serve-static
+NODE_PATH=.:node_modules node src/server/init serve-static
