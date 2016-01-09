@@ -61,7 +61,7 @@ define([
         var hit = false;
         for (var i in items) {
             if (items[i] == this.tank) continue;
-            // todo neiberhood wall can be already removed
+            // todo neighborhood wall can be already removed
             if (items[i].hit && items[i].hit(this)) {
                 this.finalX = this.speedX ? items[i].x - items[i].hw * func.vector(this.speedX) : this.x;
                 this.finalY = this.speedY ? items[i].y - items[i].hh * func.vector(this.speedY) : this.y;

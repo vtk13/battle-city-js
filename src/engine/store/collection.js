@@ -26,6 +26,7 @@ define([
     {
         // items is not array because we need an sparse array and array's methods is not applicable
         this.items = {};
+        this.changeListeners = {};
         this.length = 0;
     }
 
@@ -49,16 +50,11 @@ define([
         this.emit('add', item);
 
         var self = this;
-        var listener = function() {
+        this.changeListeners[item.id] = function() {
             self.emit('change', this);
         };
         // item must be an emitter
-        item.on('change', listener);
-        this.on('remove', function(removedItem) {
-            if (item == removedItem) {
-                item.off('change', listener);
-            }
-        });
+        item.on('change', this.changeListeners[item.id]);
 
         return true;
     };
@@ -74,6 +70,8 @@ define([
             this.emit('remove', item);
             this.length--;
             delete this.items[item.id];
+            item.off('change', this.changeListeners[item.id]);
+            delete this.changeListeners[item.id];
 
             return true;
         } else {

@@ -374,7 +374,7 @@ define([
         if (this.armoredTimer > 0) {
             return true;
         }
-        // do not hit your confederates (or yourself)
+        // do not hit either your confederates or yourself
         if (!bullet || this.clan != bullet.clan) {
             if (bullet) {
                 this.lives--;
@@ -390,6 +390,7 @@ define([
                     this.user.hit();
                 } else {
                     this.field.remove(this);
+                    this.emit('hit');
                 }
             }
             if (bullet && (this.bonus || (this.user && !this.clan.enemiesClan.isBots()))) {

@@ -4,13 +4,15 @@ define([
     'src/common/func.js',
     'src/engine/store/collection.js',
     'src/battle-city/clan.js',
+    'src/battle-city/bots-clan.js',
     'src/battle-city/field.js'
 ], function(
     require,
     Emitter,
     func,
     Collection,
-    clan,
+    Clan,
+    BotsClan,
     Field
 ) {
     function Premade(name, type)
@@ -43,10 +45,10 @@ define([
             this.type = type;
             switch (this.type) {
                 case 'classic':
-                    this.clans = [new clan.Clan(1, 10*30/*~30step per seconds*/), new clan.BotsClan(2, 10*30/*~30step per seconds*/)];
+                    this.clans = [new Clan(1, 10*30/*~30step per seconds*/), new BotsClan(2, 10*30/*~30step per seconds*/)];
                     break;
                 case 'teamvsteam':
-                    this.clans = [new clan.Clan(1, 2*30/*~30step per seconds*/), new clan.Clan(2, 2*30/*~30step per seconds*/)];
+                    this.clans = [new Clan(1, 2*30/*~30step per seconds*/), new Clan(2, 2*30/*~30step per seconds*/)];
                     break;
             }
             this.clans[0].premade = this.clans[1].premade = this;

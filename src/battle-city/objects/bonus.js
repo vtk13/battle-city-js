@@ -53,12 +53,12 @@ define([
 
     BonusGrenade.prototype.applyTo = function(tank)
     {
-        // hit() cause splice tank.clan.enemiesClan.users, so collect tanks first
-        var tanks = [];
-        for (var i in tank.clan.enemiesClan.users) {
+        // tank.hit() cause splice tank.clan.enemiesClan.users, so collect tanks first
+        var tanks = [], i;
+        for (i in tank.clan.enemiesClan.users) {
             tanks.push(tank.clan.enemiesClan.users[i].tank);
         }
-        for (var i in tanks) {
+        for (i in tanks) {
             tanks[i].hit();
         }
     };
