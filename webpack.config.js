@@ -3,5 +3,9 @@ module.exports = {
         root: [
             __dirname
         ]
+    },
+    node: {
+        fs: 'empty',
+        tls: 'empty'
     }
 };
