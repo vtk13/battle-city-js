@@ -90,10 +90,10 @@ Clan.prototype.startGame = function(field)
 
         if (user.tank) {
             user.tank.resetPosition();
+            this.field.add(user.tank);
         } else {
             this.createTank(user, i);
         }
-        this.field.add(user.tank);
     }
 
     this.base = new Base(field.width / 2, (this.n == 1) ? (field.height - 16) : 16);
@@ -121,6 +121,7 @@ Clan.prototype.createTank = function(user, position)
         this.emit('change');
     });
 
+    this.field.add(user.tank);
     user.emit('change'); // user.tankId
 };
 
