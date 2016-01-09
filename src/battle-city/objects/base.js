@@ -38,15 +38,15 @@ define([
     Base.prototype.hit = function()
     {
         this.shootDown = true;
-        this.clan.premade.gameOver(this.clan.enemiesClan, 2000);
         this.emit('change');
+        this.emit('hit');
         return true;
     };
 
     Base.prototype.armor = function()
     {
         this.armoredTimer = 10 * 1000/30; // 30ms step
-        var edge = this.baseEdge[this.clan.n];
+        var edge = this.baseEdge[this.x < this.field.height / 2 ? 1 : 2];
         for (var i in edge) {
             var walls = this.field.intersects(this, edge[i].x*16+8, edge[i].y*16+8, 8, 8);
             var convert = true;

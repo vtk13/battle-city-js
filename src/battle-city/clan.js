@@ -15,8 +15,6 @@ define([
         this.pauseTimer = 0;
         this.enemiesClan = null;
         this.users = [];
-        this.base = new Base(); // todo move to field?
-        this.base.clan = this;
         this.tankPositions = Clan.tankPositions['clan' + n]; // todo move to BotEmitter?
     }
 
@@ -90,7 +88,7 @@ define([
             }
         }
         if (activeUsers == 0) {
-            this.base.hit();
+            this.premade.gameOver(this.enemiesClan, 2000);
         }
         this.pauseTimer > 0 && this.pauseTimer--;
     };
@@ -108,9 +106,9 @@ define([
             field.add(user.tank);
             user.emit('change'); // user.tankId
         }
-        this.base.shootDown = false;
-        this.base.x = field.width /  2;
-        this.base.y = (this.n == 1) ? (field.height - 16) : 16;
+
+        this.base = new Base(field.width / 2, (this.n == 1) ? (field.height - 16) : 16);
+        this.base.once('hit', this.premade.gameOver.bind(this.premade, this.enemiesClan, 2000));
         field.add(this.base);
     };
 

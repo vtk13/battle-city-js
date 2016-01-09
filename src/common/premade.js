@@ -118,8 +118,11 @@ define([
 
     Premade.prototype.startGame = function()
     {
+        if (this.running) {
+            return false;
+        }
+
         this.locked = true;
-        this.emit('change');
         var self = this;
         require(['src/battle-city/maps/' + this.type + '/level' + this.level + '.js'], function(level) {
             self.running = true;
@@ -161,11 +164,8 @@ define([
     {
         if (this.running) {
             this.running = false;
-            var self = this;
             if (timeout) {
-                setTimeout(function() {
-                    self._gameOver(winnerClan);
-                }, timeout);
+                setTimeout(this._gameOver.bind(this, winnerClan), timeout);
             } else {
                 this._gameOver(winnerClan);
             }

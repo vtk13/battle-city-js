@@ -63,7 +63,7 @@ define([
         // can move to current direction?
         this.stuck = false;
         this.lives = 1;
-        this.bonus = false;
+        this.bonus = false; // бонусный танк, за убийство выпадает бонус
         this.clan = null;
 
         this.armoredTimer = Tank.defaultArmoredTimer; // 30ms step
@@ -374,35 +374,42 @@ define([
         if (this.armoredTimer > 0) {
             return true;
         }
-        // do not hit either your confederates or yourself
-        if (!bullet || this.clan != bullet.clan) {
-            if (bullet) {
-                this.lives--;
-            } else {
-                this.lives = 0;
-            }
-            if (this.lives <= 0) {
-                if (bullet && bullet.tank.user) {
-                    bullet.tank.user.addReward(this.reward);
-                }
 
-                if (this.user) {
-                    this.user.hit();
-                } else {
-                    this.field.remove(this);
-                    this.emit('hit');
-                }
-            }
-            if (bullet && (this.bonus || (this.user && !this.clan.enemiesClan.isBots()))) {
-                this.bonus = false;
-                var bonuses = [bonus.BonusStar, bonus.BonusGrenade, bonus.BonusShovel,
-                               bonus.BonusHelmet, bonus.BonusLive, bonus.BonusTimer];
-                this.field.add(new (bonuses[Math.floor(Math.random()*(bonuses.length-0.0001))])(
-                    Math.round((Math.random() * (this.field.width  / 16 - 2))) * 16 + 16,
-                    Math.round((Math.random() * (this.field.height / 16 - 2))) * 16 + 16
-                ));
+        // do not hit either your confederates or yourself
+        if (bullet && bullet.clan == this.clan) {
+            return true;
+        }
+
+        if (bullet) {
+            this.lives--;
+        } else {
+            this.lives = 0;
+        }
+
+        if (this.lives <= 0) {
+            bullet && bullet.tank.user && bullet.tank.user.addReward(this.reward);
+
+            if (this.user) {
+                // todo on hit
+                this.user.hit();
+            } else {
+                this.field.remove(this);
+                this.emit('hit');
             }
         }
+
+        // если пулей подстрелен бонусный танк или танк противника в сетевой игре
+        // todo просто делать все танки бонусные в сетевой игре
+        if (bullet && (this.bonus || (this.user && !this.clan.enemiesClan.isBots()))) {
+            this.bonus = false;
+            var bonuses = [bonus.BonusStar, bonus.BonusGrenade, bonus.BonusShovel,
+                           bonus.BonusHelmet, bonus.BonusLive, bonus.BonusTimer];
+            this.field.add(new (bonuses[Math.floor(Math.random()*(bonuses.length-0.0001))])(
+                Math.round((Math.random() * (this.field.width  / 16 - 2))) * 16 + 16,
+                Math.round((Math.random() * (this.field.height / 16 - 2))) * 16 + 16
+            ));
+        }
+
         return true;
     };
 
@@ -413,6 +420,10 @@ define([
         this.resetPosition();
     };
 
+    /**
+     * @deprecated
+     * @todo не сбрасывать танк, просто пересоздавать новый
+     */
     Tank.prototype.resetPosition = function()
     {
         this.direction = null;

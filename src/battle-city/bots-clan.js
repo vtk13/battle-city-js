@@ -26,7 +26,7 @@ define([
     BotsClan.prototype.step = function()
     {
         if (this.users.length == 0 && this.botStack.length == 0) {
-            this.base.hit();
+            this.premade.gameOver(this.enemiesClan, 2000);
         }
 
         if (!this.isFull() && this.botStack.length > 0 && Math.random() < 0.01) {
@@ -90,8 +90,6 @@ define([
             bot.clan = this;
             this.botStack.add(bot);
         }
-
-        this.base.shootDown = false;
     };
 
     BotsClan.prototype.pauseTanks = function()

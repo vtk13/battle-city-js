@@ -74,9 +74,7 @@ define([
 
     BonusShovel.prototype.applyTo = function(tank)
     {
-        if (!tank.clan.isBots()) {
-            tank.clan.base.armor();
-        }
+        tank.clan && tank.clan.base && tank.clan.base.armor();
     };
 
     function BonusHelmet(x, y)
