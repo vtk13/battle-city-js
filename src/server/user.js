@@ -85,20 +85,6 @@ define([
         }
     };
 
-    ServerUser.prototype.hit = function()
-    {
-        if (this.premade) {
-            this.lives -= 1;
-            if (this.lives < 0) {
-                this.tank.field.remove(this.tank);
-            } else {
-                this.tank.lives = 1;
-                this.tank.die();
-            }
-            this.emit('change');
-        }
-    };
-
     ServerUser.prototype.addReward = function(reward)
     {
         this.points += reward;

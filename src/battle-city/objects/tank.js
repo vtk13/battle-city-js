@@ -23,7 +23,7 @@ define([
      *
      * В этом классе перемешанны:
      *  - сама сущность
-     *  - отрисовка (setDirectionImage(), imgBase, clanN, trackStep, blink)
+     *  - отрисовка (setDirectionImage(), imgBase, colorCode, trackStep, blink)
      *  - не понятно куда пристроить обработку бонусов, толи this.onBonus толи в
      *          bonus.onIntersect. А может вообще в отдельный класс?
      *  - сериализация
@@ -65,6 +65,7 @@ define([
         this.lives = 1;
         this.bonus = false; // бонусный танк, за убийство выпадает бонус
         this.clan = null;
+        this.colorCode = 0;
 
         this.armoredTimer = Tank.defaultArmoredTimer; // 30ms step
         this.trackStep = 1; // 1 or 2
@@ -191,7 +192,7 @@ define([
      } else if (this.speedX  < 0) {
          dir = 'left';
      }
-     this.img[0] = (((this.imgBase == 'img/tank') ? this.imgBase + this.clanN : this.imgBase) // todo clanN hack
+     this.img[0] = (((this.imgBase == 'img/tank') ? this.imgBase + this.colorCode : this.imgBase)
              + '-' + dir + '-s' + this.trackStep + (this.blink ? '-blink' : '') + '.png');
     };
 
@@ -371,36 +372,31 @@ define([
      */
     Tank.prototype.hit = function(bullet)
     {
+        if (!bullet) {
+            this.field.remove(this);
+            this.emit('hit');
+            return true;
+        }
+
         if (this.armoredTimer > 0) {
             return true;
         }
 
         // do not hit either your confederates or yourself
-        if (bullet && bullet.clan == this.clan) {
+        if (bullet.clan == this.clan) {
             return true;
         }
 
-        if (bullet) {
+        if (this.lives > 0) {
             this.lives--;
-        } else {
-            this.lives = 0;
-        }
-
-        if (this.lives <= 0) {
-            bullet && bullet.tank.user && bullet.tank.user.addReward(this.reward);
-
-            if (this.user) {
-                // todo on hit
-                this.user.hit();
-            } else {
-                this.field.remove(this);
-                this.emit('hit');
-            }
+            bullet.tank.user && bullet.tank.user.addReward(this.reward);
+            this.field.remove(this);
+            this.emit('hit');
         }
 
         // если пулей подстрелен бонусный танк или танк противника в сетевой игре
         // todo просто делать все танки бонусные в сетевой игре
-        if (bullet && (this.bonus || (this.user && !this.clan.enemiesClan.isBots()))) {
+        if (this.bonus || (this.user && !this.clan.enemiesClan.isBots())) {
             this.bonus = false;
             var bonuses = [bonus.BonusStar, bonus.BonusGrenade, bonus.BonusShovel,
                            bonus.BonusHelmet, bonus.BonusLive, bonus.BonusTimer];
@@ -413,17 +409,6 @@ define([
         return true;
     };
 
-    Tank.prototype.die = function()
-    {
-        this.maxBullets = 1;
-        this.bulletPower = 1;
-        this.resetPosition();
-    };
-
-    /**
-     * @deprecated
-     * @todo не сбрасывать танк, просто пересоздавать новый
-     */
     Tank.prototype.resetPosition = function()
     {
         this.direction = null;

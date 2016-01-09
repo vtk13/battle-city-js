@@ -246,7 +246,7 @@ define([
             this.bonus, // 6
             Math.round(this.armoredTimer), // 7
             Math.round(this.birthTimer), // 8
-            this.clan.n // 9
+            this.colorCode // 9
         ];
     };
 
@@ -265,7 +265,7 @@ define([
         this.bonus = data[6];
         this.armoredTimer = data[7];
         this.birthTimer = data[8];
-        this.clanN = data[9];
+        this.colorCode = data[9];
     };
 
     Trees.prototype.serialize = function()

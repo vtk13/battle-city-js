@@ -25,7 +25,7 @@ define([
 
     Clan.prototype.attachUser = function(user)
     {
-        if (user.clan) user.clan.detachUser(user);
+        user.clan && user.clan.detachUser(user);
         for (var positionId = 0; positionId < this.capacity; positionId++) {
             if (this.users[positionId] === undefined) {
                 this.users[positionId] = user;
@@ -33,9 +33,7 @@ define([
                 break;
             }
         }
-        user.tank = new Tank(); // todo move to field?
-        user.tank.user = user;
-        user.tank.clan = user.clan = this;
+        user.clan = this;
         user.emit('change');
     };
 
@@ -43,13 +41,9 @@ define([
     {
         if (this.users[user.positionId] == user) {
             delete this.users[user.positionId];
-            if (user.tank.field) {
-                user.tank.field.remove(user.tank);
-            }
-            user.tank.clan = null;
-            user.tank = null;
             user.clan = null;
             user.emit('change');
+            user.tank && user.tank.hit();
         }
     };
 
@@ -99,17 +93,42 @@ define([
         for (var i in this.users) {
             var user = this.users[i];
             if (user.lives < 0) user.lives = 0; // todo hack
-            // before add to field, may set x y directly
-            user.tank.initialPosition.x = user.tank.x = 32*this.tankPositions[i].x + user.tank.hw;
-            user.tank.initialPosition.y = user.tank.y = 32*this.tankPositions[i].y + user.tank.hh;
-            user.tank.resetPosition();
-            field.add(user.tank);
-            user.emit('change'); // user.tankId
+
+            if (user.tank) {
+                user.tank.resetPosition();
+            } else {
+                this.createTank(user, i);
+            }
         }
 
         this.base = new Base(field.width / 2, (this.n == 1) ? (field.height - 16) : 16);
         this.base.once('hit', this.premade.gameOver.bind(this.premade, this.enemiesClan, 2000));
         field.add(this.base);
+    };
+
+    Clan.prototype.createTank = function(user, position)
+    {
+        user.tank = new Tank(
+            32 * this.tankPositions[position].x + 16,
+            32 * this.tankPositions[position].y + 16
+        );
+        user.tank.user = user;
+        user.tank.clan = this;
+        user.tank.colorCode = this.n;
+
+        var self = this;
+        user.tank.once('hit', function() {
+            user.tank = null;
+            user.lives--;
+            if (user.lives >= 0) {
+                self.createTank(user, position);
+            }
+            this.emit('change');
+        });
+
+        this.field.add(user.tank);
+
+        user.emit('change'); // user.tankId
     };
 
     Clan.prototype.pauseTanks = function()
