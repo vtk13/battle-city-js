@@ -29,13 +29,11 @@ BotsClan.prototype.step = function()
         var botY = this.tankPositions[this.currentBotPosition].y;
         if (this.field && this.field.canPutTank(botX, botY)) {
             var bot = this.botStack.pop();
-            delete bot['id'];
-            bot.removeAllListeners('change');
             // before add to field, may set x y directly
             bot.x = botX;
             bot.y = botY;
             this.users.push({tank: bot});
-            this.field.add(bot); // "remove handler defined in constructor" WFT?
+            this.field.add(bot);
 
             this.currentBotPosition = (this.currentBotPosition + 1) % 3;
         }

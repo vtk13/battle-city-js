@@ -30,7 +30,7 @@ Collection.prototype.add = function(item)
 
     if (item.on) {
         var self = this;
-        this.changeListeners[item.id] = function () {
+        this.changeListeners[item.id] = function() {
             self.emit('change', this);
         };
         item.on('change', this.changeListeners[item.id]);
@@ -79,9 +79,7 @@ Collection.prototype.pop = function()
 
     if (lastProperty) {
         var item = this.items[lastProperty];
-        this.emit('remove', item);
-        this.length--;
-        delete this.items[lastProperty];
+        this.remove(item);
         return item;
     } else {
         return null;

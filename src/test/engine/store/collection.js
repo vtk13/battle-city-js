@@ -52,6 +52,28 @@ describe('Collection', function () {
         item.emit('change');
     });
 
+    it('Collection should not emit change event after item removing', function() {
+        var item = {id: 1};
+        Emitter(item);
+        collection.once('change', function(item) {
+            throw new Error('Should not be called');
+        });
+        collection.add(item);
+        collection.remove(item);
+        item.emit('change');
+    });
+
+    it('Collection should not emit change event after item popped', function() {
+        var item = {id: 1};
+        Emitter(item);
+        collection.once('change', function(item) {
+            throw new Error('Should not be called');
+        });
+        collection.add(item);
+        collection.pop();
+        item.emit('change');
+    });
+
     it('Pop should behaves correctly on sparse collection', function() {
         var item1 = {id: 5};
         var item2 = {id: 10};

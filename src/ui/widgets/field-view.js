@@ -14,17 +14,23 @@ function FieldView(context, client)
     var self = this;
 
     this.field.on('remove', function(object) {
-        var anim;
+        var field = this, anim;
         if (object instanceof Bullet) {
             anim = new animation.BulletHitAnimation(self.step, object.finalX, object.finalY);
-            // FIXME there are problems with animation objects:
-            // adding their on client generate duplicated id, so with next sync from server
-            // we have undefined behaviour
-            self.field.add(anim);
         }
         if (object instanceof Tank) { // todo hit myself without splash :(
             anim = new animation.TankHitAnimation(self.step, object.x, object.y);
-            self.field.add(anim);
+        }
+
+        if (anim) {
+            anim.id = object.id;
+            // there is a problem with animation objects:
+            // adding their on client generate duplicated id, so with next sync from server
+            // we have undefined behaviour. As workaround postpone adding animation object
+            // to field to text tick, when objects itself is removed from field.
+            setTimeout(function() {
+               field.add(anim);
+            }, 0);
         }
     });
 
