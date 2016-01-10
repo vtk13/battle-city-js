@@ -28,7 +28,7 @@ function FieldView(context, client)
         }
     });
 
-    window.clientServerMessageBus.on('gameover', function(event) {
+    client.socket.on('gameover', function(event) {
         clearInterval(self.animateIntervalId);
         if (event.winnerClan == client.currentUser.clan) {
             self.message('Победа!');
@@ -36,13 +36,13 @@ function FieldView(context, client)
             self.message('Вы проиграли');
         }
     });
-    window.clientServerMessageBus.on('disconnect', function() {
+    client.socket.on('disconnect', function() {
         clearInterval(self.animateIntervalId);
     });
-    window.clientServerMessageBus.on('unjoined', function(){
+    client.socket.on('unjoined', function(){
         clearInterval(self.animateIntervalId);
     });
-    window.clientServerMessageBus.on('started', function(){
+    client.socket.on('started', function(){
         clearInterval(self.animateIntervalId);
         if (window.location.hash != '#test') {
             self.animateIntervalId =

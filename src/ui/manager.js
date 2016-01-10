@@ -15,22 +15,14 @@ function UiManager(client)
     this.premade    = new WidgetPremade($('#premade'), client);
     this.game       = new WidgetGame($('#game'), client);
 
-    this.notifier       = new WidgetNotifier(client);
-
-    var self = this;
+    this.notifier   = new WidgetNotifier(client);
 
     client.onConnect(this.setStateLogin.bind(this));
     client.onConnectFail(this.setStateConnectionFail.bind(this));
 
-    window.clientServerMessageBus.on('joined', function() {
-        self.setStatePremade();
-    });
-
-    window.clientServerMessageBus.on('unjoined', function() {
-        self.setStatePublic();
-    });
-
-    window.clientServerMessageBus.on('disconnect', this.setStateDiconnected.bind(this));
+    client.socket.on('joined', this.setStatePremade.bind(this));
+    client.socket.on('unjoined', this.setStatePublic.bind(this));
+    client.socket.on('disconnect', this.setStateDiconnected.bind(this));
 }
 
 UiManager.prototype.setStateLogin = function()

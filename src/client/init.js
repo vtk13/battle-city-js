@@ -24,15 +24,15 @@ if (typeof WebSocket == 'undefined' && typeof MozWebSocket == 'undefined') {
     var wsDomain = (location.hostname == 'localhost' ? '' : 'ws.')
         + location.hostname
         + (location.port ? ':' + location.port : '');
-    window.clientServerMessageBus = io(wsDomain, {
+    var socket = io(wsDomain, {
         transports: ['websocket'],
         autoConnect: false,
         reconnection: false // todo learn reconnection abilities
     });
-    registry.odb = new OdbProxy(window.clientServerMessageBus);
-    bcClient = new BcClient(window.clientServerMessageBus);
+    registry.odb = new OdbProxy(socket);
+    bcClient = new BcClient(socket);
     uiManager = new UiManager(bcClient);
-    window.clientServerMessageBus.connect();
+    socket.connect();
 }
 
 $(window).resize();
