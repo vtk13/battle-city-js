@@ -65,6 +65,7 @@ function Tank(x, y)
 
     this.birthTimer = 1000 / 30; // 30ms step
     this.fireTimer = 0;
+    this.pauseTimer = 0;
 
     this.onIce = false;
     this.glidingTimer = 0;
@@ -88,9 +89,8 @@ Tank.prototype.fire = function()
         this.bullets.length < this.maxBullets &&
         !(this.bullets.length > 0 && this.fireTimer > 0)
     ) {
-        if (this.bullets.length > 0) { // to not second fire too fast
-            this.fireTimer = 0.5 * 1000/30; // 30ms step
-        }
+        this.fireTimer = 0.5 * 1000/30; // 30ms step
+
         var bullet = new Bullet();
         bullet.tank = this;
         bullet.clan = this.clan;
@@ -114,10 +114,13 @@ Tank.prototype.fire = function()
     }
 };
 
-Tank.prototype.step = function(paused)
+Tank.prototype.step = function()
 {
-    if (this.fireTimer > 0) this.fireTimer--;
-    if ((this.birthTimer > 0)) {
+    this.pauseTimer > 0 && this.pauseTimer--;
+
+    this.fireTimer > 0 && this.fireTimer--;
+
+    if (this.birthTimer > 0) {
         this.birthTimer--;
         this.emit('change');
         return;
@@ -129,7 +132,10 @@ Tank.prototype.step = function(paused)
             this.emit('change');
         }
     }
-    if (paused) return;
+
+    if (this.pauseTimer > 0) {
+        return;
+    }
 
     var onIce = false;
     if (this.moveOn || this.glidingTimer > 0) {
@@ -391,8 +397,14 @@ Tank.prototype.hit = function(bullet)
     // todo просто делать все танки бонусные в сетевой игре
     if (this.bonus || (this.user && !this.clan.enemiesClan.isBots())) {
         this.bonus = false;
-        var bonuses = [bonus.BonusStar, bonus.BonusGrenade, bonus.BonusShovel,
-                       bonus.BonusHelmet, bonus.BonusLive, bonus.BonusTimer];
+        var bonuses = [
+            bonus.BonusStar,
+            bonus.BonusGrenade,
+            bonus.BonusShovel,
+            bonus.BonusHelmet,
+            bonus.BonusLive,
+            bonus.BonusTimer
+        ];
         this.field.add(new (bonuses[Math.floor(Math.random()*(bonuses.length-0.0001))])(
             Math.round((Math.random() * (this.field.width  / 16 - 2))) * 16 + 16,
             Math.round((Math.random() * (this.field.height / 16 - 2))) * 16 + 16

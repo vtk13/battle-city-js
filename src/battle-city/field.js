@@ -1,4 +1,3 @@
-var func = require('src/common/func.js');
 var MapTiled = require('src/engine/map/map-tiled.js');
 var Delimiter = require('src/battle-city/objects/delimiter.js');
 var wall = require('src/battle-city/objects/wall.js');
@@ -6,8 +5,6 @@ var Trees = require('src/battle-city/objects/trees.js');
 var Water = require('src/battle-city/objects/water.js');
 var Ice = require('src/battle-city/objects/ice.js');
 var bonus = require('src/battle-city/objects/bonus.js');
-var Tank = require('src/battle-city/objects/tank.js');
-var Base = require('src/battle-city/objects/base.js');
 
 function Field(width, height)
 {
@@ -23,7 +20,7 @@ Field.prototype.constructor = Field;
 Field.prototype.add = function(item)
 {
     if (MapTiled.prototype.add.call(this, item)) {
-        if (item.step && !(item instanceof Tank)) {
+        if (item.step) {
             this.stepableItems[item.id] = item;
         }
         item.field = this;
@@ -42,7 +39,7 @@ Field.prototype.remove = function(item)
 
 Field.prototype.step = function() {
     for (var i in this.stepableItems) {
-        this.stepableItems[i].step(); // bullets only now
+        this.stepableItems[i].step();
     }
 };
 

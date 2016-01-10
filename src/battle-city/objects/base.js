@@ -42,7 +42,7 @@ Base.prototype.hit = function()
 Base.prototype.armor = function()
 {
     this.armoredTimer = 10 * 1000/30; // 30ms step
-    var i, j, edge = this.baseEdge[this.x > this.field.height / 2 ? 1 : 2];
+    var i, j, edge = this.baseEdge[this.y > this.field.height / 2 ? 1 : 2];
     for (i in edge) {
         var walls = this.field.intersects(this, edge[i].x*16+8, edge[i].y*16+8, 8, 8);
         var convert = true;
@@ -62,7 +62,7 @@ Base.prototype.armor = function()
 
 Base.prototype.disarm = function()
 {
-    var i, j, edge = this.baseEdge[this.clan.n];
+    var i, j, edge = this.baseEdge[this.y > this.field.height / 2 ? 1 : 2];
     for (i in edge) {
         var walls = this.field.intersects(this, edge[i].x*16+8, edge[i].y*16+8, 8, 8);
         var convert = true;
@@ -92,7 +92,7 @@ Base.prototype.step = function()
     }
 };
 
-Base.prototype.animateStep = function(step)
+Base.prototype.animateStep = function()
 {
     if (this.shootDown) {
         this.img[0] = 'img/base-hit.png';

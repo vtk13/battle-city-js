@@ -1,4 +1,3 @@
-var AbstractGameObject = require('src/engine/objects/abstract.js');
 var Tank = require('src/battle-city/objects/tank.js');
 
 function TankBot(x, y, bonus)
@@ -18,9 +17,11 @@ TankBot.prototype.constructor = TankBot;
 TankBot.prototype.reward = 100;
 TankBot.prototype.imgBase = 'img/normal-bot';
 
-TankBot.prototype.step = function(paused)
+TankBot.prototype.step = function()
 {
-    if ((this.birthTimer <= 0) && !paused) {
+    // pauseTimer decrease in Tank.step()
+
+    if ((this.birthTimer <= 0) && this.pauseTimer <= 0) {
         if ((this.stuck || Math.random() < 0.03) && this.fireTimer <= 0) {
             this.fire();
             this.fireTimer = 0.5 * 1000/30; // 30ms step
@@ -43,7 +44,7 @@ TankBot.prototype.step = function(paused)
             }
         }
     }
-    Tank.prototype.step.call(this, paused);
+    Tank.prototype.step.call(this);
 };
 
 TankBot.prototype.onBonus = function(bonus)

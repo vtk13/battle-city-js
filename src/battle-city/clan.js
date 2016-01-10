@@ -6,7 +6,6 @@ function Clan(n, defaultArmoredTimer)
     this.capacity = 2; // max users
     this.n = n; // todo is this id?
     this.defaultArmoredTimer = defaultArmoredTimer;
-    this.pauseTimer = 0;
     this.enemiesClan = null;
     this.users = [];
     this.tankPositions = Clan.tankPositions['clan' + n]; // todo move to BotEmitter?
@@ -71,14 +70,12 @@ Clan.prototype.step = function()
     var activeUsers = 0;
     for (var i in this.users) {
         if (this.users[i].lives >= 0) {
-            this.users[i].tank.step(this.pauseTimer > 0);
             activeUsers++;
         }
     }
     if (activeUsers == 0) {
         this.premade.gameOver(this.enemiesClan, 2000);
     }
-    this.pauseTimer > 0 && this.pauseTimer--;
 };
 
 Clan.prototype.startGame = function(field)
@@ -127,7 +124,12 @@ Clan.prototype.createTank = function(user, position)
 
 Clan.prototype.pauseTanks = function()
 {
-    this.pauseTimer = 3 * 30; // 30 steps per second
+    for (var i in this.users) {
+        var user = this.users[i];
+        if (user.tank) {
+            user.tank.pauseTimer = 3 * 30; // 30 steps per second
+        }
+    }
 };
 
 module.exports = Clan;
