@@ -31,16 +31,16 @@
 </div>
 <div id="body">
     <div id="connecting" class="ui-block" style="display: block;">
-        <span class="lang" key="message-connection"></span>
+        <span class="lang" data-lang-key="message-connection"></span>
     </div>
     <div id="connection-fail" class="ui-block">
-        <span class="lang" key="message-connection-fail"></span>
+        <span class="lang" data-lang-key="message-connection-fail"></span>
     </div>
     <div id="disconnect" class="ui-block">
-        <span class="lang" key="message-connection-closed"></span>
+        <span class="lang" data-lang-key="message-connection-closed"></span>
     </div>
     <div id="nowebsocket" class="ui-block">
-        <span class="lang" key="lack-of-websocket-support"></span>
+        <span class="lang" data-lang-key="lack-of-websocket-support"></span>
     </div>
     <div id="login" class="ui-block">
         <div class="login">
@@ -52,9 +52,9 @@
             </div>
             <form id="game-login" class="cell-12 leftmost" action="#">
                 <fieldset>
-                    <legend class="lang" key="legend-play"></legend>
-                    <div><span class="lang" key="enter-nick"></span><input type="text" name="nick"></div>
-                    <div class="submit"><button type="submit" class="lang" key="submit-play"></button></div>
+                    <legend class="lang" data-lang-key="legend-play"></legend>
+                    <div><span class="lang" data-lang-key="enter-nick"></span><input type="text" name="nick" title=""></div>
+                    <div class="submit"><button type="submit" class="lang" data-lang-key="submit-play"></button></div>
                 </fieldset>
             </form>
         </div>
@@ -67,8 +67,8 @@
     </div>
 
     <div id="public" class="ui-block">
-        <h1 class="lang cell-6 leftmost" key="header-public-chat"></h1>
-        <div class="user-list cell-1 leftmost"><h3 class="lang" key="header-players"></h3></div>
+        <h1 class="lang cell-6 leftmost" data-lang-key="header-public-chat"></h1>
+        <div class="user-list cell-1 leftmost"><h3 class="lang" data-lang-key="header-players"></h3></div>
         <div class="chat cell-3">
             <div class="chat-log">
                 <div class="messages"></div>
@@ -77,43 +77,43 @@
         <form class="message-form">
             <div class="cell-1 leftmost">&nbsp;</div>
             <div class="cell-3">
-            <input type="text" name="message">
-            <button type="submit" class="lang" key="submit"></button>
+            <input type="text" name="message" title="">
+            <button type="submit" class="lang" data-lang-key="submit"></button>
             </div>
         </form>
         <div class="premades cell-2">
-            <div class="lang" key="join-existen-game"></div>
+            <div class="lang" data-lang-key="join-existen-game"></div>
         </div>
     </div>
 
     <div id="create" class="ui-block">
-        <h1 class="lang cell-6" key="header-create-game"></h1>
+        <h1 class="lang cell-6" data-lang-key="header-create-game"></h1>
         <form id="create-form" class="cell-6 clear">
-        <h2 class="lang top-align" key="choose-game-type"></h2>
+        <h2 class="lang top-align" data-lang-key="choose-game-type"></h2>
         <ul class="game-modes">
             <li id="classic" class="current cell-3w"><div>
                 <img src="/img/client/classic.png" width="208" height="208" alt="classic"/>
-                <h3 class="lang" key="game-type-classic"></h3>
-                <p class="lang" key="game-type-classic-desc"></p></div>
+                <h3 class="lang" data-lang-key="game-type-classic"></h3>
+                <p class="lang" data-lang-key="game-type-classic-desc"></p></div>
             </li>
             <li id="teamvsteam" class="cell-3w"><div>
                 <img src="/img/client/teamvsteam.png" width="208" height="208" alt="teamvsteam"/>
-                <h3 class="lang" key="game-type-teamvsteam"></h3>
-                <p class="lang" key="game-type-teamvsteam-desc"></p></div>
+                <h3 class="lang" data-lang-key="game-type-teamvsteam"></h3>
+                <p class="lang" data-lang-key="game-type-teamvsteam-desc"></p></div>
             </li>
         </ul>
         <div class="top-margin">
-            <span class="lang" key="enter-new-game-name"></span>
+            <span class="lang" data-lang-key="enter-new-game-name"></span>
             <input type="hidden" name="type" value="classic">
-            <input type="text" name="name">
-            <button type="submit" class="lang" key="submit-create"></button>
+            <input type="text" name="name" title="">
+            <button type="submit" class="lang" data-lang-key="submit-create"></button>
         </div>
         </form>
     </div>
 
     <div id="premade" class="ui-block">
-        <h1 class="lang cell-6 leftmost" key="header-premade-chat"></h1>
-        <div class="user-list cell-1 leftmost"><h3 class="lang" key="header-players"></h3></div>
+        <h1 class="lang cell-6 leftmost" data-lang-key="header-premade-chat"></h1>
+        <div class="user-list cell-1 leftmost"><h3 class="lang" data-lang-key="header-players"></h3></div>
         <div class="chat cell-3">
             <div class="chat-log">
                 <div class="messages"></div>
@@ -122,15 +122,15 @@
         <form class="message-form">
             <div class="cell-1 leftmost">&nbsp;</div>
             <div class="cell-3">
-            <input type="text" name="message">
-            <button type="submit" class="lang" key="submit"></button>
+            <input type="text" name="message" title="">
+            <button type="submit" class="lang" data-lang-key="submit"></button>
             </div>
         </form>
         <div class="game-controls cell-2">
-            <div class="level"><span class="lang" key="prompt-level"></span><br>
-                <select name="level"></select></div>
-            <button class="start-game lang" key="start"></button><br>
-            <button class="exit-game lang" key="exit"></button>
+            <div class="level"><span class="lang" data-lang-key="prompt-level"></span><br>
+                <select name="level" title=""></select></div>
+            <button class="start-game lang" data-lang-key="start"></button><br>
+            <button class="exit-game lang" data-lang-key="exit"></button>
         </div>
     </div>
 
@@ -143,9 +143,9 @@
         <div class="player3-stats"></div>
     </div>
 </div>
-<script src="bundle.js"></script>
+<script src="client.js"></script>
 <script type="text/javascript">
-  var _gaq = _gaq || [];
+  var _gaq = [];
   _gaq.push(['_setAccount', 'UA-28507208-1']);
   _gaq.push(['_setDomainName', 'vtk.tom.ru']);
   _gaq.push(['_setAllowLinker', true]);

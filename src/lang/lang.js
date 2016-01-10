@@ -17,7 +17,7 @@ function applyLang(lang, context, recursive)
     }
 
     elements.each(function(){
-        var key = $(this).attr('key');
+        var key = $(this).data('lang-key');
         var file = $(this).attr('langfile') ? $(this).attr('langfile') : '/src/lang/';
         if (file == 'null') {
             return;

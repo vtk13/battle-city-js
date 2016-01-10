@@ -4,9 +4,6 @@
 /v8.out
 /.idea/
 /node_modules/
-/0.bundle.js
-/1.bundle.js
-/2.bundle.js
-/bundle.js
+/client.js
 /test.js
 .DS_Store
