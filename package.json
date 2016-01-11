@@ -17,7 +17,8 @@
     "chai": "^3.4.1",
     "mocha": "^2.3.4",
     "mocha-loader": "^0.7.1",
-    "webpack": "^1.12.10"
+    "webpack": "^1.12.10",
+    "webpack-split-by-path": "0.0.7"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"

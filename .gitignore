@@ -4,6 +4,7 @@
 /v8.out
 /.idea/
 /node_modules/
+/vendor.js
 /client.js
 /test.js
 .DS_Store
