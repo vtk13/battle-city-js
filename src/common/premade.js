@@ -113,9 +113,12 @@ Premade.prototype.startGame = function()
 
     this.running = true;
     this.field.terrain(level.getMap());
+    this.field.add(this.clans[0]);
+    this.field.add(this.clans[1]);
 
-    this.clans[0].startGame(this.field, level);
-    this.clans[1].startGame(this.field, level);
+    this.clans[0].startGame(level);
+    this.clans[1].startGame(level);
+
     this.users.map(function(user) {
         user.watchCollection(self.field, 'f');
         if (user.clan.enemiesClan.botStack) {
@@ -230,8 +233,6 @@ ClientPremade.prototype.step = function(data)
     }
 
     this.field.step();
-    this.clans[0].step();
-    this.clans[1].step();
 };
 
 
@@ -262,9 +263,7 @@ ServerPremade.prototype.step = function()
     }
 
     this.field.step();
-    this.clans[0].step();
-    this.clans[1].step();
-}
+};
 
 if (func.isClient()) {
     module.exports = ClientPremade;

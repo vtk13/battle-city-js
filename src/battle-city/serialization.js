@@ -12,6 +12,8 @@ var User = require('src/common/user.js');
 var Premade = require('src/common/premade.js');
 var Message = require('src/common/message.js');
 var Collection = require('src/engine/store/collection.js');
+var Clan = require('src/battle-city/clan.js');
+var BotsClan = require('src/battle-city/bots-clan.js');
 var registry = require('src/common/registry.js');
 var OdbProxy = require('src/engine/store/odb_proxy.js');
 
@@ -37,7 +39,9 @@ var unserializeTypeMatches = {
     19: Base,
     20: User,
     21: Premade,
-    22: Message
+    22: Message,
+    23: Clan,
+    24: BotsClan
 };
 
 var serializeTypeMatches = {};
@@ -51,7 +55,7 @@ AbstractGameObject.prototype.serialize = function()
 {
     // zero element is always type, first - id
     return [
-        serializeTypeMatches['AbstractGameObject'],
+        serializeTypeMatches[this.constructor.name],
         this.id
         // ...
     ];
@@ -376,6 +380,32 @@ User.prototype.unserialize = function(data)
     this.tankId     = data[8];
 };
 
+Clan.prototype.serialize = function()
+{
+    return [
+        serializeTypeMatches[this.constructor.name],
+        this.id
+    ];
+};
+
+Clan.prototype.unserialize = function(data)
+{
+    this.id = data[1];
+};
+
+BotsClan.prototype.serialize = function()
+{
+    return [
+        serializeTypeMatches[this.constructor.name],
+        this.id
+    ];
+};
+
+BotsClan.prototype.unserialize = function(data)
+{
+    this.id = data[1];
+};
+
 
 function serialize(object)
 {
@@ -385,7 +415,8 @@ function serialize(object)
 function unserialize(object, data)
 {
     var type = unserializeTypeMatches[data[0/*type*/]];
-    object = object || new type();
+    object = object || new type;
+
     // todo бывает приходит событие change объекта, который уже удален и на его месте уже анимашка
     if (object.unserialize) {
         object.unserialize(data);

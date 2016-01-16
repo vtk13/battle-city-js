@@ -1,6 +1,8 @@
 var Tank = require('src/battle-city/objects/tank.js');
 var Base = require('src/battle-city/objects/base.js');
 
+module.exports = Clan;
+
 function Clan(n, defaultArmoredTimer)
 {
     this.capacity = 2; // max users
@@ -9,6 +11,7 @@ function Clan(n, defaultArmoredTimer)
     this.enemiesClan = null;
     this.users = [];
     this.tankPositions = Clan.tankPositions['clan' + n]; // todo move to BotEmitter?
+    this.field = null;
 }
 
 Clan.tankPositions = {
@@ -78,9 +81,8 @@ Clan.prototype.step = function()
     }
 };
 
-Clan.prototype.startGame = function(field)
+Clan.prototype.startGame = function()
 {
-    this.field = field;
     for (var i in this.users) {
         var user = this.users[i];
         if (user.lives < 0) user.lives = 0; // todo hack
@@ -93,9 +95,9 @@ Clan.prototype.startGame = function(field)
         }
     }
 
-    this.base = new Base(field.width / 2, (this.n == 1) ? (field.height - 16) : 16);
+    this.base = new Base(this.field.width / 2, (this.n == 1) ? (this.field.height - 16) : 16);
     this.base.once('hit', this.premade.gameOver.bind(this.premade, this.enemiesClan, 2000));
-    field.add(this.base);
+    this.field.add(this.base);
 };
 
 Clan.prototype.createTank = function(user, position)
@@ -131,5 +133,3 @@ Clan.prototype.pauseTanks = function()
         }
     }
 };
-
-module.exports = Clan;

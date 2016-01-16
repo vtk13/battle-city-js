@@ -2,6 +2,8 @@ var Clan = require('src/battle-city/clan.js');
 var tankbot = require('src/battle-city/objects/tankbot.js');
 var Collection = require('src/engine/store/collection.js');
 
+module.exports = BotsClan;
+
 // todo убрать понятие user из этого класса
 function BotsClan(n)
 {
@@ -40,9 +42,8 @@ BotsClan.prototype.step = function()
     }
 };
 
-BotsClan.prototype.startGame = function(field, level)
+BotsClan.prototype.startGame = function(level)
 {
-    this.field = field;
     var bots = this.users = [];
     this.field.on('remove', function(object) {
         for (var i in bots) {
@@ -89,5 +90,3 @@ BotsClan.prototype.pauseTanks = function()
         }
     }
 };
-
-module.exports = BotsClan;
