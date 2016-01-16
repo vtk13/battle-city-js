@@ -23,8 +23,7 @@ function BcClient(socket)
     // todo move to premade object?
     this.tankStack = new Collection().bindSource(socket, 'game.botStack');
 
-    this.field = new Field(13 * 32, 13 * 32);
-    Collection.prototype.bindSource.call(this.field, socket, 'f');
+    this.currentPremade.field.bindSource(socket, 'f');
 
     var self = this;
     socket.on('logged', function(data) {
@@ -38,6 +37,7 @@ function BcClient(socket)
         // do not replace this.currentPremade
         self.currentPremade.unserialize([]);
     });
+    //socket.on('step', this.currentPremade.step.bind(this.currentPremade));
 }
 
 Emitter(BcClient.prototype);

@@ -1,7 +1,9 @@
 var path = require('path');
 var fs = require('fs');
-var ServerUser = require('src/server/user.js');
+var User = require('src/common/user.js');
 var registry = require('src/common/registry.js');
+
+module.exports = BcServerInterface;
 
 /**
  * This object is an interface for "server-side" variables. All access to them
@@ -41,7 +43,7 @@ BcServerInterface.prototype.onLogin = function(event)
             }
         });
         if (nickAllowed) {
-            this.user = registry.odb.create(ServerUser);
+            this.user = registry.odb.create(User);
             this.user.lastSync = 0;
             this.user.socket = this.socket;
             this.user.nick = nick;
@@ -111,13 +113,7 @@ BcServerInterface.prototype.onStart = function(event)
 
 BcServerInterface.prototype.onControl = function(event)
 {
-    if (this.user) {
-        try {
-            this.user.control(event);
-        } catch (ex) {
-            console.log(ex.stack);
-        }
-    }
+    this.user && this.user.premade && this.user.premade.control(this.user, event);
 };
 
 BcServerInterface.prototype.onSay = function(event)
@@ -156,5 +152,3 @@ BcServerInterface.prototype.onDisconnect = function(event)
                 + connections , ' total)');
     }
 };
-
-module.exports = BcServerInterface;

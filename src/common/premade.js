@@ -15,19 +15,14 @@ function Premade(name, type)
     this.users = new Collection();
     this.messages = new Collection();
     this.setType(type || 'classic');
+
+    this.stepActions = [];
     this.stepIntervalId = null;
+
+    this.field = new Field(13*32, 13*32);
 }
 
 Emitter(Premade.prototype);
-
-Premade.types = {
-    'classic': {
-        'levels': 35
-    },
-    'teamvsteam': {
-        'levels': 1
-    }
-};
 
 Premade.prototype.setType = function(type)
 {
@@ -116,14 +111,13 @@ Premade.prototype.startGame = function()
     var self = this;
     var level = require('src/battle-city/maps/' + this.type + '/level' + this.level + '.js');
 
-    self.running = true;
-    self.field = func.isClient() ? window.bcClient.field : new Field(13*32, 13*32);
-    self.field.terrain(level.getMap());
+    this.running = true;
+    this.field.terrain(level.getMap());
 
-    self.clans[0].startGame(self.field, level);
-    self.clans[1].startGame(self.field, level);
-    self.users.traversal(function(user) {
-        user.watchCollection(this.field, 'f');
+    this.clans[0].startGame(this.field, level);
+    this.clans[1].startGame(this.field, level);
+    this.users.map(function(user) {
+        user.watchCollection(self.field, 'f');
         if (user.clan.enemiesClan.botStack) {
             user.watchCollection(user.clan.enemiesClan.botStack, 'game.botStack');
         }
@@ -132,16 +126,31 @@ Premade.prototype.startGame = function()
             user.emit('change');
         }
         user.clientMessage('started');
-    }, self);
-    self.stepIntervalId = setInterval(self.step.bind(self), 30);
-    self.emit('change');
+    });
+
+    this.stepActions = [];
+    this.stepIntervalId = setInterval(this.step.bind(this), 30);
+    this.emit('change');
 };
 
-Premade.prototype.step = function()
+Premade.prototype.control = function(user, event)
 {
-    this.field.step();
-    this.clans[0].step();
-    this.clans[1].step();
+    if (user.tank) {
+        var id = user.tank.id;
+
+        if (event.turn) {
+            this.stepActions.push([id, 'turn', [event.turn]]);
+        }
+        if (event.startMove) {
+            this.stepActions.push([id, 'startMove', []]);
+        }
+        if (event.stopMove) {
+            this.stepActions.push([id, 'stopMove', []]);
+        }
+        if (event.fire) {
+            this.stepActions.push([id, 'fire', []]);
+        }
+    }
 };
 
 Premade.prototype.lock = function()
@@ -192,4 +201,73 @@ Premade.prototype._gameOver = function(winnerClan)
     }
 };
 
-module.exports = Premade;
+function ServerPremade()
+{
+    Premade.apply(this, arguments);
+}
+
+ServerPremade.prototype = Object.create(Premade.prototype);
+ServerPremade.prototype.constructor = ServerPremade;
+
+function ClientPremade()
+{
+    Premade.apply(this, arguments);
+}
+
+ClientPremade.prototype = Object.create(Premade.prototype);
+ClientPremade.prototype.constructor = ClientPremade;
+
+ClientPremade.prototype.step = function(data)
+{
+    while (data.length) {
+        var action = data.pop();
+        var id = action[0];
+        var method = action[1];
+        var args = action[2];
+
+        var item = this.field.get(id);
+        item[method].apply(item, args);
+    }
+
+    this.field.step();
+    this.clans[0].step();
+    this.clans[1].step();
+};
+
+
+ServerPremade.types = ClientPremade.types = Premade.types = {
+    'classic': {
+        'levels': 35
+    },
+    'teamvsteam': {
+        'levels': 1
+    }
+};
+
+ServerPremade.prototype.step = function()
+{
+    var self = this;
+    this.users.map(function (user) {
+        user.clientMessage('step', self.stepActions);
+    });
+
+    while (this.stepActions.length) {
+        var action = this.stepActions.pop();
+        var id = action[0];
+        var method = action[1];
+        var args = action[2];
+
+        var item = this.field.get(id);
+        item[method].apply(item, args);
+    }
+
+    this.field.step();
+    this.clans[0].step();
+    this.clans[1].step();
+}
+
+if (func.isClient()) {
+    module.exports = ClientPremade;
+} else {
+    module.exports = ServerPremade;
+}

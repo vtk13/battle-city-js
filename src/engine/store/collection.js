@@ -3,7 +3,7 @@ var odb = require('src/engine/store/odb.js');
 
 function Collection()
 {
-    // items is not array because we need an sparse array and array's methods is not applicable
+    // items is not array because we need an sparse array and array methods are not applicable
     this.items = {};
     this.changeListeners = {};
     this.length = 0;
@@ -65,10 +65,8 @@ Collection.prototype.remove = function(item)
 Collection.prototype.clear = function()
 {
     for (var i in this.items) {
-        this.emit('remove', this.items[i]);
-        delete this.items[i];
+        this.remove(this.items[i]);
     }
-    this.length = 0;
 };
 
 Collection.prototype.pop = function()
@@ -91,6 +89,18 @@ Collection.prototype.count = function()
     return this.length;
 };
 
+Collection.prototype.map = function(callback)
+{
+    for (var i in this.items) {
+        callback(this.items[i]);
+    }
+};
+
+/**
+ * @deprecated map()
+ * @param callback
+ * @param thisObj
+ */
 Collection.prototype.traversal = function(callback, thisObj)
 {
     for (var i in this.items) {

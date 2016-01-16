@@ -45,6 +45,8 @@ Field.prototype.step = function() {
 
 Field.prototype.terrain = function(map)
 {
+    this.clear();
+
     this.add(new Delimiter(           - 20, this.height /  2,             20, this.height / 2));
     this.add(new Delimiter(this.width + 20, this.height /  2,             20, this.height / 2));
     this.add(new Delimiter(this.width /  2,             - 20, this.width / 2,              20));

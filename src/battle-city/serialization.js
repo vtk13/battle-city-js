@@ -8,39 +8,12 @@ var Trees = require('src/battle-city/objects/trees.js');
 var Ice = require('src/battle-city/objects/ice.js');
 var Delimiter = require('src/battle-city/objects/delimiter.js');
 var Base = require('src/battle-city/objects/base.js');
-var ServerUser = require('src/server/user.js');
 var User = require('src/common/user.js');
 var Premade = require('src/common/premade.js');
 var Message = require('src/common/message.js');
 var Collection = require('src/engine/store/collection.js');
-var Field = require('src/battle-city/field.js');
 var registry = require('src/common/registry.js');
 var OdbProxy = require('src/engine/store/odb_proxy.js');
-
-var serializeTypeMatches = {
-    'Bullet'            : 1,
-    'Tank'              : 2,
-    'TankBot'           : 3,
-    'HeavyTankBot'      : 4,
-    'FastBulletTankBot' : 5,
-    'FastTankBot'       : 6,
-    'Wall'              : 7,
-    'SteelWall'         : 8,
-    'BonusTimer'        : 9,
-    'BonusShovel'       : 10,
-    'BonusStar'         : 11,
-    'BonusHelmet'       : 12,
-    'BonusLive'         : 13,
-    'BonusGrenade'      : 14,
-    'Water'             : 15,
-    'Trees'             : 16,
-    'Ice'               : 17,
-    'Delimiter'         : 18,
-    'Base'              : 19,
-    'ServerUser'        : 20,
-    'Premade'           : 21,
-    'Message'           : 22
-};
 
 var unserializeTypeMatches = {
     1: Bullet,
@@ -66,6 +39,12 @@ var unserializeTypeMatches = {
     21: Premade,
     22: Message
 };
+
+var serializeTypeMatches = {};
+for (var i in unserializeTypeMatches) {
+    var constructorName = unserializeTypeMatches[i].name;
+    serializeTypeMatches[constructorName] = i;
+}
 
 /* sample
 AbstractGameObject.prototype.serialize = function()
@@ -363,7 +342,7 @@ Premade.prototype.unserialize = function(data)
     this.running    = data[7];
 };
 
-ServerUser.prototype.serialize = function()
+User.prototype.serialize = function()
 {
     return [
         serializeTypeMatches[this.constructor.name] // 0
@@ -376,25 +355,6 @@ ServerUser.prototype.serialize = function()
       , this.positionId // 7
       , this.tank ? this.tank.id : 0 // 8
     ];
-};
-
-/**
- * @todo hack for BcClient.onUserChange()
- * @param data
- * @return
- */
-User.prototype.serialize = function()
-{
-    var res = [];
-    res[1] = this.id;
-    res[2] = this.nick;
-    res[3] = this.lives;
-    res[4] = this.points;
-    res[5] = this.clan;
-    res[6] = this.premade ? this.premade.id : 0;
-    res[7] = this.positionId;
-    res[8] = this.tankId;
-    return res;
 };
 
 User.prototype.unserialize = function(data)
@@ -426,7 +386,12 @@ function unserialize(object, data)
 {
     var type = unserializeTypeMatches[data[0/*type*/]];
     object = object || new type();
-    object.unserialize(data);
+    // todo бывает приходит событие change объекта, который уже удален и на его месте уже анимашка
+    if (object.unserialize) {
+        object.unserialize(data);
+    } else {
+        console.log(object.constructor.name + ' has no method unserialize');
+    }
     return object;
 }
 
@@ -457,7 +422,8 @@ OdbProxy.prototype.updateWith = function(events) {
     }
 };
 
-Collection.prototype.updateWith = function(events) {
+Collection.prototype.updateWith = function(events)
+{
     for (var i in events) {
         var eventType = events[i][0/*type*/];
         var eventData = events[i][1/*data*/];
@@ -499,37 +465,6 @@ Collection.prototype.bindSource = function(source, key)
         }
     });
     return this;
-};
-
-/**
- * todo almost copy of Collection.prototype.updateWith
- */
-Field.prototype.updateWith = function(events)
-{
-    for (var i in events) {
-        var eventType = events[i][0/*type*/];
-        var eventData = events[i][1/*data*/];
-        var type = unserializeTypeMatches[eventData[0/*type*/]];
-        var id = parseInt(eventData[1/*id*/]);
-        switch (eventType) {
-        case 'r'/*remove*/:
-            if (obj = this.get(id)) {
-                unserialize(obj, eventData);// for bullets finalX and finalY
-                this.remove(obj);
-            }
-            break;
-            case 'a'/*add*/:
-            case 'c'/*change*/:
-                var obj = this.get(id);
-                if (obj) {
-                    unserialize(obj, eventData);
-                } else {
-                    obj = unserialize(undefined, eventData);
-                    this.add(obj);
-                }
-                break;
-        }
-    }
 };
 
 module.exports = {

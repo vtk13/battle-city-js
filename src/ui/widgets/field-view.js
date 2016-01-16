@@ -5,7 +5,7 @@ var animation = require('src/battle-city/objects/animation.js');
 
 function FieldView(context, client)
 {
-    this.field = client.field;
+    this.field = client.currentPremade.field;
     this.context = context;
     this.c2d = $('#field', context).get(0).getContext('2d');
     this.c2d.font ="bold 25px Arial";
