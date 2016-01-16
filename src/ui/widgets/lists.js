@@ -12,7 +12,7 @@ function UiList(list, container, itemClass)
     }
 }
 
-UiList.prototype.itemDomElement = function(item)
+UiList.prototype.itemDomElement = function(/*item*/)
 {
     throw new Error('subclass responsibility');
 };
@@ -134,6 +134,7 @@ UiMessageList.prototype.onAdd = function(item)
 
 function UiTankStack(list, container, itemClass)
 {
+    return;
     UiList.apply(this, arguments);
 }
 

@@ -89,7 +89,6 @@ Premade.prototype.unjoin = function(user)
     user.unwatchCollection('premade.users');
     user.unwatchCollection('premade.messages');
     user.unwatchCollection('f');
-    user.unwatchCollection('game.botStack');
     user.clan.detachUser(user);
     this.users.remove(user);
     this.userCount--;
@@ -121,9 +120,6 @@ Premade.prototype.startGame = function()
 
     this.users.map(function(user) {
         user.watchCollection(self.field, 'f');
-        if (user.clan.enemiesClan.botStack) {
-            user.watchCollection(user.clan.enemiesClan.botStack, 'game.botStack');
-        }
         if (user.premade.type == 'teamvsteam') {
             user.lives = 4;
             user.emit('change');
@@ -194,7 +190,6 @@ Premade.prototype._gameOver = function(winnerClan)
         }
         this.users.traversal(function(user) {
             user.unwatchCollection('f');
-            user.unwatchCollection('game.botStack');
             user.clientMessage('gameover', {
                 winnerClan: winnerClan ? winnerClan.n : 0
             });

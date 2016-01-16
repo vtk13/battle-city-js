@@ -2,7 +2,6 @@ var Emitter = require('component-emitter');
 var Collection = require('src/engine/store/collection.js');
 var User = require('src/common/user.js');
 var Premade = require('src/common/premade.js');
-var Field = require('src/battle-city/field.js');
 var serialization = require('src/battle-city/serialization.js');
 
 function BcClient(socket)
@@ -20,8 +19,6 @@ function BcClient(socket)
     this.messages = new Collection().bindSource(socket, 'messages');
     this.premadeUsers = new Collection().bindSource(socket, 'premade.users');
     this.premadeMessages = new Collection().bindSource(socket, 'premade.messages');
-    // todo move to premade object?
-    this.tankStack = new Collection().bindSource(socket, 'game.botStack');
 
     this.currentPremade.field.bindSource(socket, 'f');
 
