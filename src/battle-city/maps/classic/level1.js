@@ -36,6 +36,7 @@ function getMap()
 function getEnemies()
 {
     return [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,2,2];
+    //return [1];
 }
 
 module.exports = {

@@ -145,7 +145,6 @@ Bullet.prototype.unserialize = function(data)
     this.setSpeedY(data[5]);
     this.finalX = data[6];
     this.finalY = data[7];
-    this.setDirectionImage();
 };
 
 Delimiter.prototype.serialize = function()
@@ -354,10 +353,8 @@ User.prototype.serialize = function()
       , this.nick // 2
       , this.lives // 3
       , this.points // 4
-      , this.clan ? this.clan.n : 0 // 5
-      , this.premade ? this.premade.id : 0 // 6
-      , this.positionId // 7
-      , this.tank ? this.tank.id : 0 // 8
+      , this.premade ? this.premade.id : 0 // 5
+      , this.positionId // 6
     ];
 };
 
@@ -368,16 +365,14 @@ User.prototype.unserialize = function(data)
     this.nick   = data[2];
     this.lives  = data[3];
     this.points = data[4];
-    this.clan   = data[5];
-    if (data[6]) {
-        registry.odb.fetch(data[6], function(premade) {
+    if (data[5]) {
+        registry.odb.fetch(data[5], function(premade) {
             self.premade = premade;
         });
     } else {
         this.premade = null;
     }
-    this.positionId = data[7];
-    this.tankId     = data[8];
+    this.positionId = data[6];
 };
 
 Clan.prototype.serialize = function()

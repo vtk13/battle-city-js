@@ -23,7 +23,7 @@ BotsClan.prototype.isBots = function()
 BotsClan.prototype.step = function()
 {
     if (this.users.length == 0 && this.botStack.length == 0) {
-        this.premade.gameOver(this.enemiesClan, 2000);
+        this.premade.gameOver(this.enemiesClan);
     }
 
     if (!this.isFull() && this.botStack.length > 0 && Math.random() < 0.01) {

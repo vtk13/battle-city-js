@@ -7,6 +7,7 @@ function FieldView(context, client)
 {
     this.field = client.currentPremade.field;
     this.context = context;
+    this.message = '';
     this.c2d = $('#field', context).get(0).getContext('2d');
     this.c2d.font ="bold 25px Arial";
     this.step = 1;
@@ -35,12 +36,14 @@ function FieldView(context, client)
     });
 
     client.socket.on('gameover', function(event) {
-        clearInterval(self.animateIntervalId);
-        if (event.winnerClan == client.currentUser.clan) {
-            self.message('Победа!');
+        if (event.winnerClanId == client.currentUser.clan.n) {
+            self.message = 'Победа!';
         } else {
-            self.message('Вы проиграли');
+            self.message = 'Вы проиграли';
         }
+        setTimeout(function() {
+            clearInterval(self.animateIntervalId);
+        }, 2000); // todo quick hack, stop simulation is delayed also in premade
     });
     client.socket.on('disconnect', function() {
         clearInterval(self.animateIntervalId);
@@ -51,8 +54,7 @@ function FieldView(context, client)
     client.socket.on('started', function(){
         clearInterval(self.animateIntervalId);
         if (window.location.hash != '#test') {
-            self.animateIntervalId =
-                setInterval(self.animateStep.bind(self), 50);
+            self.animateIntervalId = setInterval(self.animateStep.bind(self), 50);
         }
     });
 }
@@ -89,14 +91,11 @@ FieldView.prototype.draw = function()
     for (this.z = 0 ; this.z <= 2 ; this.z++) { // this.z hack?
         this.field.traversal(this.drawItem, this);
     }
-};
 
-FieldView.prototype.message = function(message)
-{
     this.c2d.fillStyle = '#fff';
-    this.c2d.fillText(message, 100, 200);
+    this.c2d.fillText(this.message, 100, 200);
     this.c2d.strokeStyle = '#000';
-    this.c2d.strokeText(message, 100, 200);
+    this.c2d.strokeText(this.message, 100, 200);
 };
 
 module.exports = FieldView;

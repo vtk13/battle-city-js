@@ -19,8 +19,25 @@ function isInteger(value) {
         Math.floor(value) === value;
 }
 
+function createLoggedPropertyDescriptor(defaultValue)
+{
+    var value = defaultValue;
+    return {
+        enumerable: true,
+        get: function() {
+            return value;
+        },
+        set: function(newValue) {
+            console.log('Write property', newValue, value);
+            console.trace();
+            value = newValue;
+        }
+    };
+}
+
 module.exports = {
     vector: vector,
     isClient: isClient,
-    isInteger: isInteger
+    isInteger: isInteger,
+    createLoggedPropertyDescriptor: createLoggedPropertyDescriptor
 };

@@ -17,25 +17,24 @@ function Bullet(speedX, speedY)
     this.finalX = 0; // for proper hit animation (todo ugly)
     this.finalY = 0; // for proper hit animation (todo ugly)
     this.power = 1;
-    this.setDirectionImage();
 }
 
 Bullet.prototype = Object.create(AbstractGameObject.prototype);
 Bullet.prototype.constructor = Bullet;
 
-Bullet.prototype.setDirectionImage = function()
+Bullet.prototype.animateStep = function()
 {
- var dir = 'up';
- if (this.speedY  > 0) {
-     dir = 'down';
- } else if (this.speedY  < 0) {
-     dir = 'up';
- } else if (this.speedX  > 0) {
-     dir = 'right';
- } else if (this.speedX  < 0) {
-     dir = 'left';
- }
- this.img[0] = 'img/bullet-' + dir + '.png';
+    var dir = 'up';
+    if (this.speedY  > 0) {
+        dir = 'down';
+    } else if (this.speedY  < 0) {
+        dir = 'up';
+    } else if (this.speedX  > 0) {
+        dir = 'right';
+    } else if (this.speedX  < 0) {
+        dir = 'left';
+    }
+    this.img[0] = 'img/bullet-' + dir + '.png';
 };
 
 Bullet.prototype.step = function()

@@ -22,6 +22,7 @@ function BcServerInterface(socket)
     socket.on('control',    this.onControl.bind(this));
     socket.on('say',        this.onSay.bind(this));
     socket.on('disconnect', this.onDisconnect.bind(this));
+    socket.on('gameover',   this.onGameOver.bind(this));
 
     try {
         var connections = 0;
@@ -67,17 +68,17 @@ BcServerInterface.prototype.onJoin = function(event)
     try {
         oldGlobalRegistry.premades.join(event, this.user);
         this.socket.emit('joined', {
-            // user not likely synced this premade yet
+            // this premade has not probably synced yet
             premade: this.user.premade.serialize()
         });
 
         console.log(new Date().toLocaleTimeString() + ': user ' + this.user.nick
                 + ' join premade ' + this.user.premade.name + ' (' + event.gameType + ')');
     } catch (ex) {
-        console.log(ex.message, ex.stack);
         this.socket.emit('user-message', {
             message: ex.message
         });
+        throw ex;
     }
 };
 
@@ -150,5 +151,13 @@ BcServerInterface.prototype.onDisconnect = function(event)
     } else {
         console.log(new Date().toLocaleTimeString() + ': anonymous disconnected ('
                 + connections , ' total)');
+    }
+};
+
+BcServerInterface.prototype.onGameOver = function(premadeId, winnerClanId)
+{
+    var premade = oldGlobalRegistry.premades.get(premadeId);
+    if (premade) {
+        premade.gameOver(winnerClanId);
     }
 };

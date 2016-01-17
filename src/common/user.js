@@ -13,8 +13,16 @@ if (func.isClient()) {
  */
 function User()
 {
-
+    this.point = 0;
+    this.clan = null;
+    //Object.defineProperty(this, 'clan', func.createLoggedPropertyDescriptor());
 }
+
+User.prototype.addReward = function(reward)
+{
+    this.points += reward;
+    this.emit('change');
+};
 
 Emitter(User.prototype);
 
@@ -78,12 +86,6 @@ ServerUser.prototype.say = function(text)
     } else {
         return false;
     }
-};
-
-ServerUser.prototype.addReward = function(reward)
-{
-    this.points += reward;
-    this.emit('change');
 };
 
 ServerUser.prototype.clientMessage = function(type, data)

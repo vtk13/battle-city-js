@@ -2,6 +2,8 @@ var Collection = require('src/engine/store/collection.js');
 var Premade = require('src/common/premade.js');
 var odb = require('src/engine/store/odb.js');
 
+module.exports = PremadeList;
+
 function PremadeList()
 {
     Collection.call(this);
@@ -34,5 +36,3 @@ PremadeList.prototype.join = function(event, user)
         throw {message: "User already in premade - " + user.premade.id + " (bug?)"};
     }
 };
-
-module.exports = PremadeList;

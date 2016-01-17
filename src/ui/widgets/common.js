@@ -45,7 +45,7 @@ UserPoint.prototype.onRemove = function(user)
 
 function WidgetCreateGame(context, client)
 {
-    $('#create-form', context).submit(function(){
+    $('#create-form', context).submit(function() {
         var name = $('input[name=name]', this).val();
         var gameType = $('input[name=type]', this).val();
         if (name) {
@@ -54,7 +54,7 @@ function WidgetCreateGame(context, client)
         return false;
     });
     $('.game-modes li', context).click(function(){
-        $('#create-form input[name=type]').val(this.id);
+        $('#create-form').find('input[name=type]').val(this.id);
         $('.game-modes li').removeClass('current');
         $(this).addClass('current');
     });

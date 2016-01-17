@@ -77,10 +77,15 @@ Clan.prototype.step = function()
         }
     }
     if (activeUsers == 0) {
-        this.premade.gameOver(this.enemiesClan, 2000);
+        this.premade.gameOver(this.enemiesClan);
     }
 };
 
+/**
+ * можно сделать чтобы field мог прокидывать событие всем объектам у себя
+ * (например метод broadCast),
+ * и завернуть через этот механизм все вызовы step, animateStep и startGame.
+ */
 Clan.prototype.startGame = function()
 {
     for (var i in this.users) {

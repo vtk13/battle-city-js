@@ -16,7 +16,7 @@ var Bullet = require('src/battle-city/objects/bullet.js');
  *
  * В этом классе перемешанны:
  *  - сама сущность
- *  - отрисовка (setDirectionImage(), imgBase, colorCode, trackStep, blink)
+ *  - отрисовка (animateStep(), imgBase, colorCode, trackStep, blink)
  *  - не понятно куда пристроить обработку бонусов, толи this.onBonus толи в
  *          bonus.onIntersect. А может вообще в отдельный класс?
  *  - сериализация
@@ -49,7 +49,6 @@ function Tank(x, y)
     this.setSpeedY(-this.speed);
     this.direction = null;
 
-    this.setDirectionImage();
     this.maxBullets = 1;
     this.bulletPower = 1;
     this.bullets = [];
@@ -91,7 +90,9 @@ Tank.prototype.fire = function()
     ) {
         this.fireTimer = 0.5 * 1000/30; // 30ms step
 
-        var bullet = new Bullet();
+        var bullet = new Bullet(
+
+        );
         bullet.tank = this;
         bullet.clan = this.clan;
         bullet.setSpeedX(func.vector(this.speedX) * this.bulletSpeed);
@@ -181,17 +182,17 @@ Tank.prototype.onBonus = function(bonus)
 //function for override for different sprites
 Tank.prototype.setDirectionImage = function()
 {
- var dir = 'up';
- if (this.speedY  > 0) {
-     dir = 'down';
- } else if (this.speedY  < 0) {
-     dir = 'up';
- } else if (this.speedX  > 0) {
-     dir = 'right';
- } else if (this.speedX  < 0) {
-     dir = 'left';
- }
- this.img[0] = (((this.imgBase == 'img/tank') ? this.imgBase + this.colorCode : this.imgBase)
+    var dir = 'up';
+    if (this.speedY  > 0) {
+        dir = 'down';
+    } else if (this.speedY  < 0) {
+        dir = 'up';
+    } else if (this.speedX  > 0) {
+        dir = 'right';
+    } else if (this.speedX  < 0) {
+        dir = 'left';
+    }
+    this.img[0] = (((this.imgBase == 'img/tank') ? this.imgBase + this.colorCode : this.imgBase)
          + '-' + dir + '-s' + this.trackStep + (this.blink ? '-blink' : '') + '.png');
 };
 
@@ -386,8 +387,9 @@ Tank.prototype.hit = function(bullet)
         return true;
     }
 
-    if (this.lives > 0) {
-        this.lives--;
+    this.lives--;
+    if (this.lives <= 0) {
+        // todo no bullet.tank.user now
         bullet.tank.user && bullet.tank.user.addReward(this.reward);
         this.field.remove(this);
         this.emit('hit');
