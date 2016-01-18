@@ -20,7 +20,7 @@ function UiGameControls(context, client)
         client.unjoin();
     });
 
-    $('.start-game', context).click(function(){
+    $('.start-game', context).click(function() {
         client.startGame($('select[name=level]', context).val());
     });
 }

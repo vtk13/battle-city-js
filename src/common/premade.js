@@ -183,6 +183,12 @@ ClientPremade.prototype.gameOver = function(winnerClan)
 {
     if (this.running) {
         this.running = false;
+        if (this.type == 'classic' && this.clans[0] == winnerClan) {
+            this.level++;
+            if (this.level > Premade.types[this.type].levels) {
+                this.level = 1;
+            }
+        }
         this.emit('gameover', winnerClan.n);
     }
 };
@@ -262,6 +268,7 @@ ServerPremade.prototype.join = function(user, clanId)
 ServerPremade.prototype.gameOver = function(winnerClanId)
 {
     if (this.stepIntervalId) {
+        this.running = false;
         var stepIntervalId = this.stepIntervalId;
         this.stepIntervalId = null;
         setTimeout(function() {
@@ -272,13 +279,6 @@ ServerPremade.prototype.gameOver = function(winnerClanId)
             this.locked = false;
         }
 
-        // fixme
-        //if (this.type == 'classic' && this.clans[0] == winnerClan) {
-        //    this.leswvel++;
-        //    if (this.level > Premade.types[this.type].levels) {
-        //        this.level = 1;
-        //    }
-        //}
         this.emit('change');
 
         this.users.map(function(user) {
