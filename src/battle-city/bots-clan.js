@@ -45,6 +45,7 @@ BotsClan.prototype.startGame = function(level)
 {
     this.currentBotPosition = 0;
     this.botStack = level.getEnemies();
+    this.botStack = [this.botStack[0]]; // debug
 
     if (this.removeListener) {
         this.field.off('remove', this.removeListener);

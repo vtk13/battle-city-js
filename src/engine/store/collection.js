@@ -89,18 +89,7 @@ Collection.prototype.count = function()
     return this.length;
 };
 
-Collection.prototype.map = function(callback)
-{
-    for (var i in this.items) {
-        callback(this.items[i]);
-    }
-};
-
-/**
- * @deprecated map()
- * @param callback
- * @param thisObj
- */
+Collection.prototype.map =
 Collection.prototype.traversal = function(callback, thisObj)
 {
     for (var i in this.items) {

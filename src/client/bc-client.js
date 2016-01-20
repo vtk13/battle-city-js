@@ -74,6 +74,7 @@ BcClient.prototype.unjoin = function()
     this.socket.emit('unjoin');
 };
 
+// todo по идее этот метод можно перенести в некий ProxyPremade
 BcClient.prototype.startGame = function(level, done)
 {
     this.socket.emit('start', {
@@ -81,8 +82,8 @@ BcClient.prototype.startGame = function(level, done)
     });
 
     var self = this;
-    this.socket.once('started', function() {
-        self.currentPremade.startGame();
+    this.socket.once('started', function(level) {
+        self.currentPremade.startGame(level);
         done && done();
     });
 };

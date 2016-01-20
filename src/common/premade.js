@@ -134,22 +134,23 @@ ClientPremade.prototype.step = function(data)
     this.field.step();
 };
 
-ClientPremade.prototype.startGame = function()
+ClientPremade.prototype.startGame = function(level)
 {
     if (this.running) {
         return false;
     }
 
+    this.level = level;
     this.locked = true;
-    var level = require('src/battle-city/maps/' + this.type + '/level' + this.level + '.js');
+    var levelData = require('src/battle-city/maps/' + this.type + '/level' + this.level + '.js');
 
     this.running = true;
-    this.field.terrain(level.getMap());
+    this.field.terrain(levelData.getMap());
     this.field.add(this.clans[0]);
     this.field.add(this.clans[1]);
 
-    this.clans[0].startGame(level);
-    this.clans[1].startGame(level);
+    this.clans[0].startGame(levelData);
+    this.clans[1].startGame(levelData);
 
     this.emit('change');
 };
@@ -188,6 +189,7 @@ ClientPremade.prototype.gameOver = function(winnerClan)
             if (this.level > Premade.types[this.type].levels) {
                 this.level = 1;
             }
+            this.emit('change');
         }
         this.emit('gameover', winnerClan.n);
     }
@@ -216,12 +218,13 @@ ServerPremade.prototype.step = function()
     //ClientPremade.prototype.step.call(this, this.stepActions);
 };
 
-ServerPremade.prototype.startGame = function()
+ServerPremade.prototype.startGame = function(level)
 {
     if (this.running) {
         return false;
     }
 
+    this.level = level;
     this.locked = true;
     this.running = true;
 
@@ -230,8 +233,8 @@ ServerPremade.prototype.startGame = function()
             user.lives = 4;
             user.emit('change');
         }
-        user.clientMessage('started');
-    });
+        user.clientMessage('started', this.level);
+    }, this);
 
     this.stepActions = [];
     this.stepIntervalId = setInterval(this.step.bind(this), 30);

@@ -48,11 +48,12 @@ function FieldView(context, client)
     client.socket.on('disconnect', function() {
         clearInterval(self.animateIntervalId);
     });
-    client.socket.on('unjoined', function(){
+    client.socket.on('unjoined', function() {
         clearInterval(self.animateIntervalId);
     });
-    client.socket.on('started', function(){
+    client.socket.on('started', function() {
         clearInterval(self.animateIntervalId);
+        self.message = '';
         if (window.location.hash != '#test') {
             self.animateIntervalId = setInterval(self.animateStep.bind(self), 50);
         }
