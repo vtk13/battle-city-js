@@ -14,8 +14,7 @@ var Message = require('src/common/message.js');
 var Collection = require('src/engine/store/collection.js');
 var Clan = require('src/battle-city/clan.js');
 var BotsClan = require('src/battle-city/bots-clan.js');
-var registry = require('src/common/registry.js');
-var OdbProxy = require('src/engine/store/odb_proxy.js');
+var Odb = require('src/engine/store/odb.js');
 
 var unserializeTypeMatches = {
     1: Bullet,
@@ -366,7 +365,7 @@ User.prototype.unserialize = function(data)
     this.lives  = data[3];
     this.points = data[4];
     if (data[5]) {
-        registry.odb.fetch(data[5], function(premade) {
+        Odb.instance().fetch(data[5], function(premade) {
             self.premade = premade;
         });
     } else {
@@ -421,27 +420,27 @@ function unserialize(object, data)
     return object;
 }
 
-OdbProxy.prototype.updateWith = function(events) {
+Odb.prototype.updateWith = function(events) {
     for (var i in events) {
         var eventType = events[i][0/*type*/];
         var eventData = events[i][1/*data*/];
         var id = parseInt(eventData[1/*id*/]);
         switch (eventType) {
         case 'r'/*remove*/:
-            if (obj = registry.odb.fetch(id)) {
+            if (obj = Odb.instance().fetch(id)) {
                 unserialize(obj, eventData);// for bullets finalX and finalY
-                registry.odb.free(obj);
+                Odb.instance().free(obj);
             }
             break;
             case 'a'/*add*/:
             case 'c'/*change*/:
-                var obj = registry.odb.fetch(id);
+                var obj = Odb.instance().fetch(id);
                 if (obj) {
                     unserialize(obj, eventData);
-//                        registry.odb.emit('change', obj);
+//                        odb.instance().emit('change', obj);
                 } else {
                     obj = unserialize(undefined, eventData);
-                    registry.odb.add(obj);
+                    Odb.instance().add(obj);
                 }
                 break;
         }

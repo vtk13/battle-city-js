@@ -4,20 +4,10 @@ var path = require('path');
 var fs = require('fs');
 var io = require('socket.io');
 var Collection = require('src/engine/store/collection.js');
-var PremadeList = require('src/server/premadelist.js');
-var MessageList = require('src/server/messagelist.js');
+var PremadeList = require('src/engine/store/premade-list.js');
+var MessageList = require('src/engine/store/message-list.js');
 var BcServerInterface = require('src/common/server.js');
 var serialization = require('src/battle-city/serialization.js');
-var odb = require('src/engine/store/odb.js');
-var registry = require('src/common/registry.js');
-
-registry.odb = odb;
-// todo globals
-oldGlobalRegistry = {};
-
-oldGlobalRegistry.users = new Collection();
-oldGlobalRegistry.premades = new PremadeList();
-oldGlobalRegistry.messages = new MessageList();
 
 process.on('uncaughtException', function(ex) {
     if (ex.stack) {
@@ -76,6 +66,10 @@ var config = {
     'log level': 1
 };
 
+var users = new Collection();
+var premades = new PremadeList();
+var messages = new MessageList(users);
+
 io.listen(server, config).sockets.on('connection', function(socket) {
-    new BcServerInterface(socket);
+    new BcServerInterface(socket, users, premades, messages);
 });

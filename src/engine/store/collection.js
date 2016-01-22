@@ -1,5 +1,5 @@
 var Emitter = require('component-emitter');
-var odb = require('src/engine/store/odb.js');
+var Odb = require('src/engine/store/odb.js');
 
 function Collection()
 {
@@ -17,7 +17,7 @@ Emitter(Collection.prototype);
  */
 Collection.prototype.add = function(item)
 {
-    odb.add(item);
+    Odb.instance().add(item);
 
     if (this.items[item.id]) {
         return false; // item already in collection

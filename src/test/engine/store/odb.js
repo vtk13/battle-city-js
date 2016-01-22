@@ -1,7 +1,12 @@
 var assert = require('chai').assert;
-var odb = require('src/engine/store/odb.js');
+var Odb = require('src/engine/store/odb.js');
 
 describe('Global object registry', function () {
+    var odb;
+    beforeEach(function() {
+        odb = new Odb();
+    });
+
     it('Adding item should generate id for it', function() {
         var a = {};
         odb.add(a);

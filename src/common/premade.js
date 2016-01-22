@@ -18,7 +18,11 @@ ServerPremade.types = ClientPremade.types = Premade.types = {
 
 function Premade(name, type)
 {
-    this.name = name;
+    // PremadeList assume name is readonly
+    Object.defineProperty(this, 'name', {
+        enumerable: true,
+        value: name
+    });
     this.level = 1;
     this.userCount = 0; // @deprecated in case of this.users exists on client - this.users.length should be used
     this.locked = false; // lock for new users
@@ -77,7 +81,7 @@ Premade.prototype.unjoin = function(user)
     user.premade = null;
     this.emit('change');
     if (this.userCount == 0) {
-        oldGlobalRegistry.premades.remove(this);
+        this.emit('empty');
         this.removed = true; // dirty hack
     }
 };
@@ -110,9 +114,9 @@ Premade.prototype.lock = function()
 
 //===== ClientPremade ========================================================================
 
-function ClientPremade()
+function ClientPremade(name, type)
 {
-    Premade.apply(this, arguments);
+    Premade.call(this, name, type);
 }
 
 ClientPremade.prototype = Object.create(Premade.prototype);
@@ -197,9 +201,9 @@ ClientPremade.prototype.gameOver = function(winnerClan)
 
 //===== ServerPremade ========================================================================
 
-function ServerPremade()
+function ServerPremade(name, type)
 {
-    Premade.apply(this, arguments);
+    Premade.call(this, name, type);
 
     this.stepIntervalId = null;
 }
@@ -288,8 +292,6 @@ ServerPremade.prototype.gameOver = function(winnerClanId)
             user.clientMessage('gameover', {
                 winnerClanId: winnerClanId
             });
-            console.log(new Date().toLocaleTimeString() + ': user ' + user.nick +
-                ' has left game ' + user.premade.name);
         });
     }
 };

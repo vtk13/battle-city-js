@@ -6,9 +6,8 @@ var serialization = require('src/battle-city/serialization.js');
 var widgetsCommon = require('src/ui/widgets/common.js');
 var BcClient = require('src/client/bc-client.js');
 var UiManager = require('src/ui/manager.js');
-var graphicLoader = require('src/battle-city/client/graphic-loader.js');
-var registry = require('src/common/registry.js');
-var OdbProxy = require('src/engine/store/odb_proxy.js');
+require('src/battle-city/client/graphic-loader.js');
+var Odb = require('src/engine/store/odb.js');
 
 // there are all existing global vars below
 // todo all this vars should be used with window.
@@ -29,7 +28,7 @@ if (typeof WebSocket == 'undefined' && typeof MozWebSocket == 'undefined') {
         autoConnect: false,
         reconnection: false // todo learn reconnection abilities
     });
-    registry.odb = new OdbProxy(socket);
+    Odb.instance(new Odb(socket));
     bcClient = new BcClient(socket);
     uiManager = new UiManager(bcClient);
     socket.connect();

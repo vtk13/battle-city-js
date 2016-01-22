@@ -79,7 +79,7 @@ ServerUser.prototype.say = function(text)
         if (this.premade) {
             this.premade.say(message);
         } else {
-            oldGlobalRegistry.messages.say(message);
+            this.emit('say', message);
         }
         this.messages++;
         return true;

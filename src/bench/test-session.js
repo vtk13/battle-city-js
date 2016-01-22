@@ -1,10 +1,7 @@
 var io = require('socket.io-client');
 var assert = require('assert');
 var BcClient = require('src/client/bc-client.js');
-var registry = require('src/common/registry.js');
-var OdbProxy = require('src/engine/store/odb_proxy.js');
-
-return;
+var Odb = require('src/engine/store/odb.js');
 
 describe('IN ORDER TO play single player mode AS a player I NEED TO', function () {
     this.timeout(0);
@@ -18,7 +15,7 @@ describe('IN ORDER TO play single player mode AS a player I NEED TO', function (
             autoConnect: false,
             reconnection: false // todo learn reconnection abilities
         });
-        registry.odb = new OdbProxy(socket);
+        Odb.instance(new Odb(socket));
         bcClient = new BcClient(socket);
         bcClient.onConnect(done);
         socket.connect();
