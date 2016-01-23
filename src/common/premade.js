@@ -6,6 +6,7 @@ var BotsClan = require('src/battle-city/bots-clan.js');
 var Field = require('src/battle-city/field.js');
 
 module.exports = func.isClient() ? ClientPremade : ServerPremade;
+module.exports.stepInterval = 30;
 
 ServerPremade.types = ClientPremade.types = Premade.types = {
     'classic': {
@@ -168,7 +169,7 @@ ClientPremade.prototype.join = function(user, clanId)
     if (!this.locked && !this.clans[clanId].isFull()) {
         // todo extract to user method setPremade()
         if (user.premade) {
-            user.premade.unjoin();
+            user.premade.unjoin(user);
         }
         user.premade = this;
         this.clans[clanId].attachUser(user);
@@ -206,6 +207,10 @@ function ServerPremade(name, type)
     Premade.call(this, name, type);
 
     this.stepIntervalId = null;
+    var self = this;
+    this.on('empty', function() {
+        clearInterval(self.stepIntervalId);
+    });
 }
 
 ServerPremade.prototype = Object.create(Premade.prototype);
@@ -214,7 +219,7 @@ ServerPremade.prototype.constructor = ServerPremade;
 ServerPremade.prototype.step = function()
 {
     var self = this;
-    this.users.map(function (user) {
+    this.users.map(function(user) {
         user.clientMessage('step', self.stepActions);
     });
     this.stepActions = [];
@@ -241,7 +246,7 @@ ServerPremade.prototype.startGame = function(level)
     }, this);
 
     this.stepActions = [];
-    this.stepIntervalId = setInterval(this.step.bind(this), 30);
+    this.stepIntervalId = setInterval(this.step.bind(this), module.exports.stepInterval);
     this.emit('change');
 };
 
@@ -254,7 +259,7 @@ ServerPremade.prototype.join = function(user, clanId)
     if (!this.locked && !this.clans[clanId].isFull()) {
         // todo extract to user method setPremade()
         if (user.premade) {
-            user.premade.unjoin();
+            user.premade.unjoin(user);
         }
         user.premade = this;
         this.clans[clanId].attachUser(user);

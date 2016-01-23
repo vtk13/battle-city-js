@@ -15,7 +15,7 @@ function User()
 {
     this.point = 0;
     this.clan = null;
-    //Object.defineProperty(this, 'clan', func.createLoggedPropertyDescriptor());
+    //Object.defineProperty(this, 'premade', func.createLoggedPropertyDescriptor());
 }
 
 User.prototype.addReward = function(reward)

@@ -8,6 +8,7 @@ var PremadeList = require('src/engine/store/premade-list.js');
 var MessageList = require('src/engine/store/message-list.js');
 
 module.exports = BcServerInterface;
+module.exports.updateInterval = 50;
 
 function BcServerInterface(socket, users, premades, messages)
 {
@@ -43,7 +44,10 @@ BcServerInterface.prototype.onLogin = function(event)
             this.user.socket = this.socket;
             this.user.nick = nick;
             this.users.add(this.user);
-            this.user.updateIntervalId = setInterval(this.user.sendUpdatesToClient.bind(this.user), 50);
+            this.user.updateIntervalId = setInterval(
+                this.user.sendUpdatesToClient.bind(this.user),
+                module.exports.updateInterval
+            );
             this.socket.emit('logged', {
                 user: this.user.serialize()
             });
@@ -106,12 +110,6 @@ BcServerInterface.prototype.onSay = function(event)
 
 BcServerInterface.prototype.onDisconnect = function(event)
 {
-    try {
-        var connections = -1;
-        for (var i in this.socket.manager.connected) {
-            connections++;
-        }
-    } catch(e) {}
     if (this.user) {
         clearInterval(this.user.updateIntervalId);
         this.user.unwatchAll();
