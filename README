@@ -7,10 +7,10 @@ Install nodejs then:
     node_modules/webpack/bin/webpack.js src/client/init.js bundle.js
 
 Run locally:
-    node src/server/init serve-static
+    node src/server serve-static
 
 Run on server:
-    start-stop-daemon -Sb -u tactic -d /var/www/bc --exec /usr/bin/nodejs -- src/server/init.js
+    start-stop-daemon -Sb -u tactic -d /var/www/bc --exec /usr/bin/nodejs -- src/server.js
     start-stop-daemon -K --exec /usr/bin/nodejs
 
     HAProxy config:

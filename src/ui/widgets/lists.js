@@ -134,8 +134,8 @@ UiMessageList.prototype.onAdd = function(item)
 
 function UiTankStack(list, container, itemClass)
 {
-    return;
-    UiList.apply(this, arguments);
+    // todo bot stack is no longer a collection
+    //UiList.apply(this, arguments);
 }
 
 UiTankStack.prototype = Object.create(UiList.prototype);

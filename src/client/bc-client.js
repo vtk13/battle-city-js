@@ -32,6 +32,10 @@ function BcClient(socket)
         self.currentPremade.unserialize([]);
     });
     socket.on('step', this.currentPremade.step.bind(this.currentPremade));
+
+    socket.once('started', function(level) {
+        self.currentPremade.startGame(level);
+    });
 }
 
 Emitter(BcClient.prototype);
@@ -75,16 +79,10 @@ BcClient.prototype.unjoin = function()
 };
 
 // todo по идее этот метод можно перенести в некий ProxyPremade
-BcClient.prototype.startGame = function(level, done)
+BcClient.prototype.startGame = function(level)
 {
     this.socket.emit('start', {
         level: level
-    });
-
-    var self = this;
-    this.socket.once('started', function(level) {
-        self.currentPremade.startGame(level);
-        done && done();
     });
 };
 

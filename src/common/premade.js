@@ -20,10 +20,8 @@ ServerPremade.types = ClientPremade.types = Premade.types = {
 function Premade(name, type)
 {
     // PremadeList assume name is readonly
-    Object.defineProperty(this, 'name', {
-        enumerable: true,
-        value: name
-    });
+    // can't make it realy readonly due to serialization
+    this.name = name;
     this.level = 1;
     this.userCount = 0; // @deprecated in case of this.users exists on client - this.users.length should be used
     this.locked = false; // lock for new users
@@ -141,10 +139,6 @@ ClientPremade.prototype.step = function(data)
 
 ClientPremade.prototype.startGame = function(level)
 {
-    if (this.running) {
-        return false;
-    }
-
     this.level = level;
     this.locked = true;
     var levelData = require('src/battle-city/maps/' + this.type + '/level' + this.level + '.js');
@@ -257,7 +251,7 @@ ServerPremade.prototype.join = function(user, clanId)
         clanId = 1;
     }
     if (!this.locked && !this.clans[clanId].isFull()) {
-        // todo extract to user method setPremade()
+        // todo extract to user method setPremade() ?
         if (user.premade) {
             user.premade.unjoin(user);
         }

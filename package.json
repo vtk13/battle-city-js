@@ -2,7 +2,7 @@
   "name": "battle-city-js",
   "version": "1.0.0",
   "description": "nodejs battle city remake",
-  "main": "src/server/init.js",
+  "main": "src/server.js",
   "directories": {
     "doc": "docs"
   },
