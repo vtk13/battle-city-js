@@ -21,13 +21,6 @@ legend {
     font-weight: bold;
 }
 
-.game-modes li.current {
-    font-weight: normal;
-}
-.game-modes li p {
-    text-align: left;
-}
-
 #credits {
     text-align: center;
     font-size: 11px;
@@ -41,7 +34,4 @@ legend {
 }
 #game .player2-stats {
     text-align: right;
-}
-.game-modes li {
-    text-align: center;
 }

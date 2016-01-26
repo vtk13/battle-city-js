@@ -1,19 +1,27 @@
-var Clan = require('src/battle-city/clan.js');
 var tankbot = require('src/battle-city/objects/tankbot.js');
 
 module.exports = BotsClan;
 
-// todo убрать понятие user из этого класса
 function BotsClan(n)
 {
-    Clan.apply(this, arguments);
+    this.n = n;
+    this.enemiesClan = null;
     this.capacity = 6;
     this.tankPositions = [{x: 16, y: 16}, {x: 13*32 / 2, y: 16}, {x: 13*32 - 16, y: 16}];
+    this.bots = [];
     this.botStack = [];
+    this.field = null;
 }
 
-BotsClan.prototype = Object.create(Clan.prototype);
-BotsClan.prototype.constructor = BotsClan;
+BotsClan.prototype.size = function()
+{
+    return this.bots.length;
+};
+
+BotsClan.prototype.isFull = function()
+{
+    return this.bots.length == this.capacity;
+};
 
 BotsClan.prototype.isBots = function()
 {
@@ -22,7 +30,7 @@ BotsClan.prototype.isBots = function()
 
 BotsClan.prototype.step = function()
 {
-    if (this.users.length == 0 && this.botStack.length == 0) {
+    if (this.bots.length == 0 && this.botStack.length == 0) {
         this.premade.gameOver(this.enemiesClan);
     }
 
@@ -56,9 +64,9 @@ BotsClan.prototype.startGame = function(level)
 
 BotsClan.prototype.removeBot = function(bot)
 {
-    for (var i in this.users) {
-        if (this.users[i].tank == bot) {
-            this.users.splice(i, 1);
+    for (var i in this.bots) {
+        if (this.bots[i].tank == bot) {
+            this.bots.splice(i, 1);
             return;
         }
     }
@@ -88,14 +96,14 @@ BotsClan.prototype.createNextBot = function()
     }
 
     bot.clan = this;
-    this.users.push({tank: bot});
+    this.bots.push(bot);
     return bot;
 };
 
 BotsClan.prototype.pauseTanks = function()
 {
-    for (var i in this.users) {
-        var user = this.users[i];
+    for (var i in this.bots) {
+        var user = this.bots[i];
         if (user.tank) {
             user.tank.pauseTimer = 10 * 30; // 30 steps per second
         }

@@ -1,4 +1,5 @@
 var AbstractGameObject = require('src/engine/objects/abstract.js');
+var Odb = require('src/engine/store/odb.js');
 
 /**
  * drawable
@@ -50,10 +51,15 @@ BonusGrenade.prototype.constructor = BonusGrenade;
 
 BonusGrenade.prototype.applyTo = function(tank)
 {
+    var odb = Odb.instance();
     // tank.hit() cause splice tank.clan.enemiesClan.users, so collect tanks first
     var tanks = [], i;
-    for (i in tank.clan.enemiesClan.users) {
-        tanks.push(tank.clan.enemiesClan.users[i].tank);
+    var userIds = tank.clan.enemiesClan.userIds;
+    for (i in userIds) {
+        var user = odb.get(userIds[i]);
+        if (user) {
+            tanks.push(user.tank);
+        }
     }
     for (i in tanks) {
         tanks[i].hit();

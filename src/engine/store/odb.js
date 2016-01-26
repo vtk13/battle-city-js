@@ -64,7 +64,7 @@ Odb.prototype.free = function(object)
     }
 };
 
-Odb.prototype.referenceDescriptor = function()
+Odb.prototype.createReferenceDescriptor = function()
 {
     var id, self = this;
     return {
@@ -85,7 +85,8 @@ function OdbProxy(socket)
     this.socket = socket || new Emitter();
     this.store = [];
     this.waits = [];
-    this.autoincrement = 1; // todo is this wrong? there is already one autoincrement on server
+    this.idSeed = '';
+    this.autoincrement = 1;
 
     var self = this;
     this.socket.on('sync', function(data) {
@@ -98,6 +99,12 @@ function OdbProxy(socket)
     });
 }
 
+OdbProxy.prototype.seed = function(idSeed)
+{
+    this.idSeed = idSeed + '.';
+    this.autoincrement = 1;
+};
+
 OdbProxy.prototype.create = function(constructor, args)
 {
     // stackoverflow:/questions/1606797/use-of-apply-with-new-operator-is-this-possible
@@ -107,7 +114,7 @@ OdbProxy.prototype.create = function(constructor, args)
     F.prototype = constructor.prototype;
 
     var object = new F();
-    object.id = this.autoincrement++;
+    object.id = this.idSeed + this.autoincrement++;
     this.store[object.id] = object;
     return object;
 };
@@ -115,7 +122,7 @@ OdbProxy.prototype.create = function(constructor, args)
 OdbProxy.prototype.add = function(object)
 {
     if (object.id === undefined) {
-        object.id = this.autoincrement++;
+        object.id = this.idSeed + this.autoincrement++;
     }
     this.store[object.id] = object;
     this.handleWaits(object.id);
@@ -130,6 +137,11 @@ OdbProxy.prototype.handleWaits = function(id)
         }
         delete this.waits[id];
     }
+};
+
+OdbProxy.prototype.get = function(id)
+{
+    return this.store[id];
 };
 
 OdbProxy.prototype.fetch = function(id, callback)

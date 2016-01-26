@@ -86,10 +86,7 @@ BcServerInterface.prototype.onUnjoin = function()
 
 BcServerInterface.prototype.onStart = function(event)
 {
-    // todo to premade?
-    if (this.user.premade && !this.user.premade.running) {
-        this.user.premade.startGame(event.level);
-    }
+    this.user.premade && this.user.premade.startGame(event.level);
 };
 
 BcServerInterface.prototype.onControl = function(event)
@@ -121,10 +118,8 @@ BcServerInterface.prototype.onDisconnect = function(event)
     }
 };
 
-BcServerInterface.prototype.onGameOver = function(premadeId, winnerClanId)
+BcServerInterface.prototype.onGameOver = function(premadeId, winnerClanN)
 {
     var premade = this.premades.get(premadeId);
-    if (premade) {
-        premade.gameOver(winnerClanId);
-    }
+    premade && premade.onGameOver(winnerClanN);
 };

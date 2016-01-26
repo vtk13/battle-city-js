@@ -36,7 +36,7 @@
 //        var server = new BcServerInterface(socket, users);
 //        var client = new Client(socket);
 //        client.login('test1', function() {
-//            client.join('test1', 'classic', function() {
+//            client.join('test1', function() {
 //                client.startGame(1);
 //                socket.on('step', function() {
 //                    socket.emit('disconnect');

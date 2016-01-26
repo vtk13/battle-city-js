@@ -36,7 +36,7 @@ function FieldView(context, client)
     });
 
     client.socket.on('gameover', function(event) {
-        if (event.winnerClanId == client.currentUser.clan.n) {
+        if (event.winnerClanN == 0) {
             self.message = 'Победа!';
         } else {
             self.message = 'Вы проиграли';

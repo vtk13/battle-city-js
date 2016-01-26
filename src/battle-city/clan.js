@@ -1,31 +1,25 @@
 var Tank = require('src/battle-city/objects/tank.js');
 var Base = require('src/battle-city/objects/base.js');
+var Odb = require('src/engine/store/odb.js');
 
 module.exports = Clan;
 
 function Clan(n, defaultArmoredTimer)
 {
-    this.capacity = 2; // max users
     this.n = n; // todo is this id?
     this.defaultArmoredTimer = defaultArmoredTimer;
     this.enemiesClan = null;
-    this.users = [];
-    this.tankPositions = Clan.tankPositions['clan' + n]; // todo move to BotEmitter?
+    this.userIds = [0, 0]; // for simple premade serialization
+    this.tankPositions = [{x:  4, y: 12}, {x: 8, y: 12}]; // todo move to BotEmitter?
     this.field = null;
 }
 
-Clan.tankPositions = {
-    'clan1': [{x:  4, y: 12}, {x: 8, y: 12}],
-    'clan2': [{x:  4, y:  0}, {x: 8, y:  0}]
-};
-
 Clan.prototype.attachUser = function(user)
 {
-    user.clan && user.clan.detachUser(user);
-    for (var positionId = 0; positionId < this.capacity; positionId++) {
-        if (this.users[positionId] === undefined) {
-            this.users[positionId] = user;
-            user.positionId = positionId;
+    for (var i in this.userIds) {
+        if (this.userIds[i] == 0) {
+            this.userIds[i] = user.id;
+            user.positionId = i;
             break;
         }
     }
@@ -35,8 +29,8 @@ Clan.prototype.attachUser = function(user)
 
 Clan.prototype.detachUser = function(user)
 {
-    if (this.users[user.positionId] == user) {
-        delete this.users[user.positionId];
+    if (this.userIds[user.positionId] == user.id) {
+        delete this.userIds[user.positionId];
         user.clan = null;
         user.emit('change');
         user.tank && user.tank.hit();
@@ -46,8 +40,8 @@ Clan.prototype.detachUser = function(user)
 Clan.prototype.size = function()
 {
     var res = 0;
-    for (var i = 0; i < this.capacity; i++) {
-        if (this.users[i]) {
+    for (var i in this.userIds) {
+        if (this.userIds[i] > 0) {
             res++;
         }
     }
@@ -56,7 +50,7 @@ Clan.prototype.size = function()
 
 Clan.prototype.isFull = function()
 {
-    return this.size() == this.capacity;
+    return this.size() == this.userIds.length;
 };
 
 /**
@@ -70,9 +64,11 @@ Clan.prototype.isBots = function()
 
 Clan.prototype.step = function()
 {
+    var odb = Odb.instance();
     var activeUsers = 0;
-    for (var i in this.users) {
-        if (this.users[i].lives >= 0) {
+    for (var i in this.userIds) {
+        var user = odb.get(this.userIds[i]);
+        if (user && user.lives >= 0) {
             activeUsers++;
         }
     }
@@ -83,25 +79,28 @@ Clan.prototype.step = function()
 
 /**
  * можно сделать чтобы field мог прокидывать событие всем объектам у себя
- * (например метод broadCast),
+ * (например метод broadcast),
  * и завернуть через этот механизм все вызовы step, animateStep и startGame.
  */
 Clan.prototype.startGame = function()
 {
-    for (var i in this.users) {
-        var user = this.users[i];
-        if (user.lives < 0) user.lives = 0; // todo hack
+    var odb = Odb.instance();
+    for (var i in this.userIds) {
+        var user = odb.get(this.userIds[i]);
+        if (user) {
+            if (user.lives < 0) user.lives = 0; // todo hack
 
-        if (user.tank) {
-            user.tank.resetPosition();
-            this.field.add(user.tank);
-        } else {
-            this.createTank(user, i);
+            if (user.tank) {
+                user.tank.resetPosition();
+                this.field.add(user.tank);
+            } else {
+                this.createTank(user, i);
+            }
         }
     }
 
     this.base = new Base(this.field.width / 2, (this.n == 1) ? (this.field.height - 16) : 16);
-    this.base.once('hit', this.premade.gameOver.bind(this.premade, this.enemiesClan, 2000));
+    this.base.once('hit', this.premade.gameOver.bind(this.premade, this.enemiesClan));
     this.field.add(this.base);
 };
 
@@ -131,9 +130,10 @@ Clan.prototype.createTank = function(user, position)
 
 Clan.prototype.pauseTanks = function()
 {
-    for (var i in this.users) {
-        var user = this.users[i];
-        if (user.tank) {
+    var odb = Odb.instance();
+    for (var i in this.userIds) {
+        var user = odb.get(this.userIds[i]);
+        if (user && user.tank) {
             user.tank.pauseTimer = 3 * 30; // 30 steps per second
         }
     }

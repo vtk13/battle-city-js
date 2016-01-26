@@ -35,9 +35,3 @@ h1, h2, h3, h4, h5, h6 {
 #field {
     border: solid 1px #000;
 }
-.game-modes li.current {
-    background: #1C302C;
-}
-.game-modes li img {
-    background: #020608;
-}

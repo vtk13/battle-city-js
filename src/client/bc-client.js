@@ -3,6 +3,7 @@ var Collection = require('src/engine/store/collection.js');
 var User = require('src/common/user.js');
 var Premade = require('src/common/premade.js');
 var serialization = require('src/battle-city/serialization.js');
+var Odb = require('src/engine/store/odb.js');
 
 function BcClient(socket)
 {
@@ -10,31 +11,37 @@ function BcClient(socket)
     var self = this;
 
     this.users = new Collection().bindSource(socket, 'users');
-    this.currentUser = new User(); // do not replace @todo allow replace
-    this.users.bindSlave(this.currentUser);
+    this.currentUserId = 0;
 
     this.premades = new Collection().bindSource(socket, 'premades');
     this.currentPremade = new Premade(); // do not replace @todo allow replace
-    this.currentPremade.on('gameover', function(winnerClanId) {
-        self.socket.emit('gameover', this.id, winnerClanId);
+    this.currentPremade.on('gameover', function(winnerClanN) {
+        self.socket.emit('gameover', this.id, winnerClanN);
     });
     this.premades.bindSlave(this.currentPremade);
 
     this.messages = new Collection().bindSource(socket, 'messages');
-    this.premadeUsers = new Collection().bindSource(socket, 'premade.users');
-    this.premadeMessages = new Collection().bindSource(socket, 'premade.messages');
+    this.currentPremade.users = this.premadeUsers = new Collection().bindSource(socket, 'premade.users');
+    this.currentPremade.messages = this.premadeMessages = new Collection().bindSource(socket, 'premade.messages');
 
     socket.on('logged', function(data) {
-        self.currentUser.unserialize(data.user);
+        Odb.instance().updateWith([['a', data.user]]);
+        self.currentUserId = data.user[1];
     });
     socket.on('unjoined', function() {
         // do not replace this.currentPremade
         self.currentPremade.unserialize([]);
     });
-    socket.on('step', this.currentPremade.step.bind(this.currentPremade));
+    socket.on('step', function(data) {
+        var idSeed = data[0], stepData = data[1];
+        Odb.instance().seed(idSeed);
+        self.currentPremade.onStep(stepData);
+    });
 
-    socket.once('started', function(level) {
-        self.currentPremade.startGame(level);
+    socket.on('started', function(data) {
+        var idSeed = data[0], level = data[1];
+        Odb.instance().seed(idSeed);
+        self.currentPremade.onStartGame(level);
     });
 }
 
@@ -57,18 +64,16 @@ BcClient.prototype.say = function(text)
     });
 };
 
-BcClient.prototype.join = function(name, gameType, done)
+BcClient.prototype.join = function(name, done)
 {
     this.socket.emit('join', {
-        name: name,
-        gameType: gameType
+        name: name
     });
 
     var self = this;
     this.socket.once('joined', function(data) {
         // do not replace this.currentPremade
         self.currentPremade.unserialize(data.premade);
-        self.currentPremade.join(self.currentUser);
         done && done(data);
     });
 };
@@ -88,8 +93,9 @@ BcClient.prototype.startGame = function(level)
 
 BcClient.prototype.control = function(commands)
 {
-    if (this.currentUser && this.currentUser.tank) {
-        commands.id = this.currentUser.tank.id;
+    var user = Odb.instance().get(this.currentUserId);
+    if (user && user.tank) {
+        commands.id = user.tank.id;
         this.socket.emit('control', commands);
     }
 };

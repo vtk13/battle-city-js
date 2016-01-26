@@ -64,15 +64,6 @@ h1, h2 {
     width: 90px;
 }
 
-#create .game-modes li h3 {
-    line-height: 36px;
-}
-#create .game-modes li img {
-    margin-bottom: 5px;
-}
-#classic {
-    margin-right: 18px;
-}
 .message-form {
     height: 36px;
     line-height: 36px;

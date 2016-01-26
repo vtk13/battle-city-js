@@ -45,7 +45,7 @@ UiUserList.prototype.constructor = UiUserList;
 UiUserList.prototype.itemDomElement = function(user)
 {
   return $('<div class="' + this.itemClass + ' ' +
-      (window.bcClient.currentUser.id === user.id ? 'current ' : '') +
+      (window.bcClient.currentUserId === user.id ? 'current ' : '') +
       this.itemClass + user.id + '"></div>').text(user.nick);
 };
 
@@ -62,13 +62,9 @@ UiPremadeUserList.prototype.constructor = UiPremadeUserList;
 
 UiPremadeUserList.prototype.itemDomElement = function(user)
 {
-    var text = user.nick;
-    if (this.client.currentPremade.type == 'teamvsteam') {
-        text = user.nick + (user.clan == 1 ? ' (внизу)' : ' (вверху)');
-    }
     return $('<div class="' + this.itemClass + ' ' +
-        (window.bcClient.currentUser.id == user.id ? 'current ' : '') +
-        this.itemClass + user.id + '"></div>').text(text);
+        (window.bcClient.currentUserId == user.id ? 'current ' : '') +
+        this.itemClass + user.id + '"></div>').text(user.nick);
 };
 
 //====== UiPremadeList =========================================================
@@ -90,9 +86,9 @@ UiPremadeList.prototype.onAdd = function(premade)
 UiPremadeList.prototype.itemDomElement = function(premade)
 {
     var res = $('<div class="' + this.itemClass + ' ' +
-        (premade.locked ? 'locked ' : '') +
+        (premade.isLocked() ? 'locked ' : '') +
         this.itemClass + premade.id + '"><span class="name"/><span class="stat"/></div>');
-    var stat = ' (' + premade.userCount + '/' + (premade.type == 'classic' ? 2 : 4) + ')';
+    var stat = ' (' + premade.users.length + ')';
     $('.name', res).text(premade.name);
     $('.stat', res).text(stat);
     return res;

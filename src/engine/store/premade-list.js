@@ -43,7 +43,7 @@ PremadeList.prototype.join = function(event, user)
     if (!user.premade) {
         var premade = this.byName[gameName];
         if (!premade) {
-            premade = new Premade(gameName, event.gameType);
+            premade = new Premade(gameName);
             this.add(premade);
         }
         premade.join(user);

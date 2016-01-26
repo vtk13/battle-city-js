@@ -29,7 +29,7 @@ describe('IN ORDER TO play single player mode AS a player I NEED TO', function (
     });
 
     it('create premade', function(done) {
-        bcClient.join(name, 'classic', function() {
+        bcClient.join(name, function() {
             // wait for other player / observer
             //setTimeout(done, 10 * 1000);
             done();

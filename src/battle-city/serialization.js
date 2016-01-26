@@ -16,6 +16,22 @@ var Clan = require('src/battle-city/clan.js');
 var BotsClan = require('src/battle-city/bots-clan.js');
 var Odb = require('src/engine/store/odb.js');
 
+// todo this may be useful, until arrays are used
+function Serializable(prototype)
+{
+    prototype.setState = function(data, value)
+    {
+        if (Array.isArray(data)) {
+            for (var k in data) {
+                this[k] = data[k];
+            }
+        } else {
+            this[data] = value;
+        }
+        this.emit('change');
+    }
+}
+
 var unserializeTypeMatches = {
     1: Bullet,
     2: Tank,
@@ -326,10 +342,8 @@ Premade.prototype.serialize = function()
         this.id, // 1
         this.name, // 2
         this.level, // 3
-        this.type, // 4
-        this.locked, // 5
-        this.userCount, // 6
-        this.running // 7
+        this.running, // 4
+        this.clans[0].userIds // 5
     ];
 };
 
@@ -338,10 +352,16 @@ Premade.prototype.unserialize = function(data)
     this.id         = data[1];
     this.name       = data[2];
     this.level      = data[3];
-    this.type       = data[4];
-    this.locked     = data[5];
-    this.userCount  = data[6];
-    this.running    = data[7];
+    this.running    = data[4];
+
+    this.clans[0].userIds = data[5];
+    for (var i in data[5]) {
+        var user = Odb.instance().get(data[5][i]);
+        if (user) {
+            user.positionId = i;
+            user.clan = this.clans[0];
+        }
+    }
 };
 
 User.prototype.serialize = function()
@@ -359,45 +379,18 @@ User.prototype.serialize = function()
 
 User.prototype.unserialize = function(data)
 {
-    var self = this;
     this.id     = data[1];
     this.nick   = data[2];
     this.lives  = data[3];
     this.points = data[4];
     if (data[5]) {
         Odb.instance().fetch(data[5], function(premade) {
-            self.premade = premade;
-        });
+            this.premade = premade;
+        }.bind(this));
     } else {
         this.premade = null;
     }
     this.positionId = data[6];
-};
-
-Clan.prototype.serialize = function()
-{
-    return [
-        serializeTypeMatches[this.constructor.name],
-        this.id
-    ];
-};
-
-Clan.prototype.unserialize = function(data)
-{
-    this.id = data[1];
-};
-
-BotsClan.prototype.serialize = function()
-{
-    return [
-        serializeTypeMatches[this.constructor.name],
-        this.id
-    ];
-};
-
-BotsClan.prototype.unserialize = function(data)
-{
-    this.id = data[1];
 };
 
 

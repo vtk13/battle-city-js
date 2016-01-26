@@ -10,7 +10,7 @@ function WidgetLevelSelector(context, client)
         // "this" is client.currentPremade
         var levelSelect = $('select', context);
         levelSelect.empty();
-        for (var i = 1; i <= Premade.types[this.type].levels; i++) {
+        for (var i = 1; i <= Premade.maxLevels; i++) {
             levelSelect.append($('<option value="' + i + '">' + i + '</option>'));
         }
         levelSelect.val(this.level);
@@ -28,17 +28,12 @@ function UserPoint(premadeUsers)
 
 UserPoint.prototype.onChange = function(user)
 {
-    // todo hack
-    var pos = user.positionId + (user.clan == 2 ? 2 /*first clan capacity*/ : 0);
-    $('.player' + pos + '-stats')
-        .text(user.lives + ':' + user.points);
+    $('.player' + user.positionId + '-stats').text(user.lives + ':' + user.points);
 };
 
 UserPoint.prototype.onRemove = function(user)
 {
-    // todo hack
-    var pos = user.positionId + (user.clan == 2 ? 2 /*first clan capacity*/ : 0);
-    $('.player' + pos + '-stats').text('');
+    $('.player' + user.positionId + '-stats').text('');
 };
 
 //====== WidgetCreateGame ======================================================
@@ -47,16 +42,10 @@ function WidgetCreateGame(context, client)
 {
     $('#create-form', context).submit(function() {
         var name = $('input[name=name]', this).val();
-        var gameType = $('input[name=type]', this).val();
         if (name) {
-            client.join(name, gameType);
+            client.join(name);
         }
         return false;
-    });
-    $('.game-modes li', context).click(function(){
-        $('#create-form').find('input[name=type]').val(this.id);
-        $('.game-modes li').removeClass('current');
-        $(this).addClass('current');
     });
 }
 
