@@ -139,7 +139,7 @@ Premade.prototype.gameOver = function(winnerClan)
 Premade.prototype.step = function()
 {
     var self = this;
-    var idSeed = Date.now().toString(36);
+    var idSeed = Date.now();
     this.users.map(function(user) {
         user.clientMessage('step', [idSeed, self.stepActions]);
     });
@@ -155,7 +155,7 @@ Premade.prototype.startGame = function(level)
     this.level = level;
     this.running = true;
 
-    var idSeed = Date.now().toString(36);
+    var idSeed = Date.now();
     this.users.map(function(user) {
         user.clientMessage('started', [idSeed, this.level]);
     }, this);

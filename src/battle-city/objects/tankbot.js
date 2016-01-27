@@ -1,4 +1,5 @@
 var Tank = require('src/battle-city/objects/tank.js');
+var Odb = require('src/engine/store/odb.js');
 
 function TankBot(x, y, bonus)
 {
@@ -22,19 +23,18 @@ TankBot.prototype.step = function()
     // pauseTimer decrease in Tank.step()
 
     if ((this.birthTimer <= 0) && this.pauseTimer <= 0) {
-        if ((this.stuck || Math.random() < 0.03) && this.fireTimer <= 0) {
+        if ((this.stuck || Odb.instance().random() <= 3) && this.fireTimer <= 0) {
             this.fire();
             this.fireTimer = 0.5 * 1000/30; // 30ms step
         }
-        if (this.stuck || Math.random() < 0.007) {
-            // move percents
+        if (this.stuck || Odb.instance().random(0, 1000) <= 7) {
             var mp = {
-                'north': this.y / 500,
-                'east': (416 - this.x) / 416,
-                'south': (500 - this.y) / 500,
-                'west': this.x / 416
+                north: this.y,
+                east: 416 - this.x,
+                south: 500 - this.y,
+                west: this.x
             };
-            var percent = Math.random() * (mp['north'] + mp['east'] + mp['south'] + mp['west']);
+            var percent = Odb.instance().random() / 100 * (mp['north'] + mp['east'] + mp['south'] + mp['west']);
             for (var i in mp) {
                 percent -= mp[i];
                 if (percent < 0) {

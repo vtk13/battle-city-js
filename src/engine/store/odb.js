@@ -1,7 +1,12 @@
 var func = require('src/common/func.js');
 var Emitter = require('component-emitter');
+var Random = require('random-js');
 
 module.exports = func.isClient() ? OdbProxy : Odb;
+
+if (func.isClient()) {
+    window.odb = module.exports;
+}
 
 module.exports.instance = function(value)
 {
@@ -97,12 +102,23 @@ function OdbProxy(socket)
             self.updateWith(data.premades);
         }
     });
+
+    this.mt = Random.engines.mt19937();
+    this.mt.seed(0);
 }
 
 OdbProxy.prototype.seed = function(idSeed)
 {
+    this.mt.seed(idSeed);
     this.idSeed = idSeed + '.';
     this.autoincrement = 1;
+};
+
+OdbProxy.prototype.random = function(min, max)
+{
+    min = min || 0;
+    max = max || 100;
+    return min + Math.abs(this.mt() % (max - min + 1));
 };
 
 OdbProxy.prototype.create = function(constructor, args)

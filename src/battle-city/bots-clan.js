@@ -1,4 +1,5 @@
 var tankbot = require('src/battle-city/objects/tankbot.js');
+var Odb = require('src/engine/store/odb.js');
 
 module.exports = BotsClan;
 
@@ -34,7 +35,7 @@ BotsClan.prototype.step = function()
         this.premade.gameOver(this.enemiesClan);
     }
 
-    if (!this.isFull() && this.botStack.length > 0 && Math.random() < 0.01) {
+    if (!this.isFull() && this.botStack.length > 0 && Odb.instance().random() == 1) {
         var botX = this.tankPositions[this.currentBotPosition].x;
         var botY = this.tankPositions[this.currentBotPosition].y;
         if (this.field && this.field.canPutTank(botX, botY)) {

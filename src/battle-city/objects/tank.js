@@ -3,6 +3,7 @@ var AbstractGameObject = require('src/engine/objects/abstract.js');
 var bonus = require('src/battle-city/objects/bonus.js');
 var Ice = require('src/battle-city/objects/ice.js');
 var Bullet = require('src/battle-city/objects/bullet.js');
+var Odb = require('src/engine/store/odb.js');
 
 /**
  * drawable
@@ -407,9 +408,9 @@ Tank.prototype.hit = function(bullet)
             bonus.BonusLive,
             bonus.BonusTimer
         ];
-        this.field.add(new (bonuses[Math.floor(Math.random()*(bonuses.length-0.0001))])(
-            Math.round((Math.random() * (this.field.width  / 16 - 2))) * 16 + 16,
-            Math.round((Math.random() * (this.field.height / 16 - 2))) * 16 + 16
+        this.field.add(new (bonuses[Odb.instance().random(0, bonuses.length - 1)])(
+            (Odb.instance().random(0, Math.floor(this.field.width  / 16 - 3))) * 16 + 16,
+            (Odb.instance().random(0, Math.floor(this.field.height / 16 - 3))) * 16 + 16
         ));
     }
 
