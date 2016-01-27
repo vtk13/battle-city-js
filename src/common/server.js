@@ -33,7 +33,7 @@ BcServerInterface.prototype.onLogin = function(event)
     if (this.user == null && event.nick) {
         var nick = event.nick && event.nick.substr(0,20);
         var nickAllowed = true;
-        this.users.traversal(function(user){
+        this.users.map(function(user) {
             if (nick == user.nick) {
                 nickAllowed = false;
             }

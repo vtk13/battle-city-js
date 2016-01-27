@@ -1,6 +1,5 @@
 var Emitter = require('component-emitter');
 var Collection = require('src/engine/store/collection.js');
-var User = require('src/common/user.js');
 var Premade = require('src/common/premade.js');
 var serialization = require('src/battle-city/serialization.js');
 var Odb = require('src/engine/store/odb.js');
@@ -25,7 +24,7 @@ function BcClient(socket)
     this.currentPremade.messages = this.premadeMessages = new Collection().bindSource(socket, 'premade.messages');
 
     socket.on('logged', function(data) {
-        Odb.instance().updateWith([['a', data.user]]);
+        self.users.updateWith([['a', data.user]]);
         self.currentUserId = data.user[1];
     });
     socket.on('unjoined', function() {

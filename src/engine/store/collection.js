@@ -84,13 +84,7 @@ Collection.prototype.pop = function()
     }
 };
 
-Collection.prototype.count = function()
-{
-    return this.length;
-};
-
-Collection.prototype.map =
-Collection.prototype.traversal = function(callback, thisObj)
+Collection.prototype.map = function(callback, thisObj)
 {
     for (var i in this.items) {
         callback.call(thisObj, this.items[i]);

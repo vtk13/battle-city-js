@@ -135,7 +135,7 @@ ServerUser.prototype.watchCollection = function(collection, syncKey)
         'collection': collection
     };
     // отправляем клиенту все объекты группы, как вновь созданные
-    collection.traversal(function(item){
+    collection.map(function(item) {
         this.onCollectionUpdate(syncKey, item, 'add');
     }, this);
 };

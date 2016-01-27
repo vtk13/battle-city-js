@@ -67,7 +67,7 @@ FieldView.prototype._animateStepItem = function(item)
 
 FieldView.prototype.animateStep = function()
 {
-    this.field.traversal(FieldView.prototype._animateStepItem, this);
+    this.field.map(FieldView.prototype._animateStepItem, this);
     this.step++;
 
     this.draw();
@@ -90,7 +90,7 @@ FieldView.prototype.draw = function()
     this.c2d.fillRect(0, 0, this.field.width, this.field.height);
 
     for (this.z = 0 ; this.z <= 2 ; this.z++) { // this.z hack?
-        this.field.traversal(this.drawItem, this);
+        this.field.map(this.drawItem, this);
     }
 
     this.c2d.fillStyle = '#fff';

@@ -77,12 +77,6 @@ function UiPremadeList(list, container, itemClass)
 UiPremadeList.prototype = Object.create(UiList.prototype);
 UiPremadeList.prototype.constructor = UiPremadeList;
 
-
-UiPremadeList.prototype.onAdd = function(premade)
-{
-    this.container.append(this.itemDomElement(premade));
-};
-
 UiPremadeList.prototype.itemDomElement = function(premade)
 {
     var res = $('<div class="' + this.itemClass + ' ' +
@@ -114,16 +108,6 @@ UiMessageList.prototype.itemDomElement = function(message)
     $('.nick', res).text('<' + message.nick + '>');
     $('.text', res).text(message.text);
     return res;
-};
-
-UiMessageList.prototype.onAdd = function(item)
-{
-    this.container.append(this.itemDomElement(item));
-    var wrapper1 = this.container.parent().get(0);
-    var wrapper2 = this.container.parent().parent();
-    if ((wrapper1.scrollHeight - wrapper1.scrollTop) < (wrapper2.height() + 100)) {
-        wrapper1.scrollTop = wrapper1.scrollHeight;
-    }
 };
 
 //====== UiTankStack ===========================================================
