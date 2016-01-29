@@ -47,7 +47,6 @@ Collection.prototype.get = function(id)
 Collection.prototype.remove = function(item)
 {
     if (this.items[item.id]) {
-        this.emit('remove', item);
         this.length--;
         delete this.items[item.id];
 
@@ -56,6 +55,7 @@ Collection.prototype.remove = function(item)
             delete this.changeListeners[item.id];
         }
 
+        this.emit('remove', item);
         return true;
     } else {
         return false;
@@ -86,9 +86,11 @@ Collection.prototype.pop = function()
 
 Collection.prototype.map = function(callback, thisObj)
 {
+    var res = [];
     for (var i in this.items) {
-        callback.call(thisObj, this.items[i]);
+        res.push(callback.call(thisObj, this.items[i]));
     }
+    return res;
 };
 
 /**

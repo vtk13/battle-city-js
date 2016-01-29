@@ -1,6 +1,6 @@
 var $ = require('jquery');
 var TankController = require('src/client/keyboard.js');
-var widgetsLists = require('src/ui/widgets/lists.js');
+var widgetsLists = require('src/ui/widgets/lists.jsx');
 var widgetsCommon = require('src/ui/widgets/common.js');
 var FieldView = require('src/ui/widgets/field-view.js');
 var UiGameControls = require('src/ui/widgets/game-controls.js');

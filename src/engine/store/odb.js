@@ -186,8 +186,3 @@ OdbProxy.prototype.free = function(id)
     this.handleWaits(id);
     delete this.store[id];
 };
-
-OdbProxy.debug = function()
-{
-    return this.store;
-};

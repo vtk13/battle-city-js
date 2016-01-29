@@ -1,6 +1,6 @@
 var $ = require('jquery');
 var widgetsCommon = require('src/ui/widgets/common.js');
-var WidgetPublic = require('src/ui/widgets/public.js');
+var WidgetPublic = require('src/ui/widgets/public.jsx');
 var WidgetPremade = require('src/ui/widgets/premade.js');
 var WidgetGame = require('src/ui/widgets/game.js');
 var WidgetNotifier = require('src/ui/widgets/notifier.js');
