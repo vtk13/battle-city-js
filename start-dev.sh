@@ -1,4 +1,6 @@
 #!/bin/sh
-NODE_PATH=.:node_modules node_modules/webpack/bin/webpack.js
+rm -f client.js server.js test.js vendor.js
+node_modules/webpack/bin/webpack.js --config webpack-client-config.js
+node_modules/webpack/bin/webpack.js --config webpack-server-config.js
 echo Start
-NODE_PATH=.:node_modules node src/server serve-static
+node server.js serve-static

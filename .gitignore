@@ -4,6 +4,8 @@
 /v8.out
 /.idea/
 /node_modules/
+/tmp/
+/server.js
 /vendor.js
 /client.js
 /test.js

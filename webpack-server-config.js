@@ -1,14 +1,21 @@
 var path = require('path');
-var SplitByPathPlugin = require('webpack-split-by-path');
+var fs = require('fs');
+
+// http://jlongster.com/Backend-Apps-with-Webpack--Part-I#Getting-Started
+var nodeModules = {};
+fs.readdirSync('node_modules')
+    .filter(function(x) {
+        return ['.bin'].indexOf(x) === -1;
+    })
+    .forEach(function(mod) {
+        nodeModules[mod] = 'commonjs ' + mod;
+    });
 
 module.exports = {
-    entry: {
-        client: "src/client/init.js",
-        test: "src/test.js"
-    },
+    target: 'node',
+    entry: 'src/server.js',
     output: {
-        filename: "[name].js",
-        chunkFilename: "[name].js"
+        filename: "server.js"
     },
     module: {
         loaders: [
@@ -22,21 +29,10 @@ module.exports = {
             }
         ]
     },
-    plugins: [
-        new SplitByPathPlugin([
-            {
-                name: 'vendor',
-                path: path.join(__dirname, 'node_modules')
-            }
-        ])
-    ],
+    externals: nodeModules,
     resolve: {
         root: [
             __dirname
         ]
-    },
-    node: {
-        fs: 'empty',
-        tls: 'empty'
     }
 };
