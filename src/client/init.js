@@ -14,24 +14,19 @@ var Odb = require('src/engine/store/odb.js');
 window.bcClient = null;
 window.uiManager = null;
 
-new widgetsCommon.WidgetLangSelector();
 
-if (typeof WebSocket == 'undefined' && typeof MozWebSocket == 'undefined') {
-    $('.ui-block').hide().filter('#nowebsocket').show();
-} else {
-    // substitute ws.
-    var wsDomain = (location.hostname == 'localhost' ? '' : 'ws.')
-        + location.hostname
-        + (location.port ? ':' + location.port : '');
-    var socket = io(wsDomain, {
-        transports: ['websocket'],
-        autoConnect: false,
-        reconnection: false // todo learn reconnection abilities
-    });
-    Odb.instance(new Odb(socket));
-    bcClient = new BcClient(socket);
-    uiManager = new UiManager(bcClient);
-    socket.connect();
-}
+// substitute ws.
+var wsDomain = (location.hostname == 'localhost' ? '' : 'ws.')
+    + location.hostname
+    + (location.port ? ':' + location.port : '');
+var socket = io(wsDomain, {
+    transports: ['websocket'],
+    autoConnect: false,
+    reconnection: false // todo learn reconnection abilities
+});
+Odb.instance(new Odb(socket));
+bcClient = new BcClient(socket);
+uiManager = new UiManager(bcClient);
+socket.connect();
 
 $(window).resize();

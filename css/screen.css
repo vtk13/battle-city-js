@@ -16,10 +16,6 @@ body {
     position: relative;
 }
 
-.ui-block {
-    display: none;
-}
-
 fieldset {
     border: none;
 }

@@ -27,19 +27,16 @@ function UiManager(client)
 
 UiManager.prototype.setStateLogin = function()
 {
-    $('.ui-block').hide();
     $('#login').show();
 };
 
 UiManager.prototype.setStateConnectionFail = function()
 {
-    $('.ui-block').hide();
     $('#connecting-fail').hide();
 };
 
 UiManager.prototype.setStateDiconnected = function()
 {
-    $('.ui-block').hide();
     $('#disconnect').show();
 };
 
@@ -55,7 +52,6 @@ UiManager.prototype.setStatePremade = function()
 
 UiManager.prototype._slideTo = function(toShow, callback)
 {
-    $('.ui-block').hide();
     toShow.show();
     callback && callback();
     setTimeout(function(){

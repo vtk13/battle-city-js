@@ -62,19 +62,9 @@ function WidgetLoginForm(context, client)
     });
 }
 
-//====== WidgetLangSelector ====================================================
-
-function WidgetLangSelector()
-{
-    $('.lang-select li').click(function(){
-        lang.applyLang($(this).attr('lang'));
-    });
-}
-
 module.exports = {
     WidgetLevelSelector: WidgetLevelSelector,
     UserPoint: UserPoint,
     WidgetCreateGame: WidgetCreateGame,
     WidgetLoginForm: WidgetLoginForm,
-    WidgetLangSelector: WidgetLangSelector
 };

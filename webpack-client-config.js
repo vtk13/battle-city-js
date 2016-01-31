@@ -3,7 +3,7 @@ var SplitByPathPlugin = require('webpack-split-by-path');
 
 module.exports = {
     entry: {
-        client: "src/client/init.js",
+        client: "src/client.js",
         test: "src/test.js"
     },
     output: {
