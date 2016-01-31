@@ -106,11 +106,10 @@ Tank.prototype.fire = function()
         this.bullets.push(bullet);
         this.field.add(bullet);
 
-        var self = this;
-        bullet.once('hit', function() {
-            var index = self.bullets.indexOf(this);
+        bullet.once('hit', () => {
+            var index = this.bullets.indexOf(bullet);
             if (index >= 0) {
-                self.bullets.splice(index, 1);
+                this.bullets.splice(index, 1);
             }
         });
     }

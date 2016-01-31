@@ -14,8 +14,8 @@ function BcClient(socket)
 
     this.premades = new Collection().bindSource(socket, 'premades');
     this.currentPremade = new Premade(); // do not replace @todo allow replace
-    this.currentPremade.on('gameover', function(winnerClanN) {
-        self.socket.emit('gameover', this.id, winnerClanN);
+    this.currentPremade.on('gameover', winnerClanN => {
+        this.socket.emit('gameover', this.currentPremade.id, winnerClanN);
     });
     this.premades.bindSlave(this.currentPremade);
 

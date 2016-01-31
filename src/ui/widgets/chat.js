@@ -1,5 +1,5 @@
 var $ = require('jquery');
-var widgetsLists = require('src/ui/widgets/lists.jsx');
+var widgetsLists = require('src/ui/widgets/lists.js');
 var React = require('react');
 var ReactDom = require('react-dom');
 

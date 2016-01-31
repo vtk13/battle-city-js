@@ -3,7 +3,7 @@ var Odb = require('src/engine/store/odb.js');
 
 function TankBot(x, y, bonus)
 {
-    Tank.apply(this, arguments); // call parent constructor
+    Tank.call(this, x, y); // call parent constructor
     this.setSpeedY(this.speed);
     this.moveOn = true;
     this.bonus = bonus;
@@ -54,7 +54,7 @@ TankBot.prototype.onBonus = function(bonus)
 
 function FastBulletTankBot(x, y, bonus)
 {
-    TankBot.apply(this, arguments); // call parent constructor
+    TankBot.call(this, x, y, bonus); // call parent constructor
 }
 
 FastBulletTankBot.prototype = Object.create(TankBot.prototype);
@@ -66,7 +66,7 @@ FastBulletTankBot.prototype.bulletSpeed = 8; // default speed
 
 function FastTankBot(x, y, bonus)
 {
-    TankBot.apply(this, arguments); // call parent constructor
+    TankBot.call(this, x, y, bonus); // call parent constructor
 }
 
 FastTankBot.prototype = Object.create(TankBot.prototype);
@@ -78,7 +78,7 @@ FastTankBot.prototype.speed = 3; // default speed
 
 function HeavyTankBot(x, y, bonus)
 {
-    TankBot.apply(this, arguments); // call parent constructor
+    TankBot.call(this, x, y, bonus); // call parent constructor
     this.lives = 3;
 }
 

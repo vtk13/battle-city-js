@@ -470,18 +470,18 @@ Collection.prototype.updateWith = function(events)
 
 Collection.prototype.bindSource = function(source, key)
 {
-    var self = this;
-    source.on('sync', function(data) {
+    source.on('sync', data => {
         if (data[key]) {
             // todo updateWith defined in serialization.js
-            self.updateWith(data[key]);
+            this.updateWith(data[key]);
         }
     });
-    source.on('clearCollection', function(data) {
+    source.on('clearCollection', data => {
         if (data == key) {
-            self.clear();
+            this.clear();
         }
     });
+
     return this;
 };
 

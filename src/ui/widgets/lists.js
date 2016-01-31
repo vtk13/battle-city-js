@@ -21,13 +21,11 @@ var List = {
 
 function UiList(list, container, itemClass)
 {
-    if (arguments.length) {
-        this.container = container;
-        this.itemClass = itemClass;
-        list.on('add', this.onAdd.bind(this));
-        list.on('change', this.onChange.bind(this));
-        list.on('remove', this.onRemove.bind(this));
-    }
+    this.container = container;
+    this.itemClass = itemClass;
+    list.on('add', this.onAdd.bind(this));
+    list.on('change', this.onChange.bind(this));
+    list.on('remove', this.onRemove.bind(this));
 }
 
 UiList.prototype.itemDomElement = function(/*item*/)
@@ -55,7 +53,7 @@ UiList.prototype.onRemove = function(item)
 function UiTankStack(list, container, itemClass)
 {
     // todo bot stack is no longer a collection
-    //UiList.apply(this, arguments);
+    //UiList.call(this, list, container, itemClass);
 }
 
 UiTankStack.prototype = Object.create(UiList.prototype);
