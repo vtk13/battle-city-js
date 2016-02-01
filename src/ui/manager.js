@@ -1,17 +1,20 @@
 var $ = require('jquery');
-var widgetsCommon = require('src/ui/widgets/common.js');
+import { WidgetLevelSelector, UserPoint, CreateGame, LoginForm, WidgetLangSelector } from 'src/ui/widgets/common';
 var WidgetPublic = require('src/ui/widgets/public.js');
 var WidgetPremade = require('src/ui/widgets/premade.js');
-var WidgetGame = require('src/ui/widgets/game.js');
+import WidgetGame from 'src/ui/widgets/game';
 var WidgetNotifier = require('src/ui/widgets/notifier.js');
+
+import React from 'react';
+import ReactDom from 'react-dom';
 
 function UiManager(client)
 {
     this.client = client;
 
-    this.loginForm  = new widgetsCommon.WidgetLoginForm($('#login'), client);
+    ReactDom.render(<LoginForm client={client} />, document.getElementById('login'));
     this.publicArea = new WidgetPublic($('#public'), client);
-    this.createGame = new widgetsCommon.WidgetCreateGame($('#create'), client);
+    ReactDom.render(<CreateGame client={client} />, document.getElementById('create'));
     this.premade    = new WidgetPremade($('#premade'), client);
     this.game       = new WidgetGame($('#game'), client);
 

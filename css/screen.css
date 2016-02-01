@@ -32,10 +32,6 @@ fieldset {
     width: 300px;
 }
 
-#login form span {
-    float: left;
-    width: 120px;
-}
 #login .faq {
     padding-left: 18px;
 }

@@ -3,7 +3,7 @@ var ui = require('jquery-ui');
 var io = require('socket.io-client');
 var screen = require('css/screen.js');
 var serialization = require('src/battle-city/serialization.js');
-var widgetsCommon = require('src/ui/widgets/common.js');
+import { WidgetLangSelector } from 'src/ui/widgets/common.js';
 var BcClient = require('src/client/bc-client.js');
 var UiManager = require('src/ui/manager.js');
 require('src/battle-city/client/graphic-loader.js');
@@ -14,7 +14,7 @@ var Odb = require('src/engine/store/odb.js');
 window.bcClient = null;
 window.uiManager = null;
 
-new widgetsCommon.WidgetLangSelector();
+new WidgetLangSelector();
 
 if (typeof WebSocket == 'undefined' && typeof MozWebSocket == 'undefined') {
     $('.ui-block').hide().filter('#nowebsocket').show();

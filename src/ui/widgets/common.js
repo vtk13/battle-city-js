@@ -1,6 +1,9 @@
 var $ = require('jquery');
-var lang = require('src/lang/lang.js');
+import { Lang } from 'src/lang/lang';
 var Premade = require('src/common/premade.js');
+import React from 'react';
+
+export { WidgetLevelSelector, UserPoint, CreateGame, LoginForm, WidgetLangSelector };
 
 //====== WidgetLevelSelector ===================================================
 
@@ -36,30 +39,67 @@ UserPoint.prototype.onRemove = function(user)
     $('.player' + user.positionId + '-stats').text('');
 };
 
-//====== WidgetCreateGame ======================================================
+//====== CreateGame ======================================================
 
-function WidgetCreateGame(context, client)
+function CreateGame({ client })
 {
-    $('#create-form', context).submit(function() {
-        var name = $('input[name=name]', this).val();
-        if (name) {
-            client.join(name);
-        }
-        return false;
-    });
+    var input;
+    function submit(e) {
+        e.preventDefault();
+        input.value && client.join(input.value);
+    }
+
+    return <div>
+        <h1 className="cell-6"><Lang str="header-create-game" /></h1>
+        <form className="cell-6 clear" onSubmit={submit}>
+            <div className="top-margin">
+                <Lang str="enter-new-game-name" />
+                <input type="text" name="name" ref={c => input = c} />
+                <button type="submit"><Lang str="submit-create" /></button>
+            </div>
+        </form>
+    </div>;
 }
 
-//====== WidgetLoginForm =======================================================
+//====== LoginForm =======================================================
 
-function WidgetLoginForm(context, client)
+function LoginForm({ client })
 {
-    $('#game-login', context).submit(function(){
-        var nick = $('input[name=nick]', this).val();
-        client.login(nick, function() {
+    var nick;
+    function submit(e) {
+        e.preventDefault();
+        client.login(nick.value, function() {
             window.uiManager.setStatePublic();
         });
-        return false;
-    });
+    }
+
+    return <div>
+        <div className="login">
+            <div className="cell-12 leftmost">
+                <h2>FAQ:</h2>
+                <ul className="faq">
+                    <li>Управление: Стрелки - ездить, пробел - стрелять.</li>
+                </ul>
+            </div>
+            <form id="game-login" className="cell-12 leftmost" onSubmit={submit}>
+                <fieldset>
+                    <legend><Lang str="legend-play" /></legend>
+                    <div>
+                        <Lang str="enter-nick" />
+                        <input type="text" name="nick" ref={(c) => nick = c} />
+                    </div>
+                    <div className="submit">
+                        <button type="submit"><Lang str="submit-play" /></button>
+                    </div>
+                </fieldset>
+            </form>
+        </div>
+
+        <div id="credits">
+            <a className="span" href="http://www.spriters-resource.com/nes/batcity/sheet/11756">Sprites by Zephiel87</a>
+            <a className="span" href="https://github.com/vtk13/battle-city-js">Source code by vtk</a>
+        </div>
+    </div>;
 }
 
 //====== WidgetLangSelector ====================================================
@@ -70,11 +110,3 @@ function WidgetLangSelector()
         lang.applyLang($(this).attr('lang'));
     });
 }
-
-module.exports = {
-    WidgetLevelSelector: WidgetLevelSelector,
-    UserPoint: UserPoint,
-    WidgetCreateGame: WidgetCreateGame,
-    WidgetLoginForm: WidgetLoginForm,
-    WidgetLangSelector: WidgetLangSelector
-};

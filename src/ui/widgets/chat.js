@@ -1,22 +1,22 @@
 var $ = require('jquery');
-var widgetsLists = require('src/ui/widgets/lists.js');
+import List from 'src/ui/widgets/lists';
 var React = require('react');
 var ReactDom = require('react-dom');
 
 var Users = React.createClass({
-    mixins: [widgetsLists.List],
+    mixins: [List],
     renderElement: function(user) {
         var current = (window.bcClient.currentUserId === user.id ? 'current ' : '');
-        return <li className={'user user' + user.id + ' current'}>{user.nick}</li>;
+        return <li key={user.id} className={'user user' + user.id + ' current'}>{user.nick}</li>;
     }
 });
 
 var Messages = React.createClass({
-    mixins: [widgetsLists.List],
+    mixins: [List],
     renderElement: function(message) {
         var date = new Date(message.time);
         var time = date.getHours() + ':' + (date.getMinutes() < 10 ? 0 : '') + date.getMinutes();
-        return <div className={'message message' + message.id}>
+        return <div key={message.id} className={'message message' + message.id}>
             <span className="time">{time}</span>
             <span className="nick">&lt;{message.nick}&gt;</span>
             <span className="text">{message.text}</span>
